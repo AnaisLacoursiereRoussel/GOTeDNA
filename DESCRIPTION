@@ -1,0 +1,52 @@
+Package: gotedna
+Type: Package
+Encoding: UTF-8
+Title: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs
+Date: 2023-03-28
+Version: 0.3
+Authors@R: c(
+  person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "cre")),
+  person("Melissa", "Morrison", role = c("aut", "ctb"))
+  )
+Maintainer: Thierry Gosselin <thierrygosselin@icloud.com>
+Description: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs.
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.0)
+Imports:
+    dplyr (>= 1.0.0),
+    magrittr
+Suggests:
+    cowplot,
+    devtools,
+    egg,
+    ggExtra,
+    ggh4x,
+    ggplot2,
+    ggpubr,
+    grid,
+    gridExtra,
+    knitr,
+    lubridate,
+    methods,
+    parallel,
+    patchwork,
+    purrr,
+    readr (>= 2.1.0),
+    readxl,
+    rlang,
+    rmarkdown,
+    stats,
+    stringi,
+    stringr,
+    tibble,
+    tidyr (>= 1.1.0),
+    tidyselect,
+    viridis,
+    utils,
+    worms
+RoxygenNote: 7.2.3
+License: GPL-3
+LazyLoad: yes
+VignetteBuilder:
+    knitr

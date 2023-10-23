@@ -1,0 +1,9 @@
+citHeader("To cite assigner in publications use:")
+
+citEntry(
+entry="Manual",
+title = "gotedna: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs",
+year = "2023",
+author = personList(as.person("Thierry Gosselin"), as.person("Melissa Morrison")),
+textVersion = paste("Gosselin, T, Morrison, M, (2023). gotedna: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs using R. R package version 0.1.")
+)

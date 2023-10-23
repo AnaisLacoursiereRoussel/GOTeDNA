@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>/404.html</loc>
+  </url>
+  <url>
+    <loc>/authors.html</loc>
+  </url>
+  <url>
+    <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Exposition_pipe_operator.html</loc>
+  </url>
+  <url>
+    <loc>/reference/compound_assignment_pipe_operator.html</loc>
+  </url>
+  <url>
+    <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/n.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>/reference/qpcr_fig.html</loc>
+  </url>
+  <url>
+    <loc>/reference/read_edna.html</loc>
+  </url>
+  <url>
+    <loc>/reference/replace_to_snakecase.html</loc>
+  </url>
+</urlset>
