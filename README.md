@@ -15,12 +15,12 @@ develop, optimize, and interpret monitoring programs**
 
 ## Installation
 
-To try out the dev version of **gotedna**:
+To try out the dev version of **GOTeDNA**:
 
 ``` r
 if (!require("devtools")) install.packages("devtools")
-devtools::install_github("thierrygosselin/gotedna")
-library(gotedna)
+devtools::install_github("mkmor/GOTeDNA")
+library(GOTeDNA)
 ```
 
 ## R functions categories:
