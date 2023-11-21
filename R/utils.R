@@ -1,15 +1,3 @@
-# Internal ---------------------------------------------------------------------
-#'
-#' @title replace_to_snakecase
-#' @description Transform CamelCase to snake_cases
-#' @name replace_to_snakecase
-#' @rdname replace_to_snakecase
-#' @keywords internal
-#' @export
-replace_to_snakecase <- function(x) {
-  return(snakecase::to_snake_case(x))
-}
-
 #' @title Display genus and species names in italics
 #' @description Display genus and species names in italics
 #' @name scientific_name_formatter

@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(gotedna)
+library(GOTeDNA)
 
-test_check("gotedna")
+test_check("GOTeDNA")
