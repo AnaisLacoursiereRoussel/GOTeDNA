@@ -6,9 +6,9 @@ Date: 2023-03-28
 Version: 0.3
 Authors@R: c(
   person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "cre")),
-  person("Melissa", "Morrison", role = c("aut", "ctb"))
+  person("Melissa", "Morrison", email = "melissa.morrison@dfo-mpo.gc.ca", role = c("aut", "ctb"))
   )
-Maintainer: Thierry Gosselin <thierrygosselin@icloud.com>
+Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
 Description: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs.
 Roxygen: list(markdown = TRUE)
 Depends:
@@ -39,12 +39,12 @@ Suggests:
     stats,
     stringi,
     stringr,
+    taxize,
     tibble,
     tidyr (>= 1.1.0),
     tidyselect,
     viridis,
-    utils,
-    worms
+    utils
 RoxygenNote: 7.2.3
 License: GPL-3
 LazyLoad: yes
