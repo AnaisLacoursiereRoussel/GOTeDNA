@@ -40,13 +40,14 @@ Suggests:
     stringi,
     stringr,
     taxize,
+    testthat (>= 3.0.0),
     tibble,
     tidyr (>= 1.1.0),
     tidyselect,
-    viridis,
-    utils
+    viridis
 RoxygenNote: 7.2.3
 License: GPL-3
 LazyLoad: yes
 VignetteBuilder:
     knitr
+Config/testthat/edition: 3

@@ -1,0 +1,6 @@
+^README\.Rmd$
+^docs$
+^pkgdown$
+^doc$
+^gotedna\.Rproj$
+^_pkgdown\.yml$
