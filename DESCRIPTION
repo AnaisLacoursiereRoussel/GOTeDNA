@@ -1,15 +1,18 @@
 Package: GOTeDNA
 Type: Package
 Encoding: UTF-8
-Title: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs
-Date: 2023-03-28
-Version: 0.3
+Title: Guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
+Date: 2023-11-22
+Version: 0.4
 Authors@R: c(
-  person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "cre")),
-  person("Melissa", "Morrison", email = "melissa.morrison@dfo-mpo.gc.ca", role = c("aut", "ctb"))
+  person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "ctr")),
+  person("Melissa", "Morrison", email = "melissa.morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271"))
   )
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
-Description: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs.
+Description: The purpose of this package is to compile eDNA qPCR and metabarcoding
+    metadata and data, visualize species detection probabilities, and delineate 
+    species detection windows.
+License: GPL-3
 Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.0)
@@ -27,8 +30,10 @@ Suggests:
     grid,
     gridExtra,
     knitr,
+    lme4,
     lubridate,
     methods,
+    multcomp,
     parallel,
     patchwork,
     purrr,
@@ -46,7 +51,6 @@ Suggests:
     tidyselect,
     viridis
 RoxygenNote: 7.2.3
-License: GPL-3
 LazyLoad: yes
 VignetteBuilder:
     knitr
