@@ -1,29 +1,30 @@
 
-<!-- badges: start -->
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://tidyverse.org/lifecycle/#maturing)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
-developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--03--28-brightgreen.svg)](/commits/master)
+# GOTeDNA
+
+## An R package for guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
+
+<!-- badges: start -->
 <!-- badges: end -->
 
-# GOTeDNA <a href='https://thierrygosselin.github.io/gotedna/'><img src='man/figures/logo.png' align="right" height="139" /></a>
-
-**GOTeDNA: an R package for guidance on optimal DNA sampling periods to
-develop, optimize, and interpret monitoring programs**
+The goal of GOTeDNA is to import and format eDNA qPCR and metabarcoding
+metadata/data from GOTeDNA sample templates, visualize species detection
+periods, and statistically delineate optimal species detection windows.
 
 ## Installation
 
-To try out the dev version of **GOTeDNA**:
+You can install the development version of GOTeDNA from
+[GitHub](https://github.com/) with:
 
 ``` r
-if (!require("devtools")) install.packages("devtools")
+# install.packages("devtools")
 devtools::install_github("mkmor/GOTeDNA")
-library(GOTeDNA)
 ```
 
-## R functions categories:
+## Usage
+
+### R function categories:
 
 - Import data
 - Clean/tidy data
