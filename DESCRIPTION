@@ -18,7 +18,8 @@ Depends:
     R (>= 4.0)
 Imports:
     dplyr (>= 1.0.0),
-    magrittr
+    magrittr,
+    rstatix
 Suggests:
     cowplot,
     devtools,

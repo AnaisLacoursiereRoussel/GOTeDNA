@@ -1,8 +1,8 @@
-# test replace_to_snakecase()
-test_that("replace_to_snakecase() works", {
+# test scientific_name_formatter()
+test_that("scientific_name_formatter() works", {
     # test that it works
     expect_equal(
-        scientific_name_formatter("Ailuropoda"), 
+        scientific_name_formatter("Ailuropoda"),
         bquote(paste(italic(.("Ailuropoda"))))
     )
     expect_equal(
