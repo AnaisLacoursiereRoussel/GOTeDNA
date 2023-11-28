@@ -2,6 +2,7 @@
 #' @description This function normalizes (i.e., scales) monthly detection probabilities for
 #' each species and primer that were calculated with the previous function,
 #' \code{calc_det_prob()}. Outputs fed into figure and window calculation functions.
+#' * NOTE: Currently this function only works for metabarcoding data.
 #'
 #' @param data (required, data.frame) Data.frame imported with read_data(). Required
 #' to join taxonomic information.
@@ -14,7 +15,7 @@
 #' \item\code{month},
 #' \item\code{detect}: number of detections
 #' \item\code{nondetect}: number of non-detections
-#' \item\code{scaleP}:  detection probability scaled to range [0,1]
+#' \item\code{scaleP}:  detection probability scaled to range 0-1
 #' \item\code{GOTeDNA_ID},
 #' \item\code{species},
 #' \item\code{primer},
