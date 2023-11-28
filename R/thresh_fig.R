@@ -5,14 +5,13 @@
 #' threshold in grey.
 #'
 #' @param taxon.level (required, data.frame): Select taxonomic level to view.
-#' Choices: one of \code{c("phylum", "class", "order", "family", "genus", "species)}.
+#' Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species)}
 #' @param taxon.name (required, character): Select taxon name that matches the level
 #' provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"}, enter genus name, etc.
-#' @param threshold (required, character): Detection probability threshold for which
-#' data are to be displayed to visualize potential optimal detection windows.
-#' Choices: one of \code{c("50","55","60","65","70","75","80","85","90","95")}
+#' @param threshold (required, character): Detection probability threshold for
+#' which data are to be displayed to visualize potential optimal detection windows.
+#' Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
-#' @return ggplot2 object
 
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}

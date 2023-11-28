@@ -9,19 +9,16 @@ thresh_fig(taxon.level, taxon.name, threshold, ecodistrict.select)
 }
 \arguments{
 \item{taxon.level}{(required, data.frame): Select taxonomic level to view.
-Choices: one of \code{c("phylum", "class", "order", "family", "genus", "species)}.}
+Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species)}}
 
 \item{taxon.name}{(required, character): Select taxon name that matches the level
 provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"}, enter genus name, etc.}
 
-\item{threshold}{(required, character): Detection probability threshold for which
-data are to be displayed to visualize potential optimal detection windows.
-Choices: one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
+\item{threshold}{(required, character): Detection probability threshold for
+which data are to be displayed to visualize potential optimal detection windows.
+Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
-}
-\value{
-ggplot2 object
 }
 \description{
 This function displays detection probabilities in bins, with
