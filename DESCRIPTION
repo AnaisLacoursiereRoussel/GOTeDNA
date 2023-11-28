@@ -5,9 +5,9 @@ Title: Guidance on optimal eDNA sampling periods to develop, optimize, and inter
 Date: 2023-11-22
 Version: 0.4
 Authors@R: c(
-  person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "ctr")),
-  person("Melissa", "Morrison", email = "melissa.morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271"))
-  )
+  person("Melissa", "Morrison", email = "melissa.morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
+  person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "ctr")))
+  
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
 Description: The purpose of this package is to compile eDNA qPCR and metabarcoding
     metadata and data, visualize species detection probabilities, and delineate 
