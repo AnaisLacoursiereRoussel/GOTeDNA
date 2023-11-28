@@ -21,7 +21,7 @@ Grouped data.frame with 16 columns:
 \item\code{month},
 \item\code{detect}: number of detections
 \item\code{nondetect}: number of non-detections
-\item\code{scaleP}: detection probability scaled to range \link{0,1}
+\item\code{scaleP}: detection probability scaled to range 0-1
 \item\code{GOTeDNA_ID},
 \item\code{species},
 \item\code{primer},
