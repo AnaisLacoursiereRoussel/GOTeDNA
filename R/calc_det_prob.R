@@ -1,4 +1,33 @@
-## Calculate detection probabilities ----
+#' Calculate detection probabilities from data that were previously imported with read_data()
+#' @description Function that calculates non-parametric probability of detection
+#' for each species and primer for the selected ecodistrict. Probabilities are
+#' calculated both (1) monthly, across all years; and (2) monthly with each year
+#' separate. Outputs are used in subsequent functions.
+#'
+#' @param data (required, data.frame) Data.frame read in with read_data()
+#' @param ecodistrict.select (required, character) Ecodistrict present in data.frame.
+#'
+#' @return Two lists, each with distinct elements of species;primer ID containing 6-9 columns:
+#' \itemize{
+#' \item\code{month},
+#' \item\code{n}: total number of samples per month
+#' \item\code{nd}: number of positive detections per month
+#' \item\code{ecodistrict}:
+#' \item\code{p}: calculated monthly detection probability
+#' \item\code{s}: standard deviation
+#' \item\code{GOTeDNA_ID},
+#' \item\code{year},
+#' \item\code{yr.mo}: year;month concatenated
+#' }
+#'
+
+#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
+#' @rdname calc_det_prob
+#' @export
+#' @examples
+#' \dontrun{
+#' calc_det_prob(data = D_mb, ecodistrict.select = "Scotian Shelf")
+#' }
 calc_det_prob = function(data, ecodistrict.select) {
 
   options(dplyr.summarise.inform = FALSE)
@@ -42,12 +71,9 @@ calc_det_prob = function(data, ecodistrict.select) {
       newP[[species]] <- SDF
     }
   }
-  newP <- newP[lengths(newP)!=0]
-  #capture.output(newP, file=paste0("newP_",abbreviate(ecodistrict.select, minlength=1),".csv"))
-  .GlobalEnv$newP_agg = newP
+  newP_agg <- newP[lengths(newP)!=0]
 
   # calculate monthly detection probability for each year
-
   newP <- vector('list',length(unique(data$id.yr)))
   names(newP) <- unique(data$id.yr)
   comps <- vector('list',length(unique(data$id.yr)))
@@ -75,12 +101,15 @@ calc_det_prob = function(data, ecodistrict.select) {
     }
   }
   newP <- newP[lengths(newP)!=0]
-  newP <- Map(cbind, newP, id.yr=names(newP))
+  newP_yr <- Map(cbind, newP, id.yr=names(newP))
 
-  .GlobalEnv$newP_yr = lapply(newP, function(x)
+  newP_yr = lapply(newP_yr, function(x)
     dplyr::mutate(x,
                   GOTeDNA_ID = stringr::word(x$id.yr, 1, sep=stringr::fixed(";")),
                   year = stringr::word(x$id.yr, -1, sep=stringr::fixed(";")),
                   yr.mo = paste0(year,";",month),
                   id.yr=NULL)) # to obtain variation among years
+
+  list(newP_agg = newP_agg,
+       newP_yr = newP_yr)
 }
