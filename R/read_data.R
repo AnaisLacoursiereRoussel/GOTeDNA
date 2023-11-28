@@ -45,6 +45,7 @@
 #' \dontrun{
 #' D_mb <- read_data(choose.method = "metabarcoding", path.folder="./data/")
 #' }
+#' @importFrom magrittr `%>%`
 read_data <- function(choose.method, path.folder) {
 
   if (is.null(path.folder)) path.folder <- getwd()

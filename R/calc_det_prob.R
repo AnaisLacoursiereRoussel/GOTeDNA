@@ -21,6 +21,7 @@
 #' }
 #'
 
+#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @rdname calc_det_prob
 #' @export
@@ -28,6 +29,8 @@
 #' \dontrun{
 #' calc_det_prob(data = D_mb, ecodistrict.select = "Scotian Shelf")
 #' }
+#' @importFrom magrittr `%>%`
+#' @importFrom magrittr `%<>%`
 calc_det_prob = function(data, ecodistrict.select) {
 
   options(dplyr.summarise.inform = FALSE)

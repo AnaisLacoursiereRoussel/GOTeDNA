@@ -1,9 +1,9 @@
-#' Normalize detection probabilities with min-max method (range [0,1]) by year and month
+#' Normalize detection probabilities with min-max method (range 0-1) by year and month
 #' @description This function normalizes (i.e., scales) monthly detection probabilities for
 #' each species and primer that were calculated with the previous function,
 #' \code{calc_det_prob()}. Outputs fed into figure and window calculation functions.
 #'
-#' @param data (required, data.frame) Data.frame read in with read_data(). Required
+#' @param data (required, data.frame) Data.frame imported with read_data(). Required
 #' to join taxonomic information.
 #' @param ecodistrict.select (required, character) Ecodistrict present in data.frame.
 #'
@@ -27,6 +27,7 @@
 #' }
 #'
 
+#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @rdname scale_prob_by_month
 #' @export
@@ -34,6 +35,8 @@
 #' \dontrun{
 #' scale_prob_by_month(data = D_mb, ecodistrict.select = "Scotian Shelf")
 #' }
+#' @importFrom magrittr `%>%`
+#' @importFrom magrittr `%<>%`
 scale_prob_by_month <- function(data, ecodistrict.select) {
 
   # Implement min max scaling of detection probabilities
@@ -69,10 +72,7 @@ scale_prob_by_month <- function(data, ecodistrict.select) {
   }
 
   non_det <- non_det %>%
-    reshape2::melt(id.vars=c("id", "ecodistrict"),
-                   measure.vars=c("M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12"),
-                   variable.name="month",
-                   value.name="nondetect") %>%
+    tidyr::pivot_longer(-c(id, ecodistrict), names_to = "month", values_to = "nondetect") %>%
     dplyr::group_by(id, ecodistrict) %>%
     dplyr::mutate(month = dplyr::recode(month,
                                         "M1"=1,
@@ -88,10 +88,7 @@ scale_prob_by_month <- function(data, ecodistrict.select) {
                                         "M11"=11,
                                         "M12"=12))
   det <- det %>%
-    reshape2::melt(id.vars=c("id", "ecodistrict"),
-                   measure.vars=c("M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12"),
-                   variable.name="month",
-                   value.name="detect") %>%
+    tidyr::pivot_longer(-c(id, ecodistrict), names_to = "month", values_to = "detect") %>%
     dplyr::group_by(id, ecodistrict) %>%
     dplyr::mutate(month = dplyr::recode(month,
                                         "M1"=1,
@@ -129,10 +126,7 @@ scale_prob_by_month <- function(data, ecodistrict.select) {
   }
 
   CP_long = CP %>%
-    reshape2::melt(id.vars=c("id", "ecodistrict"),
-                   measure.vars=c("M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12"),
-                   variable.name="month",
-                   value.name="scaleP") %>%
+    tidyr::pivot_longer(-c(id, ecodistrict), names_to = "month", values_to = "scaleP") %>%
     dplyr::group_by(id, ecodistrict) %>%
     dplyr::mutate(month = dplyr::recode(month,
                                         "M1"=1,
@@ -190,6 +184,9 @@ scale_prob_by_month <- function(data, ecodistrict.select) {
     DF3 <- DF2[DF2$G==2,]
     DF$fill[DF$id==species] <- DF3$fill
   }
-  Pscaled_agg <- DF
 
+  Pscaled_agg <- DF %>%
+    dplyr::ungroup()
+
+  return(Pscaled_agg)
 }

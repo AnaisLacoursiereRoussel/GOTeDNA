@@ -3,4 +3,7 @@
 export(calc_det_prob)
 export(read_data)
 export(scale_prob_by_month)
+export(scale_prob_by_year)
 export(scientific_name_formatter)
+importFrom(magrittr,`%<>%`)
+importFrom(magrittr,`%>%`)

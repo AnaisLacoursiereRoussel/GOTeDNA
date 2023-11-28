@@ -37,5 +37,7 @@ calc_det_prob(data = D_mb, ecodistrict.select = "Scotian Shelf")
 }
 }
 \author{
+Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
+
 Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
 }

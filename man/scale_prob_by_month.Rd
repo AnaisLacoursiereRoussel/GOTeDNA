@@ -2,12 +2,12 @@
 % Please edit documentation in R/scale_prob_by_month.R
 \name{scale_prob_by_month}
 \alias{scale_prob_by_month}
-\title{Normalize detection probabilities with min-max method (range \link{0,1}) by year and month}
+\title{Normalize detection probabilities with min-max method (range 0-1) by year and month}
 \usage{
 scale_prob_by_month(data, ecodistrict.select)
 }
 \arguments{
-\item{data}{(required, data.frame) Data.frame read in with read_data(). Required
+\item{data}{(required, data.frame) Data.frame imported with read_data(). Required
 to join taxonomic information.}
 
 \item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
@@ -43,5 +43,7 @@ scale_prob_by_month(data = D_mb, ecodistrict.select = "Scotian Shelf")
 }
 }
 \author{
+Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
+
 Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
 }
