@@ -36,6 +36,9 @@ Grouped data.frame with 15 columns:
 This function normalizes (i.e., scales) monthly detection probabilities for
 each species and primer that were calculated with the previous function,
 \code{calc_det_prob()}. Outputs fed into figure and window calculation functions.
+\itemize{
+\item NOTE: Currently this function only works for metabarcoding data.
+}
 }
 \examples{
 \dontrun{

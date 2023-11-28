@@ -3,7 +3,7 @@
 #' @description This function normalizes (i.e., scales) monthly detection probabilities for
 #' each species, primer, and year that were calculated with the previous function,
 #' \code{calc_det_prob()}. Outputs fed into figure and window calculation functions.
-#'
+#' * NOTE: Currently this function only works for metabarcoding data.
 #' @param data (required, data.frame) Data.frame imported with read_data(). Required
 #' to join taxonomic information.
 #' @param ecodistrict.select (required, character) Ecodistrict present in data.frame.
