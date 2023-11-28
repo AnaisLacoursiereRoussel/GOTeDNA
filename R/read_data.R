@@ -125,7 +125,7 @@ read_data <- function(choose.method, path.folder) {
   samples <- lapply(samples, function(x) {
     if(any(colnames(x) %in% "concentration")==TRUE) {
       x %>%
-        rstatix::drop_na(date) %>% # drop lab/field blanks
+        tidyr::drop_na(date) %>% # drop lab/field blanks
         subset(!kingdom %in% "NA") %>%
         dplyr::group_by(eventID) %>%
         dplyr::mutate(detected = dplyr::case_when(
@@ -138,7 +138,7 @@ read_data <- function(choose.method, path.folder) {
       #all(concentration < pcr_primer_lod) ~ 0))
     } else {
       x %>%
-        rstatix::drop_na(date) %>%
+        tidyr::drop_na(date) %>%
         subset(!kingdom %in% "NA") %>%
         dplyr::mutate(detected = dplyr::case_when(
           organismQuantity != 0 ~ 1,

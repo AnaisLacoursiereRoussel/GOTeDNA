@@ -19,7 +19,7 @@ Depends:
 Imports:
     dplyr (>= 1.0.0),
     magrittr,
-    rstatix
+    tidyr
 Suggests:
     cowplot,
     devtools,
@@ -48,7 +48,6 @@ Suggests:
     taxize,
     testthat (>= 3.0.0),
     tibble,
-    tidyr (>= 1.1.0),
     tidyselect,
     viridis
 RoxygenNote: 7.2.3
