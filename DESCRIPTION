@@ -25,6 +25,7 @@ Suggests:
     egg,
     ggExtra,
     ggh4x,
+    ggpattern,
     ggplot2,
     ggpubr,
     grid,
@@ -54,3 +55,4 @@ LazyLoad: yes
 VignetteBuilder:
     knitr
 Config/testthat/edition: 3
+LazyData: true

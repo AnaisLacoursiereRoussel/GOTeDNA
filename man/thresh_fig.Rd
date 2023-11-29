@@ -9,7 +9,7 @@ thresh_fig(taxon.level, taxon.name, threshold, ecodistrict.select)
 }
 \arguments{
 \item{taxon.level}{(required, data.frame): Select taxonomic level to view.
-Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species)}}
+Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}}
 
 \item{taxon.name}{(required, character): Select taxon name that matches the level
 provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"}, enter genus name, etc.}
@@ -27,7 +27,8 @@ threshold in grey.
 }
 \examples{
 \dontrun{
-thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Scotian Shelf")
+thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90",
+ecodistrict.select = "Scotian Shelf")
 }
 }
 \author{

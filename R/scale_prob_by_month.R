@@ -45,13 +45,13 @@ scale_prob_by_month <- function(data, ecodistrict.select) {
     (x - min(x)) / (max(x) - min(x))
   }
 
-  if(!ecodistrict.select %in% data$ecodistrict) {
+ if(!ecodistrict.select %in% data$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
-
-  # Calling the data in is to merge taxonomic info
+    # Calling the data in is to merge taxonomic info
   data %<>%
     dplyr::filter(., ecodistrict %in% ecodistrict.select)
+
 
   # transform CPscaled to data frame
   non_det <- as.data.frame(matrix(ncol=14,nrow=length(names(newP_agg))))

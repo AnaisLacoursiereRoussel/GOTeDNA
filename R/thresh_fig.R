@@ -5,7 +5,7 @@
 #' threshold in grey.
 #'
 #' @param taxon.level (required, data.frame): Select taxonomic level to view.
-#' Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species)}
+#' Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}
 #' @param taxon.name (required, character): Select taxon name that matches the level
 #' provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"}, enter genus name, etc.
 #' @param threshold (required, character): Detection probability threshold for
@@ -19,7 +19,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Scotian Shelf")
+#' thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90",
+#' ecodistrict.select = "Scotian Shelf")
 #' }
 #' @importFrom magrittr `%>%`
 #' @importFrom magrittr `%<>%`
@@ -73,7 +74,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select) {
       fill < 0.49999 ~ 0,
       fill >= 0.49999 ~ 1
     )) %>%
-    rstatix::drop_na(fill)
+    tidyr::drop_na(fill)
 
   Pthresh[Pthresh$phylum=="Chordata",] %>%
     tidyr::drop_na(class)
