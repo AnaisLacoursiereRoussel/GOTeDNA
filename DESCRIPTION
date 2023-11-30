@@ -5,7 +5,8 @@ Title: Guidance on optimal eDNA sampling periods to develop, optimize, and inter
 Date: 2023-11-22
 Version: 0.4
 Authors@R: c(
-  person("Melissa", "Morrison", email = "melissa.morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
+  person("Melissa", "Morrison", email = "Melissa.Morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
+  person("Tim", "Barrett", email = "Tim.Barrett@@dfo-mpo.gc.ca", role = c("aut", "ctr")),
   person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "ctr")))
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
 Description: The purpose of this package is to compile eDNA qPCR and metabarcoding
@@ -18,6 +19,7 @@ Depends:
 Imports:
     dplyr (>= 1.0.0),
     magrittr,
+    stats,
     tidyr
 Suggests:
     cowplot,
@@ -38,11 +40,11 @@ Suggests:
     parallel,
     patchwork,
     purrr,
+    RColorBrewer,
     readr (>= 2.1.0),
     readxl,
     rlang,
     rmarkdown,
-    stats,
     stringi,
     stringr,
     taxize,

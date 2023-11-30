@@ -2,8 +2,10 @@
 if (getRversion() >= "2.15.1") {
   utils::globalVariables(
     c(".", "GOTeDNA_ID", "concentration", "controlType", "detected", "ecodistrict", "eventID",
-      "id", "kingdom", "month", "newP_agg", "newP_yr","scientificName", "target_gene",
-      "target_subfragment", "year", "Pscaled_agg", "fill", "scaleP", "x", "y"
+      "id", "kingdom", "phylum", "class", "order", "family", "genus", "species", "month",
+      "newP_agg", "newP_yr","scientificName", "target_gene", "target_subfragment", "year",
+      "Pscaled_agg", "Pscaled_yr", "fill", "scaleP", "x", "y", "P", "PRED",  "freq_det",
+      "n", "nd", "primer", "prob", "station"
     )
   )
 }

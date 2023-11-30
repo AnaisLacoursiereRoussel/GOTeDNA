@@ -8,4 +8,6 @@ test_that("thresh_fig returns a ggplot2 object", {
    expect_s3_class(p$layers[[3]]$geom, "GeomCol")
    expect_s3_class(p$layers[[4]]$geom, "GeomCol")
    expect_s3_class(p$layers[[5]]$geom, "GeomColPattern")
+   expect_error(thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Bay of Fundy"),
+                "Ecodistrict not found in data")
 })
