@@ -7,12 +7,12 @@
 smooth_fig(data, species.name, primer.select, ecodistrict.select)
 }
 \arguments{
-\item{data}{(required, data.frame): Data.frame read in with \code{read_data()}}
+\item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}.}
 
 \item{species.name}{(required, character): Full binomial species name.}
 
-\item{primer.select}{(required, character): Select primer as different primers
-may provide different detection rates.}
+\item{primer.select}{(required, character): Select primer as different
+primers may provide different detection rates.}
 
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 }
@@ -22,8 +22,10 @@ monthly detection probabilities with LOESS smoothing over years.
 }
 \examples{
 \dontrun{
-smooth_fig(data = D_mb, species.name = "Calanus finmarchicus",
-primer.select = "COI1", ecodistrict.select = "Bay of Fundy")
+smooth_fig(
+  data = D_mb, species.name = "Calanus finmarchicus",
+  primer.select = "COI1", ecodistrict.select = "Bay of Fundy"
+)
 }
 }
 \author{

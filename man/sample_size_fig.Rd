@@ -7,7 +7,7 @@
 sample_size_fig(data, species.name, ecodistrict.select)
 }
 \arguments{
-\item{data}{(required, data.frame): Data.frame read in with \code{read_data()}.}
+\item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}.}
 
 \item{species.name}{(required, character): Full binomial species name.}
 
@@ -19,8 +19,10 @@ for the specified species and region.
 }
 \examples{
 \dontrun{
-sample_size_fig(data = D_mb, species.name = "Acartia longiremis",
-ecodistrict.select = "Bay of Fundy")
+sample_size_fig(
+  data = D_mb, species.name = "Acartia longiremis",
+  ecodistrict.select = "Bay of Fundy"
+)
 }
 }
 \author{

@@ -9,32 +9,34 @@ Authors@R: c(
   person("Tim", "Barrett", email = "Tim.Barrett@@dfo-mpo.gc.ca", role = c("aut", "ctr")),
   person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "ctr")))
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
-Description: The purpose of this package is to compile eDNA qPCR and metabarcoding
-    metadata and data, visualize species detection probabilities, and delineate 
-    species detection windows.
+Description: The purpose of this package is to compile eDNA qPCR and    
+    metabarcoding metadata and data, visualize species detection probabilities, and delineate species detection windows.
 License: GPL-3
 Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.0)
 Imports:
     dplyr (>= 1.0.0),
+    ggh4x,
+    ggplot2,
+    lubridate,
     magrittr,
+    grid,
+    readxl,
+    scales,
     stats,
-    tidyr
+    tidyr,
+    viridis
 Suggests:
     cowplot,
     devtools,
     egg,
     ggExtra,
-    ggh4x,
     ggpattern,
-    ggplot2,
     ggpubr,
-    grid,
     gridExtra,
     knitr,
     lme4,
-    lubridate,
     methods,
     multcomp,
     parallel,
@@ -42,7 +44,6 @@ Suggests:
     purrr,
     RColorBrewer,
     readr (>= 2.1.0),
-    readxl,
     rlang,
     rmarkdown,
     stringi,
@@ -50,8 +51,7 @@ Suggests:
     taxize,
     testthat (>= 3.0.0),
     tibble,
-    tidyselect,
-    viridis
+    tidyselect
 RoxygenNote: 7.2.3
 LazyLoad: yes
 VignetteBuilder:

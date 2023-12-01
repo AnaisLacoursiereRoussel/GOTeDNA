@@ -12,11 +12,11 @@ thresh_fig(taxon.level, taxon.name, threshold, ecodistrict.select)
 Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}}
 
 \item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"}, enter genus name, etc.}
+provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genus name, etc.}
 
 \item{threshold}{(required, character): Detection probability threshold for
 which data are to be displayed to visualize potential optimal detection windows.
-Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
+Choices = one of `"50","55","60","65","70","75","80","85","90","95")``}
 
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 }
@@ -27,8 +27,10 @@ threshold in grey.
 }
 \examples{
 \dontrun{
-thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90",
-ecodistrict.select = "Scotian Shelf")
+thresh_fig(
+  taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90",
+  ecodistrict.select = "Scotian Shelf"
+)
 }
 }
 \author{

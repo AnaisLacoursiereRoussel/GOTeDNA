@@ -2,16 +2,16 @@
 #' @description This function displays the actual number of eDNA samples taken
 #' for all taxa of a specified higher taxonomic group per year.
 #'
-#' @param data (required, data.frame): Data.frame read in with \code{read_data()}.
+#' @param data (required, data.frame): Data.frame read in with [read_data()]
 #' @param higher.taxon.select (required, character): Higher taxonomic level of
-#' interest. Choices = one of \code{c("kingdom", "phylum", "class", "order", "family")}
+#' interest. Choices = one of `c("kingdom", "phylum", "class", "order", "family")`
 #' @param taxon.name (required, character): Select taxon name that matches the level
-#' provided in \code{higher.taxon.select}. E.g., if \code{taxon.level = "class"},
+#' provided in `higher.taxon.select`. E.g., if `taxon.level = "class"`
 #' enter class name, etc..
 #' @param view.by.level (required, character): Lower taxonomic level to view
 #' detection probability by. Cannot be higher level than higher group specified in
-#' \code{higher.taxon.select}. Choices = one of \code{c("phylum", "class", "order",
-#' "family", "genus")}
+#' `higher.taxon.select` Choices = one of `c("phylum", "class", "order",
+#' "family", "genus")`
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 #' @param primer.select (required, character): Select primer as different primers
 #' may provide different detection rates.

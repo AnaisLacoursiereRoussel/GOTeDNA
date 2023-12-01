@@ -15,33 +15,33 @@ Default: \code{path.folder = NULL}. Default will use the current working directo
 \value{
 A tibble with 21 columns:
 \itemize{
-\item\code{GOTeDNA_ID},
-\item\code{GOTeDNA_version},
-\item\code{eventID}: added internally to keep track of files origins,
-\item\code{scientificName}: added internally to keep track of files origins,
-\item\code{target_gene},
-\item\code{target_subfragment},
-\item\code{kingdom},
-\item\code{phylum},
-\item\code{class},
-\item\code{order},
-\item\code{family},
-\item\code{genus},
-\item\code{date},
-\item\code{ecodistrict},
-\item\code{decimalLatitude},
-\item\code{decimalLongitude},
-\item\code{station},
-\item\code{year},
-\item\code{month},
-\item\code{organismQuantity}: provided when choose.method = "metabarcoding",
-\item\code{concentration}: provided when choose.method = "qPCR",
-\item\code{detected}
+\item \code{GOTeDNA_ID}
+\item \code{GOTeDNA_version}
+\item \code{eventID} added internally to keep track of files origins,
+\item \code{scientificName} added internally to keep track of files origins,
+\item \code{target_gene}
+\item \code{target_subfragment}
+\item \code{kingdom}
+\item \code{phylum}
+\item \code{class}
+\item \code{order}
+\item \code{family}
+\item \code{genus}
+\item \code{date}
+\item \code{ecodistrict}
+\item \code{decimalLatitude}
+\item \code{decimalLongitude}
+\item \code{station}
+\item \code{year}
+\item \code{month}
+\item \code{organismQuantity} provided when choose.method = "metabarcoding",
+\item \code{concentration} provided when choose.method = "qPCR",
+\item `detected``
 }
 }
 \description{
 Function that reads GOTeDNA qPCR or metabarcoding template MS Excel
-sheets found in a specified folder. When \code{choose.methods = "qPCR" or "metabarcoding"},
+sheets found in a specified folder. When \verb{choose.methods = "qPCR" or "metabarcoding"}
 it will compile metadata (sheet 2) and data (sheet 3 or 4, respectively) into a single
 dataframe. Data frames are then formatted appropriately for use in subsequent
 analysis and visualizations (e.g., date reformatting, merging metadata and data).
@@ -52,7 +52,7 @@ using Darwin Core (DwC) data standards where possible.
 }
 \examples{
 \dontrun{
-D_mb <- read_data(choose.method = "metabarcoding", path.folder="./data/")
+D_mb <- read_data(choose.method = "metabarcoding", path.folder = "./data/")
 }
 }
 \author{

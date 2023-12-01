@@ -1,33 +1,31 @@
 #' Normalize detection probabilities with min-max method (range 0-1) by year and month
+#' 
 #' @description This function normalizes (i.e., scales) monthly detection probabilities for
 #' each species and primer that were calculated with the previous function,
-#' \code{calc_det_prob()}. Outputs fed into figure and window calculation functions.
+#' `calc_det_prob()` Outputs fed into figure and window calculation functions.
 #' * NOTE: Currently this function only works for metabarcoding data.
 #'
-#' @param data (required, data.frame) Data.frame imported with read_data(). Required
-#' to join taxonomic information.
+#' @param data (required, data.frame) Data.frame imported with [read_data()].
+#' Required to join taxonomic information.
 #' @param ecodistrict.select (required, character) Ecodistrict present in data.frame.
 #'
 #' @return Grouped data.frame with 15 columns:
-#' \itemize{
-#' \item\code{id}: unique species;primer identifier
-#' \item\code{ecodistrict},
-#' \item\code{month},
-#' \item\code{detect}: number of detections
-#' \item\code{nondetect}: number of non-detections
-#' \item\code{scaleP}:  detection probability scaled to range 0-1
-#' \item\code{GOTeDNA_ID},
-#' \item\code{species},
-#' \item\code{primer},
-#' \item\code{phylum},
-#' \item\code{class},
-#' \item\code{order},
-#' \item\code{family},
-#' \item\code{genus},
-#' \item\code{fill},
-#' }
+#' * `id` unique species;primer identifier
+#' * `ecodistrict`
+#' * `month`
+#' * `detect` number of detections
+#' * `nondetect` number of non-detections
+#' * `scaleP`  detection probability scaled to range 0-1
+#' * `GOTeDNA_ID`
+#' * `species`
+#' * `primer`
+#' * `phylum`
+#' * `class`
+#' * `order`
+#' * `family`
+#' * `genus`
+#' * `fill`
 #'
-
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @rdname scale_prob_by_month
@@ -36,8 +34,6 @@
 #' \dontrun{
 #' scale_prob_by_month(data = D_mb, ecodistrict.select = "Scotian Shelf")
 #' }
-#' @importFrom magrittr `%>%`
-#' @importFrom magrittr `%<>%`
 scale_prob_by_month <- function(data, ecodistrict.select) {
 
   # Implement min max scaling of detection probabilities

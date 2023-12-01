@@ -4,6 +4,8 @@
 #' @rdname scientific_name_formatter
 #' @keywords internal
 #' @param raw_name Raw name.
+#' @importFrom magrittr `%>%` `%<>%`
+#' @importFrom stats dbinom fisher.test loess median predict reorder window
 # 
 #' @export
 scientific_name_formatter <- function(raw_name) {

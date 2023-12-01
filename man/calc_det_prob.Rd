@@ -7,27 +7,27 @@
 calc_det_prob(data, ecodistrict.select)
 }
 \arguments{
-\item{data}{(required, data.frame) Data.frame read in with read_data()}
+\item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}}
 
 \item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
 }
 \value{
 Two lists, each with distinct elements of species;primer ID containing 6-9 columns:
 \itemize{
-\item\code{month},
-\item\code{n}: total number of samples per month
-\item\code{nd}: number of positive detections per month
-\item\code{ecodistrict}:
-\item\code{p}: calculated monthly detection probability
-\item\code{s}: standard deviation
-\item\code{GOTeDNA_ID},
-\item\code{year},
-\item\code{yr.mo}: year;month concatenated
+\item \code{month}
+\item \code{n} total number of samples per month
+\item \code{nd} number of positive detections per month
+\item \code{ecodistrict}
+\item \code{p} calculated monthly detection probability
+\item \code{s} standard deviation
+\item \code{GOTeDNA_ID}
+\item \code{year}
+\item \code{yr.mo} year;month concatenated
 }
 }
 \description{
 Function that calculates non-parametric probability of detection
-for each species and primer for the selected ecodistrict. Probabilities are
+for each species and primer for the selected ecodistrict.Probabilities are
 calculated both (1) monthly, across all years; and (2) monthly with each year
 separate. Outputs are used in subsequent functions.
 }
