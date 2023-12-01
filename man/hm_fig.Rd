@@ -11,15 +11,15 @@ hm_fig(taxon.level, taxon.name, ecodistrict.select)
 Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}}
 
 \item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"}, enter genus name, etc.}
+provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genus name, etc.}
 
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 }
 \description{
 This function displays scaled species detection probabilities of the
-chosen taxonomic group with probabilities produced with \code{scale_prob_by_month()}.
+chosen taxonomic group with probabilities produced with \code{scale_prob_by_month()}
 All primers that are available in the data are displayed.
-NOTE: interpolated \code{(i.e., missing)} data are not used in this representation.
+NOTE: interpolated \verb{(i.e., missing)} data are not used in this representation.
 }
 \examples{
 \dontrun{

@@ -1,13 +1,14 @@
 #' Displays heatmap of scaled monthly detection probabilities for taxon
+#' 
 #' @description This function displays scaled species detection probabilities of the
-#' chosen taxonomic group with probabilities produced with \code{scale_prob_by_month()}.
+#' chosen taxonomic group with probabilities produced with `scale_prob_by_month()`
 #' All primers that are available in the data are displayed.
-#' NOTE: interpolated \code{(i.e., missing)} data are not used in this representation.
+#' NOTE: interpolated `(i.e., missing)` data are not used in this representation.
 #'
 #' @param taxon.level (required, data.frame): Select taxonomic level to view.
-#' Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}
+#' Choices = one of `c("phylum", "class", "order", "family", "genus", "species")`
 #' @param taxon.name (required, character): Select taxon name that matches the level
-#' provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"}, enter genus name, etc.
+#' provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter genus name, etc.
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
@@ -19,8 +20,6 @@
 #' hm_fig(taxon.level = "class", taxon.name = "Copepoda",
 #' ecodistrict.select = "Bay of Fundy")
 #' }
-#' @importFrom magrittr `%>%`
-#' @importFrom magrittr `%<>%`
 hm_fig <- function(taxon.level, taxon.name, ecodistrict.select) {
 
   if(!ecodistrict.select %in% Pscaled_agg$ecodistrict) {

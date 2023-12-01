@@ -17,12 +17,14 @@ may provide different detection rates.}
 \description{
 This function calculates number of samples needed to obtain
 species detection at different thresholds by using scaled and interpolated
-data produced with \code{scale_prob_by_month()}.
+data produced with \verb{[scale_prob_by_month()]}
 }
 \examples{
 \dontrun{
-effort_needed_fig(species.name = "Acartia hudsonica", primer.select = "COI1",
-ecodistrict.select = "Scotian Shelf")
+effort_needed_fig(
+  species.name = "Acartia hudsonica", primer.select = "COI1",
+  ecodistrict.select = "Scotian Shelf"
+)
 }
 }
 \author{

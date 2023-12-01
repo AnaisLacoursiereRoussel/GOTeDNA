@@ -7,7 +7,7 @@
 calc_window(data, ecodistrict.select, threshold, show.variation, species.name)
 }
 \arguments{
-\item{data}{(required, data.frame) Data.frame read in with read_data()}
+\item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}}
 
 \item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
 
@@ -15,7 +15,7 @@ calc_window(data, ecodistrict.select, threshold, show.variation, species.name)
 which data are to be displayed to visualize potential optimal detection windows.
 Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 
-\item{show.variation}{(required, character) Choices = \code{c("within_year", "among_years")}.
+\item{show.variation}{(required, character) Choices = \code{c("within_year", "among_years")}
 When “within_year” is chosen, input will be Pscaled_agg; when “among_years” is chosen,
 input will be Pscaled_yr.}
 
@@ -24,40 +24,42 @@ input will be Pscaled_yr.}
 \value{
 A data.frame with 17 columns:
 \itemize{
-\item\code{ecodistrict},
-\item\code{length}: Number of months with optimal detection \code{(i.e., over
+\item \code{ecodistrict}
+\item \code{length} Number of months with optimal detection \code{(i.e., over
 the specified threshold)}.
-\item\code{threshold}: Detection probability threshold specified in function call.
-\item\code{period}: Range of months having optimal detection.
-\item\code{GOTeDNA_ID},
-\item\code{species},
-\item\code{primer},
-\item\code{phylum},
-\item\code{class},
-\item\code{order},
-\item\code{family},
-\item\code{genus},
-\item\code{odds ratio},
-\item\code{p value},
-\item\code{Lower CI},
-\item\code{Upper CI},
-\item\code{confidence}: Provided such that p value < 0.001 = Very high;
+\item \code{threshold} Detection probability threshold specified in function call.
+\item \code{period} Range of months having optimal detection.
+\item \code{GOTeDNA_ID}
+\item \code{species}
+\item \code{primer}
+\item \code{phylum}
+\item \code{class}
+\item \code{order}
+\item \code{family}
+\item \code{genus}
+\item \verb{odds ratio}
+\item \verb{p value}
+\item \verb{Lower CI}
+\item \verb{Upper CI}
+\item \code{confidence} Provided such that p value < 0.001 = Very high;
 0.001 < p < 0.01 = High; 0.01 < p < 0.05 = Medium; p >= 0.05 = Low.
 }
 }
 \description{
 This function calculates species optimal eDNA detection period
-\code{(i.e., months)} and window \code{(i.e., length/number of months)} at the
+\verb{(i.e., months)} and window \verb{(i.e., length/number of months)}at the
 desired detection threshold. The window is defined as consecutive months ≥ the
 threshold and executes a Fisher exact test comparing the detection probability
 within and outside the window. Output provides the odds ratio, p-value, and
-confidence interval for each primer of the species selected \code{(i.e., input = Pscaled_agg)}
-or each primer and year \code{(i.e., Pscaled_yr)}.
+confidence interval for each primer of the species selected \verb{(i.e., input = Pscaled_agg)}
+or each primer and year \verb{(i.e., Pscaled_yr)}
 }
 \examples{
 \dontrun{
-calc_window(data = D_mb, ecodistrict.select = "Bay of Fundy", threshold = "90",
-show.variation = "within_year", species.name = "Nucula proxima")
+calc_window(
+  data = D_mb, ecodistrict.select = "Bay of Fundy", threshold = "90",
+  show.variation = "within_year", species.name = "Nucula proxima"
+)
 }
 }
 \author{
