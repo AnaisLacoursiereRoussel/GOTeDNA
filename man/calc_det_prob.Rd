@@ -27,7 +27,7 @@ Two lists, each with distinct elements of species;primer ID containing 6-9 colum
 }
 \description{
 Function that calculates non-parametric probability of detection
-for each species and primer for the selected ecodistrict.Probabilities are
+for each species and primer for the selected ecodistrict. Probabilities are
 calculated both (1) monthly, across all years; and (2) monthly with each year
 separate. Outputs are used in subsequent functions.
 }
