@@ -13,7 +13,8 @@ Required to join taxonomic information.}
 
 \item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
 
-\item{newP_agg}{(required, list) detection probabilities \code{\link[=calc_det_prob]{calc_det_prob()}}.}
+\item{newP_agg}{(required, list) detection probabilities aggregated per month
+\code{\link[=calc_det_prob]{calc_det_prob()}}.}
 }
 \value{
 Grouped data.frame with 15 columns:

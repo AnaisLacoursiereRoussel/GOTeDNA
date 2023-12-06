@@ -9,7 +9,8 @@
 #' @param data (required, data.frame) Data.frame imported with [read_data()].
 #' Required to join taxonomic information.
 #' @param ecodistrict.select (required, character) Ecodistrict present in data.frame.
-#' @param newP_agg (required, list) detection probabilities [calc_det_prob()].
+#' @param newP_agg (required, list) detection probabilities aggregated per month
+#' [calc_det_prob()].
 #'
 #' @return Grouped data.frame with 15 columns:
 #' * `id` unique species;primer identifier
@@ -67,7 +68,6 @@ scale_prob_by_month <- function(data, ecodistrict.select, newP_agg) {
     dplyr::select(id, ecodistrict, month, detect, nondetect, scaleP) |>
     dplyr::tibble()
   row.names(DF) <- NULL
-
 
   DF[c("GOTeDNA_ID", "species", "primer")] <- stringr::str_split_fixed(DF$id, ";", 3)
   DF <- DF %>%

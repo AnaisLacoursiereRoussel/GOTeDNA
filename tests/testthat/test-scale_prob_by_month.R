@@ -15,6 +15,5 @@ test_that("monthly probabilities are scaled and missing months are interpolated"
       NA,
       -1L
     ), class = c("tbl_df", "tbl", "data.frame"))
-
   )
 })
