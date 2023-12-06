@@ -25,8 +25,6 @@
 #' higher_tax_fig(data = D_mb, higher.taxon.select = "phylum", taxon.name = "Bryozoa",
 #' view.by.level = "genus", ecodistrict.select = "Bay of Fundy", primer.select = "COI1")
 #' }
-#' @importFrom magrittr `%>%`
-#' @importFrom magrittr `%<>%`
 higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level, ecodistrict.select, primer.select) {
   options(dplyr.summarise.inform = FALSE)
 

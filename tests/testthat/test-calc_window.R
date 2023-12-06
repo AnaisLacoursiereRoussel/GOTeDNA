@@ -2,16 +2,34 @@ test_that("calc_window() returns optimal detection windows with confidence value
   expect_equal(
     win_df <- calc_window(
       data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      show.variation = "within_year", species.name = "Acartia longiremis"
+      detect.proba = Pscaled_month, species.name = "Acartia longiremis"
     ),
-    as.data.frame(win_df)
+    structure(list(
+      ecodistrict = "Scotian Shelf",
+      length = 2L, threshold = "90",
+      period = "Jan-Dec",
+      GOTeDNA_ID = "8",
+      species = "Acartia longiremis",
+      primer = "COI1",
+      phylum = "Arthropoda",
+      class = "Copepoda",
+      order = "Calanoida",
+      family = "Acartiidae", genus = "Acartia",
+      `odds ratio` = 5.51172767056909,
+      `p value` = "<0.001",
+      `Lower CI` = 2.74524770500307,
+      `Upper CI` = 11.2555740748163,
+      confidence = "Very high"
+    ), row.names = c(
+      NA,
+      -1L
+    ), class = "data.frame")
   )
-  expect_equal(
+  expect_warning(
     calc_window(
       data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      show.variation = "within_year", species.name = "Acartia hudsonica"
-    ),
-    "No optimal detection window"
+      detect.proba = Pscaled_month, species.name = "Acartia hudsonica"
+    )
   )
 })
 
@@ -19,14 +37,14 @@ test_that("error is thrown when value doesn't exist in data", {
   expect_error(
     calc_window(
       data = D_mb_ex, ecodistrict.select = "Bay of Fundy", threshold = "90",
-      show.variation = "within_year", species.name = "Acartia longiremis"
+      detect.proba = Pscaled_month, species.name = "Acartia longiremis"
     ),
     "Ecodistrict not found in data"
   )
   expect_error(
     calc_window(
       data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      show.variation = "within_year", species.name = "A. longiremis"
+      detect.proba = Pscaled_month, species.name = "A. longiremis"
     ),
     "Species not found in data"
   )

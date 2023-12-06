@@ -4,27 +4,22 @@
 \alias{calc_window}
 \title{Calculate species optimal detection window}
 \usage{
-calc_window(
-  data,
-  ecodistrict.select,
-  threshold,
-  show.variation = c("within_year", "among_years"),
-  species.name
-)
+calc_window(data, ecodistrict.select, threshold, detect.proba, species.name)
 }
 \arguments{
-\item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}}
+\item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}.}
 
-\item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
+\item{ecodistrict.select}{(required, character) Ecodistrict present in
+data.frame.}
 
 \item{threshold}{(required, character): Detection probability threshold for
 which data are to be displayed to visualize potential optimal detection
 windows.
 Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 
-\item{show.variation}{(required, character) Choices = \code{c("within_year", "among_years")}
-When “within_year” is chosen, input will be Pscaled_agg; when “among_years”
-is chosen, input will be Pscaled_yr.}
+\item{detect.proba}{(required, data.frame) Normalized detection
+probabilities as returned by \code{\link[=scale_prob_by_month]{scale_prob_by_month()}} or
+\code{\link[=scale_prob_by_year]{scale_prob_by_year()}}.}
 
 \item{species.name}{(required, character): Full binomial species name.}
 }
@@ -62,9 +57,15 @@ p-value, and confidence interval for each primer of the species selected
 }
 \examples{
 \dontrun{
+newprob <- calc_det_prob(
+  data = D_mb_ex,
+  ecodistrict.select = "Scotian Shelf"
+)
+Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+ newprob$newP_yr)
 calc_window(
-  data = D_mb_ex, ecodistrict.select = "Bay of Fundy", threshold = "90",
-  show.variation = "within_year", species.name = "Nucula proxima"
+  data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
+  detect.proba = Pscaledd_month, species.name = "Nucula proxima"
 )
 }
 }

@@ -1,9 +1,10 @@
 #' Normalize detection probabilities with min-max method (range 0-1) by year
 #' and month
 #'
-#' @description This function normalizes (i.e., scales) monthly detection probabilities for
-#' each species and primer that were calculated with the previous function,
-#' `calc_det_prob()` Outputs fed into figure and window calculation functions.
+#' @description This function normalizes (i.e., scales) monthly detection 
+#' probabilities for each species and primer that were calculated with the 
+#' previous function, `calc_det_prob()` Outputs fed into figure and window 
+#' calculation functions.
 #' * NOTE: Currently this function only works for metabarcoding data.
 #'
 #' @param data (required, data.frame) Data.frame imported with [read_data()].

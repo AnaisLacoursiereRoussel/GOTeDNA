@@ -8,23 +8,29 @@ hm_fig(taxon.level, taxon.name, ecodistrict.select)
 }
 \arguments{
 \item{taxon.level}{(required, data.frame): Select taxonomic level to view.
-Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}}
+Choices = one of `c("phylum", "class", "order", "family", "genus", "species")}
 
-\item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genus name, etc.}
+\item{taxon.name}{(required, character): Select taxon name that matches the
+level provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter
+genus name, etc.}
 
-\item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
+\item{ecodistrict.select}{(required, character): Ecodistrict present in data.
+frame.}
 }
 \description{
-This function displays scaled species detection probabilities of the
-chosen taxonomic group with probabilities produced with \code{scale_prob_by_month()}
-All primers that are available in the data are displayed.
-NOTE: interpolated \verb{(i.e., missing)} data are not used in this representation.
+This function displays scaled species detection probabilities
+of the chosen taxonomic group with probabilities produced with
+\code{scale_prob_by_month()}. All primers that are available in the data are
+displayed.
+NOTE: interpolated \verb{(i.e., missing)} data are not used in this
+representation.
 }
 \examples{
 \dontrun{
-hm_fig(taxon.level = "class", taxon.name = "Copepoda",
-ecodistrict.select = "Bay of Fundy")
+hm_fig(
+  taxon.level = "class", taxon.name = "Copepoda",
+  ecodistrict.select = "Bay of Fundy"
+)
 }
 }
 \author{
