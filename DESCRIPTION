@@ -17,6 +17,7 @@ Depends:
     R (>= 4.1)
 Imports:
     dplyr (>= 1.0.0),
+    fs,
     ggh4x,
     ggplot2,
     lubridate,
@@ -24,6 +25,7 @@ Imports:
     grid,
     readxl,
     scales,
+    shiny,
     stats,
     tidyr,
     viridis

@@ -1,0 +1,101 @@
+#map-map {
+  height : 90vh !important;
+}
+
+#file_report {
+  color: #337ab7;
+}
+
+#logo_gotedna {
+  height: 10rem;
+  margin-left: 20%;
+}
+
+#data_request {
+  background-color: #f2f2f2;
+  min-height: 90vh;
+  padding: 1rem;
+}
+
+#observation_request {
+  background-color: #f2f2f2;
+  min-height: 95vh;
+  padding: 1rem;
+}
+
+#data_input {
+  background-color: #7f7f7f;
+  min-height: 30vh;
+  padding: 1rem;
+}
+
+.pending{
+  color: #ccc;
+  font-size: 1.1em;
+}
+
+h2 {
+  font-weight: bold;
+  color: #53b2ad;
+}
+
+
+.col_1 {
+  color: #53b2ad;
+}
+
+.col_grey1 {
+  color: #7f7f7f;
+}
+
+.col_grey3 {
+  color: #f2f2f2;
+}
+
+.green {
+  color: #34c369;
+}
+
+.red {
+  color: #f03561;
+}
+
+.blue {
+  color: #399ad0;
+}
+
+.tbl_preview {
+  padding: 4px;
+  background-color: #eee;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+#report_html {
+  max-height: 900px!important;
+}
+
+#iframe_report {
+  height: 90vh;
+}
+
+#footer {
+  width: 100%;
+}
+
+#footer_left {
+  width: 16%;
+  display:inline-table;
+}
+
+#footer_right {
+  width: 84%;
+  display:inline-table;
+  text-align: center;
+}
+
+.shiny-notification {
+  position:fixed;
+  top: calc(85%);
+  left: calc(10%);
+}
