@@ -2,17 +2,20 @@
 % Please edit documentation in R/calc_det_prob.R
 \name{calc_det_prob}
 \alias{calc_det_prob}
-\title{Calculate detection probabilities from data that were previously imported with read_data()}
+\title{Calculate detection probabilities from data that were previously imported
+with read_data()}
 \usage{
 calc_det_prob(data, ecodistrict.select)
 }
 \arguments{
-\item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}}
+\item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}.}
 
-\item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
+\item{ecodistrict.select}{(required, character) Ecodistrict present in data.
+frame.}
 }
 \value{
-Two lists, each with distinct elements of species;primer ID containing 6-9 columns:
+Two lists, each with distinct elements of species; primer ID
+containing 6-9 columns:
 \itemize{
 \item \code{month}
 \item \code{n} total number of samples per month
@@ -33,7 +36,10 @@ separate. Outputs are used in subsequent functions.
 }
 \examples{
 \dontrun{
-calc_det_prob(data = D_mb, ecodistrict.select = "Scotian Shelf")
+ D_mb <- read_data(
+   choose.method = "metabarcoding", path.folder = "./inst/testdata"
+ )
+ calc_det_prob(data = D_mb_ex, ecodistrict.select = "Scotian Shelf")
 }
 }
 \author{

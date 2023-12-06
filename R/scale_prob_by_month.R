@@ -36,11 +36,6 @@
 #' }
 scale_prob_by_month <- function(data, ecodistrict.select) {
 
-  # Implement min max scaling of detection probabilities
-  minMax <- function(x) {
-    (x - min(x)) / (max(x) - min(x))
-  }
-
  if(!ecodistrict.select %in% data$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
@@ -109,11 +104,11 @@ scale_prob_by_month <- function(data, ecodistrict.select) {
 
   CPscaled = lapply(newP_agg, function(x) {
     data.frame(x) %>%
-      #  dplyr::mutate(scaleP = minMax(x$p)) %>%
+      #  dplyr::mutate(scaleP = scale_min_max(x$p)) %>%
       dplyr::mutate(x, scaleP = dplyr::case_when(
         p == 1 ~ 1,
         p == 0 ~ 0,
-        p != 0 | 1 ~ minMax(x$p)
+        p != 0 | 1 ~ scale_min_max(x$p)
       ))
   })
 

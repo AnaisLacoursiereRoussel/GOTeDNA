@@ -40,7 +40,7 @@
 scale_prob_by_year <- function(data, ecodistrict.select) {
 
   # Implement min max scaling of detection probabilities
-  minMax <- function(x) {
+  scale_min_max <- function(x) {
     (x - min(x)) / (max(x) - min(x))
   }
 
@@ -113,7 +113,7 @@ scale_prob_by_year <- function(data, ecodistrict.select) {
       dplyr::mutate(x, scaleP = dplyr::case_when(
         p == 1 ~ 1,
         p == 0 ~ 0,
-        p != 0|1 ~ minMax(p)))
+        p != 0|1 ~ scale_min_max(p)))
   })
 
 

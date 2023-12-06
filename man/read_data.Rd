@@ -52,7 +52,9 @@ reformatting, merging metadata and data).
 }
 \examples{
 \dontrun{
-D_mb <- read_data(choose.method = "metabarcoding", path.folder = "./data/")
+D_mb <- read_data(
+ choose.method = "metabarcoding", path.folder = "./inst/testdata"
+)
 }
 }
 \author{

@@ -3,7 +3,7 @@ Type: Package
 Encoding: UTF-8
 Title: Guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
 Date: 2023-12-05
-Version: 0.4.0.9001
+Version: 0.4.0.9002
 Authors@R: c(
   person("Melissa", "Morrison", email = "Melissa.Morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
   person("Tim", "Barrett", email = "Tim.Barrett@@dfo-mpo.gc.ca", role = c("aut", "ctr")),
@@ -14,7 +14,7 @@ Description: The purpose of this package is to compile eDNA qPCR and
 License: GPL-3
 Roxygen: list(markdown = TRUE)
 Depends:
-    R (>= 4.0)
+    R (>= 4.1)
 Imports:
     dplyr (>= 1.0.0),
     ggh4x,

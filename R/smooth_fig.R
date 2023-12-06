@@ -22,7 +22,7 @@
 #' }
 smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
   # Implement min max scaling of detection probabilities
-  minMax <- function(x) {
+  scale_min_max <- function(x) {
     (x - min(x)) / (max(x) - min(x))
   }
   options(dplyr.summarise.inform = FALSE)
@@ -56,7 +56,7 @@ smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
   data %<>%
     dplyr::group_by(year) %>%
     tidyr::drop_na(prob) %>%
-    dplyr::mutate(scaleP = minMax(prob)) %>%
+    dplyr::mutate(scaleP = scale_min_max(prob)) %>%
     dplyr::mutate(scaleP = dplyr::case_when(
       scaleP == "NaN" ~ prob,
       scaleP != "NaN" ~ scaleP
