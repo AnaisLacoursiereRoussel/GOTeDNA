@@ -1,3 +1,7 @@
+# Project specific files 
+*.html
+
+
 # History files
 .Rhistory
 .Rapp.history

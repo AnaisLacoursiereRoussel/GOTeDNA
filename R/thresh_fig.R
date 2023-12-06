@@ -1,6 +1,6 @@
 #' Display monthly detection probabilities for selected taxon, ecodistrict, and
 #' detection probability threshold
-#' 
+#'
 #' @description This function displays detection probabilities in bins, with
 #' probabilities over a specified threshold displayed in purple and under the
 #' threshold in grey.
@@ -13,25 +13,43 @@
 #' which data are to be displayed to visualize potential optimal detection windows.
 #' Choices = one of `"50","55","60","65","70","75","80","85","90","95")`
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
-
+#' @param Pscaled_agg (required, data.frame) Normalized detection
+#' probabilities as returned by [scale_prob_by_month()] or
+#' [scale_prob_by_year()].
+#' 
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname thresh_fig
 #' @export
 #' @examples
 #' \dontrun{
+#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
+#' Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+#'  newprob$newP_agg)
 #' thresh_fig(
-#'   taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90",
-#'   ecodistrict.select = "Scotian Shelf"
+#'   taxon.level = "species", taxon.name = "Acartia hudsonica",
+#'   threshold = "90", ecodistrict.select = "Scotian Shelf",
+#'   Pscaled_month
 #' )
 #' }
-thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select) {
+thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select, 
+  Pscaled_agg) {
+  
   if (!ecodistrict.select %in% Pscaled_agg$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
 
-  # Pscaled_agg %>%
-  #   dplyr::filter(., ecodistrict == ecodistrict.select)
+  taxon.level <- match.arg(
+    arg = taxon.level,
+    choices = c("phylum", "class", "order", "family", "genus", "species")
+  )
+
+  thresh_slc <- as.character(seq(50, 95, 5))
+  threshold <- match.arg(arg = threshold, choices = thresh_slc)
+  thresh <- data.frame(
+    values = paste0("thresh", thresh_slc),
+    labels = thresh_slc
+  )
 
   Pthresh <- Pscaled_agg %>%
     dplyr::mutate(thresh95 = dplyr::case_when(
@@ -79,35 +97,13 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select) {
   Pthresh[Pthresh$phylum == "Chordata", ] %>%
     tidyr::drop_na(class)
 
-  if (!is.null(taxon.level)) {
-    taxon.level <- match.arg(
-      arg = taxon.level,
-      choices = c("phylum", "class", "order", "family", "genus", "species"),
-      several.ok = FALSE
-    )
-  }
-
-  thresh_slc <- as.character(seq(50, 95, 5))
-  if (!is.null(threshold)) {
-    threshold <- match.arg(
-      arg = threshold,
-      choices = thresh_slc
-       ,
-      several.ok = FALSE
-    )
-  }
-
-  thresh <- data.frame(
-    values = paste0("thresh", thresh_slc),
-    labels = thresh_slc
-  )
 
   thresh.value <- switch(threshold,
     thresh$values[thresh$labels == threshold]
   )
   data <- Pthresh[Pthresh[[taxon.level]] %in% taxon.name, ]
 
-  print(ggplot2::ggplot() +
+  ggplot2::ggplot() +
     ggplot2::geom_hline(
       mapping = ggplot2::aes(yintercept = y),
       data.frame(y = c(0:4) / 4),
@@ -153,5 +149,5 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select) {
       panel.grid = ggplot2::element_blank(),
       axis.title.y = ggplot2::element_text(hjust = 1, vjust = 2),
       plot.background = ggplot2::element_rect(fill = "white", colour = NA)
-    ))
+    )
 }

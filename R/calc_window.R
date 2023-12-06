@@ -55,7 +55,7 @@
 #'  newprob$newP_yr)
 #' calc_window(
 #'   data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-#'   detect.proba = Pscaledd_month, species.name = "Nucula proxima"
+#'   detect.proba = Pscaled_month, species.name = "Nucula proxima"
 #' )
 #' }
 calc_window <- function(

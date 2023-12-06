@@ -20,8 +20,8 @@ for the specified species and region.
 \examples{
 \dontrun{
 sample_size_fig(
-  data = D_mb, species.name = "Acartia longiremis",
-  ecodistrict.select = "Bay of Fundy"
+  data = D_mb_ex, species.name = "Acartia hudsonica",
+  ecodistrict.select = "Scotian Shelf"
 )
 }
 }

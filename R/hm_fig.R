@@ -7,13 +7,15 @@
 #' NOTE: interpolated `(i.e., missing)` data are not used in this 
 #' representation.
 #'
-#' @param taxon.level (required, data.frame): Select taxonomic level to view.
-#' Choices = one of `c("phylum", "class", "order", "family", "genus", "species")
+#' @param taxon.level (required, character): Select taxonomic level to view.
 #' @param taxon.name (required, character): Select taxon name that matches the 
 #' level provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter 
 #' genus name, etc.
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.
 #' frame.
+#' @param Pscaled_agg  (required, data.frame) Normalized detection
+#' probabilities as returned by [scale_prob_by_month()] or
+#' [scale_prob_by_year()].
 #'
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
@@ -21,28 +23,27 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' hm_fig(
-#'   taxon.level = "class", taxon.name = "Copepoda",
-#'   ecodistrict.select = "Bay of Fundy"
-#' )
+#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
+#' Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+#'  newprob$newP_agg)
+#' hm_fig(taxon.level = "class", taxon.name = "Copepoda", 
+#'  ecodistrict.select = "Scotian Shelf", Pscaled_month)
 #' }
-hm_fig <- function(taxon.level, taxon.name, ecodistrict.select) {
+hm_fig <- function(
+  taxon.level = c("phylum", "class", "order", "family", "genus", "species"), 
+  taxon.name, ecodistrict.select, Pscaled_agg
+) {
+
   if (!ecodistrict.select %in% Pscaled_agg$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
+  taxon.level <- match.arg(taxon.level)
 
   data <- Pscaled_agg[Pscaled_agg[[taxon.level]] %in% c(taxon.name), ] %>%
     dplyr::filter(., ecodistrict == ecodistrict.select)
 
-  if (!is.null(taxon.level)) {
-    taxon.level <- match.arg(
-      arg = taxon.level,
-      choices = c("phylum", "class", "order", "family", "genus", "species"),
-      several.ok = FALSE
-    )
-  }
 
-  print(ggplot2::ggplot(
+  ggplot2::ggplot(
     data,
     ggplot2::aes(x = month, y = reorder(species, dplyr::desc(species)))
   ) +
@@ -75,5 +76,5 @@ hm_fig <- function(taxon.level, taxon.name, ecodistrict.select) {
       panel.grid = ggplot2::element_blank(),
       axis.text.y = ggplot2::element_text(face = "italic"),
       legend.spacing = grid::unit(0, "cm")
-    ))
+    )
 }
