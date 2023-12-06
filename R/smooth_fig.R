@@ -21,11 +21,11 @@
 #' )
 #' }
 smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
-  # Implement min max scaling of detection probabilities
-  scale_min_max <- function(x) {
-    (x - min(x)) / (max(x) - min(x))
-  }
+
+  oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
+  # reset option on exit
+  on.exit(options(dplyr.summarise.inform = oop))
 
   if (!ecodistrict.select %in% data$ecodistrict) {
     stop("Ecodistrict not found in data")

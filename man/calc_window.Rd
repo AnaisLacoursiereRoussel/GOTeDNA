@@ -4,7 +4,13 @@
 \alias{calc_window}
 \title{Calculate species optimal detection window}
 \usage{
-calc_window(data, ecodistrict.select, threshold, show.variation, species.name)
+calc_window(
+  data,
+  ecodistrict.select,
+  threshold,
+  show.variation = c("within_year", "among_years"),
+  species.name
+)
 }
 \arguments{
 \item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}}
@@ -12,12 +18,13 @@ calc_window(data, ecodistrict.select, threshold, show.variation, species.name)
 \item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
 
 \item{threshold}{(required, character): Detection probability threshold for
-which data are to be displayed to visualize potential optimal detection windows.
+which data are to be displayed to visualize potential optimal detection
+windows.
 Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 
 \item{show.variation}{(required, character) Choices = \code{c("within_year", "among_years")}
-When “within_year” is chosen, input will be Pscaled_agg; when “among_years” is chosen,
-input will be Pscaled_yr.}
+When “within_year” is chosen, input will be Pscaled_agg; when “among_years”
+is chosen, input will be Pscaled_yr.}
 
 \item{species.name}{(required, character): Full binomial species name.}
 }
@@ -25,8 +32,7 @@ input will be Pscaled_yr.}
 A data.frame with 17 columns:
 \itemize{
 \item \code{ecodistrict}
-\item \code{length} Number of months with optimal detection \code{(i.e., over
-the specified threshold)}.
+\item \code{length} Number of months with optimal detection \verb{(i.e., over the specified threshold)}.
 \item \code{threshold} Detection probability threshold specified in function call.
 \item \code{period} Range of months having optimal detection.
 \item \code{GOTeDNA_ID}
@@ -47,17 +53,17 @@ the specified threshold)}.
 }
 \description{
 This function calculates species optimal eDNA detection period
-\verb{(i.e., months)} and window \verb{(i.e., length/number of months)}at the
-desired detection threshold. The window is defined as consecutive months ≥ the
-threshold and executes a Fisher exact test comparing the detection probability
-within and outside the window. Output provides the odds ratio, p-value, and
-confidence interval for each primer of the species selected \verb{(i.e., input = Pscaled_agg)}
-or each primer and year \verb{(i.e., Pscaled_yr)}
+\verb{(i.e., months)} and window \verb{(i.e., length/number of months)} at the
+desired detection threshold. The window is defined as consecutive months ≥
+the threshold and executes a Fisher exact test comparing the detection
+probability within and outside the window. Output provides the odds ratio,
+p-value, and confidence interval for each primer of the species selected
+\verb{(i.e., input = Pscaled_agg)} or each primer and year \verb{(i.e., Pscaled_yr)}.
 }
 \examples{
 \dontrun{
 calc_window(
-  data = D_mb, ecodistrict.select = "Bay of Fundy", threshold = "90",
+  data = D_mb_ex, ecodistrict.select = "Bay of Fundy", threshold = "90",
   show.variation = "within_year", species.name = "Nucula proxima"
 )
 }

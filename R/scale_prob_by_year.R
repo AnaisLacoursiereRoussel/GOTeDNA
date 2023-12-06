@@ -39,11 +39,6 @@
 #' }
 scale_prob_by_year <- function(data, ecodistrict.select) {
 
-  # Implement min max scaling of detection probabilities
-  scale_min_max <- function(x) {
-    (x - min(x)) / (max(x) - min(x))
-  }
-
   if(!ecodistrict.select %in% data$ecodistrict) {
     stop("Ecodistrict not found in data")
   }

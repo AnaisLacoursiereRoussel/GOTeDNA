@@ -2,15 +2,18 @@
 % Please edit documentation in R/scale_prob_by_month.R
 \name{scale_prob_by_month}
 \alias{scale_prob_by_month}
-\title{Normalize detection probabilities with min-max method (range 0-1) by year and month}
+\title{Normalize detection probabilities with min-max method (range 0-1) by year
+and month}
 \usage{
-scale_prob_by_month(data, ecodistrict.select)
+scale_prob_by_month(data, ecodistrict.select, newP_agg)
 }
 \arguments{
 \item{data}{(required, data.frame) Data.frame imported with \code{\link[=read_data]{read_data()}}.
 Required to join taxonomic information.}
 
 \item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
+
+\item{newP_agg}{(required, list) detection probabilities \code{\link[=calc_det_prob]{calc_det_prob()}}.}
 }
 \value{
 Grouped data.frame with 15 columns:
@@ -20,7 +23,7 @@ Grouped data.frame with 15 columns:
 \item \code{month}
 \item \code{detect} number of detections
 \item \code{nondetect} number of non-detections
-\item \code{scaleP}  detection probability scaled to range 0-1
+\item \code{scaleP} detection probability scaled to range 0-1
 \item \code{GOTeDNA_ID}
 \item \code{species}
 \item \code{primer}
@@ -42,7 +45,11 @@ each species and primer that were calculated with the previous function,
 }
 \examples{
 \dontrun{
-scale_prob_by_month(data = D_mb, ecodistrict.select = "Scotian Shelf")
+newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
+scale_prob_by_month(
+  data = D_mb_ex, ecodistrict.select = "Scotian Shelf",
+  newprob$newP_agg
+)
 }
 }
 \author{

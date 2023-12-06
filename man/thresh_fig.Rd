@@ -16,7 +16,7 @@ provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genu
 
 \item{threshold}{(required, character): Detection probability threshold for
 which data are to be displayed to visualize potential optimal detection windows.
-Choices = one of `"50","55","60","65","70","75","80","85","90","95")``}
+Choices = one of \verb{"50","55","60","65","70","75","80","85","90","95")}}
 
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 }

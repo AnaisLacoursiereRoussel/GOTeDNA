@@ -1,5 +1,3 @@
-newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-
 test_that("calc_det_prob() calculates detection probability", {
   expect_true(is.list(newprob))
   expect_identical(names(newprob), c("newP_agg", "newP_yr"))
