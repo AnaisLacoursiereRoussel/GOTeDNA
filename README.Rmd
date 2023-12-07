@@ -31,8 +31,91 @@ devtools::install_github("mkmor/GOTeDNA")
 ```
 
 ## Usage
+
+
+
 ### R function categories:
 - Import data
 - Clean/tidy data
 - Visualization
 
+```{R}
+library("GOTeDNA")
+```
+
+
+### Clean/tidt data
+
+```{R}
+newprob <- calc_det_prob(
+  data = D_mb_ex,
+  ecodistrict.select = "Scotian Shelf"
+)
+Pscaled_month <- scale_prob_by_month(
+  D_mb_ex, "Scotian Shelf",
+  newprob$newP_agg
+)
+win <- calc_window(
+  data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
+  detect.proba = Pscaled_month, species.name = "Acartia longiremis"
+)
+```
+
+
+### Heat map 
+
+```{R hm}
+hm_fig(
+   taxon.level = "class", taxon.name = "Copepoda",
+   ecodistrict.select = "Scotian Shelf",
+   Pscaled_month
+ )
+```
+
+### Effort needed
+
+```{R effort}
+effort_needed_fig(
+  species.name = "Acartia hudsonica", primer.select = "COI1",
+  ecodistrict.select = "Scotian Shelf", Pscaled_month
+)
+```
+
+### Sampling effort
+
+```{R higher}
+higher_tax_fig(
+  data = D_mb_ex, 
+  higher.taxon.select = "phylum", 
+  taxon.name = "Bryozoa",
+  view.by.level = "genus", 
+  ecodistrict.select = "Scotian Shelf", 
+  primer.select = "COI1"
+)
+```
+
+### Sample size 
+
+```{R sample_size}
+sample_size_fig(
+  data = D_mb_ex, species.name = "Acartia hudsonica",
+  ecodistrict.select = "Scotian Shelf"
+)
+```
+
+### Species monthly detection
+
+```{R smooth}
+smooth_fig(
+  data = D_mb_ex, species.name = "Acartia longiremis",
+  primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+)
+```
+
+
+### Monthly detection probabilities
+
+```{R thresh_fig}
+thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
+  threshold = "90", ecodistrict.select = "Scotian Shelf", Pscaled_month)
+```

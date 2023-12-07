@@ -38,8 +38,14 @@ for all taxa of a specified higher taxonomic group per year.
 }
 \examples{
 \dontrun{
-higher_tax_fig(data = D_mb, higher.taxon.select = "phylum", taxon.name = "Bryozoa",
-view.by.level = "genus", ecodistrict.select = "Bay of Fundy", primer.select = "COI1")
+higher_tax_fig(
+  data = D_mb_ex,
+  higher.taxon.select = "phylum",
+  taxon.name = "Bryozoa",
+  view.by.level = "genus",
+  ecodistrict.select = "Scotian Shelf",
+  primer.select = "COI1"
+)
 }
 }
 \author{

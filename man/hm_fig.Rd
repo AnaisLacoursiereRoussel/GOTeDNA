@@ -4,27 +4,42 @@
 \alias{hm_fig}
 \title{Displays heatmap of scaled monthly detection probabilities for taxon}
 \usage{
-hm_fig(taxon.level, taxon.name, ecodistrict.select)
+hm_fig(
+  taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
+  taxon.name,
+  ecodistrict.select,
+  Pscaled_agg
+)
 }
 \arguments{
-\item{taxon.level}{(required, data.frame): Select taxonomic level to view.
-Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}}
+\item{taxon.level}{(required, character): Select taxonomic level to view.}
 
-\item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genus name, etc.}
+\item{taxon.name}{(required, character): Select taxon name that matches the
+level provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter
+genus name, etc.}
 
-\item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
+\item{ecodistrict.select}{(required, character): Ecodistrict present in data.
+frame.}
+
+\item{Pscaled_agg}{(required, data.frame) Normalized detection
+probabilities as returned by \code{\link[=scale_prob_by_month]{scale_prob_by_month()}} or
+\code{\link[=scale_prob_by_year]{scale_prob_by_year()}}.}
 }
 \description{
-This function displays scaled species detection probabilities of the
-chosen taxonomic group with probabilities produced with \code{scale_prob_by_month()}
-All primers that are available in the data are displayed.
-NOTE: interpolated \verb{(i.e., missing)} data are not used in this representation.
+This function displays scaled species detection probabilities
+of the chosen taxonomic group with probabilities produced with
+\code{scale_prob_by_month()}. All primers that are available in the data are
+displayed.
+NOTE: interpolated \verb{(i.e., missing)} data are not used in this
+representation.
 }
 \examples{
 \dontrun{
-hm_fig(taxon.level = "class", taxon.name = "Copepoda",
-ecodistrict.select = "Bay of Fundy")
+newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
+Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+ newprob$newP_agg)
+hm_fig(taxon.level = "class", taxon.name = "Copepoda", 
+ ecodistrict.select = "Scotian Shelf", Pscaled_month)
 }
 }
 \author{

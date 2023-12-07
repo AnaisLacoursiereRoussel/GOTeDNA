@@ -26,6 +26,97 @@ devtools::install_github("mkmor/GOTeDNA")
 
 ### R function categories:
 
-- Import data
-- Clean/tidy data
-- Visualization
+-   Import data
+-   Clean/tidy data
+-   Visualization
+
+``` r
+library("GOTeDNA")
+```
+
+### Clean/tidt data
+
+``` r
+newprob <- calc_det_prob(
+  data = D_mb_ex,
+  ecodistrict.select = "Scotian Shelf"
+)
+Pscaled_month <- scale_prob_by_month(
+  D_mb_ex, "Scotian Shelf",
+  newprob$newP_agg
+)
+win <- calc_window(
+  data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
+  detect.proba = Pscaled_month, species.name = "Acartia longiremis"
+)
+```
+
+### Heat map
+
+``` r
+hm_fig(
+   taxon.level = "class", taxon.name = "Copepoda",
+   ecodistrict.select = "Scotian Shelf",
+   Pscaled_month
+ )
+```
+
+<img src="man/figures/README-hm-1.png" width="100%" />
+
+### Effort needed
+
+``` r
+effort_needed_fig(
+  species.name = "Acartia hudsonica", primer.select = "COI1",
+  ecodistrict.select = "Scotian Shelf", Pscaled_month
+)
+```
+
+<img src="man/figures/README-effort-1.png" width="100%" />
+
+### Sampling effort
+
+``` r
+higher_tax_fig(
+  data = D_mb_ex, 
+  higher.taxon.select = "phylum", 
+  taxon.name = "Bryozoa",
+  view.by.level = "genus", 
+  ecodistrict.select = "Scotian Shelf", 
+  primer.select = "COI1"
+)
+```
+
+<img src="man/figures/README-higher-1.png" width="100%" />
+
+### Sample size
+
+``` r
+sample_size_fig(
+  data = D_mb_ex, species.name = "Acartia hudsonica",
+  ecodistrict.select = "Scotian Shelf"
+)
+```
+
+<img src="man/figures/README-sample_size-1.png" width="100%" />
+
+### Species monthly detection
+
+``` r
+smooth_fig(
+  data = D_mb_ex, species.name = "Acartia longiremis",
+  primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+)
+#> Warning in RColorBrewer::brewer.pal(length(unique(data$year)), "Dark2"): minimal value for n is 3, returning requested palette with 3 different levels
+```
+
+<img src="man/figures/README-smooth-1.png" width="100%" />
+
+### Monthly detection probabilities
+
+``` r
+thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
+  threshold = "90", ecodistrict.select = "Scotian Shelf", Pscaled_month)
+```
+
+<img src="man/figures/README-thresh_fig-1.png" width="100%" />

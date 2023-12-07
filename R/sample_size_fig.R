@@ -14,8 +14,8 @@
 #' @examples
 #' \dontrun{
 #' sample_size_fig(
-#'   data = D_mb, species.name = "Acartia longiremis",
-#'   ecodistrict.select = "Bay of Fundy"
+#'   data = D_mb_ex, species.name = "Acartia hudsonica",
+#'   ecodistrict.select = "Scotian Shelf"
 #' )
 #' }
 sample_size_fig <- function(data, species.name, ecodistrict.select) {
@@ -39,7 +39,7 @@ sample_size_fig <- function(data, species.name, ecodistrict.select) {
       freq_det = nd / n
     )
 
-  print(ggplot2::ggplot() +
+  ggplot2::ggplot() +
     ggplot2::geom_jitter(data,
       mapping = ggplot2::aes(
         month, freq_det,
@@ -77,5 +77,5 @@ sample_size_fig <- function(data, species.name, ecodistrict.select) {
       strip.background = ggplot2::element_rect(fill = "grey95", colour = "black"),
       strip.text.y.left = ggplot2::element_text(angle = 0),
       strip.placement = "outside"
-    ))
+    )
 }

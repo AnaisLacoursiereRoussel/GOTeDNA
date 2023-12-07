@@ -22,26 +22,30 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' higher_tax_fig(data = D_mb, higher.taxon.select = "phylum", taxon.name = "Bryozoa",
-#' view.by.level = "genus", ecodistrict.select = "Bay of Fundy", primer.select = "COI1")
+#' higher_tax_fig(
+#'   data = D_mb_ex,
+#'   higher.taxon.select = "phylum",
+#'   taxon.name = "Bryozoa",
+#'   view.by.level = "genus",
+#'   ecodistrict.select = "Scotian Shelf",
+#'   primer.select = "COI1"
+#' )
 #' }
-#' @importFrom magrittr `%>%`
-#' @importFrom magrittr `%<>%`
 higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level, ecodistrict.select, primer.select) {
   options(dplyr.summarise.inform = FALSE)
 
-  if(!ecodistrict.select %in% data$ecodistrict) {
+  if (!ecodistrict.select %in% data$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
 
-  if(!taxon.name %in% data[[higher.taxon.select]]) {
+  if (!taxon.name %in% data[[higher.taxon.select]]) {
     stop("Taxon not found in data")
   }
 
   if (!is.null(view.by.level)) {
     view.by.level <- match.arg(
       arg = view.by.level,
-      choices = c("phylum","class","order","family","genus"),
+      choices = c("phylum", "class", "order", "family", "genus"),
       several.ok = FALSE
     )
   }
@@ -49,56 +53,65 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
   if (!is.null(higher.taxon.select)) {
     higher.taxon.select <- match.arg(
       arg = higher.taxon.select,
-      choices = c("kingdom","phylum","class","order","family"),
+      choices = c("kingdom", "phylum", "class", "order", "family"),
       several.ok = FALSE
     )
   }
 
-  if(!primer.select %in% data$target_subfragment) {
+  if (!primer.select %in% data$target_subfragment) {
     stop("Primer not found in data")
   }
 
   data %<>%
     dplyr::filter(., ecodistrict == ecodistrict.select &
-                    target_subfragment == primer.select &
-                    !!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
-    dplyr::group_by(kingdom,phylum,class,order,family,genus,year,month) %>%
-    dplyr::summarise(n=dplyr::n(),
-                     nd=sum(detected),
-                     freq_det = nd/n)
+      target_subfragment == primer.select &
+      !!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
+    dplyr::group_by(kingdom, phylum, class, order, family, genus, year, month) %>%
+    dplyr::summarise(
+      n = dplyr::n(),
+      nd = sum(detected),
+      freq_det = nd / n
+    )
 
-  print(ggplot2::ggplot()+
-          ggplot2::geom_jitter(data,
-                               mapping=ggplot2::aes(
-                                 x=month,
-                                 y=freq_det,
-                                 colour=!!dplyr::ensym(view.by.level),
-                                 size=n),
-                               alpha = 0.8,
-                               na.rm = TRUE, width = 0.5, height = 0.01) +
-          ggplot2::scale_colour_viridis_d() +
-          ggh4x::facet_grid2(year ~.,
-                             strip = ggh4x::strip_nested(bleed=T)) +
-          ggplot2::scale_y_continuous(breaks = c(0,0.25,0.5,0.75,1), limits = c(-.01,1)) +
-          ggplot2::scale_x_continuous(limits=c(1,12),
-                                      breaks=1:12,
-                                      labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")) +
-          ggplot2::scale_size_continuous(limits=c(0,NA), breaks=seq(0,50,10))+
-          ggplot2::theme_minimal(base_size = 10) +
-          ggplot2::labs(x="Month", y="Proportion of positive samples",
-                        title=paste(stringr::str_to_title(higher.taxon.select),taxon.name),
-                        colour=stringr::str_to_title(view.by.level),
-                        size="Sampling effort") +
-          ggplot2::theme(
-            panel.background = ggplot2::element_blank(),
-            panel.grid = ggplot2::element_blank(),
-            panel.border = ggplot2::element_rect(colour="black", fill=NA),
-            axis.line = ggplot2::element_blank(),
-            panel.grid.minor.x = ggplot2::element_line(colour="lightgrey"),
-            axis.ticks = ggplot2::element_line(),
-            legend.position = NULL,
-            strip.background=ggplot2::element_rect(fill="grey95",colour="black"),
-            strip.text.y.left = ggplot2::element_text(angle=0),
-            strip.placement="outside"))
-
+  ggplot2::ggplot() +
+    ggplot2::geom_jitter(data,
+      mapping = ggplot2::aes(
+        x = month,
+        y = freq_det,
+        colour = !!dplyr::ensym(view.by.level),
+        size = n
+      ),
+      alpha = 0.8,
+      na.rm = TRUE, width = 0.5, height = 0.01
+    ) +
+    ggplot2::scale_colour_viridis_d() +
+    ggh4x::facet_grid2(year ~ .,
+      strip = ggh4x::strip_nested(bleed = T)
+    ) +
+    ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1)) +
+    ggplot2::scale_x_continuous(
+      limits = c(1, 12),
+      breaks = 1:12,
+      labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    ) +
+    ggplot2::scale_size_continuous(limits = c(0, NA), breaks = seq(0, 50, 10)) +
+    ggplot2::theme_minimal(base_size = 10) +
+    ggplot2::labs(
+      x = "Month", y = "Proportion of positive samples",
+      title = paste(stringr::str_to_title(higher.taxon.select), taxon.name),
+      colour = stringr::str_to_title(view.by.level),
+      size = "Sampling effort"
+    ) +
+    ggplot2::theme(
+      panel.background = ggplot2::element_blank(),
+      panel.grid = ggplot2::element_blank(),
+      panel.border = ggplot2::element_rect(colour = "black", fill = NA),
+      axis.line = ggplot2::element_blank(),
+      panel.grid.minor.x = ggplot2::element_line(colour = "lightgrey"),
+      axis.ticks = ggplot2::element_line(),
+      legend.position = NULL,
+      strip.background = ggplot2::element_rect(fill = "grey95", colour = "black"),
+      strip.text.y.left = ggplot2::element_text(angle = 0),
+      strip.placement = "outside"
+    )
 }

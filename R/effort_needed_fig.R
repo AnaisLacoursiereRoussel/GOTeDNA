@@ -1,13 +1,15 @@
 #' Calculate sampling effort needed to obtain different detection thresholds.
-#' 
+#'
 #' @description This function calculates number of samples needed to obtain
 #' species detection at different thresholds by using scaled and interpolated
-#' data produced with `[scale_prob_by_month()]`
-#'
+#' data produced with `[scale_prob_by_month()]`.
 #' @param species.name (required, character): Full binomial species name.
-#' @param primer.select (required, character): Select primer as different primers
-#' may provide different detection rates.
+#' @param primer.select (required, character): Select primer as different
+#' primers may provide different detection rates.
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
+#' @param Pscaled_agg  (required, data.frame) Normalized detection
+#' probabilities as returned by [scale_prob_by_month()] or
+#' [scale_prob_by_year()].
 #'
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
@@ -15,19 +17,22 @@
 #' @export
 #' @examples
 #' \dontrun{
+#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
+#' Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+#'  newprob$newP_agg)
 #' effort_needed_fig(
 #'   species.name = "Acartia hudsonica", primer.select = "COI1",
-#'   ecodistrict.select = "Scotian Shelf"
+#'   ecodistrict.select = "Scotian Shelf", newprob$newP_agg
 #' )
 #' }
-effort_needed_fig <- function(species.name, primer.select, ecodistrict.select) {
-  if (!is.null(species.name)) {
-    species.name <- match.arg(
-      arg = species.name,
-      choices = c(Pscaled_agg$species),
-      several.ok = FALSE
-    )
-  }
+effort_needed_fig <- function(
+    species.name, primer.select, ecodistrict.select, Pscaled_agg
+  ) {
+
+  species.name <- match.arg(
+    species.name,
+    choices = c(Pscaled_agg$species) |> unique(),
+  )
 
   if (!ecodistrict.select %in% Pscaled_agg$ecodistrict) {
     stop("Ecodistrict not found in data")
@@ -40,8 +45,8 @@ effort_needed_fig <- function(species.name, primer.select, ecodistrict.select) {
   data <- Pscaled_agg %>%
     dplyr::filter(
       ecodistrict == ecodistrict.select &
-      species == species.name &
-      primer == primer.select
+        species == species.name &
+        primer == primer.select
     )
 
   DF2 <- expand.grid(
@@ -52,7 +57,7 @@ effort_needed_fig <- function(species.name, primer.select, ecodistrict.select) {
   DF2 <- DF2 %>%
     merge(data.frame(p = data$fill, month = data$month))
 
-  for (i in 1:nrow(DF2)) {
+  for (i in seq_len(nrow(DF2))) {
     DF2$P[i] <- 1 - dbinom(0, size = DF2$n[i], prob = DF2$p[i]) # 1 - probability of zero detects
   }
 

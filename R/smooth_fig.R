@@ -16,16 +16,16 @@
 #' @examples
 #' \dontrun{
 #' smooth_fig(
-#'   data = D_mb, species.name = "Calanus finmarchicus",
-#'   primer.select = "COI1", ecodistrict.select = "Bay of Fundy"
+#'    data = D_mb_ex, species.name = "Acartia longiremis",
+#'  primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
 #' )
 #' }
 smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
-  # Implement min max scaling of detection probabilities
-  minMax <- function(x) {
-    (x - min(x)) / (max(x) - min(x))
-  }
+
+  oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
+  # reset option on exit
+  on.exit(options(dplyr.summarise.inform = oop))
 
   if (!ecodistrict.select %in% data$ecodistrict) {
     stop("Ecodistrict not found in data")
@@ -56,7 +56,7 @@ smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
   data %<>%
     dplyr::group_by(year) %>%
     tidyr::drop_na(prob) %>%
-    dplyr::mutate(scaleP = minMax(prob)) %>%
+    dplyr::mutate(scaleP = scale_min_max(prob)) %>%
     dplyr::mutate(scaleP = dplyr::case_when(
       scaleP == "NaN" ~ prob,
       scaleP != "NaN" ~ scaleP
@@ -77,7 +77,7 @@ smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
   NEW2 <- NEW[NEW$month > 12 & NEW$month <= 24, ]
   NEW2$month <- NEW2$month - 12
 
-  print(ggplot2::ggplot() +
+  ggplot2::ggplot() +
     ggplot2::geom_hline(ggplot2::aes(yintercept = y), data.frame(y = c(0:4) / 4), color = "lightgrey") +
     ggplot2::geom_vline(ggplot2::aes(xintercept = x), data.frame(x = 0:12), color = "lightgrey") +
     ggplot2::geom_path(data = NEW2, ggplot2::aes(x = month, y = PRED), show.legend = TRUE, colour = "blue") +
@@ -99,5 +99,5 @@ smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
     ggplot2::theme(
       panel.grid = ggplot2::element_blank(),
       axis.title.y = ggplot2::element_text(hjust = 1)
-    ))
+    )
 }

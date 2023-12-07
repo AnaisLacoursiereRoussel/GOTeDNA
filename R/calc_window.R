@@ -1,27 +1,29 @@
 #' Calculate species optimal detection window
 #'
 #' @description This function calculates species optimal eDNA detection period
-#' `(i.e., months)` and window `(i.e., length/number of months)`at the
-#' desired detection threshold. The window is defined as consecutive months ≥ the
-#' threshold and executes a Fisher exact test comparing the detection probability
-#' within and outside the window. Output provides the odds ratio, p-value, and
-#' confidence interval for each primer of the species selected `(i.e., input = Pscaled_agg)`
-#' or each primer and year `(i.e., Pscaled_yr)`
+#' `(i.e., months)` and window `(i.e., length/number of months)` at the
+#' desired detection threshold. The window is defined as consecutive months ≥
+#' the threshold and executes a Fisher exact test comparing the detection
+#' probability within and outside the window. Output provides the odds ratio,
+#' p-value, and confidence interval for each primer of the species selected
+#' `(i.e., input = Pscaled_agg)` or each primer and year `(i.e., Pscaled_yr)`.
 #'
-#' @param data (required, data.frame) Data.frame read in with [read_data()]
-#' @param ecodistrict.select (required, character) Ecodistrict present in data.frame.
+#' @param data (required, data.frame) Data.frame read in with [read_data()].
+#' @param ecodistrict.select (required, character) Ecodistrict present in
+#' data.frame.
 #' @param threshold (required, character): Detection probability threshold for
-#' which data are to be displayed to visualize potential optimal detection windows.
+#' which data are to be displayed to visualize potential optimal detection
+#' windows.
 #' Choices = one of `c("50","55","60","65","70","75","80","85","90","95")`
-#' @param show.variation (required, character) Choices = `c("within_year", "among_years")`
-#' When “within_year” is chosen, input will be Pscaled_agg; when “among_years” is chosen,
-#' input will be Pscaled_yr.
+#' @param detect.proba (required, data.frame) Normalized detection
+#' probabilities as returned by [scale_prob_by_month()] or
+#' [scale_prob_by_year()].
 #' @param species.name (required, character): Full binomial species name.
 #'
 #' @return A data.frame with 17 columns:
 #' * `ecodistrict`
-#' * `length` Number of months with optimal detection \code{(i.e., over
-#' the specified threshold)}.
+#' * `length` Number of months with optimal detection `(i.e., over
+#' the specified threshold)`.
 #' * `threshold` Detection probability threshold specified in function call.
 #' * `period` Range of months having optimal detection.
 #' * `GOTeDNA_ID`
@@ -45,28 +47,25 @@
 #' @export
 #' @examples
 #' \dontrun{
+#' newprob <- calc_det_prob(
+#'   data = D_mb_ex,
+#'   ecodistrict.select = "Scotian Shelf"
+#' )
+#' Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+#'  newprob$newP_yr)
 #' calc_window(
-#'   data = D_mb, ecodistrict.select = "Bay of Fundy", threshold = "90",
-#'   show.variation = "within_year", species.name = "Nucula proxima"
+#'   data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
+#'   detect.proba = Pscaled_month, species.name = "Nucula proxima"
 #' )
 #' }
-calc_window <- function(data, ecodistrict.select, threshold, show.variation, species.name) {
+calc_window <- function(
+    data, ecodistrict.select, threshold, detect.proba, species.name) {
+  oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
+  # reset option on exit
+  on.exit(options(dplyr.summarise.inform = oop))
 
-  if (!is.null(show.variation)) {
-    show.variation <- match.arg(
-      arg = show.variation,
-      choices = c("within_year", "among_years"),
-      several.ok = FALSE
-    )
-  }
-
-  var.lst <- list(
-    "within_year" = Pscaled_agg,
-    "among_years" = Pscaled_yr
-  )
-
-  var.df <- dplyr::filter(var.lst[[show.variation]], species %in% species.name)
+  var.df <- dplyr::filter(detect.proba, species %in% species.name)
 
   if (!species.name %in% var.df$species) {
     stop("Species not found in data")
@@ -77,13 +76,7 @@ calc_window <- function(data, ecodistrict.select, threshold, show.variation, spe
   }
 
   thresh_slc <- seq(50, 95, 5) %>% as.character()
-  if (!is.null(threshold)) {
-    threshold <- match.arg(
-      arg = threshold,
-      choices = thresh_slc,
-      several.ok = FALSE
-    )
-  }
+  threshold <- match.arg(threshold, choices = thresh_slc)
 
   thresh <- data.frame(
     values = c(
@@ -163,7 +156,7 @@ calc_window <- function(data, ecodistrict.select, threshold, show.variation, spe
   fshTest <- vector("list", length(names(both_in_out)))
   names(fshTest) <- names(both_in_out)
 
-  if (length(both_in_out) != 0) {
+  if (length(both_in_out)) {
     # gives the period and length of optimal detection window
     opt_sampling <- optwin %>%
       dplyr::summarise(
@@ -186,14 +179,15 @@ calc_window <- function(data, ecodistrict.select, threshold, show.variation, spe
         nrow = 2
       ))
       fshTest[[i]] <- data.frame(
-        "odds ratio" = f$estimate, "p value" = scales::pvalue(f$p.value),
-        "Lower CI" = f$conf.int[1], "Upper CI" = f$conf.int[2],
+        "odds ratio" = f$estimate,
+        "p value" = scales::pvalue(f$p.value),
+        "Lower CI" = f$conf.int[1],
+        "Upper CI" = f$conf.int[2],
         check.names = FALSE
       )
     }
 
     fshDF <- do.call(rbind, fshTest)
-
     fshDF$id <- rownames(fshDF)
     fshDF <- dplyr::full_join(fshDF, opt_sampling, by = "id")
 
@@ -213,7 +207,7 @@ calc_window <- function(data, ecodistrict.select, threshold, show.variation, spe
         `p value` < "0.01" ~ "High",
         `p value` < "0.05" ~ "Medium",
         `p value` >= "0.05" ~ "Low",
-        is.na(`p value`) == TRUE ~ "No optimal period"
+        is.na(`p value`) ~ "No optimal period"
       ))
 
     fshDF <- fshDF %>%
@@ -222,6 +216,7 @@ calc_window <- function(data, ecodistrict.select, threshold, show.variation, spe
 
     return(fshDF)
   } else {
-    return("No optimal detection window")
+    warning("No optimal detection window")
+    return(NULL)
   }
 }

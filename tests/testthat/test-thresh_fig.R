@@ -1,5 +1,5 @@
 test_that("thresh_fig returns a ggplot2 object", {
-   p <- thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Scotian Shelf")
+   p <- thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Scotian Shelf", Pscaled_month)
 
    expect_s3_class(p$coordinates, "CoordPolar")
    expect_identical(p$layers[[1]]$geom$required_aes, "yintercept")
@@ -8,7 +8,11 @@ test_that("thresh_fig returns a ggplot2 object", {
    expect_s3_class(p$layers[[4]]$geom, "GeomCol")
    expect_s3_class(p$layers[[5]]$geom, "GeomColPattern")
    expect_error(
-      thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Bay of Fundy"),
+      thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Bay of Fundy", Pscaled_month),
       "Ecodistrict not found in data"
+   )
+   expect_error(
+      thresh_fig(taxon.level = "wrong", taxon.name = "Acartia hudsonica", threshold = "90", ecodistrict.select = "Scotian Shelf", Pscaled_month),
+       'should be one of "phylum", "class"'
    )
 })

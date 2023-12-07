@@ -20,3 +20,9 @@ scientific_name_formatter <- function(raw_name) {
     return(bquote(paste(italic(.(words[1])) ~ italic(.(words[2])))))
   }
 }
+
+
+# Implement min max scaling of detection probabilities
+scale_min_max <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}

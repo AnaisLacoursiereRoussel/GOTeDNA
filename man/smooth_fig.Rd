@@ -23,8 +23,8 @@ monthly detection probabilities with LOESS smoothing over years.
 \examples{
 \dontrun{
 smooth_fig(
-  data = D_mb, species.name = "Calanus finmarchicus",
-  primer.select = "COI1", ecodistrict.select = "Bay of Fundy"
+   data = D_mb_ex, species.name = "Acartia longiremis",
+ primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
 )
 }
 }
