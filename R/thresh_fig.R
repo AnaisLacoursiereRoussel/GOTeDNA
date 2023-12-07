@@ -17,8 +17,8 @@
 #' probabilities as returned by [scale_prob_by_month()] or
 #' [scale_prob_by_year()].
 #' 
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname thresh_fig
 #' @export
 #' @examples
@@ -133,7 +133,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select,
       pattern_color = "white", pattern_density = 0.05, pattern_spacing = 0.015, pattern_key_scale_factor = 0.6
     ) +
     ggplot2::coord_polar() +
-    ggplot2::facet_wrap(~ primer + species, ncol = 2) + # will need to italicize the species name, but it would also be good if the name didn't show up if there is only one species to facet (if executing at higher taxonomy level [i.e., anything except species])
+    ggplot2::facet_wrap(~ GOTeDNA_ID + primer + species, ncol = 2) + # will need to italicize the species name, but it would also be good if the name didn't show up if there is only one species to facet (if executing at higher taxonomy level [i.e., anything except species])
     ggplot2::scale_x_continuous(
       limits = c(0.5, 12.5),
       breaks = 1:12,
