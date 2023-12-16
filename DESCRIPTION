@@ -16,6 +16,7 @@ Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.1)
 Imports:
+    cli,
     dplyr (>= 1.0.0),
     fs,
     ggh4x,
@@ -37,7 +38,9 @@ Suggests:
     ggpattern,
     ggpubr,
     gridExtra,
+    htmlwidgets,
     knitr,
+    leaflet,
     lme4,
     methods,
     multcomp,
@@ -48,6 +51,7 @@ Suggests:
     readr (>= 2.1.0),
     rlang,
     rmarkdown,
+    sf,
     stringi,
     stringr,
     taxize,
