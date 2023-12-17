@@ -1,11 +1,15 @@
-library(dplyr)
-library(leaflet)
-library(GOTeDNA)
-library(shiny)
 library(cli)
+library(dplyr)
+library(ggplot2)
+library(GOTeDNA)
+library(leaflet)
+library(patchwork)
+library(shiny)
 cli_alert_info("Packages loaded")
 
-list.files("modules", full.names = TRUE) |> lapply(source)
+list.files("modules", full.names = TRUE) |> 
+    lapply(source)
+
 cli_alert_info("Modules loaded")
 
 taxo_lvl <- c("phylum", "class", "order", "family", "genus", "scientificName")
@@ -15,6 +19,8 @@ dfs <- D_mb_ex |>
         coords = c("decimalLongitude", "decimalLatitude"),
         crs = sf::st_crs(4326)
     )
+newprob <- readRDS("data/newprob.rds")
+Pscaled_month <- readRDS("data/Pscaled_month.rds")
 
 tx_phy <- c("all", unique(D_mb_ex$phylum))
 tx_cla <- c("all", unique(D_mb_ex$class))

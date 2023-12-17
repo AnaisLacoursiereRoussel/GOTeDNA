@@ -29,7 +29,7 @@ mod_select_data_ui <- function(id) {
                     selectInput(ns("slc_spe"), "Species", choices = tx_spe)
                 )
             ),
-            leafletOutput(outputId = ns("map"), height = 500)
+            leafletOutput(outputId = ns("map"), height = "50vh")
         )
     )
 }

@@ -9,31 +9,30 @@
 
 #data_request {
   background-color: #f2f2f2;
-  min-height: 90vh;
+  min-height: 80vh;
   padding: 0.5rem;
   margin-top: 0rem !important;
 }
 
 #observation_request {
   background-color: #f2f2f2;
-  min-height: 95vh;
+  min-height: 80vh;
   padding: 0.5rem;
   color: #fff;
 }
 
 #observation_request .btn i {
   color: #53b2ad;
-
 }
 
 #data_input {
   background-color: #7f7f7f;
   padding: 1rem;
-  min-height: 25vh;
 }
 
 #figure_output {
-  min-height: 50vh;
+  margin-bottom: 2rem;
+  height: 50vh;
 }
 
 
@@ -76,4 +75,8 @@ h2 {
   left: calc(4%);
   width: 15%;
   font-weight: bold;
+}
+
+shiny-plot-output {
+  height: 500px;
 }
