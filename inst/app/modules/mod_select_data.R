@@ -5,9 +5,20 @@ mod_select_data_ui <- function(id) {
         div(
             id = "data_request",
             h2("Data request window", class = "col_1"),
-            radioButtons("datatype",
-                label = "Data Type", choices = c("qPCR", "Metabarcoding"),
-                inline = TRUE
+            fluidRow(
+                column(
+                    6,
+                    radioButtons(ns("datatype"),
+                        label = "Data Type", choices = c("qPCR", "Metabarcoding"),
+                        inline = TRUE
+                    )
+                ),
+                column(
+                    6,
+                    actionButton(ns("calc_window"), "New search",
+                        icon = icon("gear")
+                    )
+                )
             ),
             fluidRow(
                 column(
@@ -37,7 +48,6 @@ mod_select_data_ui <- function(id) {
 mod_select_data_server <- function(id, r) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
-
 
         observeEvent(input$slc_phy, {
             r$data_filtered <- filter_spatial_data(
@@ -83,8 +93,11 @@ mod_select_data_server <- function(id, r) {
                     choices = c("All", unique(r$data_filtered$scientificName))
                 )
             }
-        })        
+        })
 
+        observeEvent(input$calc_window, {
+            r$calc_window <- TRUE
+        })
 
         output$map <- renderLeaflet({
             leaflet(r$data_filtered) |>

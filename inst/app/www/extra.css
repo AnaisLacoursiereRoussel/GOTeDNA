@@ -40,6 +40,10 @@
     color: #53b2ad;
 }
 
+#data_input table tbody tr td {
+  font-size: 1.6rem;
+}
+
 .pending{
   color: #ccc;
   font-size: 1.1em;
