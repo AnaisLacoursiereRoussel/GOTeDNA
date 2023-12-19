@@ -5,6 +5,7 @@ library(GOTeDNA)
 library(leaflet)
 library(patchwork)
 library(shiny)
+library(shinyjs)
 cli_alert_info("Packages loaded")
 
 list.files("modules", full.names = TRUE) |> 
@@ -22,24 +23,24 @@ dfs <- D_mb_ex |>
 newprob <- readRDS("data/newprob.rds")
 Pscaled_month <- readRDS("data/Pscaled_month.rds")
 
-tx_phy <- c("all", unique(D_mb_ex$phylum))
-tx_cla <- c("all", unique(D_mb_ex$class))
-tx_gen <- c("all", unique(D_mb_ex$genus))
-tx_spe <- c("all", unique(D_mb_ex$scientificName))
+tx_phy <- c("All", unique(D_mb_ex$phylum))
+tx_cla <- c("All", unique(D_mb_ex$class))
+tx_gen <- c("All", unique(D_mb_ex$genus))
+tx_spe <- c("All", unique(D_mb_ex$scientificName))
 
 
 filter_spatial_data <- function(x, phy, cla, gen, spe) {
-    if (phy != "all") {
+    if (phy != "All") {
         x <- x |> dplyr::filter(phylum == phy)
-    }
-    if (cla != "all") {
-        x <- x |> dplyr::filter(class == cla)
-    }
-    if (gen != "all") {
-        x <- x |> dplyr::filter(genus == gen)
-    }
-    if (spe != "all") {
-        x <- x |> dplyr::filter(scientificName == spe)
+        if (cla != "All") {
+            x <- x |> dplyr::filter(class == cla)
+            if (gen != "All") {
+                x <- x |> dplyr::filter(genus == gen)
+                if (spe != "All") {
+                    x <- x |> dplyr::filter(scientificName == spe)
+                }
+            }
+        }
     }
     x
 }

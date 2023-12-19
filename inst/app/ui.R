@@ -1,5 +1,6 @@
 ui <- fluidPage(
   theme = bslib::bs_theme(version = 5),
+  useShinyjs(),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "extra.css"),
     # https://markusdumke.github.io/articles/2017/11/customize-leaflet-map-in-r-with-html-css-and-javascript/
