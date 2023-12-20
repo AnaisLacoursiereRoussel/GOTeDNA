@@ -130,7 +130,7 @@ mod_select_figure_server <- function(id, r) {
 
         output$table <- renderTable(
             {
-                dfs[1:3, ] |>
+                gotedna_data$metabarcoding[1:3, ] |>
                     dplyr::select(c(GOTeDNA_ID, ecodistrict, station, year, detected)) |>
                     sf::st_drop_geometry() |>
                     as.data.frame()

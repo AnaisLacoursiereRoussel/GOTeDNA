@@ -9,7 +9,12 @@ mod_select_data_ui <- function(id) {
                 column(
                     6,
                     radioButtons(ns("datatype"),
-                        label = "Data Type", choices = c("qPCR", "Metabarcoding"),
+                        label = "Data Type", 
+                        choices = list(
+                           "Species specific (qPCR)" = "qPCR", 
+                           "Multi-species (metabarcoding)" = "metabarcoding"
+                        ),
+                        selected = "qPCR",
                         inline = TRUE
                     )
                 ),
@@ -49,9 +54,14 @@ mod_select_data_server <- function(id, r) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
+        observeEvent(input$datatype, {
+            r$data_filtered <- gotedna_data[[input$datatype]]
+            updateSelectInput(session, "slc_phy", selected = "All")
+        })
+
         observeEvent(input$slc_phy, {
             r$data_filtered <- filter_spatial_data(
-                dfs, input$slc_phy, input$slc_cla,
+                gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
                 input$slc_gen, input$slc_spe
             )
             if (input$slc_phy == "All") {
@@ -67,7 +77,7 @@ mod_select_data_server <- function(id, r) {
         })
         observeEvent(input$slc_cla, {
             r$data_filtered <- filter_spatial_data(
-                dfs, input$slc_phy, input$slc_cla,
+                gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
                 input$slc_gen, input$slc_spe
             )
             if (input$slc_cla == "All") {
@@ -82,7 +92,7 @@ mod_select_data_server <- function(id, r) {
         })
         observeEvent(input$slc_gen, {
             r$data_filtered <- filter_spatial_data(
-                dfs, input$slc_phy, input$slc_cla,
+                gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
                 input$slc_gen, input$slc_spe
             )
             if (input$slc_gen == "All") {

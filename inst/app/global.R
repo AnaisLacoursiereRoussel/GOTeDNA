@@ -13,18 +13,17 @@ list.files("modules", full.names = TRUE) |>
     lapply(source)
 cli_alert_info("Modules loaded")
 
+# import glossary
 gloss <- read.csv("data/glossary.csv")
 gloss$Term <- paste0('<p align ="right"><b>', trimws(gloss$Term), "</b></p>")
 gloss$Definition <- trimws(gloss$Definition)
-taxo_lvl <- c("phylum", "class", "order", "family", "genus", "scientificName")
-dfs <- D_mb_ex |>
-    sf::st_as_sf(
-        coords = c("decimalLongitude", "decimalLatitude"),
-        crs = sf::st_crs(4326)
-    )
+
+# import all GOTeDNA data
+gotedna_data <- readRDS("data/gotedna_data.rds")
 newprob <- readRDS("data/newprob.rds")
 Pscaled_month <- readRDS("data/Pscaled_month.rds")
 
+taxo_lvl <- c("phylum", "class", "order", "family", "genus", "scientificName")
 tx_phy <- c("All", unique(D_mb_ex$phylum))
 tx_cla <- c("All", unique(D_mb_ex$class))
 tx_gen <- c("All", unique(D_mb_ex$genus))
