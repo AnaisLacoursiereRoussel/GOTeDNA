@@ -28,7 +28,7 @@ ui <- fluidPage(
           column(10, h2("Observation")),
           column(
             2,
-            actionButton("show_dialogue", "", icon("info-circle", class = "fa-2xl")),
+            actionButton("show_dialog", "", icon("info-circle", class = "fa-2xl")),
             actionButton("show_help", "", icon("question-circle", class = "fa-2xl")),
           ),
         ),

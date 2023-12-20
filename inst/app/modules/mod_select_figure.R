@@ -10,37 +10,34 @@ mod_select_figure_ui <- function(id) {
                     tags$table(
                         tags$tbody(
                             tags$tr(
-                                tags$td("Optimal sampling period: ", style="text-align:right;"),
+                                tags$td("Optimal sampling period: ", style = "text-align:right;"),
                                 tags$td(uiOutput(ns("opt_sampl")))
                             )
                         ),
                         tags$tbody(
                             tags$tr(
-                                tags$td("Confidence: ", style="text-align:right;"),
+                                tags$td("Confidence: ", style = "text-align:right;"),
                                 tags$td(uiOutput(ns("conf")))
                             )
                         ),
                         tags$tbody(
                             tags$tr(
-                                tags$td("Variation among year: ", style="text-align:right;"),
+                                tags$td("Variation among year: ", style = "text-align:right;"),
                                 tags$td(uiOutput(ns("var_year")))
                             )
                         ),
                         tags$tbody(
                             tags$tr(
-                                tags$td("Variation among primers: ", style="text-align:right;"),
+                                tags$td("Variation among primers: ", style = "text-align:right;"),
                                 tags$td(uiOutput(ns("var_primer")))
                             )
                         ),
                         tags$tbody(
                             tags$tr(
-                                tags$td("Variation among datasets: ", style="text-align:right;"),
-                                tags$td(uiOutput(ns("var_dat"))
+                                tags$td("Variation among datasets: ", style = "text-align:right;"),
+                                tags$td(uiOutput(ns("var_dat")))
                             )
-                        )
-                        
-                    ),
-                    selectInput(ns("figtest"), "Figure", choices = 1:5)
+                        ),
                     )
                 ),
                 column(
@@ -56,6 +53,7 @@ mod_select_figure_ui <- function(id) {
                         "Normalized detection threshold",
                         choices = seq(75, 95, 5)
                     ),
+                    selectInput(ns("figtest"), "Figure test", choices = 1:5)
                 )
             )
         ),
@@ -77,13 +75,13 @@ mod_select_figure_server <- function(id, r) {
         observeEvent(r$calc_window, {
             cli::cli_alert_info("Computing")
             win <- calc_window(
-                 data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-                 detect.proba = Pscaled_month, species.name = "Acartia longiremis"
+                data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
+                detect.proba = Pscaled_month, species.name = "Acartia longiremis"
             )
             output$opt_sampl <- renderUI(win$period)
             output$conf <- renderUI(win$confidence)
-            output$var_year  <- renderUI(2)
-            output$var_primer  <- renderUI("TODO")
+            output$var_year <- renderUI(2)
+            output$var_primer <- renderUI("TODO")
             output$var_dat <- renderUI("TODO")
             r$calc_window <- FALSE
         })

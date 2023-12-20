@@ -2,19 +2,21 @@ library(cli)
 library(dplyr)
 library(ggplot2)
 library(GOTeDNA)
+library(kableExtra)
 library(leaflet)
 library(patchwork)
 library(shiny)
 library(shinyjs)
 cli_alert_info("Packages loaded")
 
-list.files("modules", full.names = TRUE) |> 
+list.files("modules", full.names = TRUE) |>
     lapply(source)
-
 cli_alert_info("Modules loaded")
 
+gloss <- read.csv("data/glossary.csv")
+gloss$Term <- paste0('<p align ="right"><b>', trimws(gloss$Term), "</b></p>")
+gloss$Definition <- trimws(gloss$Definition)
 taxo_lvl <- c("phylum", "class", "order", "family", "genus", "scientificName")
-
 dfs <- D_mb_ex |>
     sf::st_as_sf(
         coords = c("decimalLongitude", "decimalLatitude"),

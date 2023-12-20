@@ -1,0 +1,39 @@
+Package: GOTeDNA.app
+Type: Shiny App
+Encoding: UTF-8
+Title: GOTeDNA Shiny App
+Date: 2023-12-10
+Version: 0.0.0.9000
+Authors@R: c(
+  person("Melissa", "Morrison", email = "Melissa.Morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
+  person("Team", "inSileco", email = "info@insileco.io", role = c("aut", "ctr")))
+Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
+Description: The purpose of this package is to compile eDNA qPCR and    
+    metabarcoding metadata and data, visualize species detection probabilities, and delineate species detection windows.
+License: GPL-3
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.1)
+Imports:
+    cli,
+    dplyr (>= 1.0.0),
+    DT,
+    fs,
+    ggh4x,
+    ggplot2,
+    GOTeDNA,
+    grid,
+    htmlwidgets,
+    knitr,
+    leaflet,
+    magrittr,
+    patchwork,
+    shiny
+Remotes:
+    mkmor/GOTeDNA
+RoxygenNote: 7.2.3
+LazyLoad: yes
+VignetteBuilder:
+    knitr
+Config/testthat/edition: 3
+LazyData: true

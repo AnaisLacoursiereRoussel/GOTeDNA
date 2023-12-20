@@ -1,4 +1,4 @@
-mod_dialogue_server <- function(id, r) {
+mod_dialog_disclaimers_server <- function(id, r) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
         query_modal <- modalDialog(
@@ -25,8 +25,8 @@ mod_dialogue_server <- function(id, r) {
         # Show the model on start up ...
         showModal(query_modal)
 
-        observeEvent(r$show_dialogue, {
-            if (r$show_dialogue) {
+        observeEvent(r$show_dialog, {
+            if (r$show_dialog) {
                 showModal(query_modal)
             }
         })
@@ -35,7 +35,7 @@ mod_dialogue_server <- function(id, r) {
         observeEvent(input$dismiss, {
             if (input$agreed) {
                 removeModal()
-                r$show_dialogue  <- FALSE
+                r$show_dialog  <- FALSE
             } else {
                 showNotification("You must check the box!", type = "warning")
             }
