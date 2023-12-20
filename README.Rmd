@@ -33,7 +33,6 @@ devtools::install_github("mkmor/GOTeDNA")
 ## Usage
 
 
-
 ### R function categories:
 - Import data
 - Clean/tidy data
@@ -44,7 +43,7 @@ library("GOTeDNA")
 ```
 
 
-### Clean/tidt data
+### Clean/tidy data
 
 ```{R}
 newprob <- calc_det_prob(
@@ -118,4 +117,11 @@ smooth_fig(
 ```{R thresh_fig}
 thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
   threshold = "90", ecodistrict.select = "Scotian Shelf", Pscaled_month)
+```
+
+
+### Shiny 
+
+```R
+run_gotedna_app()
 ```

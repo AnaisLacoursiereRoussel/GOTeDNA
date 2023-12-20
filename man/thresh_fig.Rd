@@ -42,7 +42,7 @@ thresh_fig(
 }
 }
 \author{
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
 
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
+Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
 }
