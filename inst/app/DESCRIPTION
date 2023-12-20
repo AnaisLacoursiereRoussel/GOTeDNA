@@ -3,7 +3,7 @@ Type: Shiny App
 Encoding: UTF-8
 Title: GOTeDNA Shiny App
 Date: 2023-12-10
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
   person("Melissa", "Morrison", email = "Melissa.Morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
   person("Team", "inSileco", email = "info@insileco.io", role = c("aut", "ctr")))
