@@ -41,7 +41,7 @@ A tibble with 21 columns:
 }
 \description{
 Function that reads GOTeDNA qPCR or metabarcoding template MS
-Excel sheets found in a specified folder. When \verb{choose.methods = "qPCR" or  "metabarcoding"} it will compile metadata (sheet 2) and data (sheet 3 or 4,
+Excel sheets found in a specified folder. When \verb{choose.methods = "qPCR" or "metabarcoding"} it will compile metadata (sheet 2) and data (sheet 3 or 4,
 respectively) into a single dataframe. Data frames are then formatted
 appropriately for use in subsequent analysis and visualizations (e.g., date
 reformatting, merging metadata and data).

@@ -2,7 +2,7 @@ test_that("calc_window() returns optimal detection windows with confidence value
   expect_equal(
     win_df <- calc_window(
       data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      detect.proba = Pscaled_month, species.name = "Acartia longiremis"
+      species.name = "Acartia longiremis", scaledprobs
     ),
     structure(list(
       ecodistrict = "Scotian Shelf",
@@ -23,12 +23,12 @@ test_that("calc_window() returns optimal detection windows with confidence value
     ), row.names = c(
       NA,
       -1L
-    ), class = "data.frame")
+    ), class = c("tbl_df", "tbl", "data.frame"))
   )
   expect_warning(
     calc_window(
       data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      detect.proba = Pscaled_month, species.name = "Acartia hudsonica"
+      species.name = "Acartia hudsonica", scaledprobs
     )
   )
 })
@@ -37,14 +37,14 @@ test_that("error is thrown when value doesn't exist in data", {
   expect_error(
     calc_window(
       data = D_mb_ex, ecodistrict.select = "Bay of Fundy", threshold = "90",
-      detect.proba = Pscaled_month, species.name = "Acartia longiremis"
+      species.name = "Acartia longiremis", scaledprobs
     ),
     "Ecodistrict not found in data"
   )
   expect_error(
     calc_window(
       data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      detect.proba = Pscaled_month, species.name = "A. longiremis"
+      species.name = "A. longiremis", scaledprobs
     ),
     "Species not found in data"
   )

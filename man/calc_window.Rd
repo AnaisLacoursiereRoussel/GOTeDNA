@@ -4,7 +4,7 @@
 \alias{calc_window}
 \title{Calculate species optimal detection window}
 \usage{
-calc_window(data, ecodistrict.select, threshold, detect.proba, species.name)
+calc_window(data, ecodistrict.select, threshold, species.name, scaledprobs)
 }
 \arguments{
 \item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}.}
@@ -17,11 +17,10 @@ which data are to be displayed to visualize potential optimal detection
 windows.
 Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 
-\item{detect.proba}{(required, data.frame) Normalized detection
-probabilities as returned by \code{\link[=scale_prob_by_month]{scale_prob_by_month()}} or
-\code{\link[=scale_prob_by_year]{scale_prob_by_year()}}.}
-
 \item{species.name}{(required, character): Full binomial species name.}
+
+\item{scaledprobs}{(required, list) Normalized detection probabilities
+aggregated per month and year \code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \value{
 A data.frame with 17 columns:
@@ -52,8 +51,9 @@ This function calculates species optimal eDNA detection period
 desired detection threshold. The window is defined as consecutive months ≥
 the threshold and executes a Fisher exact test comparing the detection
 probability within and outside the window. Output provides the odds ratio,
-p-value, and confidence interval for each primer of the species selected
-\verb{(i.e., input = Pscaled_agg)} or each primer and year \verb{(i.e., Pscaled_yr)}.
+p-value, and confidence interval for each primer of the species selected,
+showing the variation within year and among years, if applicable
+\verb{(i.e., input = Pscaled_agg and Pscaled_yr)}.
 }
 \examples{
 \dontrun{
@@ -61,11 +61,11 @@ newprob <- calc_det_prob(
   data = D_mb_ex,
   ecodistrict.select = "Scotian Shelf"
 )
-Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
- newprob$newP_yr)
+scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
+ newprob)
 calc_window(
   data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-  detect.proba = Pscaled_month, species.name = "Nucula proxima"
+  species.name = "Nucula proxima", scaledprobs
 )
 }
 }

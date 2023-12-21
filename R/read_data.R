@@ -1,12 +1,12 @@
 #' Read and format qPCR and metabarcoding metadata and data from GOTeDNA templates
 #'
-#' @description Function that reads GOTeDNA qPCR or metabarcoding template MS 
-#' Excel sheets found in a specified folder. When `choose.methods = "qPCR" or 
-#' "metabarcoding"` it will compile metadata (sheet 2) and data (sheet 3 or 4, 
-#' respectively) into a single dataframe. Data frames are then formatted 
-#' appropriately for use in subsequent analysis and visualizations (e.g., date 
-#' reformatting, merging metadata and data). 
-#' * Note that template column names are in the format of Darwin Core Archive 
+#' @description Function that reads GOTeDNA qPCR or metabarcoding template MS
+#' Excel sheets found in a specified folder. When `choose.methods = "qPCR" or
+#' "metabarcoding"` it will compile metadata (sheet 2) and data (sheet 3 or 4,
+#' respectively) into a single dataframe. Data frames are then formatted
+#' appropriately for use in subsequent analysis and visualizations (e.g., date
+#' reformatting, merging metadata and data).
+#' * Note that template column names are in the format of Darwin Core Archive
 #' (DwC-A) using Darwin Core (DwC) data standards where possible.
 #'
 #' @param choose.method (required, character) Choices = c("qPCR", "metabarcoding").
@@ -110,15 +110,15 @@ read_data <- function(
 
   # match event date to samples
   for (j in seq_len(length(samples))) {
-    samples[[j]]$date <- metadata[[j]]$eventDate[match(samples[[j]]$eventID, metadata[[j]]$eventID)]
-    samples[[j]]$ecodistrict <- metadata[[j]]$ecodistrict[match(samples[[j]]$eventID, metadata[[j]]$eventID)] %>%
+    samples[[j]]$date <- metadata[[j]]$eventDate[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
+    samples[[j]]$ecodistrict <- metadata[[j]]$ecodistrict[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)] %>%
       stringr::str_remove_all( # clean ecodistrict
         pattern = "(-?[:digit:])"
       )
 
-    samples[[j]]$decimalLatitude <- metadata[[j]]$decimalLatitude[match(samples[[j]]$eventID, metadata[[j]]$eventID)]
-    samples[[j]]$decimalLongitude <- metadata[[j]]$decimalLongitude[match(samples[[j]]$eventID, metadata[[j]]$eventID)]
-    samples[[j]]$station <- metadata[[j]]$samplingStation[match(samples[[j]]$eventID, metadata[[j]]$eventID)]
+    samples[[j]]$decimalLatitude <- metadata[[j]]$decimalLatitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
+    samples[[j]]$decimalLongitude <- metadata[[j]]$decimalLongitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
+    samples[[j]]$station <- metadata[[j]]$samplingStation[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$year <- lubridate::year(samples[[j]]$date)
     samples[[j]]$month <- lubridate::month(samples[[j]]$date)
   }
@@ -157,7 +157,7 @@ read_data <- function(
       "target_gene", "target_subfragment", "scientificName",
       "kingdom", "phylum", "class", "order", "family",
       "genus", "date", "ecodistrict", "decimalLatitude", "decimalLongitude",
-      "station", "year", "month", "organismQuantity", "concentration", 
+      "station", "year", "month", "organismQuantity", "concentration",
       "detected"
     )]
   }))
