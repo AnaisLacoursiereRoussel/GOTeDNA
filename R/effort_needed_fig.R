@@ -2,14 +2,13 @@
 #'
 #' @description This function calculates number of samples needed to obtain
 #' species detection at different thresholds by using scaled and interpolated
-#' data produced with `[scale_prob_by_month()]`.
+#' data produced with `[scale_newprob()]`.
 #' @param species.name (required, character): Full binomial species name.
 #' @param primer.select (required, character): Select primer as different
 #' primers may provide different detection rates.
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
-#' @param Pscaled_agg  (required, data.frame) Normalized detection
-#' probabilities as returned by [scale_prob_by_month()] or
-#' [scale_prob_by_year()].
+#' @param scaledprobs  (required, data.frame) Normalized detection
+#' probabilities as returned by [[scale_newprob()].
 #'
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
@@ -18,31 +17,31 @@
 #' @examples
 #' \dontrun{
 #' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
-#'  newprob$newP_agg)
+#' scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
+#'  newprob)
 #' effort_needed_fig(
 #'   species.name = "Acartia hudsonica", primer.select = "COI1",
-#'   ecodistrict.select = "Scotian Shelf", newprob$newP_agg
+#'   ecodistrict.select = "Scotian Shelf", scaledprobs
 #' )
 #' }
 effort_needed_fig <- function(
-    species.name, primer.select, ecodistrict.select, Pscaled_agg
+    species.name, primer.select, ecodistrict.select, scaledprobs
   ) {
 
   species.name <- match.arg(
     species.name,
-    choices = c(Pscaled_agg$species) |> unique(),
+    choices = c(scaledprobs$Pscaled_month$species) |> unique()
   )
 
-  if (!ecodistrict.select %in% Pscaled_agg$ecodistrict) {
+  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
 
-  if (!primer.select %in% Pscaled_agg$primer) {
+  if (!primer.select %in% scaledprobs$Pscaled_month$primer) {
     stop("Primer not found in data")
   }
 
-  data <- Pscaled_agg %>%
+  data <- scaledprobs$Pscaled_month %>%
     dplyr::filter(
       ecodistrict == ecodistrict.select &
         species == species.name &

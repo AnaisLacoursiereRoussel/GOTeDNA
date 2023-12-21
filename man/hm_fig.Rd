@@ -8,7 +8,7 @@ hm_fig(
   taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
   taxon.name,
   ecodistrict.select,
-  Pscaled_agg
+  scaledprobs
 )
 }
 \arguments{
@@ -21,14 +21,13 @@ genus name, etc.}
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.
 frame.}
 
-\item{Pscaled_agg}{(required, data.frame) Normalized detection
-probabilities as returned by \code{\link[=scale_prob_by_month]{scale_prob_by_month()}} or
-\code{\link[=scale_prob_by_year]{scale_prob_by_year()}}.}
+\item{scaledprobs}{(required, data.frame) Normalized detection
+probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \description{
 This function displays scaled species detection probabilities
 of the chosen taxonomic group with probabilities produced with
-\code{scale_prob_by_month()}. All primers that are available in the data are
+\code{\link[=scale_newprob]{scale_newprob()}}. All primers that are available in the data are
 displayed.
 NOTE: interpolated \verb{(i.e., missing)} data are not used in this
 representation.
@@ -36,10 +35,10 @@ representation.
 \examples{
 \dontrun{
 newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
- newprob$newP_agg)
-hm_fig(taxon.level = "class", taxon.name = "Copepoda", 
- ecodistrict.select = "Scotian Shelf", Pscaled_month)
+scaledprobs <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+ newprob)
+hm_fig(taxon.level = "class", taxon.name = "Copepoda",
+ ecodistrict.select = "Scotian Shelf", scaledprobs)
 }
 }
 \author{

@@ -1,0 +1,86 @@
+#file_report {
+  color: #337ab7;
+}
+
+#logo_gotedna {
+  height: 8rem;
+  margin-left: 10%;
+}
+
+#data_request {
+  background-color: #f2f2f2;
+  min-height: 80vh;
+  padding: 0.5rem;
+  margin-top: 0rem !important;
+}
+
+#observation_request {
+  background-color: #f2f2f2;
+  min-height: 80vh;
+  padding: 0.5rem;
+  color: #fff;
+}
+
+#observation_request .btn i {
+  color: #53b2ad;
+}
+
+#data_input {
+  background-color: #7f7f7f;
+  padding: 1rem;
+}
+
+#figure_output {
+  margin-bottom: 2rem;
+  height: 50vh;
+}
+
+
+#table_output table {
+    color: #53b2ad;
+}
+
+#data_input table {
+  font-size: 1.4rem;
+}
+
+.pending{
+  color: #ccc;
+  font-size: 1.1em;
+}
+
+h2 {
+  font-weight: bold;
+  color: #53b2ad;
+  margin-top: 0rem !important;
+}
+
+
+.col_1 {
+  color: #53b2ad;
+}
+
+.col_grey1 {
+  color: #7f7f7f;
+}
+
+.col_grey3 {
+  color: #f2f2f2;
+}
+
+.align-text-right {
+  width: 100%;
+  text-align: right;
+}
+
+.shiny-notification {
+  position:fixed;
+  top: calc(4%);
+  left: calc(4%);
+  width: 15%;
+  font-weight: bold;
+}
+
+shiny-plot-output {
+  height: 500px;
+}

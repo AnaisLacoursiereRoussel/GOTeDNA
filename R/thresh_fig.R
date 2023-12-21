@@ -13,10 +13,9 @@
 #' which data are to be displayed to visualize potential optimal detection windows.
 #' Choices = one of `"50","55","60","65","70","75","80","85","90","95")`
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
-#' @param Pscaled_agg (required, data.frame) Normalized detection
-#' probabilities as returned by [scale_prob_by_month()] or
-#' [scale_prob_by_year()].
-#' 
+#' @param scaledprobs (required, data.frame) Normalized detection
+#' probabilities as returned by [scale_newprob()].
+#'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @rdname thresh_fig
@@ -24,18 +23,18 @@
 #' @examples
 #' \dontrun{
 #' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
-#'  newprob$newP_agg)
+#' scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
+#'  newprob)
 #' thresh_fig(
 #'   taxon.level = "species", taxon.name = "Acartia hudsonica",
 #'   threshold = "90", ecodistrict.select = "Scotian Shelf",
-#'   Pscaled_month
+#'   scaledprobs
 #' )
 #' }
-thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select, 
-  Pscaled_agg) {
-  
-  if (!ecodistrict.select %in% Pscaled_agg$ecodistrict) {
+thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select,
+  scaledprobs) {
+
+  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
 
@@ -51,7 +50,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select,
     labels = thresh_slc
   )
 
-  Pthresh <- Pscaled_agg %>%
+  Pthresh <- scaledprobs$Pscaled_month %>%
     dplyr::mutate(thresh95 = dplyr::case_when(
       fill < 0.94999 ~ 0,
       fill >= 0.94999 ~ 1
@@ -133,7 +132,9 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select,
       pattern_color = "white", pattern_density = 0.05, pattern_spacing = 0.015, pattern_key_scale_factor = 0.6
     ) +
     ggplot2::coord_polar() +
-    ggplot2::facet_wrap(~ GOTeDNA_ID + primer + species, ncol = 2) + # will need to italicize the species name, but it would also be good if the name didn't show up if there is only one species to facet (if executing at higher taxonomy level [i.e., anything except species])
+    ggplot2::facet_wrap(~ GOTeDNA_ID + primer + species, ncol = 2,
+                        labeller=function(x) {x[2]}
+                        ) + # will need to italicize the species name, but it would also be good if the name didn't show up if there is only one species to facet (if executing at higher taxonomy level [i.e., anything except species])
     ggplot2::scale_x_continuous(
       limits = c(0.5, 12.5),
       breaks = 1:12,

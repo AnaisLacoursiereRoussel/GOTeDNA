@@ -4,7 +4,7 @@
 \alias{effort_needed_fig}
 \title{Calculate sampling effort needed to obtain different detection thresholds.}
 \usage{
-effort_needed_fig(species.name, primer.select, ecodistrict.select, Pscaled_agg)
+effort_needed_fig(species.name, primer.select, ecodistrict.select, scaledprobs)
 }
 \arguments{
 \item{species.name}{(required, character): Full binomial species name.}
@@ -14,23 +14,22 @@ primers may provide different detection rates.}
 
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 
-\item{Pscaled_agg}{(required, data.frame) Normalized detection
-probabilities as returned by \code{\link[=scale_prob_by_month]{scale_prob_by_month()}} or
-\code{\link[=scale_prob_by_year]{scale_prob_by_year()}}.}
+\item{scaledprobs}{(required, data.frame) Normalized detection
+probabilities as returned by [\code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \description{
 This function calculates number of samples needed to obtain
 species detection at different thresholds by using scaled and interpolated
-data produced with \verb{[scale_prob_by_month()]}.
+data produced with \verb{[scale_newprob()]}.
 }
 \examples{
 \dontrun{
 newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
- newprob$newP_agg)
+scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
+ newprob)
 effort_needed_fig(
   species.name = "Acartia hudsonica", primer.select = "COI1",
-  ecodistrict.select = "Scotian Shelf", newprob$newP_agg
+  ecodistrict.select = "Scotian Shelf", scaledprobs
 )
 }
 }

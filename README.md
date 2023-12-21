@@ -26,28 +26,28 @@ devtools::install_github("mkmor/GOTeDNA")
 
 ### R function categories:
 
--   Import data
--   Clean/tidy data
--   Visualization
+- Import data
+- Clean/tidy data
+- Visualization
 
 ``` r
 library("GOTeDNA")
 ```
 
-### Clean/tidt data
+### Clean/tidy data
 
 ``` r
 newprob <- calc_det_prob(
   data = D_mb_ex,
   ecodistrict.select = "Scotian Shelf"
 )
-Pscaled_month <- scale_prob_by_month(
+scaledprobs <- scale_newprob(
   D_mb_ex, "Scotian Shelf",
-  newprob$newP_agg
+  newprob
 )
 win <- calc_window(
   data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-  detect.proba = Pscaled_month, species.name = "Acartia longiremis"
+  species.name = "Acartia longiremis", scaledprobs
 )
 ```
 
@@ -57,7 +57,7 @@ win <- calc_window(
 hm_fig(
    taxon.level = "class", taxon.name = "Copepoda",
    ecodistrict.select = "Scotian Shelf",
-   Pscaled_month
+   scaledprobs
  )
 ```
 
@@ -68,7 +68,7 @@ hm_fig(
 ``` r
 effort_needed_fig(
   species.name = "Acartia hudsonica", primer.select = "COI1",
-  ecodistrict.select = "Scotian Shelf", Pscaled_month
+  ecodistrict.select = "Scotian Shelf", scaledprobs
 )
 ```
 
@@ -116,7 +116,13 @@ smooth_fig(
 
 ``` r
 thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
-  threshold = "90", ecodistrict.select = "Scotian Shelf", Pscaled_month)
+  threshold = "90", ecodistrict.select = "Scotian Shelf", scaledprobs)
 ```
 
 <img src="man/figures/README-thresh_fig-1.png" width="100%" />
+
+### Shiny
+
+``` r
+run_gotedna_app()
+```

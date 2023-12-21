@@ -2,11 +2,11 @@ Package: GOTeDNA
 Type: Package
 Encoding: UTF-8
 Title: Guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
-Date: 2023-12-06
-Version: 0.4.0.9005
+Date: 2023-12-18
+Version: 0.4.0.9007
 Authors@R: c(
   person("Melissa", "Morrison", email = "Melissa.Morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
-  person("Tim", "Barrett", email = "Tim.Barrett@@dfo-mpo.gc.ca", role = c("aut", "ctr")),
+  person("Tim", "Barrett", email = "Tim.Barrett@dfo-mpo.gc.ca", role = c("aut", "ctr")),
   person("Thierry", "Gosselin", email = "thierrygosselin@icloud.com", role = c("aut", "ctr")))
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
 Description: The purpose of this package is to compile eDNA qPCR and    
@@ -17,25 +17,31 @@ Depends:
     R (>= 4.1)
 Imports:
     dplyr (>= 1.0.0),
+    fs,
     ggh4x,
     ggplot2,
+    grid,
     lubridate,
     magrittr,
-    grid,
     readxl,
     scales,
+    shiny,
     stats,
     tidyr,
     viridis
 Suggests:
+    cli,
     cowplot,
     devtools,
+    DT,
     egg,
     ggExtra,
     ggpattern,
     ggpubr,
     gridExtra,
+    htmlwidgets,
     knitr,
+    leaflet,
     lme4,
     methods,
     multcomp,
@@ -46,6 +52,8 @@ Suggests:
     readr (>= 2.1.0),
     rlang,
     rmarkdown,
+    sf,
+    shinyjs,
     stringi,
     stringr,
     taxize,

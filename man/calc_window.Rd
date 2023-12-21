@@ -63,6 +63,8 @@ newprob <- calc_det_prob(
 )
 scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
  newprob)
+Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+ newprob$newP_agg)
 calc_window(
   data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
   species.name = "Nucula proxima", scaledprobs

@@ -1,21 +1,20 @@
 #' Displays heatmap of scaled monthly detection probabilities for taxon
 #'
-#' @description This function displays scaled species detection probabilities 
-#' of the chosen taxonomic group with probabilities produced with 
-#' `scale_prob_by_month()`. All primers that are available in the data are 
+#' @description This function displays scaled species detection probabilities
+#' of the chosen taxonomic group with probabilities produced with
+#' [scale_newprob()]. All primers that are available in the data are
 #' displayed.
-#' NOTE: interpolated `(i.e., missing)` data are not used in this 
+#' NOTE: interpolated `(i.e., missing)` data are not used in this
 #' representation.
 #'
 #' @param taxon.level (required, character): Select taxonomic level to view.
-#' @param taxon.name (required, character): Select taxon name that matches the 
-#' level provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter 
+#' @param taxon.name (required, character): Select taxon name that matches the
+#' level provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter
 #' genus name, etc.
 #' @param ecodistrict.select (required, character): Ecodistrict present in data.
 #' frame.
-#' @param Pscaled_agg  (required, data.frame) Normalized detection
-#' probabilities as returned by [scale_prob_by_month()] or
-#' [scale_prob_by_year()].
+#' @param scaledprobs  (required, data.frame) Normalized detection
+#' probabilities as returned by [scale_newprob()].
 #'
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
@@ -24,22 +23,22 @@
 #' @examples
 #' \dontrun{
 #' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
-#'  newprob$newP_agg)
-#' hm_fig(taxon.level = "class", taxon.name = "Copepoda", 
-#'  ecodistrict.select = "Scotian Shelf", Pscaled_month)
+#' scaledprobs <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
+#'  newprob)
+#' hm_fig(taxon.level = "class", taxon.name = "Copepoda",
+#'  ecodistrict.select = "Scotian Shelf", scaledprobs)
 #' }
 hm_fig <- function(
-  taxon.level = c("phylum", "class", "order", "family", "genus", "species"), 
-  taxon.name, ecodistrict.select, Pscaled_agg
+  taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
+  taxon.name, ecodistrict.select, scaledprobs
 ) {
 
-  if (!ecodistrict.select %in% Pscaled_agg$ecodistrict) {
+  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
     stop("Ecodistrict not found in data")
   }
   taxon.level <- match.arg(taxon.level)
 
-  data <- Pscaled_agg[Pscaled_agg[[taxon.level]] %in% c(taxon.name), ] %>%
+  data <- scaledprobs$Pscaled_month[scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name), ] %>%
     dplyr::filter(., ecodistrict == ecodistrict.select)
 
 

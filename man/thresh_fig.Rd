@@ -5,7 +5,7 @@
 \title{Display monthly detection probabilities for selected taxon, ecodistrict, and
 detection probability threshold}
 \usage{
-thresh_fig(taxon.level, taxon.name, threshold, ecodistrict.select, Pscaled_agg)
+thresh_fig(taxon.level, taxon.name, threshold, ecodistrict.select, scaledprobs)
 }
 \arguments{
 \item{taxon.level}{(required, data.frame): Select taxonomic level to view.
@@ -20,9 +20,8 @@ Choices = one of \verb{"50","55","60","65","70","75","80","85","90","95")}}
 
 \item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 
-\item{Pscaled_agg}{(required, data.frame) Normalized detection
-probabilities as returned by \code{\link[=scale_prob_by_month]{scale_prob_by_month()}} or
-\code{\link[=scale_prob_by_year]{scale_prob_by_year()}}.}
+\item{scaledprobs}{(required, data.frame) Normalized detection
+probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \description{
 This function displays detection probabilities in bins, with
@@ -32,12 +31,12 @@ threshold in grey.
 \examples{
 \dontrun{
 newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
- newprob$newP_agg)
+scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
+ newprob)
 thresh_fig(
   taxon.level = "species", taxon.name = "Acartia hudsonica",
   threshold = "90", ecodistrict.select = "Scotian Shelf",
-  Pscaled_month
+  scaledprobs
 )
 }
 }
