@@ -116,7 +116,7 @@ smooth_fig(
 
 ```{R thresh_fig}
 thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
-  threshold = "90", ecodistrict.select = "Scotian Shelf", scaledprobs)
+  threshold = "75", ecodistrict.select = "Scotian Shelf", scaledprobs)
 ```
 
 
