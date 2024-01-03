@@ -20,17 +20,16 @@ gloss$Definition <- trimws(gloss$Definition)
 
 # import all GOTeDNA data
 gotedna_data <- readRDS("data/gotedna_data.rds")
+gotedna_station <- readRDS("data/gotedna_station.rds")
+#
 newprob <- readRDS("data/newprob.rds")
+Pscaled <- readRDS("data/Pscaled.rds")
 Pscaled_month <- readRDS("data/Pscaled_month.rds")
 
-taxo_lvl <- c("phylum", "class", "order", "family", "genus", "scientificName")
-tx_phy <- c("All", unique(D_mb_ex$phylum))
-tx_cla <- c("All", unique(D_mb_ex$class))
-tx_gen <- c("All", unique(D_mb_ex$genus))
-tx_spe <- c("All", unique(D_mb_ex$scientificName))
 
-
-filter_spatial_data <- function(x, phy, cla, gen, spe) {
+# function
+## filter data based on user choices of taxa
+filter_taxa_data <- function(x, phy, cla, gen, spe) {
     if (phy != "All") {
         x <- x |> dplyr::filter(phylum == phy)
         if (cla != "All") {
@@ -43,5 +42,8 @@ filter_spatial_data <- function(x, phy, cla, gen, spe) {
             }
         }
     }
-    x
+    x 
+    # too slow on sf => isolate station then use station and count per station
+      #  dplyr::group_by(ecodistrict, station) |>
+      #  dplyr::summarise(n = dplyr::n())
 }

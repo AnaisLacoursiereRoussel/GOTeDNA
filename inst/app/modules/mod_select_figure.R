@@ -92,12 +92,12 @@ mod_select_figure_server <- function(id, r) {
                     hm_fig(
                         taxon.level = "class", taxon.name = "Copepoda",
                         ecodistrict.select = "Scotian Shelf",
-                        Pscaled_month
+                        Pscaled
                     )
                 } else if (input$figtest == 2) {
                     effort_needed_fig(
                         species.name = "Acartia hudsonica", primer.select = "COI1",
-                        ecodistrict.select = "Scotian Shelf", Pscaled_month
+                        ecodistrict.select = "Scotian Shelf", Pscaled
                     )
                 } else if (input$figtest == 3) {
                     higher_tax_fig(

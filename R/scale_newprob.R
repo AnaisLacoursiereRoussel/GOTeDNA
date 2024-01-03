@@ -49,7 +49,7 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
 
   CPscaled <- lapply(newprob, function(x)
     lapply(x, function(y) {
-      data.frame(y) %>%
+      data.frame(y) |>
       dplyr::mutate(y, scaleP = dplyr::case_when(
         p == 1 ~ 1,
         p == 0 ~ 0,
@@ -81,10 +81,11 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
 
   DFmo[c("GOTeDNA_ID", "species", "primer")] <- stringr::str_split_fixed(DFmo$id, ";", 3)
 
-  DFmo <- DFmo %>%
-    dplyr::left_join(unique(data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
-                     by = c("species" = "scientificName"),
-                     multiple = "first"
+  DFmo <- DFmo |>
+    dplyr::left_join(
+      unique(data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
+      by = c("species" = "scientificName"),
+      multiple = "first"
     )
   # Interpolate missing months
   DFmo$fill <- NA # add column
@@ -152,7 +153,7 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
 
   DFyr[c("GOTeDNA_ID", "species", "primer", "year")] <- stringr::str_split_fixed(DFyr$id, ";", 4)
 
-  DFyr <- DFyr %>%
+  DFyr <- DFyr |>
     dplyr::left_join(unique(data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
                      by = c("species" = "scientificName"),
                      multiple = "first"
@@ -197,10 +198,6 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
     DFyr$fill[DFyr$id == species] <- DF3$fill
   }
 
- # Pscaled_year <- DFyr %>%
-  #  dplyr::ungroup()
-
   list(Pscaled_month = DFmo, Pscaled_year = DFyr)
-
 }
 

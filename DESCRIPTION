@@ -30,6 +30,7 @@ Imports:
     tidyr,
     viridis
 Suggests:
+    bslib,
     cli,
     cowplot,
     devtools,

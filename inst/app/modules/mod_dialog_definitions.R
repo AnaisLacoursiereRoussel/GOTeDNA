@@ -23,7 +23,6 @@ mod_dialog_definitions_server <- function(id, r) {
             gloss |> DT::datatable(escape = FALSE)
         )
 
-        # ... or when user wants to change query
         observeEvent(input$dismiss, {
             removeModal()
             r$show_help <- FALSE
