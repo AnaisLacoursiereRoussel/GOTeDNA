@@ -45,7 +45,17 @@ mod_select_data_ui <- function(id) {
           selectInput(ns("slc_spe"), "Species", choices = "All")
         )
       ),
-      uiOutput(outputId = ns("n_smpl")),
+      fluidRow(
+        column(
+          8,
+          uiOutput(outputId = ns("n_smpl"))
+        ),
+        column(
+          4,
+          actionButton("show_source", "Sources", icon = icon("eye"), 
+            title = "access data sources")
+        )
+      ),
       leafletOutput(outputId = ns("map"), height = "50vh")
     )
   )

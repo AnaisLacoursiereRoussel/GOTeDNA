@@ -21,6 +21,11 @@
   color: #fff;
 }
 
+#observation_request .btn {
+  background-color: transparent;
+  border: none;
+}
+
 #observation_request .btn i {
   color: #53b2ad;
 }

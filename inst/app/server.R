@@ -9,5 +9,8 @@ server <- function(input, output, session) {
   mod_dialog_definitions_server("show_help", r)
   observeEvent(input$show_help, r$show_help <- TRUE)
 
+  mod_dialog_source_server("show_source", r)
+  observeEvent(input$show_source, r$show_source <- TRUE)
+
   mod_select_figure_server("slc_fig", r)
 }

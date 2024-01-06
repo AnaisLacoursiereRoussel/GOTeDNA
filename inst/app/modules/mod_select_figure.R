@@ -60,10 +60,6 @@ mod_select_figure_ui <- function(id) {
         div(
             id = "figure_output",
             plotOutput(ns("figure"), height = "50vh")
-        ),
-        div(
-            id = "table_output",
-            tableOutput(ns("table"))
         )
     )
 }
@@ -126,16 +122,6 @@ mod_select_figure_server <- function(id, r) {
                 }
             },
             res = 108
-        )
-
-        output$table <- renderTable(
-            {
-                gotedna_data$metabarcoding[1:3, ] |>
-                    dplyr::select(c(GOTeDNA_ID, ecodistrict, station, year, detected)) |>
-                    sf::st_drop_geometry() |>
-                    as.data.frame()
-            },
-            width = "100%"
         )
     })
 }

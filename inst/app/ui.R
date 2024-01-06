@@ -28,8 +28,8 @@ ui <- fluidPage(
           column(10, h2("Observation")),
           column(
             2,
-            actionButton("show_dialog", "", icon("info-circle", class = "fa-2xl")),
-            actionButton("show_help", "", icon("question-circle", class = "fa-2xl")),
+            actionButton("show_dialog", "", icon("info-circle", class = "fa-2xl"), title = "disclaimers"),
+            actionButton("show_help", "", icon("question-circle", class = "fa-2xl"), title = "glossary"),
           ),
         ),
         mod_select_figure_ui("slc_fig")
