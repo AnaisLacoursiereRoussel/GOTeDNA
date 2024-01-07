@@ -21,17 +21,14 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
-#'  newprob)
+#' newprob <- calc_det_prob(D_mb_ex)
+#' scaledprobs <- scale_newprob(D_mb_ex, newprob)
 #' thresh_fig(
 #'   taxon.level = "species", taxon.name = "Acartia hudsonica",
 #'   threshold = "90", scaledprobs
 #' )
 #' }
-thresh_fig <- function(taxon.level, taxon.name, threshold,
-  scaledprobs) {
-
+thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs) {
   taxon.level <- match.arg(
     arg = taxon.level,
     choices = c("phylum", "class", "order", "family", "genus", "species")
@@ -44,52 +41,23 @@ thresh_fig <- function(taxon.level, taxon.name, threshold,
     labels = thresh_slc
   )
 
-  Pthresh <- scaledprobs$Pscaled_month %>%
-    dplyr::mutate(thresh95 = dplyr::case_when(
-      fill < 0.94999 ~ 0,
-      fill >= 0.94999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh90 = dplyr::case_when(
-      fill < 0.89999 ~ 0,
-      fill >= 0.89999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh85 = dplyr::case_when(
-      fill < 0.849999 ~ 0,
-      fill >= 0.849999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh80 = dplyr::case_when(
-      fill < 0.79999 ~ 0,
-      fill >= 0.79999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh75 = dplyr::case_when(
-      fill < 0.74999 ~ 0,
-      fill >= 0.74999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh70 = dplyr::case_when(
-      fill < 0.69999 ~ 0,
-      fill >= 0.69999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh65 = dplyr::case_when(
-      fill < 0.649999 ~ 0,
-      fill >= 0.649999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh60 = dplyr::case_when(
-      fill < 0.59999 ~ 0,
-      fill >= 0.59999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh55 = dplyr::case_when(
-      fill < 0.549999 ~ 0,
-      fill >= 0.549999 ~ 1
-    )) %>%
-    dplyr::mutate(thresh50 = dplyr::case_when(
-      fill < 0.49999 ~ 0,
-      fill >= 0.49999 ~ 1
-    )) %>%
+  Pthresh <- scaledprobs$Pscaled_month |>
+    dplyr::mutate(
+      thresh95 = (fill >= 0.94999) * 1,
+      thresh90 = (fill >= 0.89999) * 1,
+      thresh85 = (fill >= 0.84999) * 1,
+      thresh80 = (fill >= 0.79999) * 1,
+      thresh75 = (fill >= 0.74999) * 1,
+      thresh70 = (fill >= 0.69999) * 1,
+      thresh65 = (fill >= 0.64999) * 1,
+      thresh60 = (fill >= 0.59999) * 1,
+      thresh55 = (fill >= 0.54999) * 1,
+      thresh50 = (fill >= 0.49999) * 1
+    ) |>
     tidyr::drop_na(fill)
 
   Pthresh[Pthresh$phylum == "Chordata", ] %>%
     tidyr::drop_na(class)
-
 
   thresh.value <- switch(threshold,
     thresh$values[thresh$labels == threshold]
@@ -126,9 +94,12 @@ thresh_fig <- function(taxon.level, taxon.name, threshold,
       pattern_color = "white", pattern_density = 0.05, pattern_spacing = 0.015, pattern_key_scale_factor = 0.6
     ) +
     ggplot2::coord_polar() +
-    ggplot2::facet_wrap(~ GOTeDNA_ID + primer + species, ncol = 2,
-                        labeller=function(x) {x[2]}
-                        ) + # will need to italicize the species name, but it would also be good if the name didn't show up if there is only one species to facet (if executing at higher taxonomy level [i.e., anything except species])
+    ggplot2::facet_wrap(~ GOTeDNA_ID + primer + species,
+      ncol = 2,
+      labeller = function(x) {
+        x[2]
+      }
+    ) + # will need to italicize the species name, but it would also be good if the name didn't show up if there is only one species to facet (if executing at higher taxonomy level [i.e., anything except species])
     ggplot2::scale_x_continuous(
       limits = c(0.5, 12.5),
       breaks = 1:12,

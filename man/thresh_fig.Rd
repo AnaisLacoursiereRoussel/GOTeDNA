@@ -28,9 +28,8 @@ threshold in grey.
 }
 \examples{
 \dontrun{
-newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
- newprob)
+newprob <- calc_det_prob(D_mb_ex)
+scaledprobs <- scale_newprob(D_mb_ex, newprob)
 thresh_fig(
   taxon.level = "species", taxon.name = "Acartia hudsonica",
   threshold = "90", scaledprobs

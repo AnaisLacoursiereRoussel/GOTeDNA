@@ -7,7 +7,7 @@
 #' @param primer.select (required, character): Select primer as different
 #' primers may provide different detection rates.
 #' @param scaledprobs  (required, data.frame) Normalized detection
-#' probabilities as returned by [[scale_newprob()].
+#' probabilities as returned by [scale_newprob()].
 #'
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
@@ -15,9 +15,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
-#'  newprob)
+#' newprob <- calc_det_prob(D_mb_ex)
+#' scaledprobs <- scale_newprob(D_mb_ex, newprob)
 #' effort_needed_fig(
 #'   species.name = "Acartia hudsonica", primer.select = "COI1",
 #'   scaledprobs)

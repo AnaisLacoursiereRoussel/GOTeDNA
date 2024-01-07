@@ -84,11 +84,8 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
       strip = ggh4x::strip_nested(bleed = T)
     ) +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1)) +
-    ggplot2::scale_x_continuous(
-      limits = c(1, 12),
-      breaks = 1:12,
-      labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-    ) +
+    ggplot2::scale_x_continuous(limits = c(1, 12), breaks = 1:12,
+      labels = month.abb) +
     ggplot2::scale_size_continuous(limits = c(0, NA), breaks = seq(0, 50, 10)) +
     ggplot2::theme_minimal(base_size = 10) +
     ggplot2::labs(

@@ -2,8 +2,8 @@ Package: GOTeDNA
 Type: Package
 Encoding: UTF-8
 Title: Guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
-Date: 2024-01-06
-Version: 0.4.0.9008
+Date: 2024-01-07
+Version: 0.4.0.9009
 Authors@R: c(
   person("Melissa", "Morrison", email = "Melissa.Morrison@dfo-mpo.gc.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5114-1271")),
   person("Tim", "Barrett", email = "Tim.Barrett@dfo-mpo.gc.ca", role = c("aut", "ctr")),

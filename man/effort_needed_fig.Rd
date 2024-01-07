@@ -13,7 +13,7 @@ effort_needed_fig(species.name, primer.select, scaledprobs)
 primers may provide different detection rates.}
 
 \item{scaledprobs}{(required, data.frame) Normalized detection
-probabilities as returned by [\code{\link[=scale_newprob]{scale_newprob()}}.}
+probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \description{
 This function calculates number of samples needed to obtain

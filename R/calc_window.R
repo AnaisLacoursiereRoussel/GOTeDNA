@@ -67,7 +67,7 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
 
-  if (!species.name %in% scaledprobs[[1]]$species) {
+  if (! all(species.name %in% scaledprobs[[1]]$species)) {
     stop("Species not found in data")
   }
 

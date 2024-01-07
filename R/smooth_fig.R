@@ -15,8 +15,8 @@
 #' @examples
 #' \dontrun{
 #' smooth_fig(
-#'    data = D_mb_ex, species.name = "Acartia longiremis", 
-#'    primer.select = "COI1"
+#'   data = D_mb_ex, species.name = "Acartia longiremis", 
+#'   primer.select = "COI1"
 #' )
 #' }
 smooth_fig <- function(data, species.name, primer.select) {
