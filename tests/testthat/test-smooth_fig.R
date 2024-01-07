@@ -1,7 +1,7 @@
 test_that("smooth_fig returns a ggplot2 object", {
   p <- smooth_fig(
     data = D_mb_ex, species.name = "Acartia longiremis",
-    primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+    primer.select = "COI1"
   )
 
   expect_s3_class(p$coordinates, "CoordPolar")
@@ -12,28 +12,21 @@ test_that("smooth_fig returns a ggplot2 object", {
   expect_error(
     smooth_fig(
       data = D_mb_ex, species.name = "A. longiremis",
-      primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+      primer.select = "COI1"
     ),
     "Species not found in data"
   )
   expect_error(
     smooth_fig(
       data = D_mb_ex, species.name = "Acartia longiremis",
-      primer.select = "COI1", ecodistrict.select = "Bay of Fundy"
-    ),
-    "Ecodistrict not found in data"
-  )
-  expect_error(
-    smooth_fig(
-      data = D_mb_ex, species.name = "Acartia longiremis",
-      primer.select = "COI", ecodistrict.select = "Scotian Shelf"
+      primer.select = "COI"
     ),
     "Primer not found in data"
   )
   expect_warning(
     smooth_fig(
       data = D_mb_ex, species.name = "Acartia longiremis",
-      primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+      primer.select = "COI1"
     ),
     "minimal value for n is 3, returning requested palette with 3 different levels"
   )

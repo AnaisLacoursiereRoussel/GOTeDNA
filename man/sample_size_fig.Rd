@@ -4,14 +4,12 @@
 \alias{sample_size_fig}
 \title{Display actual sampling effort by species, year, and region.}
 \usage{
-sample_size_fig(data, species.name, ecodistrict.select)
+sample_size_fig(data, species.name)
 }
 \arguments{
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}.}
 
 \item{species.name}{(required, character): Full binomial species name.}
-
-\item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 }
 \description{
 This function displays the actual number of eDNA samples taken
@@ -19,10 +17,7 @@ for the specified species and region.
 }
 \examples{
 \dontrun{
-sample_size_fig(
-  data = D_mb_ex, species.name = "Acartia hudsonica",
-  ecodistrict.select = "Scotian Shelf"
-)
+sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
 }
 }
 \author{

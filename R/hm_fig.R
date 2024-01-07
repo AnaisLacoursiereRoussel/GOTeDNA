@@ -11,8 +11,6 @@
 #' @param taxon.name (required, character): Select taxon name that matches the
 #' level provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter
 #' genus name, etc.
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.
-#' frame.
 #' @param scaledprobs  (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
@@ -23,23 +21,20 @@
 #' @examples
 #' \dontrun{
 #' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' scaledprobs <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
-#'  newprob)
-#' hm_fig(taxon.level = "class", taxon.name = "Copepoda",
-#'  ecodistrict.select = "Scotian Shelf", scaledprobs)
+#' scaledprobs <- scale_prob_by_month(
+#'   D_mb_ex, "Scotian Shelf",
+#'   newprob
+#' )
+#' hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 #' }
 hm_fig <- function(
-  taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
-  taxon.name, ecodistrict.select, scaledprobs
-) {
-
-  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
+    taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
+    taxon.name, scaledprobs) {
   taxon.level <- match.arg(taxon.level)
 
-  data <- scaledprobs$Pscaled_month[scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name), ] %>%
-    dplyr::filter(., ecodistrict == ecodistrict.select)
+  data <- scaledprobs$Pscaled_month[
+    scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name),
+  ]
 
 
   ggplot2::ggplot(

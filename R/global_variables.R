@@ -7,6 +7,6 @@ utils::globalVariables(
     "scientificName", "target_gene","target_subfragment", "year",
     "Pscaled_agg", "Pscaled_yr", "fill", "scaleP", "x", "y", "P", "PRED", 
     "freq_det", "n", "nd", "primer", "prob", "station", "detect", "diff_y1", 
-    "nondetect", "id.yr", "p"
+    "nondetect", "id.yr", "p", "prev_", "next_"
   )
 )

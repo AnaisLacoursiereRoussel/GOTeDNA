@@ -1,4 +1,4 @@
-#' Display monthly detection probabilities for selected taxon, ecodistrict, and
+#' Display monthly detection probabilities for selected taxon, and
 #' detection probability threshold
 #'
 #' @description This function displays detection probabilities in bins, with
@@ -12,7 +12,6 @@
 #' @param threshold (required, character): Detection probability threshold for
 #' which data are to be displayed to visualize potential optimal detection windows.
 #' Choices = one of `"50","55","60","65","70","75","80","85","90","95")`
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 #' @param scaledprobs (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
@@ -27,16 +26,11 @@
 #'  newprob)
 #' thresh_fig(
 #'   taxon.level = "species", taxon.name = "Acartia hudsonica",
-#'   threshold = "90", ecodistrict.select = "Scotian Shelf",
-#'   scaledprobs
+#'   threshold = "90", scaledprobs
 #' )
 #' }
-thresh_fig <- function(taxon.level, taxon.name, threshold, ecodistrict.select,
+thresh_fig <- function(taxon.level, taxon.name, threshold,
   scaledprobs) {
-
-  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
 
   taxon.level <- match.arg(
     arg = taxon.level,

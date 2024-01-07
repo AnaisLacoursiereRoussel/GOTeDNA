@@ -7,7 +7,6 @@
 #' @param species.name (required, character): Full binomial species name.
 #' @param primer.select (required, character): Select primer as different
 #' primers may provide different detection rates.
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 #'
 #' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
@@ -16,20 +15,16 @@
 #' @examples
 #' \dontrun{
 #' smooth_fig(
-#'    data = D_mb_ex, species.name = "Acartia longiremis",
-#'  primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+#'    data = D_mb_ex, species.name = "Acartia longiremis", 
+#'    primer.select = "COI1"
 #' )
 #' }
-smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
+smooth_fig <- function(data, species.name, primer.select) {
 
   oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
-
-  if (!ecodistrict.select %in% data$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
 
   if (!species.name %in% data$scientificName) {
     stop("Species not found in data")
@@ -43,7 +38,6 @@ smooth_fig <- function(data, species.name, primer.select, ecodistrict.select) {
 
   data %<>%
     dplyr::filter(., scientificName == species.name &
-      ecodistrict == ecodistrict.select &
       target_subfragment == primer.select) %>%
     dplyr::group_by(scientificName, year, month) %>%
     dplyr::summarise(n = sum(n), nd = sum(detected))

@@ -12,7 +12,6 @@
 #' detection probability by. Cannot be higher level than higher group specified in
 #' `higher.taxon.select` Choices = one of `c("phylum", "class", "order",
 #' "family", "genus")`
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 #' @param primer.select (required, character): Select primer as different primers
 #' may provide different detection rates.
 
@@ -27,16 +26,13 @@
 #'   higher.taxon.select = "phylum",
 #'   taxon.name = "Bryozoa",
 #'   view.by.level = "genus",
-#'   ecodistrict.select = "Scotian Shelf",
 #'   primer.select = "COI1"
 #' )
 #' }
-higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level, ecodistrict.select, primer.select) {
+higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level, primer.select) {
+  oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
-
-  if (!ecodistrict.select %in% data$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
+  on.exit(options(dplyr.summarise.inform = oop))
 
   if (!taxon.name %in% data[[higher.taxon.select]]) {
     stop("Taxon not found in data")
@@ -63,8 +59,7 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
   }
 
   data %<>%
-    dplyr::filter(., ecodistrict == ecodistrict.select &
-      target_subfragment == primer.select &
+    dplyr::filter(., target_subfragment == primer.select &
       !!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
     dplyr::group_by(kingdom, phylum, class, order, family, genus, year, month) %>%
     dplyr::summarise(

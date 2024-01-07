@@ -9,7 +9,6 @@ higher_tax_fig(
   higher.taxon.select,
   taxon.name,
   view.by.level,
-  ecodistrict.select,
   primer.select
 )
 }
@@ -27,8 +26,6 @@ enter class name, etc..}
 detection probability by. Cannot be higher level than higher group specified in
 \code{higher.taxon.select} Choices = one of \code{c("phylum", "class", "order", "family", "genus")}}
 
-\item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
-
 \item{primer.select}{(required, character): Select primer as different primers
 may provide different detection rates.}
 }
@@ -43,7 +40,6 @@ higher_tax_fig(
   higher.taxon.select = "phylum",
   taxon.name = "Bryozoa",
   view.by.level = "genus",
-  ecodistrict.select = "Scotian Shelf",
   primer.select = "COI1"
 )
 }

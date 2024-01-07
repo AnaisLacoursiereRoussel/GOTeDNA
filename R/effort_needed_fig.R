@@ -6,7 +6,6 @@
 #' @param species.name (required, character): Full binomial species name.
 #' @param primer.select (required, character): Select primer as different
 #' primers may provide different detection rates.
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 #' @param scaledprobs  (required, data.frame) Normalized detection
 #' probabilities as returned by [[scale_newprob()].
 #'
@@ -21,39 +20,24 @@
 #'  newprob)
 #' effort_needed_fig(
 #'   species.name = "Acartia hudsonica", primer.select = "COI1",
-#'   ecodistrict.select = "Scotian Shelf", scaledprobs
-#' )
+#'   scaledprobs)
 #' }
-effort_needed_fig <- function(
-    species.name, primer.select, ecodistrict.select, scaledprobs
-  ) {
+effort_needed_fig <- function(species.name, primer.select, scaledprobs) {
 
   species.name <- match.arg(
     species.name,
     choices = c(scaledprobs$Pscaled_month$species) |> unique()
   )
 
-  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
-
   if (!primer.select %in% scaledprobs$Pscaled_month$primer) {
     stop("Primer not found in data")
   }
 
-  data <- scaledprobs$Pscaled_month %>%
-    dplyr::filter(
-      ecodistrict == ecodistrict.select &
-        species == species.name &
-        primer == primer.select
-    )
+  data <- scaledprobs$Pscaled_month |>
+    dplyr::filter(species == species.name, primer == primer.select)
 
-  DF2 <- expand.grid(
-    p = data$fill,
-    n = 1:10,
-    P = NA
-  )
-  DF2 <- DF2 %>%
+  DF2 <- expand.grid(p = data$fill, n = seq_len(10), P = NA)
+  DF2 <- DF2 |>
     merge(data.frame(p = data$fill, month = data$month))
 
   for (i in seq_len(nrow(DF2))) {

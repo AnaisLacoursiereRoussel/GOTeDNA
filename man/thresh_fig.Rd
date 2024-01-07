@@ -2,10 +2,10 @@
 % Please edit documentation in R/thresh_fig.R
 \name{thresh_fig}
 \alias{thresh_fig}
-\title{Display monthly detection probabilities for selected taxon, ecodistrict, and
+\title{Display monthly detection probabilities for selected taxon, and
 detection probability threshold}
 \usage{
-thresh_fig(taxon.level, taxon.name, threshold, ecodistrict.select, scaledprobs)
+thresh_fig(taxon.level, taxon.name, threshold, scaledprobs)
 }
 \arguments{
 \item{taxon.level}{(required, data.frame): Select taxonomic level to view.
@@ -17,8 +17,6 @@ provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genu
 \item{threshold}{(required, character): Detection probability threshold for
 which data are to be displayed to visualize potential optimal detection windows.
 Choices = one of \verb{"50","55","60","65","70","75","80","85","90","95")}}
-
-\item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 
 \item{scaledprobs}{(required, data.frame) Normalized detection
 probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
@@ -35,8 +33,7 @@ scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
  newprob)
 thresh_fig(
   taxon.level = "species", taxon.name = "Acartia hudsonica",
-  threshold = "90", ecodistrict.select = "Scotian Shelf",
-  scaledprobs
+  threshold = "90", scaledprobs
 )
 }
 }

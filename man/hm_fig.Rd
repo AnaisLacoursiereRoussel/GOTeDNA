@@ -7,7 +7,6 @@
 hm_fig(
   taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
   taxon.name,
-  ecodistrict.select,
   scaledprobs
 )
 }
@@ -17,9 +16,6 @@ hm_fig(
 \item{taxon.name}{(required, character): Select taxon name that matches the
 level provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter
 genus name, etc.}
-
-\item{ecodistrict.select}{(required, character): Ecodistrict present in data.
-frame.}
 
 \item{scaledprobs}{(required, data.frame) Normalized detection
 probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
@@ -35,10 +31,11 @@ representation.
 \examples{
 \dontrun{
 newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-scaledprobs <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
- newprob)
-hm_fig(taxon.level = "class", taxon.name = "Copepoda",
- ecodistrict.select = "Scotian Shelf", scaledprobs)
+scaledprobs <- scale_prob_by_month(
+  D_mb_ex, "Scotian Shelf",
+  newprob
+)
+hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 }
 }
 \author{
