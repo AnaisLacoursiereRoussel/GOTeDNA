@@ -44,22 +44,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(
-#'   data = D_mb_ex,
-#'   ecodistrict.select = "Scotian Shelf"
-#' )
-#' scaledprobs <- scale_newprob(
-#'   D_mb_ex, "Scotian Shelf",
-#'   newprob
-#' )
-#' Pscaled_month <- scale_prob_by_month(
-#'   D_mb_ex, "Scotian Shelf",
-#'   newprob$newP_agg
-#' )
-#' calc_window(
-#'   data = D_mb_ex, threshold = "90",
-#'   species.name = "Nucula proxima", scaledprobs
-#' )
+#' newprob <- calc_det_prob(data = D_mb_ex)
+#' scaledprobs <- scale_newprob(D_mb_ex, newprob)
+#' calc_window(data = D_mb_ex, threshold = "90",
+#'  species.name = "Acartia longiremis", scaledprobs)
 #' }
 calc_window <- function(data, threshold, species.name, scaledprobs) {
   oop <- options("dplyr.summarise.inform")
@@ -244,9 +232,7 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
           dplyr::bind_rows, fshTest[[var]][[i]]
         )
         fshDF[[var]]$id <- names(fshTest[[var]])
-        fshDF2 <- do.call(
-          dplyr::bind_rows, fshDF[[var]]
-        )
+        fshDF2 <- do.call(dplyr::bind_rows, fshDF[[var]])
 
         if (lengths(strsplit(fshDF2$id[1], ";")) == 4) {
           fshDF3 <- dplyr::full_join(fshDF2, opt_sampling$Pscaled_year, by = "id")

@@ -22,9 +22,8 @@ data produced with \verb{[scale_newprob()]}.
 }
 \examples{
 \dontrun{
-newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
- newprob)
+newprob <- calc_det_prob(D_mb_ex)
+scaledprobs <- scale_newprob(D_mb_ex, newprob)
 effort_needed_fig(
   species.name = "Acartia hudsonica", primer.select = "COI1",
   scaledprobs)
