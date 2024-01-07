@@ -15,9 +15,9 @@
 #' sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
 #' }
 sample_size_fig <- function(data, species.name) {
-  
+  oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
-
+  on.exit(options(dplyr.summarise.inform = oop))
 
   if (!species.name %in% data$scientificName) {
     stop("Species not found in data")

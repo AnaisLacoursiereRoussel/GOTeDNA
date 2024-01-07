@@ -7,15 +7,12 @@
 #' separate. Outputs are used in subsequent functions.
 #'
 #' @param data (required, data.frame) Data.frame read in with [read_data()].
-#' @param ecodistrict.select (required, character) Ecodistrict present in data.
-#' frame.
 #'
 #' @return Two lists, each with distinct elements of species; primer ID 
-#' containing 6-9 columns:
+#' containing 5-7 columns:
 #' * `month`
 #' * `n` total number of samples per month
 #' * `nd` number of positive detections per month
-#' * `ecodistrict`
 #' * `p` calculated monthly detection probability
 #' * `s` standard deviation
 #' * `GOTeDNA_ID`
@@ -31,21 +28,16 @@
 #'  D_mb <- read_data(
 #'    choose.method = "metabarcoding", path.folder = "./inst/testdata"
 #'  )
-#'  calc_det_prob(data = D_mb_ex, ecodistrict.select = "Scotian Shelf")
+#'  calc_det_prob(data = D_mb_ex)
 #' }
-calc_det_prob <- function(data, ecodistrict.select) {
+calc_det_prob <- function(data) {
   oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
 
-  if (!ecodistrict.select %in% data$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
-
   data %<>%
-    dplyr::filter(., ecodistrict == ecodistrict.select) %>% # select the ecodistrict to calculate per region
-    dplyr::mutate(
+    dplyr::mutate(.,
       id = if (!all(is.na(target_subfragment))) paste0(GOTeDNA_ID, ";", scientificName, ";", target_subfragment) else paste0(GOTeDNA_ID, ";", scientificName, ";", target_gene),
       id.yr = if (!all(is.na(target_subfragment))) paste0(GOTeDNA_ID, ";", scientificName, ";", target_subfragment, ";", year) else paste0(GOTeDNA_ID, ";", scientificName, ";", target_gene, ";", year)
     )
@@ -66,7 +58,6 @@ calc_det_prob <- function(data, ecodistrict.select) {
       dplyr::summarise(
         n = dplyr::n(),
         nd = sum(detected),
-        ecodistrict = unique(ecodistrict),
         p = nd/n,
         s = sqrt(p * (1 - p)/n)
       ) %>%

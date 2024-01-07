@@ -1,12 +1,12 @@
 test_that("monthly probabilities are scaled and missing months are interpolated, years aggregated", {
-  expect_identical(dim(scaledprobs$Pscaled_month), c(2988L, 15L))
+  expect_identical(dim(scaledprobs$Pscaled_month), c(2988L, 14L))
   tmp <- scaledprobs$Pscaled_month[1L, ]
   tmp$scaleP <- round(tmp$scaleP, 5)
   tmp$fill <- round(tmp$fill, 5)
   expect_identical(
     tmp,
     structure(list(
-      id = "8;Prionospio steenstrupi;COI1", ecodistrict = "Scotian Shelf",
+      id = "8;Prionospio steenstrupi;COI1", 
       month = 1L, detect = 2, nondetect = 13, scaleP = 0.17778,
       GOTeDNA_ID = "8", species = "Prionospio steenstrupi", primer = "COI1",
       phylum = "Annelida", class = "Polychaeta", order = "Spionida",
@@ -20,13 +20,12 @@ test_that("monthly probabilities are scaled and missing months are interpolated,
 
 
 test_that("monthly probabilities are scaled and missing months are interpolated", {
-  expect_identical(dim(scaledprobs$Pscaled_year), c(5976L, 16L))
+  expect_identical(dim(scaledprobs$Pscaled_year), c(5976L, 15L))
   tmp <- scaledprobs$Pscaled_year[1L, ]
   expect_identical(
     tmp,
     structure(list(
       id = "8;Prionospio steenstrupi;COI1;2021",
-      ecodistrict = "Scotian Shelf",
       month = 1L,
       detect = NA_real_,
       nondetect = NA_real_,
@@ -50,7 +49,6 @@ test_that("monthly probabilities are scaled and missing months are interpolated"
     tmp,
     structure(list(
       id = "8;Prionospio steenstrupi;COI1;2021",
-      ecodistrict = "Scotian Shelf",
       month = 12L,
       detect = 4,
       nondetect = 25,

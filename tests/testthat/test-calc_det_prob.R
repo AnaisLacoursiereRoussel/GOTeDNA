@@ -14,7 +14,7 @@ test_that("calc_det_prob() calculates detection probability", {
     "8;Prionospio steenstrupi;COI1"
   )
   expect_identical(
-    dim(newprob$newP_agg[[1]]), c(12L, 6L)
+    dim(newprob$newP_agg[[1]]), c(12L, 5L)
   )
   tmp <- newprob$newP_agg[[1]][1, ]
   tmp$p <- round(tmp$p, 5)
@@ -25,7 +25,6 @@ test_that("calc_det_prob() calculates detection probability", {
       month = 1,
       n = 15L,
       nd = 2,
-      ecodistrict = "Scotian Shelf",
       p = 0.13333,
       s = 0.08777
     ), row.names = 1L, class = "data.frame")

@@ -26,9 +26,9 @@ devtools::install_github("mkmor/GOTeDNA")
 
 ### R function categories:
 
-- Import data
-- Clean/tidy data
-- Visualization
+-   Import data
+-   Clean/tidy data
+-   Visualization
 
 ``` r
 library("GOTeDNA")
@@ -37,17 +37,10 @@ library("GOTeDNA")
 ### Clean/tidy data
 
 ``` r
-newprob <- calc_det_prob(
-  data = D_mb_ex,
-  ecodistrict.select = "Scotian Shelf"
-)
-scaledprobs <- scale_newprob(
-  D_mb_ex, "Scotian Shelf",
-  newprob
-)
+newprob <- calc_det_prob(data = D_mb_ex)
+scaledprobs <- scale_newprob(D_mb_ex, newprob)
 win <- calc_window(
-  data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-  species.name = "Acartia longiremis", scaledprobs
+  data = D_mb_ex, threshold = "90", species.name = "Acartia longiremis",scaledprobs
 )
 ```
 
@@ -55,10 +48,7 @@ win <- calc_window(
 
 ``` r
 hm_fig(
-   taxon.level = "class", taxon.name = "Copepoda",
-   ecodistrict.select = "Scotian Shelf",
-   scaledprobs
- )
+   taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 ```
 
 <img src="man/figures/README-hm-1.png" width="100%" />
@@ -67,14 +57,12 @@ hm_fig(
 
 ``` r
 effort_needed_fig(
-  species.name = "Acartia hudsonica", primer.select = "COI1",
-  ecodistrict.select = "Scotian Shelf", scaledprobs
+  species.name = "Acartia hudsonica", primer.select = "COI1", scaledprobs
 )
 ```
 
 <img src="man/figures/README-effort-1.png" width="100%" />
-
-### Sampling effort
+ecodistrict.select = “Scotian Shelf”, \### Sampling effort
 
 ``` r
 higher_tax_fig(
@@ -82,7 +70,6 @@ higher_tax_fig(
   higher.taxon.select = "phylum", 
   taxon.name = "Bryozoa",
   view.by.level = "genus", 
-  ecodistrict.select = "Scotian Shelf", 
   primer.select = "COI1"
 )
 ```
@@ -92,10 +79,7 @@ higher_tax_fig(
 ### Sample size
 
 ``` r
-sample_size_fig(
-  data = D_mb_ex, species.name = "Acartia hudsonica",
-  ecodistrict.select = "Scotian Shelf"
-)
+sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
 ```
 
 <img src="man/figures/README-sample_size-1.png" width="100%" />
@@ -105,7 +89,7 @@ sample_size_fig(
 ``` r
 smooth_fig(
   data = D_mb_ex, species.name = "Acartia longiremis",
-  primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+  primer.select = "COI1"
 )
 #> Warning in RColorBrewer::brewer.pal(length(unique(data$year)), "Dark2"): minimal value for n is 3, returning requested palette with 3 different levels
 ```
@@ -116,7 +100,7 @@ smooth_fig(
 
 ``` r
 thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
-  threshold = "75", ecodistrict.select = "Scotian Shelf", scaledprobs)
+  threshold = "75", scaledprobs)
 ```
 
 <img src="man/figures/README-thresh_fig-1.png" width="100%" />

@@ -9,13 +9,11 @@
 #'
 #' @param data (required, data.frame) Data.frame imported with [read_data()]. Required
 #' to join taxonomic information.
-#' @param ecodistrict.select (required, character) Ecodistrict present in data.frame.
 #' @param newprob (required, list) detection probabilities aggregated per month and year
 #' [calc_det_prob()].
 #'
-#' @return Grouped data.frame with 16 columns:
+#' @return Grouped data.frame with 15 columns:
 #' * `id` unique species;primer;year identifier
-#' * `ecodistrict`
 #' * `month`
 #' * `detect` number of detections
 #' * `nondetect` number of non-detections
@@ -36,16 +34,9 @@
 #' @examples
 #' \dontrun{
 #' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' scale_newprob(data = D_mb, ecodistrict.select = "Scotian Shelf", newprob)
+#' scale_newprob(data = D_mb, newprob)
 #' }
-scale_newprob <- function(data, ecodistrict.select, newprob) {
-  if (!ecodistrict.select %in% data$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
-
-  # Call the data in to merge taxonomic info
-  data %<>%
-    dplyr::filter(., ecodistrict %in% ecodistrict.select)
+scale_newprob <- function(data, newprob) {
 
   CPscaled <- lapply(newprob, function(x)
     lapply(x, function(y) {
@@ -60,7 +51,6 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
 
   DFmo <- lapply(CPscaled$newP_agg, function(x) {
     out <- data.frame(
-      ecodistrict = x$ecodistrict[1],
       month = 1:12,
       detect = NA_integer_,
       nondetect = NA_integer_,
@@ -75,7 +65,7 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
     dplyr::mutate(
       id = rep(names(CPscaled$newP_agg), each = 12)
     ) |>
-    dplyr::select(id, ecodistrict, month, detect, nondetect, scaleP) |>
+    dplyr::select(id, month, detect, nondetect, scaleP) |>
     dplyr::tibble()
   row.names(DFmo) <- NULL
 
@@ -132,7 +122,6 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
   # scale and interpolate each month separately
   DFyr <- lapply(CPscaled$newP_yr, function(x) {
     out <- data.frame(
-      ecodistrict = x$ecodistrict[1],
       month = 1:12,
       detect = NA_integer_,
       nondetect = NA_integer_,
@@ -147,7 +136,7 @@ scale_newprob <- function(data, ecodistrict.select, newprob) {
     dplyr::mutate(
       id = rep(names(CPscaled$newP_yr), each = 12)
     ) |>
-    dplyr::select(id, ecodistrict, month, detect, nondetect, scaleP) |>
+    dplyr::select(id, month, detect, nondetect, scaleP) |>
     dplyr::tibble()
   row.names(DFyr) <- NULL
 
