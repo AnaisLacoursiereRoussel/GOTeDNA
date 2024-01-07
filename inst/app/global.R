@@ -5,6 +5,7 @@ library(GOTeDNA)
 library(kableExtra)
 library(leaflet)
 library(patchwork)
+library(sf)
 library(shiny)
 library(shinyjs)
 cli_alert_info("Packages loaded")
@@ -24,8 +25,6 @@ gotedna_station <- readRDS("data/gotedna_station.rds")
 #
 newprob <- readRDS("data/newprob.rds")
 Pscaled <- readRDS("data/Pscaled.rds")
-Pscaled_month <- readRDS("data/Pscaled_month.rds")
-
 
 # function
 ## filter data based on user choices of taxa
@@ -42,8 +41,5 @@ filter_taxa_data <- function(x, phy, cla, gen, spe) {
             }
         }
     }
-    x 
-    # too slow on sf => isolate station then use station and count per station
-      #  dplyr::group_by(ecodistrict, station) |>
-      #  dplyr::summarise(n = dplyr::n())
+    x
 }

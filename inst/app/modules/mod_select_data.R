@@ -5,43 +5,24 @@ mod_select_data_ui <- function(id) {
     div(
       id = "data_request",
       h2("Data request window", class = "col_1"),
-      fluidRow(
-        column(
-          6,
-          radioButtons(ns("datatype"),
-            label = "Data Type",
-            choices = list(
-              "Species specific (qPCR)" = "qPCR",
-              "Multi-species (metabarcoding)" = "metabarcoding"
-            ),
-            selected = "qPCR",
-            inline = TRUE
-          )
+      radioButtons(ns("datatype"),
+        label = "Data Type",
+        choices = list(
+          "Species specific (qPCR)" = "qPCR",
+          "Multi-species (metabarcoding)" = "metabarcoding"
         ),
-        column(
-          6,
-          actionButton(ns("calc_window"), "New search",
-            icon = icon("gear")
-          )
-        )
+        selected = "qPCR",
+        inline = TRUE
       ),
       fluidRow(
         column(
           6,
-          selectInput(ns("slc_phy"), "Phylum", choices = "All")
-        ),
-        column(
-          6,
-          selectInput(ns("slc_cla"), "Class", choices = "All")
-        )
-      ),
-      fluidRow(
-        column(
-          6,
+          selectInput(ns("slc_phy"), "Phylum", choices = "All"),
           selectInput(ns("slc_gen"), "Genus", choices = "All")
         ),
         column(
           6,
+          selectInput(ns("slc_cla"), "Class", choices = "All"),
           selectInput(ns("slc_spe"), "Species", choices = "All")
         )
       ),
@@ -52,8 +33,10 @@ mod_select_data_ui <- function(id) {
         ),
         column(
           4,
-          actionButton("show_source", "Sources", icon = icon("eye"), 
-            title = "access data sources")
+          actionButton("show_source", "Sources",
+            icon = icon("eye"),
+            title = "access data sources"
+          )
         )
       ),
       leafletOutput(outputId = ns("map"), height = "50vh")
@@ -68,6 +51,7 @@ mod_select_data_server <- function(id, r) {
     observeEvent(input$datatype, {
       r$data_filtered <- gotedna_data[[input$datatype]]
       r$data_station <- gotedna_station[[input$datatype]]
+      class(r$data_station)
       updateSelectInput(session, "slc_phy",
         selected = "All",
         choices = c("All", unique(r$data_filtered$phylum))
@@ -119,6 +103,12 @@ mod_select_data_server <- function(id, r) {
         )
       }
     })
+    observeEvent(input$slc_spe, {
+      r$data_filtered <- filter_taxa_data(
+        gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
+        input$slc_gen, input$slc_spe
+      )
+    })
 
     observeEvent(input$calc_window, {
       r$calc_window <- TRUE
@@ -134,21 +124,15 @@ mod_select_data_server <- function(id, r) {
     })
 
     output$map <- renderLeaflet({
-      sta <- r$data_station |>
-        dplyr::filter(
-          ecodistrict %in% r$data_filtered$ecodistrict,
-          station %in% r$data_filtered$station
-        )
       # count data
-      tmp <- r$data_filtered |>
-        dplyr::group_by(ecodistrict, station) |>
-        dplyr::summarise(count = n())
       sta <- r$data_station |>
         dplyr::inner_join(
-          tmp,
+          r$data_filtered |>
+        dplyr::group_by(ecodistrict, station) |>
+        dplyr::summarise(count = n()) ,
           join_by(ecodistrict, station)
         )
-      r$n_sample <- sum(tmp$count)
+      r$n_sample <- sum(sta$count)
       leaflet(sta) |>
         # setView(lng = -63, lat = 48, zoom = 5) |>
         addProviderTiles("Esri.OceanBasemap", group = "Ocean") |>

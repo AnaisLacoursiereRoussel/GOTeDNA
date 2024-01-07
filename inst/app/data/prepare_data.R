@@ -8,10 +8,11 @@ D_qPCR <- read_data(
 # make a list of two data frames
 gotedna_data <- list(
   metabarcoding = D_mb |>
-    dplyr::filter(!is.na(decimalLongitude)),
-  qPCR = D_qPCR |>
     dplyr::filter(!is.na(decimalLongitude)) |>
-    dplyr::filter(!is.na((phylum)))
+    as.data.frame(),
+  qPCR = D_qPCR |>
+    dplyr::filter(!is.na(decimalLongitude), !is.na(phylum)) |>
+    as.data.frame()
 )
 saveRDS(gotedna_data, "inst/app/data/gotedna_data.rds")
 
@@ -20,8 +21,9 @@ saveRDS(gotedna_data, "inst/app/data/gotedna_data.rds")
 # a few points on map
 get_station <- function(x) {
   x |>
+    dplyr::ungroup() |>
     dplyr::filter(!is.na(decimalLongitude)) |>
-    dplyr::filter(!is.na(phylum))
+    dplyr::filter(!is.na(phylum)) |>
     dplyr::select(
       c(decimalLongitude, decimalLatitude, ecodistrict, station)
     ) |>
@@ -31,6 +33,8 @@ get_station <- function(x) {
       decimalLongitude = mean(as.numeric(decimalLongitude)),
       decimalLatitude = mean(as.numeric(decimalLatitude))
     ) |>
+    dplyr::ungroup() |>
+    as.data.frame() |>
     sf::st_as_sf(
       coords = c("decimalLongitude", "decimalLatitude"),
       crs = sf::st_crs(4326)

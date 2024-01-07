@@ -13,10 +13,23 @@ ui <- fluidPage(
   fluidRow(
     column(
       4,
-      img(
-        src = "img/GOTeDNA_logo_white.png",
-        alt = "GOTeDNA_logo",
-        id = "logo_gotedna"
+      fluidRow(
+        column(
+          9,
+          img(
+            src = "img/GOTeDNA_logo_white.png",
+            alt = "GOTeDNA_logo",
+            id = "logo_gotedna"
+          )
+        ),
+        column(
+          3,
+          div(
+            id = "gotedna_info",
+            actionButton("show_dialog", "", icon("info-circle", class = "fa-2xl"), title = "disclaimers"),
+            actionButton("show_help", "", icon("question-circle", class = "fa-2xl"), title = "glossary"),
+          )
+        ),
       ),
       mod_select_data_ui("slc_data")
     ),
@@ -24,14 +37,6 @@ ui <- fluidPage(
       8,
       div(
         id = "observation_request",
-        fluidRow(
-          column(10, h2("Observation")),
-          column(
-            2,
-            actionButton("show_dialog", "", icon("info-circle", class = "fa-2xl"), title = "disclaimers"),
-            actionButton("show_help", "", icon("question-circle", class = "fa-2xl"), title = "glossary"),
-          ),
-        ),
         mod_select_figure_ui("slc_fig")
       )
     )
