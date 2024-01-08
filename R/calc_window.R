@@ -61,27 +61,19 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
 
   thresh_slc <- seq(50, 95, 5) %>% as.character()
   threshold <- match.arg(threshold, choices = thresh_slc)
-
   thresh <- data.frame(
-    values = c(
-      0.49999, 0.54999, 0.59999, 0.64999, 0.69999,
-      0.74999, 0.79999, 0.84999, 0.89999, 0.94999
-    ),
+    values = 0.49999 + seq(0, 0.45, 0.05),
     labels = thresh_slc
   )
-
-  thresh.value <- switch(threshold,
-    thresh$values[thresh$labels == threshold]
-  )
+  thresh.value <- thresh$values[thresh$labels == threshold]
 
   df <- lapply(scaledprobs, function(x) {
     dplyr::filter(x, species %in% species.name)
   })
 
   df_thresh <- lapply(scaledprobs, function(x) {
-    dplyr::filter(
-      x,
-      species %in% species.name &
+    x |> dplyr::filter(
+      species %in% species.name,
         fill >= thresh.value
     )
   })
@@ -110,7 +102,8 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
         )
     },
     df_thresh,
-    onemonth
+    onemonth,
+    SIMPLIFY = FALSE
   )
 
   multmonth <- lapply(multmonth, function(x) {
@@ -125,7 +118,7 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
   # selects species with consecutive months >= threshold
   consecmonth1 <- multmonth %>%
     lapply(function(x) {
-      dplyr::filter(x, length(x$id) == sum(x$diff_y1) + 1) # %>%
+      dplyr::filter(x, length(x$id) == sum(x$diff_y1) + 1)
     })
 
   # selects species with consecutive months being December-January >= threshold
@@ -134,11 +127,12 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
   # if diff_y1 = 1, keep row before
   consecmonth2 <- multmonth %>%
     lapply(function(x) {
-      dplyr::filter(x, length(id) == 2 & sum(diff_y1) == 11) # %>%
+      dplyr::filter(x, length(id) == 2 & sum(diff_y1) == 11)
     })
 
   # all of the species with consecutive windows AND single month window
-  consec.det <- mapply(dplyr::bind_rows, onemonth, consecmonth1, consecmonth2)
+  consec.det <- mapply(dplyr::bind_rows, onemonth, consecmonth1, consecmonth2, 
+    SIMPLIFY = FALSE)
 
   # create df where species have no discernible window (for now, this means more than one non-consecutive period)
   optwin <- lapply(consec.det, function(x) {
@@ -162,9 +156,9 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
         dplyr::mutate(window = "outsidewindow")
     },
     df,
-    optwin
+    optwin,
+    SIMPLIFY = FALSE
   )
-
 
   outsidewindow <- lapply(nowin, function(x) {
     x %>%
@@ -177,13 +171,11 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
 
   window_sum <- mapply(
     function(x, y) {
-      dplyr::bind_rows(
-        x, y
-      ) %>%
-        split(.$id)
+      dplyr::bind_rows(x, y) %>% split(.$id)
     },
     inwindow,
-    outsidewindow
+    outsidewindow,
+    SIMPLIFY = FALSE
   )
 
   both_in_out <- lapply(window_sum, function(x) {
