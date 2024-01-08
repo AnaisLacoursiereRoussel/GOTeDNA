@@ -73,53 +73,65 @@ mod_select_figure_server <- function(id, r) {
     ns <- session$ns
 
     observeEvent(input$calc_window, {
-      cli::cli_alert_info("Computing")
-      newprob <- calc_det_prob(r$data_filtered)
-      scaledprobs <- scale_newprob(r$data_filtered, newprob)
-      win <- calc_window(
-        data = r$data_filtered, threshold = "90",
-        species.name = unique(r$data_filtered$scientificName),
-        scaledprobs = scaledprobs
-      )
-      if (is.null(win)) {
-        showNotification("No optimal detection window", type = "warning")
-        output$opt_sampl <- renderUI("UNKNOWN")
-        output$conf <- renderUI("UNKNOWN")
-        output$var_year <- renderUI("UNKNOWN")
+      if (r$taxon_slc[1] == "All") {
+        showNotification("Select at least one phylum!", type = "warning")
       } else {
-        output$opt_sampl <- renderUI(win$period)
-        output$conf <- renderUI(win$confidence)
-        output$var_year <- renderUI(2)
-      }
-      output$var_primer <- renderUI("TODO")
-      output$var_dat <- renderUI("TODO")
+        # compute probabilities
+        cli::cli_alert_info("Computing probablities")
+        newprob <- calc_det_prob(r$data_filtered)
+        scaledprobs <- scale_newprob(r$data_filtered, newprob)
+        cli::cli_alert_info("Computing optimal detection window")
+        win <- calc_window(
+          data = r$data_filtered, threshold = "90",
+          species.name = unique(r$data_filtered$scientificName),
+          scaledprobs = scaledprobs
+        )
+        
+        if (is.null(win)) {
+          showNotification("No optimal detection window", type = "warning")
+          output$opt_sampl <- renderUI("UNKNOWN")
+          output$conf <- renderUI("UNKNOWN")
+          output$var_year <- renderUI("UNKNOWN")
+        } else {
+          output$opt_sampl <- renderUI(win$period)
+          output$conf <- renderUI(win$confidence)
+          output$var_year <- renderUI(2)
+        }
+        output$var_primer <- renderUI("TODO")
+        output$var_dat <- renderUI("TODO")
 
-      # Creates figures
-      r$fig_1 <- hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
-      r$fig_2 <- effort_needed_fig(
-        species.name = "Acartia hudsonica",
-        primer.select = "COI1", scaledprobs
-      )
-      r$fig_3 <- higher_tax_fig(
-        data = D_mb_ex,
-        higher.taxon.select = "phylum",
-        taxon.name = "Bryozoa",
-        view.by.level = "genus",
-        primer.select = "COI1"
-      )
-      r$fig_4 <- sample_size_fig(
-        data = D_mb_ex,
-        species.name = "Acartia hudsonica"
-      )
-      p1 <- smooth_fig(
-        data = D_mb_ex, species.name = "Acartia longiremis",
-        primer.select = "COI1"
-      )
-      p2 <- thresh_fig(
-        taxon.level = "species", taxon.name = "Acartia hudsonica",
-        threshold = "90", Pscaled
-      )
-      r$fig_5 <- p1 + p2
+        # freeze taxon level selected
+        r$taxon_slc_compute <- r$taxon_slc
+        r$taxon_lvl_compute <- do.call(get_taxon_level, as.list(r$taxon_slc))
+        # taxon level selected
+        taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
+        taxon.level <- taxon_levels[r$taxon_lvl_compute]
+        print(taxon.level)
+        # Creates figures
+        cli::cli_alert_info("Creating figures")
+        r$fig_1 <- hm_fig(taxon.level, taxon.name, scaledprobs) 
+        r$fig_2 <- effort_needed_fig(
+          species.name = "Acartia hudsonica",
+          primer.select = "COI1", Pscaled
+        )
+        r$fig_3 <- higher_tax_fig(
+          data = r$data_filtered,
+          higher.taxon.select = taxon.level,
+          taxon.name = taxon.name, 
+          view.by.level = taxon.level,
+          primer.select = "COI1"
+        )
+        r$fig_4 <- sample_size_fig(
+          data = D_mb_ex, species.name = "Acartia hudsonica"
+        )
+        p1 <- smooth_fig(
+          data = D_mb_ex, species.name = "Acartia longiremis",
+          primer.select = "COI1"
+        )
+        p2 <- thresh_fig(taxon.level, taxon.name, threshold = "90", 
+          scaledprobs)
+        r$fig_5 <- p1 + p2
+      }
     })
 
     output$fig_1 <- renderPlot(r$fig_1, res = 144)

@@ -11,7 +11,7 @@ library(shinyjs)
 cli_alert_info("Packages loaded")
 
 list.files("modules", full.names = TRUE) |>
-    lapply(source)
+  lapply(source)
 cli_alert_info("Modules loaded")
 
 # import glossary
@@ -26,20 +26,34 @@ gotedna_station <- readRDS("data/gotedna_station.rds")
 newprob <- readRDS("data/newprob.rds")
 Pscaled <- readRDS("data/Pscaled.rds")
 
+taxon_levels <- c("phylum", "class", "genus", "species")
+
 # function
 ## filter data based on user choices of taxa
 filter_taxa_data <- function(x, phy, cla, gen, spe) {
-    if (phy != "All") {
-        x <- x |> dplyr::filter(phylum == phy)
-        if (cla != "All") {
-            x <- x |> dplyr::filter(class == cla)
-            if (gen != "All") {
-                x <- x |> dplyr::filter(genus == gen)
-                if (spe != "All") {
-                    x <- x |> dplyr::filter(scientificName == spe)
-                }
-            }
+  if (phy != "All") {
+    x <- x |> dplyr::filter(phylum == phy)
+    if (cla != "All") {
+      x <- x |> dplyr::filter(class == cla)
+      if (gen != "All") {
+        x <- x |> dplyr::filter(genus == gen)
+        if (spe != "All") {
+          x <- x |> dplyr::filter(scientificName == spe)
         }
+      }
     }
-    x
+  }
+  x
+}
+
+get_taxon_level <- function(phy, cla, gen, spe) {
+  if (spe != "All") {
+    out <- 4
+  } else if (gen != "All") {
+    out <- 3
+  } else if (cla != "All") {
+    out <- 2
+  } else {
+    out <- 1
+  }
 }

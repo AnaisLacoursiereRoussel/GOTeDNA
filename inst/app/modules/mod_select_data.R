@@ -51,7 +51,6 @@ mod_select_data_server <- function(id, r) {
     observeEvent(input$datatype, {
       r$data_filtered <- gotedna_data[[input$datatype]]
       r$data_station <- gotedna_station[[input$datatype]]
-      class(r$data_station)
       updateSelectInput(session, "slc_phy",
         selected = "All",
         choices = c("All", unique(r$data_filtered$phylum))
@@ -66,6 +65,7 @@ mod_select_data_server <- function(id, r) {
         hide(id = "slc_cla")
         hide(id = "slc_gen")
         hide(id = "slc_spe")
+        updateSelectInput(session, "slc_cla", select = "All")
       } else {
         show(id = "slc_cla")
         updateSelectInput(session, "slc_cla",
@@ -81,6 +81,7 @@ mod_select_data_server <- function(id, r) {
       if (input$slc_cla == "All") {
         hide(id = "slc_gen")
         hide(id = "slc_spe")
+        updateSelectInput(session, "slc_gen", select = "All")
       } else {
         show(id = "slc_gen")
         updateSelectInput(session, "slc_gen",
@@ -124,12 +125,14 @@ mod_select_data_server <- function(id, r) {
     })
 
     output$map <- renderLeaflet({
+      r$taxon_slc <- c(input$slc_phy, input$slc_cla, input$slc_gen,     
+        input$slc_spe)
       # count data
       sta <- r$data_station |>
         dplyr::inner_join(
           r$data_filtered |>
-        dplyr::group_by(ecodistrict, station) |>
-        dplyr::summarise(count = n()) ,
+            dplyr::group_by(ecodistrict, station) |>
+            dplyr::summarise(count = n()),
           join_by(ecodistrict, station)
         )
       r$n_sample <- sum(sta$count)
