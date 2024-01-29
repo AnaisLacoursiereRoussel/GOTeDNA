@@ -17,16 +17,16 @@ Imports:
     dplyr (>= 1.0.0),
     DT,
     fs,
-    ggh4x,
+    ggh4x (>= 0.2.8),
     ggplot2,
     GOTeDNA,
     grid,
     htmlwidgets,
     knitr,
     leaflet,
-    mapedit,
+    mapedit (>= 0.6.0),
     magrittr,
-    patchwork,
+    patchwork (>=1.2),
     shiny
 Remotes:
     mkmor/GOTeDNA

@@ -107,6 +107,18 @@ thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica",
 
 ### Shiny 
 
+Once the package loaded, the shiny can be launched using the following function.
+
 ```R
 run_gotedna_app()
+```
+
+There is also a docker file available: 
+
+```sh
+# build the container 
+docker build -t gotedna . 
+# use the container
+docker run -it --rm --network host gotedna 
+# the shiny will be available at http://0.0.0.0:9292
 ```
