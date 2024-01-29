@@ -28,18 +28,29 @@ mod_select_data_ui <- function(id) {
       ),
       fluidRow(
         column(
-          8,
+          6,
           uiOutput(outputId = ns("n_smpl"))
         ),
         column(
-          4,
-          actionButton("show_source", "Sources",
-            icon = icon("eye"),
-            title = "access data sources"
+          6,
+          div(
+            id = "button_map",
+            actionButton(ns("confirm"), "Confirm",
+              icon = icon("check"),
+              title = "confirm spatial selection"
+            ),
+            actionButton(ns("refresh"), "Refresh",
+              icon = icon("refresh"),
+              title = "refresh spatial selection"
+            ),
+            actionButton("show_source", "Sources",
+              icon = icon("eye"),
+              title = "access data sources"
+            )
           )
         )
       ),
-      leafletOutput(outputId = ns("map"), height = "50vh")
+      mapedit::editModUI(ns("map-select"), height = "50vh")
     )
   )
 }
@@ -111,10 +122,6 @@ mod_select_data_server <- function(id, r) {
       )
     })
 
-    observeEvent(input$calc_window, {
-      r$calc_window <- TRUE
-    })
-
     output$n_smpl <- renderUI({
       tagList(
         p(
@@ -124,33 +131,91 @@ mod_select_data_server <- function(id, r) {
       )
     })
 
-    output$map <- renderLeaflet({
-      r$taxon_slc <- c(input$slc_phy, input$slc_cla, input$slc_gen,     
-        input$slc_spe)
+    listenMapData <- reactive({
+      list(
+        input$slc_phy,
+        input$slc_cla,
+        input$slc_gen,
+        input$slc_spe,
+        input$datatype
+      )
+    })
+    observeEvent(listenMapData(), {
+      r$taxon_slc <- c(
+        input$slc_phy, input$slc_cla, input$slc_gen,
+        input$slc_spe
+      )
       # count data
-      sta <- r$data_station |>
+      r$geom <- r$data_station |>
         dplyr::inner_join(
           r$data_filtered |>
             dplyr::group_by(ecodistrict, station) |>
             dplyr::summarise(count = n()),
           join_by(ecodistrict, station)
         )
-      r$n_sample <- sum(sta$count)
-      leaflet(sta) |>
-        # setView(lng = -63, lat = 48, zoom = 5) |>
-        addProviderTiles("Esri.OceanBasemap", group = "Ocean") |>
-        addMarkers(
-          data = sta,
-          clusterOptions = markerClusterOptions(),
-          label = ~ paste(count, "samples")
-        ) |>
-        htmlwidgets::onRender(
-          "function(el, x) {
-                        L.control.zoom({
-                        position:'bottomright'
-                      }).addTo(this);
-                    }"
+      r$reload_map <- r$reload_map + 1
+    })
+
+    observeEvent(input$confirm, {
+      if (!is.null(sf_edits()$all)) {
+        cli::cli_alert_info("Using geom(s) drawn to select region")
+        if (!is.null(r$geom)) {
+          id_slc <- st_contains(sf_edits()$all, r$geom, sparse = FALSE) |>
+            apply(2, any)
+          if (sum(id_slc)) {
+            r$geom <- r$geom[id_slc, ]
+            r$data_filtered <- r$data_filtered |>
+              dplyr::filter(station %in% r$geom$station)
+           # sf_edits <<- reactive(list(finished = NULL))
+          } else {
+            showNotification("No station selected", type = "warning")
+          }
+        } else {
+          cli::cli_alert_info("`r$geom` is null")
+        }
+      } else {
+        cli::cli_alert_info("`sf_edits()$all` is null")
+        showNotification("Empty spatial selection", type = "warning")
+      }
+      r$reload_map <- r$reload_map + 1
+    })
+
+    observeEvent(input$refresh, print(input$refresh))
+
+    observeEvent(input$refresh, {
+      r$data_filtered <- filter_taxa_data(
+        gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
+        input$slc_gen, "All"
+      )
+      r$geom <- r$data_station |>
+        dplyr::inner_join(
+          r$data_filtered |>
+            dplyr::group_by(ecodistrict, station) |>
+            dplyr::summarise(count = n()),
+          join_by(ecodistrict, station)
         )
+      r$reload_map <- r$reload_map + 1
+      # sf_edits <<- reactive(list(finished = NULL))
+      # print(sf_edits())
+    })
+
+    observeEvent(r$geom, {
+      r$n_sample <- sum(r$geom$count)
+    })
+
+    observeEvent(r$reload_map, {
+      print(r$reload_map)
+      sf_edits <<- callModule(
+        mapedit::editMod,
+        leafmap = leaflet(isolate(r$geom)) |>
+          addProviderTiles("Esri.OceanBasemap", group = "Ocean") |>
+          addMarkers(
+            data = isolate(r$geom),
+            clusterOptions = markerClusterOptions(),
+            label = ~ paste(count, "samples")
+          ),
+        id = "map-select"
+      )
     })
   })
 }

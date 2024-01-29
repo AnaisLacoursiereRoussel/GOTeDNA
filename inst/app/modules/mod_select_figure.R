@@ -73,6 +73,12 @@ mod_select_figure_server <- function(id, r) {
     ns <- session$ns
 
     observeEvent(input$calc_window, {
+      showNotification(
+        "Compuing time window", 
+        type = "message", 
+        duration = NULL,
+        id = "notif_calc_win"
+      )
       if (r$taxon_slc[1] == "All") {
         showNotification("Select at least one phylum!", type = "warning")
       } else {
@@ -86,6 +92,7 @@ mod_select_figure_server <- function(id, r) {
           species.name = unique(r$data_filtered$scientificName),
           scaledprobs = scaledprobs
         )
+        removeNotification(id = "notif_calc_win")
         
         if (is.null(win)) {
           showNotification("No optimal detection window", type = "warning")

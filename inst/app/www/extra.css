@@ -109,6 +109,38 @@ h2 {
   font-weight: bold;
 }
 
+.shiny-notification-message {
+  color: #0fbadc;
+  background-color: #e7fafe;
+  border: 1px solid #8de6f8;
+}
+
+.shiny-notification-warning {
+  color: #f1b708;
+  background-color: #111;
+  border: 2px solid #ffedb7;
+}
+
+.shiny-notification-error {
+  color: #c93342;
+  background-color: #111;
+  border: 1px solid #f8d5d8;
+}
+
 shiny-plot-output {
   height: 500px;
+}
+
+#button_map {
+  text-align: right;
+}
+/* remove some leaflettool */
+/* .leaflet-draw-draw-polyline, 
+.leaflet-draw-draw-marker, 
+.leaflet-draw-draw-circlemarker {
+  visibility: hidden !important;
+} */
+
+.selectize-dropdown {
+  z-index: 1001 !important;
 }
