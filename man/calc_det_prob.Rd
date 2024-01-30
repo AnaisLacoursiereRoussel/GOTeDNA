@@ -38,8 +38,3 @@ separate. Outputs are used in subsequent functions.
  calc_det_prob(data = D_mb_ex)
 }
 }
-\author{
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
-
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
-}

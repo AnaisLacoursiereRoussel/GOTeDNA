@@ -8,8 +8,6 @@
 #' @param primer.select (required, character): Select primer as different
 #' primers may provide different detection rates.
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname smooth_fig
 #' @export
 #' @examples
@@ -26,19 +24,22 @@ smooth_fig <- function(data, species.name, primer.select) {
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
 
-  if (!species.name %in% data$scientificName) {
-    stop("Species not found in data")
-  }
+  # if (!species.name %in% data$scientificName) {
+  #   stop("Species not found in data")
+  # }
 
   if (!primer.select %in% data$target_subfragment) {
-    stop("Primer not found in data")
+    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
+    return(NULL)
   }
 
   data$n <- 1
 
   data %<>%
-    dplyr::filter(., scientificName == species.name &
-      target_subfragment == primer.select) %>%
+    dplyr::filter(
+      # scientificName == species.name, 
+      target_subfragment == primer.select
+    ) %>%
     dplyr::group_by(scientificName, year, month) %>%
     dplyr::summarise(n = sum(n), nd = sum(detected))
 
@@ -87,7 +88,7 @@ smooth_fig <- function(data, species.name, primer.select) {
     ggplot2::scale_x_continuous(
       limits = c(0, 12),
       breaks = 1:12,
-      labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+      labels = month.abb
     ) +
     ggplot2::scale_y_continuous(limits = c(-0.1, 1), breaks = c(0, 0.25, 0.50, 0.75, 1)) +
     ggplot2::theme(

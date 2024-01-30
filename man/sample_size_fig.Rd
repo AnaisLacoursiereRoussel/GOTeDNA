@@ -20,8 +20,3 @@ for the specified species and region.
 sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
 }
 }
-\author{
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
-
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
-}

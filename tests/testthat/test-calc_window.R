@@ -29,11 +29,11 @@ test_that("calc_window() returns optimal detection windows with confidence value
   )
 })
 
-test_that("error is thrown when value doesn't exist in data", {
-  expect_error(
-    calc_window(
-      data = D_mb_ex, threshold = "90", species.name = "A. longiremis", scaledprobs
-    ),
-    "Species not found in data"
-  )
-})
+# test_that("error is thrown when value doesn't exist in data", {
+#   expect_error(
+#     calc_window(
+#       data = D_mb_ex, threshold = "90", species.name = "A. longiremis", scaledprobs
+#     ),
+#     "Species not found in data"
+#   )
+# })

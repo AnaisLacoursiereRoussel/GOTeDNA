@@ -6,8 +6,6 @@
 #' @param data (required, data.frame): Data.frame read in with [read_data()].
 #' @param species.name (required, character): Full binomial species name.
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname sample_size_fig
 #' @export
 #' @examples
@@ -19,12 +17,12 @@ sample_size_fig <- function(data, species.name) {
   options(dplyr.summarise.inform = FALSE)
   on.exit(options(dplyr.summarise.inform = oop))
 
-  if (!species.name %in% data$scientificName) {
-    stop("Species not found in data")
-  }
+  # if (!species.name %in% data$scientificName) {
+  #   stop("Species not found in data")
+  # }
 
   data %<>%
-    dplyr::filter(., scientificName == species.name) %>%
+    # dplyr::filter(., scientificName == species.name) %>%
     dplyr::group_by(scientificName, eventID, station, year, month) %>%
     # dplyr::group_by(scientificName, year, month) %>% # We could have a separate figure where the sample size is shown in size of bubble.
     dplyr::summarise(
@@ -45,7 +43,7 @@ sample_size_fig <- function(data, species.name) {
     ) +
     ggplot2::scale_colour_viridis_d(guide = "none") +
     ggh4x::facet_grid2(year ~ .,
-      strip = ggh4x::strip_nested(bleed = T)
+      strip = ggh4x::strip_nested(bleed = TRUE)
     ) +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1.05)) +
     ggplot2::scale_x_continuous(

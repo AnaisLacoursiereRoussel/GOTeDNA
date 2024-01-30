@@ -19,8 +19,6 @@
 #' * `year`
 #' * `yr.mo` year;month concatenated
 #'
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @rdname calc_det_prob
 #' @export
 #' @examples

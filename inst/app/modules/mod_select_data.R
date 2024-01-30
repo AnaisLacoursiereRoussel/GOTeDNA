@@ -204,7 +204,6 @@ mod_select_data_server <- function(id, r) {
     })
 
     observeEvent(r$reload_map, {
-      print(r$reload_map)
       sf_edits <<- callModule(
         mapedit::editMod,
         leafmap = leaflet(isolate(r$geom)) |>

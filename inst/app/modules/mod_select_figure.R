@@ -9,6 +9,7 @@ mod_select_figure_ui <- function(id) {
           column(
             12,
             h2("Observation"),
+            h3("Compute optimal detection window"),
             actionButton(
               ns("calc_window"),
               label = "Compute and visualize",
@@ -48,6 +49,7 @@ mod_select_figure_ui <- function(id) {
               ),
             ),
             h3("Figure details"),
+            selectInput(ns("primer"), "Primer", choices = "unkown"),
             tags$ul(
               tags$li(strong("Figure 1:"), "does that"),
               tags$li(strong("Figure 2:"), "does that"),
@@ -74,8 +76,8 @@ mod_select_figure_server <- function(id, r) {
 
     observeEvent(input$calc_window, {
       showNotification(
-        "Compuing time window", 
-        type = "message", 
+        "Computing time window",
+        type = "message",
         duration = NULL,
         id = "notif_calc_win"
       )
@@ -93,7 +95,23 @@ mod_select_figure_server <- function(id, r) {
           scaledprobs = scaledprobs
         )
         removeNotification(id = "notif_calc_win")
-        
+
+        tg <- table(r$data_filtered$target_subfragment) |>
+          sort() |>
+          rev()
+        updateSelectInput(
+          session,
+          "primer",
+          choices = names(tg),
+          selected = names(tg)[1]
+        )
+        if (!length(tg)) {
+          cli::cli_alert_danger("target_subfragment is missing")
+          tmp_primer <- "unknown"
+        } else {
+          tmp_primer <- names(tg)[1]
+        }
+
         if (is.null(win)) {
           showNotification("No optimal detection window", type = "warning")
           output$opt_sampl <- renderUI("UNKNOWN")
@@ -113,31 +131,53 @@ mod_select_figure_server <- function(id, r) {
         # taxon level selected
         taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
         taxon.level <- taxon_levels[r$taxon_lvl_compute]
-        print(taxon.level)
         # Creates figures
         cli::cli_alert_info("Creating figures")
-        r$fig_1 <- hm_fig(taxon.level, taxon.name, scaledprobs) 
-        r$fig_2 <- effort_needed_fig(
-          species.name = "Acartia hudsonica",
-          primer.select = "COI1", Pscaled
-        )
-        r$fig_3 <- higher_tax_fig(
-          data = r$data_filtered,
-          higher.taxon.select = taxon.level,
-          taxon.name = taxon.name, 
-          view.by.level = taxon.level,
-          primer.select = "COI1"
-        )
+
+        r$fig_1 <- hm_fig(taxon.level, taxon.name, scaledprobs)
+
+        if (tmp_primer == "unknown") {
+          cli::cli_alert_danger("cannot render figure 2")
+          r$fig_2 <- NULL
+        } else {
+          r$fig_2 <- effort_needed_fig(
+            species.name = unique(r$data_filtered$scientificName),
+            primer.select = tmp_primer,
+            Pscaled
+          )
+        }
+        # one possible selection
+        if (tmp_primer == "unknown") {
+          cli::cli_alert_danger("cannot render figure 3")
+          r$fig_3 <- NULL
+        } else {
+          id_lvl <- which(r$taxon_slc != "All") |> which.max()
+          r$fig_3 <- higher_tax_fig(
+            data = r$data_filtered,
+            higher.taxon.select = taxon_levels[min(id_lvl, 2)],
+            taxon.name = r$taxon_slc[min(id_lvl + 1, 2)],
+            view.by.level = taxon_levels[min(id_lvl + 1, 3)],
+            primer.select = tmp_primer
+          )
+        }
         r$fig_4 <- sample_size_fig(
-          data = D_mb_ex, species.name = "Acartia hudsonica"
+          data = r$data_filtered, species.name = taxon.name
         )
-        p1 <- smooth_fig(
-          data = D_mb_ex, species.name = "Acartia longiremis",
-          primer.select = "COI1"
-        )
-        p2 <- thresh_fig(taxon.level, taxon.name, threshold = "90", 
-          scaledprobs)
-        r$fig_5 <- p1 + p2
+
+        if (tmp_primer == "unknown") {
+          cli::cli_alert_danger("cannot render figure 5")
+          r$fig_5 <- NULL
+        } else {
+          p1 <- smooth_fig(
+            data = r$data_filtered, species.name = taxon.name,
+            primer.select = tmp_primer
+          )
+          p2 <- thresh_fig(taxon.level, taxon.name,
+            threshold = "90",
+            scaledprobs
+          )
+          r$fig_5 <- p1 + p2
+        }
       }
     })
 

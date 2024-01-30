@@ -15,8 +15,6 @@
 #' @param primer.select (required, character): Select primer as different primers
 #' may provide different detection rates.
 
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname higher_tax_fig
 #' @export
 #' @examples
@@ -55,11 +53,12 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
   }
 
   if (!primer.select %in% data$target_subfragment) {
-    stop("Primer not found in data")
+    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
+    return(NULL)
   }
 
   data %<>%
-    dplyr::filter(., target_subfragment == primer.select &
+    dplyr::filter(target_subfragment == primer.select,
       !!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
     dplyr::group_by(kingdom, phylum, class, order, family, genus, year, month) %>%
     dplyr::summarise(
@@ -81,7 +80,7 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
     ) +
     ggplot2::scale_colour_viridis_d() +
     ggh4x::facet_grid2(year ~ .,
-      strip = ggh4x::strip_nested(bleed = T)
+      strip = ggh4x::strip_nested(bleed = TRUE)
     ) +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1)) +
     ggplot2::scale_x_continuous(limits = c(1, 12), breaks = 1:12,

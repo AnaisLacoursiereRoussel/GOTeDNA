@@ -38,6 +38,4 @@ thresh_fig(
 }
 \author{
 Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
-
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
 }

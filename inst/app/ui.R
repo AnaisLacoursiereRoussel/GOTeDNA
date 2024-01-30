@@ -6,7 +6,7 @@ ui <- fluidPage(
   ),
   fluidRow(
     column(
-      4,
+      5,
       fluidRow(
         column(
           9,
@@ -28,7 +28,7 @@ ui <- fluidPage(
       mod_select_data_ui("slc_data")
     ),
     column(
-      8,
+      7,
       div(
         id = "observation_request",
         mod_select_figure_ui("slc_fig")

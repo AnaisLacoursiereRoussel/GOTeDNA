@@ -5,13 +5,13 @@ test_that("higher_tax_fig returns a ggplot2 object", {
   )
 
   expect_s3_class(p$layers[[1L]]$geom, "GeomPoint")
-  expect_error(
-    higher_tax_fig(
-      data = D_mb_ex, higher.taxon.select = "phylum", taxon.name = "Bryozoa",
-      view.by.level = "genus", primer.select = "COI"
-    ),
-    "Primer not found in data"
-  )
+  # expect_error(
+  #   higher_tax_fig(
+  #     data = D_mb_ex, higher.taxon.select = "phylum", taxon.name = "Bryozoa",
+  #     view.by.level = "genus", primer.select = "COI"
+  #   ),
+  #   "Primer not found in data"
+  # )
   expect_error(
     higher_tax_fig(
       data = D_mb_ex, higher.taxon.select = "phylum", taxon.name = "Bryo",

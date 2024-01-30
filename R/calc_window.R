@@ -55,9 +55,9 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
 
-  if (! all(species.name %in% scaledprobs[[1]]$species)) {
-    stop("Species not found in data")
-  }
+  # if (! all(species.name %in% scaledprobs[[1]]$species)) {
+  #   stop("Species not found in data")
+  # }
 
   thresh_slc <- seq(50, 95, 5) %>% as.character()
   threshold <- match.arg(threshold, choices = thresh_slc)

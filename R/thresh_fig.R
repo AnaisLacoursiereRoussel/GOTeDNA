@@ -16,7 +16,6 @@
 #' probabilities as returned by [scale_newprob()].
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
 #' @rdname thresh_fig
 #' @export
 #' @examples

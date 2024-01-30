@@ -35,8 +35,3 @@ scaledprobs <- scale_prob_by_month(D_mb_ex, newprob)
 hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 }
 }
-\author{
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
-
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
-}

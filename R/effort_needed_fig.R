@@ -9,8 +9,6 @@
 #' @param scaledprobs  (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname effort_needed_fig
 #' @export
 #' @examples
@@ -23,17 +21,22 @@
 #' }
 effort_needed_fig <- function(species.name, primer.select, scaledprobs) {
 
-  species.name <- match.arg(
-    species.name,
-    choices = c(scaledprobs$Pscaled_month$species) |> unique()
-  )
+  # species.name <- match.arg(
+  #   species.name,
+  #   choices = c(scaledprobs$Pscaled_month$species) |> unique()
+  # )
 
   if (!primer.select %in% scaledprobs$Pscaled_month$primer) {
-    stop("Primer not found in data")
+    print(scaledprobs$Pscaled_month$primer)
+    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
+    return(NULL)
   }
 
   data <- scaledprobs$Pscaled_month |>
-    dplyr::filter(species == species.name, primer == primer.select)
+    dplyr::filter(
+      species %in% species.name, 
+      primer == primer.select
+    )
 
   DF2 <- expand.grid(p = data$fill, n = seq_len(10), P = NA)
   DF2 <- DF2 |>

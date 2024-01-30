@@ -26,8 +26,3 @@ smooth_fig(
 )
 }
 }
-\author{
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
-
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
-}

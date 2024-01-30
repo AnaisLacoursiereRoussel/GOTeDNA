@@ -14,8 +14,6 @@
 #' @param scaledprobs  (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname hm_fig
 #' @export
 #' @examples
@@ -47,10 +45,7 @@ hm_fig <- function(
     # ggh4x::force_panelsizes(rows=)+ It would be nice to have all the rows the same size, but I'm not sure if there's a way
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0, 1), na.value = "lightgrey") +
     #   ggplot2::scale_y_discrete(expand=c(0,0))+
-    ggplot2::scale_x_continuous(
-      breaks = c(1:12),
-      labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-    ) +
+    ggplot2::scale_x_continuous(breaks = 1:12, labels = month.abb) +
     ggplot2::labs(
       fill = "Normalized \nDetection \nProbability", x = NULL, y = NULL,
       title = "Species monthly normalized detection probability by primer \n(years combined)",

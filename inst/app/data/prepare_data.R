@@ -5,6 +5,7 @@ D_mb <- read_data(
 D_qPCR <- read_data(
   choose.method = "qPCR", path.folder = "inst/app/data/raw_xlsx_files"
 )
+
 # make a list of two data frames
 gotedna_data <- list(
   metabarcoding = D_mb |>
