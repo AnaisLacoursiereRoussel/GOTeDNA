@@ -4,8 +4,8 @@ Encoding: UTF-8
 Title: Guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
 Date: 2024-01-29
 Version: 0.4.0.9011
-Authors@R: c(person("Anaïs", "Lacoursière et al.", email = "Anais.Lacoursiere@dfo-mpo.gc.ca", role = c("aut", "cre")))
-Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
+Authors@R: c(person("Anaïs", "Lacoursière-Roussel et al.", email = "Anais.Lacoursiere@dfo-mpo.gc.ca", role = c("aut", "cre")))
+Maintainer: Anais Lacoursiere-Roussel <anais.lacoursiere@dfo-mpo.gc.ca>
 Description: The purpose of this package is to compile eDNA qPCR and    
     metabarcoding metadata and data, visualize species detection probabilities, and delineate species detection windows.
 License: GPL-3
