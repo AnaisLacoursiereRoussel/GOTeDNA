@@ -1,6 +1,6 @@
 # Project specific files 
 *.html
-
+inst/app/data/raw_xlsx_files
 
 # History files
 .Rhistory

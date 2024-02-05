@@ -5,22 +5,18 @@
 \title{Calculate detection probabilities from data that were previously imported
 with read_data()}
 \usage{
-calc_det_prob(data, ecodistrict.select)
+calc_det_prob(data)
 }
 \arguments{
 \item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}.}
-
-\item{ecodistrict.select}{(required, character) Ecodistrict present in data.
-frame.}
 }
 \value{
 Two lists, each with distinct elements of species; primer ID
-containing 6-9 columns:
+containing 5-7 columns:
 \itemize{
 \item \code{month}
 \item \code{n} total number of samples per month
 \item \code{nd} number of positive detections per month
-\item \code{ecodistrict}
 \item \code{p} calculated monthly detection probability
 \item \code{s} standard deviation
 \item \code{GOTeDNA_ID}
@@ -39,11 +35,6 @@ separate. Outputs are used in subsequent functions.
  D_mb <- read_data(
    choose.method = "metabarcoding", path.folder = "./inst/testdata"
  )
- calc_det_prob(data = D_mb_ex, ecodistrict.select = "Scotian Shelf")
+ calc_det_prob(data = D_mb_ex)
 }
-}
-\author{
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
-
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
 }

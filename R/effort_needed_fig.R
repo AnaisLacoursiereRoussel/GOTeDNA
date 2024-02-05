@@ -6,54 +6,40 @@
 #' @param species.name (required, character): Full binomial species name.
 #' @param primer.select (required, character): Select primer as different
 #' primers may provide different detection rates.
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 #' @param scaledprobs  (required, data.frame) Normalized detection
-#' probabilities as returned by [[scale_newprob()].
+#' probabilities as returned by [scale_newprob()].
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname effort_needed_fig
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
-#'  newprob)
+#' newprob <- calc_det_prob(D_mb_ex)
+#' scaledprobs <- scale_newprob(D_mb_ex, newprob)
 #' effort_needed_fig(
 #'   species.name = "Acartia hudsonica", primer.select = "COI1",
-#'   ecodistrict.select = "Scotian Shelf", scaledprobs
-#' )
+#'   scaledprobs)
 #' }
-effort_needed_fig <- function(
-    species.name, primer.select, ecodistrict.select, scaledprobs
-  ) {
+effort_needed_fig <- function(species.name, primer.select, scaledprobs) {
 
-  species.name <- match.arg(
-    species.name,
-    choices = c(scaledprobs$Pscaled_month$species) |> unique()
-  )
-
-  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
+  # species.name <- match.arg(
+  #   species.name,
+  #   choices = c(scaledprobs$Pscaled_month$species) |> unique()
+  # )
 
   if (!primer.select %in% scaledprobs$Pscaled_month$primer) {
-    stop("Primer not found in data")
+    print(scaledprobs$Pscaled_month$primer)
+    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
+    return(NULL)
   }
 
-  data <- scaledprobs$Pscaled_month %>%
+  data <- scaledprobs$Pscaled_month |>
     dplyr::filter(
-      ecodistrict == ecodistrict.select &
-        species == species.name &
-        primer == primer.select
+      species %in% species.name, 
+      primer == primer.select
     )
 
-  DF2 <- expand.grid(
-    p = data$fill,
-    n = 1:10,
-    P = NA
-  )
-  DF2 <- DF2 %>%
+  DF2 <- expand.grid(p = data$fill, n = seq_len(10), P = NA)
+  DF2 <- DF2 |>
     merge(data.frame(p = data$fill, month = data$month))
 
   for (i in seq_len(nrow(DF2))) {

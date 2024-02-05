@@ -46,17 +46,10 @@ library("GOTeDNA")
 ### Clean/tidy data
 
 ```{R}
-newprob <- calc_det_prob(
-  data = D_mb_ex,
-  ecodistrict.select = "Scotian Shelf"
-)
-scaledprobs <- scale_newprob(
-  D_mb_ex, "Scotian Shelf",
-  newprob
-)
+newprob <- calc_det_prob(data = D_mb_ex)
+scaledprobs <- scale_newprob(D_mb_ex, newprob)
 win <- calc_window(
-  data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-  species.name = "Acartia longiremis", scaledprobs
+  data = D_mb_ex, threshold = "90", species.name = "Acartia longiremis",scaledprobs
 )
 ```
 
@@ -65,21 +58,17 @@ win <- calc_window(
 
 ```{R hm}
 hm_fig(
-   taxon.level = "class", taxon.name = "Copepoda",
-   ecodistrict.select = "Scotian Shelf",
-   scaledprobs
- )
+   taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 ```
 
 ### Effort needed
 
 ```{R effort}
 effort_needed_fig(
-  species.name = "Acartia hudsonica", primer.select = "COI1",
-  ecodistrict.select = "Scotian Shelf", scaledprobs
+  species.name = "Acartia hudsonica", primer.select = "COI1", scaledprobs
 )
 ```
-
+ecodistrict.select = "Scotian Shelf",
 ### Sampling effort
 
 ```{R higher}
@@ -88,7 +77,6 @@ higher_tax_fig(
   higher.taxon.select = "phylum", 
   taxon.name = "Bryozoa",
   view.by.level = "genus", 
-  ecodistrict.select = "Scotian Shelf", 
   primer.select = "COI1"
 )
 ```
@@ -96,10 +84,7 @@ higher_tax_fig(
 ### Sample size 
 
 ```{R sample_size}
-sample_size_fig(
-  data = D_mb_ex, species.name = "Acartia hudsonica",
-  ecodistrict.select = "Scotian Shelf"
-)
+sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
 ```
 
 ### Species monthly detection
@@ -107,7 +92,7 @@ sample_size_fig(
 ```{R smooth}
 smooth_fig(
   data = D_mb_ex, species.name = "Acartia longiremis",
-  primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+  primer.select = "COI1"
 )
 ```
 
@@ -116,12 +101,24 @@ smooth_fig(
 
 ```{R thresh_fig}
 thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
-  threshold = "75", ecodistrict.select = "Scotian Shelf", scaledprobs)
+  threshold = "75", scaledprobs)
 ```
 
 
 ### Shiny 
 
+Once the package loaded, the shiny can be launched using the following function.
+
 ```R
 run_gotedna_app()
+```
+
+There is also a docker file available: 
+
+```sh
+# build the container 
+docker build -t gotedna . 
+# use the container
+docker run -it --rm --network host gotedna 
+# the shiny will be available at http://0.0.0.0:9292
 ```

@@ -1,9 +1,14 @@
+h2 {
+  font-weight: bold;
+  color: #53b2ad;
+}
+
 #file_report {
   color: #337ab7;
 }
 
 #logo_gotedna {
-  height: 8rem;
+  height: 7rem;
   margin-left: 10%;
 }
 
@@ -14,20 +19,48 @@
   margin-top: 0rem !important;
 }
 
-#observation_request {
-  background-color: #f2f2f2;
-  min-height: 80vh;
-  padding: 0.5rem;
-  color: #fff;
+#data_request h2 {
+  margin-top: 0rem !important;
 }
 
-#observation_request .btn i {
+#observation_request {
+  background-color: #f2f2f2;
+  min-height: 92vh;
+  padding: 0.5rem;
+}
+
+#observation_request .tabbable a {
   color: #53b2ad;
 }
 
-#data_input {
-  background-color: #7f7f7f;
-  padding: 1rem;
+#observation_request h2 {
+  margin-top: 1rem;
+}
+
+#observation_request h3 {
+  color: #53b2ad;
+  margin-top: 2rem;
+  font-size: 1.4rem;
+}
+
+#gotedna_info {
+  text-align: right;
+}
+
+#gotedna_info .btn {
+  background-color: transparent;
+  border: none;
+  margin-top: 1rem;
+  padding: 0.25rem;
+}
+
+#gotedna_info .btn i {
+  color: #53b2ad;
+}
+
+
+#data_input table {
+  font-size: 1.4rem;
 }
 
 #figure_output {
@@ -40,20 +73,11 @@
     color: #53b2ad;
 }
 
-#data_input table {
-  font-size: 1.4rem;
-}
-
 .pending{
   color: #ccc;
   font-size: 1.1em;
 }
 
-h2 {
-  font-weight: bold;
-  color: #53b2ad;
-  margin-top: 0rem !important;
-}
 
 
 .col_1 {
@@ -73,6 +97,10 @@ h2 {
   text-align: right;
 }
 
+.shiny-options-group label {
+  margin-right: 1rem;
+}
+
 .shiny-notification {
   position:fixed;
   top: calc(4%);
@@ -81,6 +109,38 @@ h2 {
   font-weight: bold;
 }
 
+.shiny-notification-message {
+  color: #0fbadc;
+  background-color: #e7fafe;
+  border: 1px solid #8de6f8;
+}
+
+.shiny-notification-warning {
+  color: #f1b708;
+  background-color: #111;
+  border: 2px solid #ffedb7;
+}
+
+.shiny-notification-error {
+  color: #c93342;
+  background-color: #111;
+  border: 1px solid #f8d5d8;
+}
+
 shiny-plot-output {
   height: 500px;
+}
+
+#button_map {
+  text-align: right;
+}
+/* remove some leaflettool */
+/* .leaflet-draw-draw-polyline, 
+.leaflet-draw-draw-marker, 
+.leaflet-draw-draw-circlemarker {
+  visibility: hidden !important;
+} */
+
+.selectize-dropdown {
+  z-index: 1001 !important;
 }

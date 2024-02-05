@@ -11,35 +11,25 @@
 #' @param taxon.name (required, character): Select taxon name that matches the
 #' level provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter
 #' genus name, etc.
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.
-#' frame.
 #' @param scaledprobs  (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname hm_fig
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' scaledprobs <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
-#'  newprob)
-#' hm_fig(taxon.level = "class", taxon.name = "Copepoda",
-#'  ecodistrict.select = "Scotian Shelf", scaledprobs)
+#' newprob <- calc_det_prob(D_mb_ex)
+#' scaledprobs <- scale_prob_by_month(D_mb_ex, newprob)
+#' hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 #' }
 hm_fig <- function(
-  taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
-  taxon.name, ecodistrict.select, scaledprobs
-) {
-
-  if (!ecodistrict.select %in% scaledprobs$Pscaled_month$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
+    taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
+    taxon.name, scaledprobs) {
   taxon.level <- match.arg(taxon.level)
 
-  data <- scaledprobs$Pscaled_month[scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name), ] %>%
-    dplyr::filter(., ecodistrict == ecodistrict.select)
+  data <- scaledprobs$Pscaled_month[
+    scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name),
+  ]
 
 
   ggplot2::ggplot(
@@ -55,10 +45,7 @@ hm_fig <- function(
     # ggh4x::force_panelsizes(rows=)+ It would be nice to have all the rows the same size, but I'm not sure if there's a way
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0, 1), na.value = "lightgrey") +
     #   ggplot2::scale_y_discrete(expand=c(0,0))+
-    ggplot2::scale_x_continuous(
-      breaks = c(1:12),
-      labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-    ) +
+    ggplot2::scale_x_continuous(breaks = 1:12, labels = month.abb) +
     ggplot2::labs(
       fill = "Normalized \nDetection \nProbability", x = NULL, y = NULL,
       title = "Species monthly normalized detection probability by primer \n(years combined)",

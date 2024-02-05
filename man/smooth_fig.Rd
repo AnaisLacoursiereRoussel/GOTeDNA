@@ -4,7 +4,7 @@
 \alias{smooth_fig}
 \title{Display species monthly detection probability by primer and region.}
 \usage{
-smooth_fig(data, species.name, primer.select, ecodistrict.select)
+smooth_fig(data, species.name, primer.select)
 }
 \arguments{
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}.}
@@ -13,8 +13,6 @@ smooth_fig(data, species.name, primer.select, ecodistrict.select)
 
 \item{primer.select}{(required, character): Select primer as different
 primers may provide different detection rates.}
-
-\item{ecodistrict.select}{(required, character): Ecodistrict present in data.frame.}
 }
 \description{
 This function displays the species optimal detection period as
@@ -23,13 +21,8 @@ monthly detection probabilities with LOESS smoothing over years.
 \examples{
 \dontrun{
 smooth_fig(
-   data = D_mb_ex, species.name = "Acartia longiremis",
- primer.select = "COI1", ecodistrict.select = "Scotian Shelf"
+  data = D_mb_ex, species.name = "Acartia longiremis", 
+  primer.select = "COI1"
 )
 }
-}
-\author{
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
-
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
 }

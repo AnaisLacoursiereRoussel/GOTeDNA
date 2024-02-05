@@ -12,12 +12,9 @@
 #' detection probability by. Cannot be higher level than higher group specified in
 #' `higher.taxon.select` Choices = one of `c("phylum", "class", "order",
 #' "family", "genus")`
-#' @param ecodistrict.select (required, character): Ecodistrict present in data.frame.
 #' @param primer.select (required, character): Select primer as different primers
 #' may provide different detection rates.
 
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
 #' @rdname higher_tax_fig
 #' @export
 #' @examples
@@ -27,16 +24,13 @@
 #'   higher.taxon.select = "phylum",
 #'   taxon.name = "Bryozoa",
 #'   view.by.level = "genus",
-#'   ecodistrict.select = "Scotian Shelf",
 #'   primer.select = "COI1"
 #' )
 #' }
-higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level, ecodistrict.select, primer.select) {
+higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level, primer.select) {
+  oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
-
-  if (!ecodistrict.select %in% data$ecodistrict) {
-    stop("Ecodistrict not found in data")
-  }
+  on.exit(options(dplyr.summarise.inform = oop))
 
   if (!taxon.name %in% data[[higher.taxon.select]]) {
     stop("Taxon not found in data")
@@ -59,12 +53,12 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
   }
 
   if (!primer.select %in% data$target_subfragment) {
-    stop("Primer not found in data")
+    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
+    return(NULL)
   }
 
   data %<>%
-    dplyr::filter(., ecodistrict == ecodistrict.select &
-      target_subfragment == primer.select &
+    dplyr::filter(target_subfragment == primer.select,
       !!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
     dplyr::group_by(kingdom, phylum, class, order, family, genus, year, month) %>%
     dplyr::summarise(
@@ -86,14 +80,11 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
     ) +
     ggplot2::scale_colour_viridis_d() +
     ggh4x::facet_grid2(year ~ .,
-      strip = ggh4x::strip_nested(bleed = T)
+      strip = ggh4x::strip_nested(bleed = TRUE)
     ) +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1)) +
-    ggplot2::scale_x_continuous(
-      limits = c(1, 12),
-      breaks = 1:12,
-      labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-    ) +
+    ggplot2::scale_x_continuous(limits = c(1, 12), breaks = 1:12,
+      labels = month.abb) +
     ggplot2::scale_size_continuous(limits = c(0, NA), breaks = seq(0, 50, 10)) +
     ggplot2::theme_minimal(base_size = 10) +
     ggplot2::labs(

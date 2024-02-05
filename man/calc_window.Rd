@@ -4,13 +4,10 @@
 \alias{calc_window}
 \title{Calculate species optimal detection window}
 \usage{
-calc_window(data, ecodistrict.select, threshold, species.name, scaledprobs)
+calc_window(data, threshold, species.name, scaledprobs)
 }
 \arguments{
 \item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}.}
-
-\item{ecodistrict.select}{(required, character) Ecodistrict present in
-data.frame.}
 
 \item{threshold}{(required, character): Detection probability threshold for
 which data are to be displayed to visualize potential optimal detection
@@ -23,9 +20,8 @@ Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 aggregated per month and year \code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \value{
-A data.frame with 17 columns:
+A data.frame with 16 columns:
 \itemize{
-\item \code{ecodistrict}
 \item \code{length} Number of months with optimal detection \verb{(i.e., over the specified threshold)}.
 \item \code{threshold} Detection probability threshold specified in function call.
 \item \code{period} Range of months having optimal detection.
@@ -57,18 +53,10 @@ showing the variation within year and among years, if applicable
 }
 \examples{
 \dontrun{
-newprob <- calc_det_prob(
-  data = D_mb_ex,
-  ecodistrict.select = "Scotian Shelf"
-)
-scaledprobs <- scale_newprob(D_mb_ex, "Scotian Shelf",
- newprob)
-Pscaled_month <- scale_prob_by_month(D_mb_ex, "Scotian Shelf",
- newprob$newP_agg)
-calc_window(
-  data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-  species.name = "Nucula proxima", scaledprobs
-)
+newprob <- calc_det_prob(data = D_mb_ex)
+scaledprobs <- scale_newprob(D_mb_ex, newprob)
+calc_window(data = D_mb_ex, threshold = "90",
+ species.name = "Acartia longiremis", scaledprobs)
 }
 }
 \author{

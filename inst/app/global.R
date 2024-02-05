@@ -2,47 +2,58 @@ library(cli)
 library(dplyr)
 library(ggplot2)
 library(GOTeDNA)
-library(kableExtra)
 library(leaflet)
+library(mapview)
 library(patchwork)
+library(sf)
 library(shiny)
 library(shinyjs)
 cli_alert_info("Packages loaded")
 
 list.files("modules", full.names = TRUE) |>
-    lapply(source)
+  lapply(source)
 cli_alert_info("Modules loaded")
 
+# import glossary
 gloss <- read.csv("data/glossary.csv")
 gloss$Term <- paste0('<p align ="right"><b>', trimws(gloss$Term), "</b></p>")
 gloss$Definition <- trimws(gloss$Definition)
-taxo_lvl <- c("phylum", "class", "order", "family", "genus", "scientificName")
-dfs <- D_mb_ex |>
-    sf::st_as_sf(
-        coords = c("decimalLongitude", "decimalLatitude"),
-        crs = sf::st_crs(4326)
-    )
+
+# import all GOTeDNA data
+gotedna_data <- readRDS("data/gotedna_data.rds")
+gotedna_station <- readRDS("data/gotedna_station.rds")
+#
 newprob <- readRDS("data/newprob.rds")
-Pscaled_month <- readRDS("data/Pscaled_month.rds")
+Pscaled <- readRDS("data/Pscaled.rds")
 
-tx_phy <- c("All", unique(D_mb_ex$phylum))
-tx_cla <- c("All", unique(D_mb_ex$class))
-tx_gen <- c("All", unique(D_mb_ex$genus))
-tx_spe <- c("All", unique(D_mb_ex$scientificName))
+taxon_levels <- c("phylum", "class", "genus", "species")
 
-
-filter_spatial_data <- function(x, phy, cla, gen, spe) {
-    if (phy != "All") {
-        x <- x |> dplyr::filter(phylum == phy)
-        if (cla != "All") {
-            x <- x |> dplyr::filter(class == cla)
-            if (gen != "All") {
-                x <- x |> dplyr::filter(genus == gen)
-                if (spe != "All") {
-                    x <- x |> dplyr::filter(scientificName == spe)
-                }
-            }
+# function
+## filter data based on user choices of taxa
+filter_taxa_data <- function(x, phy, cla, gen, spe) {
+  if (phy != "All") {
+    x <- x |> dplyr::filter(phylum == phy)
+    if (cla != "All") {
+      x <- x |> dplyr::filter(class == cla)
+      if (gen != "All") {
+        x <- x |> dplyr::filter(genus == gen)
+        if (spe != "All") {
+          x <- x |> dplyr::filter(scientificName == spe)
         }
+      }
     }
-    x
+  }
+  x
+}
+
+get_taxon_level <- function(phy, cla, gen, spe) {
+  if (spe != "All") {
+    out <- 4
+  } else if (gen != "All") {
+    out <- 3
+  } else if (cla != "All") {
+    out <- 2
+  } else {
+    out <- 1
+  }
 }

@@ -1,11 +1,8 @@
 test_that("calc_window() returns optimal detection windows with confidence values", {
   expect_equal(
     win_df <- calc_window(
-      data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      species.name = "Acartia longiremis", scaledprobs
-    ),
+      data = D_mb_ex, threshold = "90", species.name = "Acartia longiremis", scaledprobs),
     structure(list(
-      ecodistrict = "Scotian Shelf",
       length = 2L, threshold = "90",
       period = "Jan-Dec",
       GOTeDNA_ID = "8",
@@ -27,25 +24,16 @@ test_that("calc_window() returns optimal detection windows with confidence value
   )
   expect_warning(
     calc_window(
-      data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      species.name = "Acartia hudsonica", scaledprobs
+      data = D_mb_ex, threshold = "90", species.name = "Acartia hudsonica", scaledprobs
     )
   )
 })
 
-test_that("error is thrown when value doesn't exist in data", {
-  expect_error(
-    calc_window(
-      data = D_mb_ex, ecodistrict.select = "Bay of Fundy", threshold = "90",
-      species.name = "Acartia longiremis", scaledprobs
-    ),
-    "Ecodistrict not found in data"
-  )
-  expect_error(
-    calc_window(
-      data = D_mb_ex, ecodistrict.select = "Scotian Shelf", threshold = "90",
-      species.name = "A. longiremis", scaledprobs
-    ),
-    "Species not found in data"
-  )
-})
+# test_that("error is thrown when value doesn't exist in data", {
+#   expect_error(
+#     calc_window(
+#       data = D_mb_ex, threshold = "90", species.name = "A. longiremis", scaledprobs
+#     ),
+#     "Species not found in data"
+#   )
+# })

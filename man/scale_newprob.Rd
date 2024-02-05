@@ -5,22 +5,19 @@
 \title{Normalize detection probabilities with min-max method (range 011) by month
 for each year separately.}
 \usage{
-scale_newprob(data, ecodistrict.select, newprob)
+scale_newprob(data, newprob)
 }
 \arguments{
 \item{data}{(required, data.frame) Data.frame imported with \code{\link[=read_data]{read_data()}}. Required
 to join taxonomic information.}
 
-\item{ecodistrict.select}{(required, character) Ecodistrict present in data.frame.}
-
 \item{newprob}{(required, list) detection probabilities aggregated per month and year
 \code{\link[=calc_det_prob]{calc_det_prob()}}.}
 }
 \value{
-Grouped data.frame with 16 columns:
+Grouped data.frame with 15 columns:
 \itemize{
 \item \code{id} unique species;primer;year identifier
-\item \code{ecodistrict}
 \item \code{month}
 \item \code{detect} number of detections
 \item \code{nondetect} number of non-detections
@@ -49,6 +46,6 @@ calculation functions.
 \examples{
 \dontrun{
 newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-scale_newprob(data = D_mb, ecodistrict.select = "Scotian Shelf", newprob)
+scale_newprob(data = D_mb, newprob)
 }
 }
