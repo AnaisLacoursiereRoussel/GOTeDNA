@@ -1,13 +1,13 @@
 Package: GOTeDNA
 Type: Package
-Encoding: UTF-8
 Title: Guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
-Date: 2024-01-29
-Version: 0.4.0.9011
+Date: 2024-02-11
+Version: 0.4.0.9012
 Authors@R: c(person("Anaïs", "Lacoursière-Roussel et al.", email = "Anais.Lacoursiere@dfo-mpo.gc.ca", role = c("aut", "cre")))
 Maintainer: Anais Lacoursiere-Roussel <anais.lacoursiere@dfo-mpo.gc.ca>
 Description: The purpose of this package is to compile eDNA qPCR and    
     metabarcoding metadata and data, visualize species detection probabilities, and delineate species detection windows.
+Encoding: UTF-8
 License: GPL-3
 Roxygen: list(markdown = TRUE)
 Depends:

@@ -4,7 +4,7 @@ mod_dialog_disclaimers_server <- function(id, r) {
     query_modal <- modalDialog(
       title = "Welcome to GOTeDNA!",
       tagList(
-        p(em("Guidance on Optimal Timing for eDNA"), "is an interactive tool displaying coastal environmental DNA (eDNA) observations.."),
+        p(em("Guidance on Optimal Timing for eDNA"), "is an interactive tool displaying coastal environmental DNA (eDNA) observations."),
         p("GOTeDNA intends to guide the development of eDNA research and/or monitoring programs based on the observed and predicted optimal detection period(s) for the taxonomic group(s) of interest and biodiversity"),
         h5("Disclaimers:"),
         p("This tool intends to infer optimal eDNA detection periods only, not species spatial distribution."),

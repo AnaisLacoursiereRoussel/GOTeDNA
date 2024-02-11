@@ -8,3 +8,4 @@
 ^\.Rproj\.user$
 ^inst//app//data//raw_xlsx_files$
 ^Dockerfile$
+^tmp$

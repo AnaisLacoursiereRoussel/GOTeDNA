@@ -60,6 +60,7 @@ mod_select_data_server <- function(id, r) {
     ns <- session$ns
 
     observeEvent(input$datatype, {
+      r$data_type <- input$datatype
       r$data_filtered <- gotedna_data[[input$datatype]]
       r$data_station <- gotedna_station[[input$datatype]]
       updateSelectInput(session, "slc_phy",

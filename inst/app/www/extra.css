@@ -103,10 +103,11 @@ h2 {
 
 .shiny-notification {
   position:fixed;
-  top: calc(4%);
-  left: calc(4%);
-  width: 15%;
+  top: calc(1%);
+  left: calc(1%);
+  width: 98%;
   font-weight: bold;
+  text-align: center;
 }
 
 .shiny-notification-message {

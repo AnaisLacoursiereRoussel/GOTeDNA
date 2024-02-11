@@ -2,7 +2,7 @@ Package: GOTeDNA.app
 Type: Shiny App
 Encoding: UTF-8
 Title: GOTeDNA Shiny App
-Date: 2024-01-29
+Date: 2024-02-11
 Version: 0.0.2
 Authors@R: c(person("Anaïs", "Lacoursière et al.", email = "Anais.Lacoursiere@dfo-mpo.gc.ca", role = c("aut", "cre")))
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>

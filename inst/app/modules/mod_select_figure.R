@@ -75,108 +75,115 @@ mod_select_figure_server <- function(id, r) {
     ns <- session$ns
 
     observeEvent(input$calc_window, {
-      showNotification(
-        "Computing time window",
-        type = "message",
-        duration = NULL,
-        id = "notif_calc_win"
-      )
-      if (r$taxon_slc[1] == "All") {
-        showNotification("Select at least one phylum!", type = "warning")
+      if (r$taxon_slc[4] == "All" && r$data_type == "qPCR") {
+        showNotification(
+          "For qPCR data, one species should be selected.",
+          type = "warning"
+        )
       } else {
-        # compute probabilities
-        cli::cli_alert_info("Computing probablities")
-        newprob <- calc_det_prob(r$data_filtered)
-        scaledprobs <- scale_newprob(r$data_filtered, newprob)
-        cli::cli_alert_info("Computing optimal detection window")
-        win <- calc_window(
-          data = r$data_filtered, threshold = "90",
-          species.name = unique(r$data_filtered$scientificName),
-          scaledprobs = scaledprobs
-        )
-        removeNotification(id = "notif_calc_win")
-
-        tg <- table(r$data_filtered$target_subfragment) |>
-          sort() |>
-          rev()
-        updateSelectInput(
-          session,
-          "primer",
-          choices = names(tg),
-          selected = names(tg)[1]
-        )
-        if (!length(tg)) {
-          cli::cli_alert_danger("target_subfragment is missing")
-          tmp_primer <- "unknown"
+        if (r$taxon_slc[1] == "All") {
+          showNotification("Select at least one phylum", type = "warning")
         } else {
-          tmp_primer <- names(tg)[1]
-        }
-
-        if (is.null(win)) {
-          showNotification("No optimal detection window", type = "warning")
-          output$opt_sampl <- renderUI("UNKNOWN")
-          output$conf <- renderUI("UNKNOWN")
-          output$var_year <- renderUI("UNKNOWN")
-        } else {
-          output$opt_sampl <- renderUI(win$period)
-          output$conf <- renderUI(win$confidence)
-          output$var_year <- renderUI(2)
-        }
-        output$var_primer <- renderUI("TODO")
-        output$var_dat <- renderUI("TODO")
-
-        # freeze taxon level selected
-        r$taxon_slc_compute <- r$taxon_slc
-        r$taxon_lvl_compute <- do.call(get_taxon_level, as.list(r$taxon_slc))
-        # taxon level selected
-        taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
-        taxon.level <- taxon_levels[r$taxon_lvl_compute]
-        # Creates figures
-        cli::cli_alert_info("Creating figures")
-
-        r$fig_1 <- hm_fig(taxon.level, taxon.name, scaledprobs)
-
-        if (tmp_primer == "unknown") {
-          cli::cli_alert_danger("cannot render figure 2")
-          r$fig_2 <- NULL
-        } else {
-          r$fig_2 <- effort_needed_fig(
+          # compute probabilities
+          cli::cli_alert_info("Computing probablities")
+          showNotification(
+            "Computing time window",
+            type = "message",
+            duration = NULL,
+            id = "notif_calc_win"
+          )
+          newprob <- calc_det_prob(r$data_filtered)
+          scaledprobs <- scale_newprob(r$data_filtered, newprob)
+          cli::cli_alert_info("Computing optimal detection window")
+          win <- calc_window(
+            data = r$data_filtered, threshold = "90",
             species.name = unique(r$data_filtered$scientificName),
-            primer.select = tmp_primer,
-            Pscaled
+            scaledprobs = scaledprobs
           )
-        }
-        # one possible selection
-        if (tmp_primer == "unknown") {
-          cli::cli_alert_danger("cannot render figure 3")
-          r$fig_3 <- NULL
-        } else {
-          id_lvl <- which(r$taxon_slc != "All") |> which.max()
-          r$fig_3 <- higher_tax_fig(
-            data = r$data_filtered,
-            higher.taxon.select = taxon_levels[min(id_lvl, 2)],
-            taxon.name = r$taxon_slc[min(id_lvl + 1, 2)],
-            view.by.level = taxon_levels[min(id_lvl + 1, 3)],
-            primer.select = tmp_primer
-          )
-        }
-        r$fig_4 <- sample_size_fig(
-          data = r$data_filtered, species.name = taxon.name
-        )
+          removeNotification(id = "notif_calc_win")
 
-        if (tmp_primer == "unknown") {
-          cli::cli_alert_danger("cannot render figure 5")
-          r$fig_5 <- NULL
-        } else {
-          p1 <- smooth_fig(
-            data = r$data_filtered, species.name = taxon.name,
-            primer.select = tmp_primer
+          tg <- table(r$data_filtered$target_subfragment) |>
+            sort() |>
+            rev()
+          updateSelectInput(
+            session,
+            "primer",
+            choices = names(tg),
+            selected = names(tg)[1]
           )
-          p2 <- thresh_fig(taxon.level, taxon.name,
-            threshold = "90",
-            scaledprobs
+          if (!length(tg)) {
+            cli::cli_alert_danger("target_subfragment is missing")
+            tmp_primer <- "unknown"
+          } else {
+            tmp_primer <- names(tg)[1]
+          }
+
+          if (is.null(win)) {
+            showNotification("No optimal detection window", type = "warning")
+            output$opt_sampl <- renderUI("UNKNOWN")
+            output$conf <- renderUI("UNKNOWN")
+            output$var_year <- renderUI("UNKNOWN")
+          } else {
+            output$opt_sampl <- renderUI(win$period)
+            output$conf <- renderUI(win$confidence)
+            output$var_year <- renderUI(2)
+          }
+          output$var_primer <- renderUI("TODO")
+          output$var_dat <- renderUI("TODO")
+
+          # freeze taxon level selected
+          r$taxon_slc_compute <- r$taxon_slc
+          r$taxon_lvl_compute <- do.call(get_taxon_level, as.list(r$taxon_slc))
+          # taxon level selected
+          taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
+          taxon.level <- taxon_levels[r$taxon_lvl_compute]
+          # Creates figures
+          cli::cli_alert_info("Creating figures")
+
+          r$fig_1 <- hm_fig(taxon.level, taxon.name, scaledprobs)
+
+          if (tmp_primer == "unknown") {
+            cli::cli_alert_danger("cannot render figure 2")
+            r$fig_2 <- NULL
+          } else {
+            r$fig_2 <- effort_needed_fig(
+              species.name = unique(r$data_filtered$scientificName),
+              primer.select = tmp_primer,
+              Pscaled
+            )
+          }
+          # one possible selection
+          if (tmp_primer == "unknown") {
+            cli::cli_alert_danger("cannot render figure 3")
+            r$fig_3 <- NULL
+          } else {
+            id_lvl <- which(r$taxon_slc != "All") |> which.max()
+            r$fig_3 <- higher_tax_fig(
+              data = r$data_filtered,
+              higher.taxon.select = taxon_levels[min(id_lvl, 2)],
+              taxon.name = r$taxon_slc[min(id_lvl + 1, 2)],
+              view.by.level = taxon_levels[min(id_lvl + 1, 3)],
+              primer.select = tmp_primer
+            )
+          }
+          r$fig_4 <- sample_size_fig(
+            data = r$data_filtered, species.name = taxon.name
           )
-          r$fig_5 <- p1 + p2
+
+          if (tmp_primer == "unknown") {
+            cli::cli_alert_danger("cannot render figure 5")
+            r$fig_5 <- NULL
+          } else {
+            p1 <- smooth_fig(
+              data = r$data_filtered, species.name = taxon.name,
+              primer.select = tmp_primer
+            )
+            p2 <- thresh_fig(taxon.level, taxon.name,
+              threshold = "90",
+              scaledprobs
+            )
+            r$fig_5 <- p1 + p2
+          }
         }
       }
     })

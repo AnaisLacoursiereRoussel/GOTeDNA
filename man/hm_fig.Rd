@@ -31,7 +31,7 @@ representation.
 \examples{
 \dontrun{
 newprob <- calc_det_prob(D_mb_ex)
-scaledprobs <- scale_prob_by_month(D_mb_ex, newprob)
+scaledprobs <- scale_newprob(D_mb_ex, newprob)
 hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 }
 }

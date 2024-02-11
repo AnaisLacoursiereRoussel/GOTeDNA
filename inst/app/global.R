@@ -57,3 +57,9 @@ get_taxon_level <- function(phy, cla, gen, spe) {
     out <- 1
   }
 }
+
+plotNotAvailable <- function() {
+  plot(c(-1, 1), c(-1, 1), ann = FALSE, bty = "n", type = "n", xaxt = "n", 
+    yaxt = "n")
+  text("Plot only available at the species level.")
+}
