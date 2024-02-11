@@ -1,7 +1,7 @@
 test_that("smooth_fig returns a ggplot2 object", {
+  D_mb_ex_slc <- D_mb_ex |> dplyr::filter(target_subfragment == "COI1")
   suppressWarnings(p <- smooth_fig(
-    data = D_mb_ex, species.name = "Acartia longiremis",
-    primer.select = "COI1"
+    data = D_mb_ex_slc, species.name = "Acartia longiremis"
   ))
 
   expect_s3_class(p$coordinates, "CoordPolar")
@@ -11,23 +11,18 @@ test_that("smooth_fig returns a ggplot2 object", {
   expect_s3_class(p$layers[[4]]$geom, "GeomPoint")
   # expect_error(
   #   smooth_fig(
-  #     data = D_mb_ex, species.name = "A. longiremis",
-  #     primer.select = "COI1"
+  #     data = D_mb_ex_slc, species.name = "A. longiremis"
   #   ),
   #   "Species not found in data"
   # )
   # expect_error(
   #   smooth_fig(
-  #     data = D_mb_ex, species.name = "Acartia longiremis",
-  #     primer.select = "COI"
+  #     data = D_mb_ex_slc, species.name = "Acartia longiremis"
   #   ),
   #   "Primer not found in data"
   # )
   expect_warning(
-    smooth_fig(
-      data = D_mb_ex, species.name = "Acartia longiremis",
-      primer.select = "COI1"
-    ),
+    smooth_fig(data = D_mb_ex_slc, species.name = "Acartia longiremis"),
     "minimal value for n is 3, returning requested palette with 3 different levels"
   )
 })

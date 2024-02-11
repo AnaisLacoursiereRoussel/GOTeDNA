@@ -99,11 +99,10 @@ ecodistrict.select = "Scotian Shelf",
 
 ```{R higher}
 higher_tax_fig(
-  data = D_mb_ex, 
+  data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"), 
   higher.taxon.select = "phylum", 
   taxon.name = "Bryozoa",
-  view.by.level = "genus", 
-  primer.select = "COI1"
+  view.by.level = "genus"
 )
 ```
 
@@ -117,8 +116,8 @@ sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
 
 ```{R smooth}
 smooth_fig(
-  data = D_mb_ex, species.name = "Acartia longiremis",
-  primer.select = "COI1"
+  data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"), 
+  species.name = "Acartia longiremis"
 )
 ```
 

@@ -11,7 +11,7 @@
 #' @param taxon.name (required, character): Select taxon name that matches the
 #' level provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter
 #' genus name, etc.
-#' @param scaledprobs  (required, data.frame) Normalized detection
+#' @param scaledprobs (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
 #' @rdname hm_fig
@@ -30,7 +30,6 @@ hm_fig <- function(
   data <- scaledprobs$Pscaled_month[
     scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name),
   ]
-
 
   ggplot2::ggplot(
     data,

@@ -5,43 +5,37 @@
 #'
 #' @param data (required, data.frame): Data.frame read in with [read_data()].
 #' @param species.name (required, character): Full binomial species name.
-#' @param primer.select (required, character): Select primer as different
-#' primers may provide different detection rates.
 #'
 #' @rdname smooth_fig
 #' @export
 #' @examples
 #' \dontrun{
 #' smooth_fig(
-#'   data = D_mb_ex, species.name = "Acartia longiremis", 
-#'   primer.select = "COI1"
+#'   data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"),
+#'   species.name = "Acartia longiremis"
 #' )
 #' }
-smooth_fig <- function(data, species.name, primer.select) {
-
+smooth_fig <- function(data, species.name) {
   oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
 
-  # if (!species.name %in% data$scientificName) {
-  #   stop("Species not found in data")
-  # }
-
-  if (!primer.select %in% data$target_subfragment) {
-    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
-    return(NULL)
+  primer.select <- unique(data$target_subfragment)
+  if (length(primer.select) > 1) {
+    cli::cli_alert_warning("Primer not unique")
+    subt <- paste("Primer:", paste0(primer.select, collapse = ", "))
+  } else {
+    if (is.na(primer.select)) {
+      subt <- NULL
+    } else {
+      subt <- paste("Primer:", primer.select)
+    }
   }
 
-  data$n <- 1
-
   data %<>%
-    dplyr::filter(
-      # scientificName == species.name, 
-      target_subfragment == primer.select
-    ) %>%
     dplyr::group_by(scientificName, year, month) %>%
-    dplyr::summarise(n = sum(n), nd = sum(detected))
+    dplyr::summarise(n = dplyr::n(), nd = sum(detected))
 
   # Do smoothing by making continuous time (rbind time series and focus on middle period)
   data$prob <- data$nd / data$n
@@ -81,7 +75,7 @@ smooth_fig <- function(data, species.name, primer.select) {
     ggplot2::labs(
       col = "Year", x = NULL, y = "Normalized detection probability",
       title = scientific_name_formatter(species.name),
-      subtitle = paste("Primer:", primer.select)
+      subtitle = subt
     ) +
     ggplot2::theme_minimal() +
     ggplot2::scale_colour_manual(values = RColorBrewer::brewer.pal(length(unique(data$year)), "Dark2")) +

@@ -4,13 +4,7 @@
 \alias{higher_tax_fig}
 \title{Display actual sampling effort of taxa within specified taxonomic group.}
 \usage{
-higher_tax_fig(
-  data,
-  higher.taxon.select,
-  taxon.name,
-  view.by.level,
-  primer.select
-)
+higher_tax_fig(data, higher.taxon.select, taxon.name, view.by.level)
 }
 \arguments{
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}}
@@ -25,9 +19,6 @@ enter class name, etc..}
 \item{view.by.level}{(required, character): Lower taxonomic level to view
 detection probability by. Cannot be higher level than higher group specified in
 \code{higher.taxon.select} Choices = one of \code{c("phylum", "class", "order", "family", "genus")}}
-
-\item{primer.select}{(required, character): Select primer as different primers
-may provide different detection rates.}
 }
 \description{
 This function displays the actual number of eDNA samples taken
@@ -39,8 +30,7 @@ higher_tax_fig(
   data = D_mb_ex,
   higher.taxon.select = "phylum",
   taxon.name = "Bryozoa",
-  view.by.level = "genus",
-  primer.select = "COI1"
+  view.by.level = "genus"
 )
 }
 }
