@@ -3,11 +3,12 @@
 #' @description This function calculates number of samples needed to obtain
 #' species detection at different thresholds by using scaled and interpolated
 #' data produced with `[scale_newprob()]`.
-#' 
+#'
 #' @param scaledprobs_month  (required, data.frame) Normalized detection
 #' probabilities as returned by the element `month` of the list returned by
 #' [scale_newprob()] for one species ans one primer.
 #'
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname effort_needed_fig
 #' @export
 #' @examples

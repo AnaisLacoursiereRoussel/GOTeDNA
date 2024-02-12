@@ -37,7 +37,7 @@
 #' * `concentration`: provided when choose.method = "qPCR",
 #' * `detected`
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname read_data
 #' @export
 #' @examples

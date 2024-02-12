@@ -29,6 +29,7 @@
 #' * `genus`:
 #' * `fill`:
 #'
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname scale_newprob
 #' @export
 #' @examples

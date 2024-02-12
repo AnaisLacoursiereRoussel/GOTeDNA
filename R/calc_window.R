@@ -38,8 +38,7 @@
 #' * `confidence` Provided such that p value < 0.001 = Very high;
 #' 0.001 < p < 0.01 = High; 0.01 < p < 0.05 = Medium; p >= 0.05 = Low.
 #'
-#' @author Melissa Morrison \email{Melissa.Morrison@@dfo-mpo.gc.ca}
-#' @author Tim Barrett \email{Tim.Barrett@@dfo-mpo.gc.ca}
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname calc_window
 #' @export
 #' @examples
@@ -131,7 +130,7 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
     })
 
   # all of the species with consecutive windows AND single month window
-  consec.det <- mapply(dplyr::bind_rows, onemonth, consecmonth1, consecmonth2, 
+  consec.det <- mapply(dplyr::bind_rows, onemonth, consecmonth1, consecmonth2,
     SIMPLIFY = FALSE)
 
   # create df where species have no discernible window (for now, this means more than one non-consecutive period)

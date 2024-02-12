@@ -6,6 +6,7 @@
 #' @param data (required, data.frame): Data.frame read in with [read_data()].
 #' @param species.name (required, character): Full binomial species name.
 #'
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname sample_size_fig
 #' @export
 #' @examples

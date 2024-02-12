@@ -14,6 +14,7 @@
 #' @param scaledprobs (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname hm_fig
 #' @export
 #' @examples

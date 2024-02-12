@@ -1,6 +1,6 @@
-#' Calculate detection probabilities from data that were previously imported 
+#' Calculate detection probabilities from data that were previously imported
 #' with read_data()
-#' 
+#'
 #' @description Function that calculates non-parametric probability of detection
 #' for each species and primer for the selected ecodistrict. Probabilities are
 #' calculated both (1) monthly, across all years; and (2) monthly with each year
@@ -8,7 +8,7 @@
 #'
 #' @param data (required, data.frame) Data.frame read in with [read_data()].
 #'
-#' @return Two lists, each with distinct elements of species; primer ID 
+#' @return Two lists, each with distinct elements of species; primer ID
 #' containing 5-7 columns:
 #' * `month`
 #' * `n` total number of samples per month
@@ -19,6 +19,7 @@
 #' * `year`
 #' * `yr.mo` year;month concatenated
 #'
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname calc_det_prob
 #' @export
 #' @examples
@@ -75,7 +76,7 @@ calc_det_prob <- function(data) {
   names(COM) <- unique(data$id.yr)
 
   for (species in unique(data$id.yr)) {
-    SDF <- data %>% 
+    SDF <- data %>%
       dplyr::filter(id.yr == species) %>%
       dplyr::group_by(month) %>%
       dplyr::summarise(

@@ -1,5 +1,5 @@
 #' Display actual sampling effort of taxa within specified taxonomic group.
-#' 
+#'
 #' @description This function displays the actual number of eDNA samples taken
 #' for all taxa of a specified higher taxonomic group per year.
 #'
@@ -13,7 +13,8 @@
 #' detection probability by. Cannot be higher level than higher group specified in
 #' `higher.taxon.select` Choices = one of `c("phylum", "class", "order",
 #' "family", "genus")`
-#' 
+#'
+#' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname higher_tax_fig
 #' @export
 #' @examples
