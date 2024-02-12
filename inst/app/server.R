@@ -3,7 +3,8 @@ server <- function(input, output, session) {
   r <- reactiveValues(
     geom = NULL,
     geom_slc = NULL,
-    reload_map = 0
+    fig_ready = FALSE,
+    reload_map = 0,
   )
 
   mod_select_data_server("slc_data", r)

@@ -4,7 +4,7 @@ mod_select_data_ui <- function(id) {
   tagList(
     div(
       id = "data_request",
-      h2("Data request window", class = "col_1"),
+      h2("Data request", class = "col_1"),
       radioButtons(ns("datatype"),
         label = "Data Type",
         choices = list(
@@ -154,6 +154,7 @@ mod_select_data_server <- function(id, r) {
             dplyr::summarise(count = n()),
           join_by(ecodistrict, station)
         )
+      # reset figures 
       r$reload_map <- r$reload_map + 1
     })
 
@@ -196,8 +197,6 @@ mod_select_data_server <- function(id, r) {
           join_by(ecodistrict, station)
         )
       r$reload_map <- r$reload_map + 1
-      # sf_edits <<- reactive(list(finished = NULL))
-      # print(sf_edits())
     })
 
     observeEvent(r$geom, {

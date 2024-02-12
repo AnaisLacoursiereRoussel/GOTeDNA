@@ -8,11 +8,12 @@ mod_select_figure_ui <- function(id) {
         fluidRow(
           column(
             12,
-            h2("Observation"),
+            h2("Observations"),
             h3("Compute optimal detection window"),
+            selectInput(ns("primer"), "Primer", choices = "unkown"),
             actionButton(
               ns("calc_window"),
-              label = "Compute and visualize",
+              label = "Compute & visualize",
               icon = icon("gear")
             ),
             h3("Data selected details"),
@@ -48,24 +49,43 @@ mod_select_figure_ui <- function(id) {
                 )
               ),
             ),
-            h3("Figure details"),
-            selectInput(ns("primer"), "Primer", choices = "unkown"),
-            tags$ul(
-              tags$li(strong("Figure 1:"), "does that"),
-              tags$li(strong("Figure 2:"), "does that"),
-              tags$li(strong("Figure 3:"), "does that"),
-              tags$li(strong("Figure 4:"), "does that"),
-              tags$li(strong("Figure 5:"), "does that")
+            h3(icon("info-circle"), "About the figures"),
+            fluidRow(
+              taglist_fig_info(
+                "Heatmap",
+                "Heatmap of scaled monthly detection probabilities for taxon."
+              ),
+              taglist_fig_info(
+                "Sampling effort 1",
+                "Sampling effort needed to obtain different detection thresholds."
+              ),
+              taglist_fig_info(
+                "Sampling effort 2",
+                "Sampling effort of taxa within specified taxonomic group per year."
+              ),
+              taglist_fig_info(
+                "Sampling effort 3",
+                "Sampling effort by species, year, and region."
+              ),
+              taglist_fig_info(
+                "Detection probability 1",
+                "Display species monthly detection probability.."
+              ),
+              taglist_fig_info(
+                "Detection probability 2",
+                "Display monthly detection probabilities for selected taxon, and detection probability threshold"
+              )
             )
           )
         ),
       ),
-      tabPanel("All", plotOutput(ns("fig_all"), height = "85vh")),
-      tabPanel("Figure 1", plotOutput(ns("fig_1"), height = "85vh")),
-      tabPanel("Figure 2", plotOutput(ns("fig_2"), height = "85vh")),
-      tabPanel("Figure 3", plotOutput(ns("fig_3"), height = "85vh")),
-      tabPanel("Figure 4", plotOutput(ns("fig_4"), height = "85vh")),
-      tabPanel("Figure 5", plotOutput(ns("fig_5"), height = "85vh"))
+      # tabPanel("All", plotOutput(ns("fig_all"), height = "85vh")),
+      tabPanel("Heatmap", plotOutput(ns("fig_1"), height = "85vh")),
+      tabPanel("Sampling effort 1", plotOutput(ns("fig_2"), height = "85vh")),
+      tabPanel("Sampling effort 2", plotOutput(ns("fig_3"), height = "85vh")),
+      tabPanel("Sampling effort 3", plotOutput(ns("fig_4"), height = "85vh")),
+      tabPanel("Detection probability 1", plotOutput(ns("fig_5"), height = "85vh")),
+      tabPanel("Detection probability 2", plotOutput(ns("fig_6"), height = "85vh"))
     )
   )
 }
@@ -73,6 +93,26 @@ mod_select_figure_ui <- function(id) {
 mod_select_figure_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    observe({
+      if (r$data_type == "qPCR") {
+        updateSelectInput(
+          session,
+          "primer",
+          choices = "not available"
+        )
+      } else {
+        tg <- table(r$data_filtered$target_subfragment) |>
+          sort() |>
+          rev()
+        updateSelectInput(
+          session,
+          "primer",
+          choices = names(tg),
+          selected = names(tg)[1]
+        )
+      }
+    })
 
     observeEvent(input$calc_window, {
       if (r$taxon_slc[4] == "All" && r$data_type == "qPCR") {
@@ -93,30 +133,16 @@ mod_select_figure_server <- function(id, r) {
             id = "notif_calc_win"
           )
           newprob <- calc_det_prob(r$data_filtered)
-          scaledprobs <- scale_newprob(r$data_filtered, newprob)
+          r$scaledprobs <- scale_newprob(r$data_filtered, newprob)
           cli::cli_alert_info("Computing optimal detection window")
           win <- calc_window(
             data = r$data_filtered, threshold = "90",
             species.name = unique(r$data_filtered$scientificName),
-            scaledprobs = scaledprobs
+            scaledprobs = r$scaledprobs
           )
           removeNotification(id = "notif_calc_win")
 
-          tg <- table(r$data_filtered$target_subfragment) |>
-            sort() |>
-            rev()
-          updateSelectInput(
-            session,
-            "primer",
-            choices = names(tg),
-            selected = names(tg)[1]
-          )
-          if (!length(tg)) {
-            cli::cli_alert_danger("target_subfragment is missing")
-            tmp_primer <- "unknown"
-          } else {
-            tmp_primer <- names(tg)[1]
-          }
+          r$fig_ready <- TRUE
 
           if (is.null(win)) {
             showNotification("No optimal detection window", type = "warning")
@@ -135,64 +161,117 @@ mod_select_figure_server <- function(id, r) {
           r$taxon_slc_compute <- r$taxon_slc
           r$taxon_lvl_compute <- do.call(get_taxon_level, as.list(r$taxon_slc))
           # taxon level selected
-          taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
-          taxon.level <- taxon_levels[r$taxon_lvl_compute]
-          # Creates figures
-          cli::cli_alert_info("Creating figures")
-
-          r$fig_1 <- hm_fig(taxon.level, taxon.name, scaledprobs)
-
-          if (tmp_primer == "unknown") {
-            cli::cli_alert_danger("cannot render figure 2")
-            r$fig_2 <- NULL
-          } else {
-            r$fig_2 <- effort_needed_fig(
-              species.name = unique(r$data_filtered$scientificName),
-              primer.select = tmp_primer,
-              Pscaled
-            )
-          }
-          # one possible selection
-          if (tmp_primer == "unknown") {
-            cli::cli_alert_danger("cannot render figure 3")
-            r$fig_3 <- NULL
-          } else {
-            id_lvl <- which(r$taxon_slc != "All") |> which.max()
-            r$fig_3 <- higher_tax_fig(
-              data = r$data_filtered,
-              higher.taxon.select = taxon_levels[min(id_lvl, 2)],
-              taxon.name = r$taxon_slc[min(id_lvl + 1, 2)],
-              view.by.level = taxon_levels[min(id_lvl + 1, 3)],
-              primer.select = tmp_primer
-            )
-          }
-          r$fig_4 <- sample_size_fig(
-            data = r$data_filtered, species.name = taxon.name
-          )
-
-          if (tmp_primer == "unknown") {
-            cli::cli_alert_danger("cannot render figure 5")
-            r$fig_5 <- NULL
-          } else {
-            p1 <- smooth_fig(
-              data = r$data_filtered, species.name = taxon.name,
-              primer.select = tmp_primer
-            )
-            p2 <- thresh_fig(taxon.level, taxon.name,
-              threshold = "90",
-              scaledprobs
-            )
-            r$fig_5 <- p1 + p2
-          }
+          r$taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
+          r$taxon.level <- taxon_levels[r$taxon_lvl_compute]
         }
       }
     })
 
-    output$fig_1 <- renderPlot(r$fig_1, res = 144)
-    output$fig_2 <- renderPlot(r$fig_2, res = 144)
-    output$fig_3 <- renderPlot(r$fig_3, res = 144)
-    output$fig_4 <- renderPlot(r$fig_4, res = 144)
-    output$fig_5 <- renderPlot(r$fig_5, res = 144)
-    output$fig_all <- renderPlot((r$fig_1 | r$fig_2 | r$fig_3) / (r$fig_4 | r$fig_5), res = 72)
+    output$fig_1 <- renderPlot(
+      {
+        if (r$fig_ready) {
+          hm_fig(r$taxon.level, r$taxon.name, r$scaledprobs)
+        } else {
+          plotNotAvailable()
+        }
+      },
+      res = 144
+    )
+
+    output$fig_2 <- renderPlot(
+      {
+        if (r$fig_ready) {
+          if (r$taxon.level != "species") {
+            cli::cli_alert_danger("cannot render figure 2")
+            plotNotAvailableSpeciesLevel()
+          } else {
+            data_slc <- r$scaledprobs$Pscaled_month |>
+              dplyr::filter(species == r$taxon.name)
+            if (input$primer != "not available") {
+              data_slc <- data_slc |>
+                dplyr::filter(primer == input$primer)
+            }
+            effort_needed_fig(data_slc)
+          }
+        } else {
+          plotNotAvailable()
+        }
+      },
+      res = 144
+    )
+
+    output$fig_3 <- renderPlot(
+      {
+        if (r$fig_ready) {
+          id_lvl <- which(r$taxon_slc != "All") |> which.max()
+          higher_tax_fig(
+            data = r$data_filtered,
+            higher.taxon.select = taxon_levels[min(id_lvl, 2)],
+            taxon.name = r$taxon_slc[min(id_lvl + 1, 2)],
+            view.by.level = taxon_levels[min(id_lvl + 1, 3)]
+          )
+        } else {
+          plotNotAvailable()
+        }
+      },
+      res = 144
+    )
+
+    output$fig_4 <- renderPlot(
+      {
+        if (r$fig_ready) {
+          # not filtered for primer
+          sample_size_fig(data = r$data_filtered, species.name = r$taxon.name)
+        } else {
+          plotNotAvailable()
+        }
+      },
+      res = 144
+    )
+
+    output$fig_5 <- renderPlot(
+      {
+        if (r$fig_ready) {
+          data_slc <- r$data_filtered
+          if (input$primer != "not available") {
+            data_slc <- data_slc |>
+              dplyr::filter(target_subfragment == input$primer)
+          }
+          smooth_fig(data = data_slc, species.name = r$taxon.name)
+        } else {
+          plotNotAvailable()
+        }
+      },
+      res = 144
+    )
+
+    output$fig_6 <- renderPlot(
+      {
+        if (r$fig_ready) {
+          data_slc <- r$scaledprobs
+          if (input$primer != "not available") {
+            data_slc$Pscaled_month <- data_slc$Pscaled_month |>
+              dplyr::filter(primer == input$primer)
+          }
+          thresh_fig(
+            r$taxon.level, r$taxon.name, threshold = "90", data_slc
+          )
+        } else {
+          plotNotAvailable()
+        }
+      },
+      res = 144
+    )
+
+    # output$fig_all <- renderPlot(
+    #   {
+    #     if (r$fig_ready) {
+    #     } else {
+    #       plotNotAvailable()
+    #     }
+    #   },
+    #   res = 144
+    # )
+
   })
 }

@@ -58,8 +58,46 @@ get_taxon_level <- function(phy, cla, gen, spe) {
   }
 }
 
+plotText <- function(txt) {
+  plot(c(-1, 1), c(-1, 1),
+    ann = FALSE, bty = "n", type = "n", xaxt = "n",
+    yaxt = "n"
+  )
+  text(0, 0, txt)
+}
+
+plotNotAvailableSpeciesLevel <- function() {
+  plotText("Plot only available at the species level.")
+}
+
 plotNotAvailable <- function() {
-  plot(c(-1, 1), c(-1, 1), ann = FALSE, bty = "n", type = "n", xaxt = "n", 
-    yaxt = "n")
-  text("Plot only available at the species level.")
+  plotText("Plot not available yet.")
+}
+
+
+placeholder_thumbnail <- function() {
+  img(
+    src = "img/GOTeDNA_wave.png",
+    alt = "GOTeDNA_logo",
+    id = "place_holder_logo_gotedna",
+    style = "height: 4rem"
+  )
+}
+
+
+taglist_fig_info <- function(title, info, scr = NULL) {
+  column(
+    6,
+    fluidRow(
+      column(
+        8,
+        h5(title),
+        p(info)
+      ),
+      column(
+        4,
+        placeholder_thumbnail()
+      ),
+    )
+  )
 }
