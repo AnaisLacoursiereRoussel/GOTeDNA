@@ -21,7 +21,34 @@ knitr::opts_chunk$set(
 
 The goal of GOTeDNA is to import and format eDNA qPCR and metabarcoding metadata/data from GOTeDNA sample templates, visualize species detection periods, and statistically delineate optimal species detection windows.
 
+
 ## Installation
+
+### non-R users
+
+#### Install R 
+
+We recommend to use R and RStudio: https://posit.co/download/rstudio-desktop/
+
+1. Download R for your OS: https://cran.rstudio.com/
+
+2. Install R Studio
+
+
+#### Install the package 
+
+You first need to have access to the archive `GoteDNA_{version}.tar.gz`.
+Once you have obtained the archive, use the following: 
+
+```R
+install.packages("path/to/GoteDNA_{version}.tar.gz")
+```
+
+
+
+
+
+### R users with access to the GitHub repository
 
 You can install the development version of GOTeDNA from [GitHub](https://github.com/) with:
 
@@ -31,7 +58,6 @@ devtools::install_github("mkmor/GOTeDNA")
 ```
 
 ## Usage
-
 
 ### R function categories:
 - Import data
@@ -65,7 +91,10 @@ hm_fig(
 
 ```{R effort}
 effort_needed_fig(
-  species.name = "Acartia hudsonica", primer.select = "COI1", scaledprobs
+  scaledprobs$Pscaled_month |> dplyr::filter(
+      species %in% "Acartia hudsonica",
+      primer == "COI1"
+  )
 )
 ```
 ecodistrict.select = "Scotian Shelf",
@@ -73,26 +102,33 @@ ecodistrict.select = "Scotian Shelf",
 
 ```{R higher}
 higher_tax_fig(
-  data = D_mb_ex, 
+  data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"), 
   higher.taxon.select = "phylum", 
   taxon.name = "Bryozoa",
-  view.by.level = "genus", 
-  primer.select = "COI1"
+  view.by.level = "genus"
 )
 ```
 
 ### Sample size 
 
 ```{R sample_size}
-sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
+sample_size_fig(
+  data = D_mb_ex |> dplyr::filter(scientificName == "Acartia hudsonica"),
+  species.name = "Acartia hudsonica"
+)
 ```
 
 ### Species monthly detection
 
 ```{R smooth}
+D_mb_ex_slc <- D_mb_ex |>
+  dplyr::filter(
+    scientificName == "Acartia longiremis",
+    target_subfragment == "COI1"
+  )
 smooth_fig(
-  data = D_mb_ex, species.name = "Acartia longiremis",
-  primer.select = "COI1"
+  data = D_mb_ex_slc, 
+  species.name = "Acartia longiremis"
 )
 ```
 

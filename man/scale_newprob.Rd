@@ -17,21 +17,21 @@ to join taxonomic information.}
 \value{
 Grouped data.frame with 15 columns:
 \itemize{
-\item \code{id} unique species;primer;year identifier
-\item \code{month}
-\item \code{detect} number of detections
-\item \code{nondetect} number of non-detections
-\item \code{scaleP} detection probability scaled to range 0-1
-\item \code{GOTeDNA_ID}
-\item \code{species}
-\item \code{primer}
-\item \code{year}
-\item \code{phylum}
-\item \code{class}
-\item \code{order}
-\item \code{family}
-\item \code{genus}
-\item \code{fill}
+\item \code{id}: unique species;primer;year identifier
+\item \code{month}:
+\item \code{detect}: number of detections
+\item \code{nondetect}: number of non-detections
+\item \code{scaleP}: detection probability scaled to range 0-1
+\item \code{GOTeDNA_ID}:
+\item \code{species}:
+\item \code{primer}:
+\item \code{year}:
+\item \code{phylum}:
+\item \code{class}:
+\item \code{order}:
+\item \code{family}:
+\item \code{genus}:
+\item \code{fill}:
 }
 }
 \description{

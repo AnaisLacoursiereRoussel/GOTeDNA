@@ -8,7 +8,7 @@ h2 {
 }
 
 #logo_gotedna {
-  height: 7rem;
+  height: 6rem;
   margin-left: 10%;
 }
 
@@ -103,10 +103,11 @@ h2 {
 
 .shiny-notification {
   position:fixed;
-  top: calc(4%);
-  left: calc(4%);
-  width: 15%;
+  top: calc(1%);
+  left: calc(1%);
+  width: 98%;
   font-weight: bold;
+  text-align: center;
 }
 
 .shiny-notification-message {
@@ -134,6 +135,12 @@ shiny-plot-output {
 #button_map {
   text-align: right;
 }
+
+#button_source {
+  margin-top: 0.2rem;
+  text-align: right;
+}
+
 /* remove some leaflettool */
 /* .leaflet-draw-draw-polyline, 
 .leaflet-draw-draw-marker, 

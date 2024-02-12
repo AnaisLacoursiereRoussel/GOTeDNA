@@ -13,21 +13,21 @@
 #' [calc_det_prob()].
 #'
 #' @return Grouped data.frame with 15 columns:
-#' * `id` unique species;primer;year identifier
-#' * `month`
-#' * `detect` number of detections
-#' * `nondetect` number of non-detections
-#' * `scaleP` detection probability scaled to range 0-1
-#' * `GOTeDNA_ID`
-#' * `species`
-#' * `primer`
-#' * `year`
-#' * `phylum`
-#' * `class`
-#' * `order`
-#' * `family`
-#' * `genus`
-#' * `fill`
+#' * `id`: unique species;primer;year identifier
+#' * `month`:
+#' * `detect`: number of detections
+#' * `nondetect`: number of non-detections
+#' * `scaleP`: detection probability scaled to range 0-1
+#' * `GOTeDNA_ID`:
+#' * `species`:
+#' * `primer`:
+#' * `year`:
+#' * `phylum`:
+#' * `class`:
+#' * `order`:
+#' * `family`:
+#' * `genus`:
+#' * `fill`:
 #'
 #' @rdname scale_newprob
 #' @export

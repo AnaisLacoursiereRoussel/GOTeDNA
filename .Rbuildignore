@@ -6,5 +6,8 @@
 ^_pkgdown\.yml$
 ^LICENSE\.md$
 ^\.Rproj\.user$
-^inst//app//data//raw_xlsx_files$
+^inst/app/data/raw_xlsx_files$
 ^Dockerfile$
+^tmp$
+^tests$
+^inst/testdata$

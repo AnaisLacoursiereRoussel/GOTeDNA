@@ -10,7 +10,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
+#' sample_size_fig(
+#'  data = D_mb_ex |> dplyr::filter(scientificName == "Acartia hudsonica"),
+#'  species.name = "Acartia hudsonica"
+#' )
 #' }
 sample_size_fig <- function(data, species.name) {
   oop <- options("dplyr.summarise.inform")

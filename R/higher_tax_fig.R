@@ -1,4 +1,5 @@
 #' Display actual sampling effort of taxa within specified taxonomic group.
+#' 
 #' @description This function displays the actual number of eDNA samples taken
 #' for all taxa of a specified higher taxonomic group per year.
 #'
@@ -12,9 +13,7 @@
 #' detection probability by. Cannot be higher level than higher group specified in
 #' `higher.taxon.select` Choices = one of `c("phylum", "class", "order",
 #' "family", "genus")`
-#' @param primer.select (required, character): Select primer as different primers
-#' may provide different detection rates.
-
+#' 
 #' @rdname higher_tax_fig
 #' @export
 #' @examples
@@ -23,11 +22,10 @@
 #'   data = D_mb_ex,
 #'   higher.taxon.select = "phylum",
 #'   taxon.name = "Bryozoa",
-#'   view.by.level = "genus",
-#'   primer.select = "COI1"
+#'   view.by.level = "genus"
 #' )
 #' }
-higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level, primer.select) {
+higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level) {
   oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
   on.exit(options(dplyr.summarise.inform = oop))
@@ -52,14 +50,9 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name, view.by.level,
     )
   }
 
-  if (!primer.select %in% data$target_subfragment) {
-    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
-    return(NULL)
-  }
 
   data %<>%
-    dplyr::filter(target_subfragment == primer.select,
-      !!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
+    dplyr::filter(!!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
     dplyr::group_by(kingdom, phylum, class, order, family, genus, year, month) %>%
     dplyr::summarise(
       n = dplyr::n(),
