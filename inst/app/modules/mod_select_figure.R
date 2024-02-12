@@ -3,8 +3,10 @@ mod_select_figure_ui <- function(id) {
   ns <- NS(id)
   tagList(
     tabsetPanel(
+      id = "tabset_figs",
       tabPanel(
-        "Details",
+        title = "Details",
+        value = "details",
         fluidRow(
           column(
             12,
@@ -14,7 +16,9 @@ mod_select_figure_ui <- function(id) {
             actionButton(
               ns("calc_window"),
               label = "Compute & visualize",
-              icon = icon("gear")
+              title = "Trigger computation",
+              icon = icon("gear"),
+              style = "border-color: #53b2ad; border-width: 3px; font-size: 1.4rem; border-radius: 0.8rem"
             ),
             h3("Data selected details"),
             tags$table(
@@ -80,7 +84,7 @@ mod_select_figure_ui <- function(id) {
         ),
       ),
       # tabPanel("All", plotOutput(ns("fig_all"), height = "85vh")),
-      tabPanel("Heatmap", plotOutput(ns("fig_1"), height = "85vh")),
+      tabPanel("Heatmap", vaule = "hm", plotOutput(ns("fig_1"), height = "85vh")),
       tabPanel("Sampling effort 1", plotOutput(ns("fig_2"), height = "85vh")),
       tabPanel("Sampling effort 2", plotOutput(ns("fig_3"), height = "85vh")),
       tabPanel("Sampling effort 3", plotOutput(ns("fig_4"), height = "85vh")),
@@ -249,12 +253,14 @@ mod_select_figure_server <- function(id, r) {
       {
         if (r$fig_ready) {
           data_slc <- r$scaledprobs
+          # maybe better to change the input in thresh_fig.
           if (input$primer != "not available") {
             data_slc$Pscaled_month <- data_slc$Pscaled_month |>
               dplyr::filter(primer == input$primer)
           }
           thresh_fig(
-            r$taxon.level, r$taxon.name, threshold = "90", data_slc
+            r$taxon.level, r$taxon.name,
+            threshold = "90", data_slc
           )
         } else {
           plotNotAvailable()
@@ -272,6 +278,5 @@ mod_select_figure_server <- function(id, r) {
     #   },
     #   res = 144
     # )
-
   })
 }

@@ -6,7 +6,7 @@ mod_select_data_ui <- function(id) {
       id = "data_request",
       h2("Data request", class = "col_1"),
       radioButtons(ns("datatype"),
-        label = "Data Type",
+        label = "Type of data",
         choices = list(
           "Species specific (qPCR)" = "qPCR",
           "Multi-species (metabarcoding)" = "metabarcoding"
@@ -35,6 +35,10 @@ mod_select_data_ui <- function(id) {
           6,
           div(
             id = "button_map",
+            actionButton(ns("show_map_info"), "Map info",
+              icon = icon("info-circle"),
+              title = "Display information about how to use the map below"
+            ),
             actionButton(ns("confirm"), "Confirm",
               icon = icon("check"),
               title = "confirm spatial selection"
@@ -43,14 +47,17 @@ mod_select_data_ui <- function(id) {
               icon = icon("refresh"),
               title = "refresh spatial selection"
             ),
-            actionButton("show_source", "Sources",
-              icon = icon("eye"),
-              title = "access data sources"
-            )
           )
         )
       ),
-      mapedit::editModUI(ns("map-select"), height = "50vh")
+      mapedit::editModUI(ns("map-select"), height = "50vh"),
+      div(
+        id = "button_source",
+        actionButton("show_source", "Sources",
+          icon = icon("eye"),
+          title = "access data sources"
+        )
+      )
     )
   )
 }
@@ -154,7 +161,7 @@ mod_select_data_server <- function(id, r) {
             dplyr::summarise(count = n()),
           join_by(ecodistrict, station)
         )
-      # reset figures 
+      # reset figures
       r$reload_map <- r$reload_map + 1
     })
 
@@ -168,7 +175,7 @@ mod_select_data_server <- function(id, r) {
             r$geom <- r$geom[id_slc, ]
             r$data_filtered <- r$data_filtered |>
               dplyr::filter(station %in% r$geom$station)
-           # sf_edits <<- reactive(list(finished = NULL))
+            # sf_edits <<- reactive(list(finished = NULL))
           } else {
             showNotification("No station selected", type = "warning")
           }
@@ -182,7 +189,9 @@ mod_select_data_server <- function(id, r) {
       r$reload_map <- r$reload_map + 1
     })
 
-    observeEvent(input$refresh, print(input$refresh))
+    observeEvent(input$show_map_info, r$show_map_info <- TRUE)
+
+
 
     observeEvent(input$refresh, {
       r$data_filtered <- filter_taxa_data(
