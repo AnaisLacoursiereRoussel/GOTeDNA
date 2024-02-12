@@ -10,10 +10,11 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' smooth_fig(
-#'   data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"),
-#'   species.name = "Acartia longiremis"
-#' )
+#' data <- D_mb_ex |> dplyr::filter(
+#'      scientificName == "Acartia longiremis",
+#'      target_subfragment == "COI1"
+#'  )
+#' smooth_fig(data = data, species.name = "Acartia longiremis")
 #' }
 smooth_fig <- function(data, species.name) {
   oop <- options("dplyr.summarise.inform")

@@ -14,6 +14,28 @@ periods, and statistically delineate optimal species detection windows.
 
 ## Installation
 
+### non-R users
+
+#### Install R
+
+We recommend to use R and RStudio:
+<https://posit.co/download/rstudio-desktop/>
+
+1.  Download R for your OS: <https://cran.rstudio.com/>
+
+2.  Install R Studio
+
+#### Install the package
+
+You first need to have access to the archive `GoteDNA_{version}.tar.gz`.
+Once you have obtained the archive, use the following:
+
+``` r
+install.packages("path/to/GoteDNA_{version}.tar.gz")
+```
+
+### R users with access to the GitHub repository
+
 You can install the development version of GOTeDNA from
 [GitHub](https://github.com/) with:
 
@@ -57,7 +79,10 @@ hm_fig(
 
 ``` r
 effort_needed_fig(
-  species.name = "Acartia hudsonica", primer.select = "COI1", scaledprobs
+  scaledprobs$Pscaled_month |> dplyr::filter(
+      species %in% "Acartia hudsonica",
+      primer == "COI1"
+  )
 )
 ```
 
@@ -66,11 +91,10 @@ ecodistrict.select = “Scotian Shelf”, \### Sampling effort
 
 ``` r
 higher_tax_fig(
-  data = D_mb_ex, 
+  data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"), 
   higher.taxon.select = "phylum", 
   taxon.name = "Bryozoa",
-  view.by.level = "genus", 
-  primer.select = "COI1"
+  view.by.level = "genus"
 )
 ```
 
@@ -79,7 +103,10 @@ higher_tax_fig(
 ### Sample size
 
 ``` r
-sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
+sample_size_fig(
+  data = D_mb_ex |> dplyr::filter(scientificName == "Acartia hudsonica"),
+  species.name = "Acartia hudsonica"
+)
 ```
 
 <img src="man/figures/README-sample_size-1.png" width="100%" />
@@ -87,9 +114,14 @@ sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
 ### Species monthly detection
 
 ``` r
+D_mb_ex_slc <- D_mb_ex |>
+  dplyr::filter(
+    scientificName == "Acartia longiremis",
+    target_subfragment == "COI1"
+  )
 smooth_fig(
-  data = D_mb_ex, species.name = "Acartia longiremis",
-  primer.select = "COI1"
+  data = D_mb_ex_slc, 
+  species.name = "Acartia longiremis"
 )
 #> Warning in RColorBrewer::brewer.pal(length(unique(data$year)), "Dark2"): minimal value for n is 3, returning requested palette with 3 different levels
 ```

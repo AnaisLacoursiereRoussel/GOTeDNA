@@ -1,4 +1,5 @@
 #' Display actual sampling effort of taxa within specified taxonomic group.
+#' 
 #' @description This function displays the actual number of eDNA samples taken
 #' for all taxa of a specified higher taxonomic group per year.
 #'

@@ -3,11 +3,10 @@
 #' @description This function calculates number of samples needed to obtain
 #' species detection at different thresholds by using scaled and interpolated
 #' data produced with `[scale_newprob()]`.
-#' @param species.name (required, character): Full binomial species name.
-#' @param primer.select (required, character): Select primer as different
-#' primers may provide different detection rates.
-#' @param scaledprobs  (required, data.frame) Normalized detection
-#' probabilities as returned by [scale_newprob()].
+#' 
+#' @param scaledprobs_month  (required, data.frame) Normalized detection
+#' probabilities as returned by the element `month` of the list returned by
+#' [scale_newprob()] for one species ans one primer.
 #'
 #' @rdname effort_needed_fig
 #' @export
@@ -16,31 +15,30 @@
 #' newprob <- calc_det_prob(D_mb_ex)
 #' scaledprobs <- scale_newprob(D_mb_ex, newprob)
 #' effort_needed_fig(
-#'   species.name = "Acartia hudsonica", primer.select = "COI1",
-#'   scaledprobs)
+#'   scaledprobs$Pscaled_month |> dplyr::filter(
+#'       species %in% "Acartia hudsonica",
+#'       primer == "COI1"
+#'   )
+#' )
 #' }
-effort_needed_fig <- function(species.name, primer.select, scaledprobs) {
+effort_needed_fig <- function(scaledprobs_month) {
 
-  # species.name <- match.arg(
-  #   species.name,
-  #   choices = c(scaledprobs$Pscaled_month$species) |> unique()
-  # )
+  species.name <- unique(scaledprobs_month$species)
+  stopifnot(length(unique(scaledprobs_month$species)) == 1)
 
-  if (!primer.select %in% scaledprobs$Pscaled_month$primer) {
-    print(scaledprobs$Pscaled_month$primer)
-    cli::cli_alert_danger("Primer not found in data -- cannot render figure")
+  primer.select <- unique(scaledprobs_month$primer)
+  stopifnot(length(primer.select) == 1)
+
+  if (!primer.select %in% scaledprobs_month$primer) {
+    cli::cli_alert_warning("Primer not found in data -- cannot render figure")
     return(NULL)
   }
 
-  data <- scaledprobs$Pscaled_month |>
-    dplyr::filter(
-      species %in% species.name, 
-      primer == primer.select
-    )
-
-  DF2 <- expand.grid(p = data$fill, n = seq_len(10), P = NA)
+  DF2 <- expand.grid(p = scaledprobs_month$fill, n = seq_len(10), P = NA)
   DF2 <- DF2 |>
-    merge(data.frame(p = data$fill, month = data$month))
+    merge(
+      data.frame(p = scaledprobs_month$fill, month = scaledprobs_month$month)
+    )
 
   for (i in seq_len(nrow(DF2))) {
     DF2$P[i] <- 1 - dbinom(0, size = DF2$n[i], prob = DF2$p[i]) # 1 - probability of zero detects

@@ -4,16 +4,12 @@
 \alias{effort_needed_fig}
 \title{Calculate sampling effort needed to obtain different detection thresholds.}
 \usage{
-effort_needed_fig(species.name, primer.select, scaledprobs)
+effort_needed_fig(scaledprobs_month)
 }
 \arguments{
-\item{species.name}{(required, character): Full binomial species name.}
-
-\item{primer.select}{(required, character): Select primer as different
-primers may provide different detection rates.}
-
-\item{scaledprobs}{(required, data.frame) Normalized detection
-probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
+\item{scaledprobs_month}{(required, data.frame) Normalized detection
+probabilities as returned by the element \code{month} of the list returned by
+\code{\link[=scale_newprob]{scale_newprob()}} for one species ans one primer.}
 }
 \description{
 This function calculates number of samples needed to obtain
@@ -25,7 +21,10 @@ data produced with \verb{[scale_newprob()]}.
 newprob <- calc_det_prob(D_mb_ex)
 scaledprobs <- scale_newprob(D_mb_ex, newprob)
 effort_needed_fig(
-  species.name = "Acartia hudsonica", primer.select = "COI1",
-  scaledprobs)
+  scaledprobs$Pscaled_month |> dplyr::filter(
+      species \%in\% "Acartia hudsonica",
+      primer == "COI1"
+  )
+)
 }
 }

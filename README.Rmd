@@ -91,7 +91,10 @@ hm_fig(
 
 ```{R effort}
 effort_needed_fig(
-  species.name = "Acartia hudsonica", primer.select = "COI1", scaledprobs
+  scaledprobs$Pscaled_month |> dplyr::filter(
+      species %in% "Acartia hudsonica",
+      primer == "COI1"
+  )
 )
 ```
 ecodistrict.select = "Scotian Shelf",
@@ -109,14 +112,22 @@ higher_tax_fig(
 ### Sample size 
 
 ```{R sample_size}
-sample_size_fig(data = D_mb_ex, species.name = "Acartia hudsonica")
+sample_size_fig(
+  data = D_mb_ex |> dplyr::filter(scientificName == "Acartia hudsonica"),
+  species.name = "Acartia hudsonica"
+)
 ```
 
 ### Species monthly detection
 
 ```{R smooth}
+D_mb_ex_slc <- D_mb_ex |>
+  dplyr::filter(
+    scientificName == "Acartia longiremis",
+    target_subfragment == "COI1"
+  )
 smooth_fig(
-  data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"), 
+  data = D_mb_ex_slc, 
   species.name = "Acartia longiremis"
 )
 ```
