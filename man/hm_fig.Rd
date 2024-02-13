@@ -35,3 +35,6 @@ scaledprobs <- scale_newprob(D_mb_ex, newprob)
 hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 }
 }
+\author{
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
+}

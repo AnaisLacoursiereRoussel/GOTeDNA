@@ -60,7 +60,5 @@ calc_window(data = D_mb_ex, threshold = "90",
 }
 }
 \author{
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
-
-Tim Barrett \email{Tim.Barrett@dfo-mpo.gc.ca}
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
 }

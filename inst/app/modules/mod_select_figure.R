@@ -12,7 +12,17 @@ mod_select_figure_ui <- function(id) {
             12,
             h2("Observations"),
             h3("Compute optimal detection window"),
-            selectInput(ns("primer"), "Primer", choices = "unkown"),
+            fluidRow(
+              column(
+                4, 
+                selectInput(ns("primer"), "Primer", choices = "unkown")
+              ),
+              column(
+                4,
+                selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 90)
+              )
+            )
+                ,
             actionButton(
               ns("calc_window"),
               label = "Compute & visualize",
@@ -140,7 +150,7 @@ mod_select_figure_server <- function(id, r) {
           r$scaledprobs <- scale_newprob(r$data_filtered, newprob)
           cli::cli_alert_info("Computing optimal detection window")
           win <- calc_window(
-            data = r$data_filtered, threshold = "90",
+            data = r$data_filtered, threshold = input$threshold,
             species.name = unique(r$data_filtered$scientificName),
             scaledprobs = r$scaledprobs
           )
@@ -260,7 +270,7 @@ mod_select_figure_server <- function(id, r) {
           }
           thresh_fig(
             r$taxon.level, r$taxon.name,
-            threshold = "90", data_slc
+            threshold = input$threshold, data_slc
           )
         } else {
           plotNotAvailable()
