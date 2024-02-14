@@ -46,9 +46,9 @@ effort_needed_fig <- function(scaledprobs_month) {
   }
 
   ggplot2::ggplot(DF2, ggplot2::aes(y = P, x = n, colour = as.factor(month))) +
-    ggplot2::geom_point(size = 2) +
+    ggplot2::geom_point(size = 3) +
     ggplot2::theme_classic() +
-    ggplot2::scale_y_continuous("Probability of at least one detection",
+    ggplot2::scale_y_continuous("Detection probability",
       limits = c(0, 1),
       expand = c(0, 0.01)
     ) +
@@ -65,6 +65,6 @@ effort_needed_fig <- function(scaledprobs_month) {
       colour = "Month",
       title = scientific_name_formatter(species.name),
       subtitle = paste("Primer:", primer.select),
-      x = "Sample size required"
+      x = "Number of samples"
     )
 }

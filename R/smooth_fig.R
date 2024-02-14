@@ -80,7 +80,7 @@ smooth_fig <- function(data, species.name) {
       subtitle = subt
     ) +
     ggplot2::theme_minimal() +
-    ggplot2::scale_colour_manual(values = RColorBrewer::brewer.pal(length(unique(data$year)), "Dark2")) +
+    ggplot2::scale_colour_manual(values = palette("Alphabet")) +
     ggplot2::scale_x_continuous(
       limits = c(0, 12),
       breaks = 1:12,

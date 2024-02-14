@@ -28,27 +28,27 @@ hm_fig <- function(
     taxon.name, scaledprobs) {
   taxon.level <- match.arg(taxon.level)
 
-  data <- scaledprobs$Pscaled_month[
-    scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name),
+  data <- scaledprobs$Pscaled_year[
+    scaledprobs$Pscaled_year[[taxon.level]] %in% c(taxon.name),
   ]
 
   ggplot2::ggplot(
     data,
-    ggplot2::aes(x = month, y = reorder(species, dplyr::desc(species)))
+    ggplot2::aes(x = month, y = reorder(year, dplyr::desc(year)))
   ) +
     ggplot2::geom_rect(
       xmin = 1, xmax = 1.1, ymin = 1, ymax = 1.1,
       linewidth = 0, ggplot2::aes(colour = "No data")
     ) + # this is to create the "No data" legend entry, but if there's another way then perfect
     ggplot2::geom_tile(ggplot2::aes(fill = scaleP)) +
-    ggh4x::facet_nested_wrap(~primer, ncol = 1, scales = "free") +
+    ggh4x::facet_nested_wrap(~primer + species, ncol = 1, scales = "free") +
     # ggh4x::force_panelsizes(rows=)+ It would be nice to have all the rows the same size, but I'm not sure if there's a way
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0, 1), na.value = "lightgrey") +
     #   ggplot2::scale_y_discrete(expand=c(0,0))+
     ggplot2::scale_x_continuous(breaks = 1:12, labels = month.abb) +
     ggplot2::labs(
       fill = "Normalized \nDetection \nProbability", x = NULL, y = NULL,
-      title = "Species monthly normalized detection probability by primer \n(years combined)",
+      title = "Species monthly normalized detection probability by primer",
       subtitle = paste0(stringr::str_to_title(taxon.level), ": ", taxon.name),
       colour = NULL
     ) +
@@ -60,7 +60,6 @@ hm_fig <- function(
     ggplot2::theme_minimal(base_size = 10) +
     ggplot2::theme(
       panel.grid = ggplot2::element_blank(),
-      axis.text.y = ggplot2::element_text(face = "italic"),
       legend.spacing = grid::unit(0, "cm")
     )
 }
