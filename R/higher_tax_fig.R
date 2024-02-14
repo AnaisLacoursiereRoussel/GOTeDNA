@@ -1,7 +1,7 @@
 #' Display actual sampling effort of taxa within specified taxonomic group.
 #'
 #' @description This function displays the actual number of eDNA samples taken
-#' for all taxa of a specified higher taxonomic group per year.
+#' for all species of a specified higher taxonomic group per year.
 #'
 #' @param data (required, data.frame): Data.frame read in with [read_data()]
 #' @param higher.taxon.select (required, character): Higher taxonomic level of
@@ -9,10 +9,6 @@
 #' @param taxon.name (required, character): Select taxon name that matches the level
 #' provided in `higher.taxon.select`. E.g., if `taxon.level = "class"`
 #' enter class name, etc..
-#' @param view.by.level (required, character): Lower taxonomic level to view
-#' detection probability by. Cannot be higher level than higher group specified in
-#' `higher.taxon.select` Choices = one of `c("phylum", "class", "order",
-#' "family", "genus")`
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname higher_tax_fig
@@ -22,11 +18,10 @@
 #' higher_tax_fig(
 #'   data = D_mb_ex,
 #'   higher.taxon.select = "phylum",
-#'   taxon.name = "Bryozoa",
-#'   view.by.level = "genus"
+#'   taxon.name = "Bryozoa"
 #' )
 #' }
-higher_tax_fig <- function(data, higher.taxon.select, taxon.name) { #}, view.by.level) {
+higher_tax_fig <- function(data, higher.taxon.select, taxon.name) {
   oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
   on.exit(options(dplyr.summarise.inform = oop))
@@ -35,14 +30,6 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name) { #}, view.by.
     stop("Taxon not found in data")
   }
 
-#  if (!is.null(view.by.level)) {
-#    view.by.level <- match.arg(
-#      arg = view.by.level,
-#      choices = c("phylum", "class", "order", "family", "genus"),
-#      several.ok = FALSE
-#    )
-#  }
-
   if (!is.null(higher.taxon.select)) {
     higher.taxon.select <- match.arg(
       arg = higher.taxon.select,
@@ -50,7 +37,6 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name) { #}, view.by.
       several.ok = FALSE
     )
   }
-
 
   data %<>%
     dplyr::filter(!!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
