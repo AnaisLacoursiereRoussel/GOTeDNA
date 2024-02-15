@@ -58,5 +58,5 @@ D_mb <- read_data(
 }
 }
 \author{
-Melissa Morrison \email{Melissa.Morrison@dfo-mpo.gc.ca}
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
 }

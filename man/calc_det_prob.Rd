@@ -38,3 +38,6 @@ separate. Outputs are used in subsequent functions.
  calc_det_prob(data = D_mb_ex)
 }
 }
+\author{
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
+}

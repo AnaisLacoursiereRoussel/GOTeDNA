@@ -23,3 +23,6 @@ sample_size_fig(
 )
 }
 }
+\author{
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
+}

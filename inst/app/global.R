@@ -74,6 +74,11 @@ plotNotAvailable <- function() {
   plotText("Plot not available yet.")
 }
 
+plotNotAvailableForqPCR <- function() {
+  plotText("Plot not available for qPCR data.")
+}
+
+
 
 placeholder_thumbnail <- function() {
   img(

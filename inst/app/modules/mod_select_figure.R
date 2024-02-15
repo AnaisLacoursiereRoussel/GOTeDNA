@@ -12,7 +12,16 @@ mod_select_figure_ui <- function(id) {
             12,
             h2("Observations"),
             h3("Compute optimal detection window"),
-            selectInput(ns("primer"), "Primer", choices = "unkown"),
+            fluidRow(
+              column(
+                4,
+                selectInput(ns("primer"), "Primer", choices = "unkown")
+              ),
+              column(
+                4,
+                selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 90)
+              )
+            ),
             actionButton(
               ns("calc_window"),
               label = "Compute & visualize",
@@ -140,7 +149,7 @@ mod_select_figure_server <- function(id, r) {
           r$scaledprobs <- scale_newprob(r$data_filtered, newprob)
           cli::cli_alert_info("Computing optimal detection window")
           win <- calc_window(
-            data = r$data_filtered, threshold = "90",
+            data = r$data_filtered, threshold = input$threshold,
             species.name = unique(r$data_filtered$scientificName),
             scaledprobs = r$scaledprobs
           )
@@ -189,13 +198,17 @@ mod_select_figure_server <- function(id, r) {
             cli::cli_alert_danger("cannot render figure 2")
             plotNotAvailableSpeciesLevel()
           } else {
-            data_slc <- r$scaledprobs$Pscaled_month |>
-              dplyr::filter(species == r$taxon.name)
-            if (input$primer != "not available") {
-              data_slc <- data_slc |>
-                dplyr::filter(primer == input$primer)
+            if (r$data_type == "qPCR") {
+              plotNotAvailableForqPCR()
+            } else {
+              data_slc <- r$scaledprobs$Pscaled_month |>
+                dplyr::filter(species == r$taxon.name)
+              if (input$primer != "not available") {
+                data_slc <- data_slc |>
+                  dplyr::filter(primer == input$primer)
+              }
+              effort_needed_fig(data_slc)
             }
-            effort_needed_fig(data_slc)
           }
         } else {
           plotNotAvailable()
@@ -207,13 +220,17 @@ mod_select_figure_server <- function(id, r) {
     output$fig_3 <- renderPlot(
       {
         if (r$fig_ready) {
-          id_lvl <- which(r$taxon_slc != "All") |> which.max()
-          higher_tax_fig(
-            data = r$data_filtered,
-            higher.taxon.select = taxon_levels[min(id_lvl, 2)],
-            taxon.name = r$taxon_slc[min(id_lvl + 1, 2)],
-            view.by.level = taxon_levels[min(id_lvl + 1, 3)]
-          )
+          if (r$data_type == "qPCR") {
+            plotNotAvailableForqPCR()
+          } else {
+            id_lvl <- which(r$taxon_slc != "All") |> which.max()
+            higher_tax_fig(
+              data = r$data_filtered,
+              higher.taxon.select = taxon_levels[min(id_lvl, 2)],
+              taxon.name = r$taxon_slc[min(id_lvl + 1, 2)],
+              view.by.level = taxon_levels[min(id_lvl + 1, 3)]
+            )
+          }
         } else {
           plotNotAvailable()
         }
@@ -236,12 +253,16 @@ mod_select_figure_server <- function(id, r) {
     output$fig_5 <- renderPlot(
       {
         if (r$fig_ready) {
-          data_slc <- r$data_filtered
-          if (input$primer != "not available") {
-            data_slc <- data_slc |>
-              dplyr::filter(target_subfragment == input$primer)
+          if (r$data_type == "qPCR") {
+            plotNotAvailableForqPCR()
+          } else {
+            data_slc <- r$data_filtered
+            if (input$primer != "not available") {
+              data_slc <- data_slc |>
+                dplyr::filter(target_subfragment == input$primer)
+            }
+            smooth_fig(data = data_slc, species.name = r$taxon.name)
           }
-          smooth_fig(data = data_slc, species.name = r$taxon.name)
         } else {
           plotNotAvailable()
         }
@@ -260,7 +281,7 @@ mod_select_figure_server <- function(id, r) {
           }
           thresh_fig(
             r$taxon.level, r$taxon.name,
-            threshold = "90", data_slc
+            threshold = input$threshold, data_slc
           )
         } else {
           plotNotAvailable()

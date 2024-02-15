@@ -28,3 +28,6 @@ effort_needed_fig(
 )
 }
 }
+\author{
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
+}

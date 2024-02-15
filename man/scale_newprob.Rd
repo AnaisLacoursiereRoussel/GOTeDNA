@@ -49,3 +49,6 @@ newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
 scale_newprob(data = D_mb, newprob)
 }
 }
+\author{
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
+}

@@ -24,3 +24,6 @@ data <- D_mb_ex |> dplyr::filter(
 smooth_fig(data = data, species.name = "Acartia longiremis")
 }
 }
+\author{
+Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@dfo-mpo.gc.ca}
+}
