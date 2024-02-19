@@ -89,6 +89,15 @@ placeholder_thumbnail <- function() {
   )
 }
 
+add_thumbnail <- function(src, alt = "Figure thumbnail") {
+  img(
+    src = src,
+    alt = alt,
+    id = "fig-thumbnail",
+    style = "height: 5rem"
+  )
+}
+
 
 taglist_fig_info <- function(title, info, scr = NULL) {
   column(
@@ -101,7 +110,7 @@ taglist_fig_info <- function(title, info, scr = NULL) {
       ),
       column(
         4,
-        placeholder_thumbnail()
+        add_thumbnail(scr)
       ),
     )
   )

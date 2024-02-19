@@ -66,27 +66,33 @@ mod_select_figure_ui <- function(id) {
             fluidRow(
               taglist_fig_info(
                 "Heatmap",
-                "Heatmap of scaled monthly detection probabilities for taxon."
+                "Heatmap of scaled monthly detection probabilities for taxon.",
+                "img/tn_heatmap.png"
               ),
               taglist_fig_info(
                 "Sampling effort 1",
-                "Sampling effort needed to obtain different detection thresholds."
+                "Sampling effort needed to obtain different detection thresholds.",
+                "img/tn_effort.png"
               ),
               taglist_fig_info(
                 "Sampling effort 2",
-                "Sampling effort of taxa within specified taxonomic group per year."
+                "Sampling effort of taxa within specified taxonomic group per year.",
+                "img/tn_higher.png"
               ),
               taglist_fig_info(
                 "Sampling effort 3",
-                "Sampling effort by species, year, and region."
+                "Sampling effort by species, year, and region.",
+                "img/tn_sample_size.png"
               ),
               taglist_fig_info(
                 "Detection probability 1",
-                "Display species monthly detection probability.."
+                "Display species monthly detection probability.",
+                "img/tn_smooth.png"
               ),
               taglist_fig_info(
                 "Detection probability 2",
-                "Display monthly detection probabilities for selected taxon, and detection probability threshold"
+                "Display monthly detection probabilities for selected taxon, and detection probability threshold.",
+                "img/tn_thresh.png"
               )
             )
           )
@@ -290,14 +296,6 @@ mod_select_figure_server <- function(id, r) {
       res = 144
     )
 
-    # output$fig_all <- renderPlot(
-    #   {
-    #     if (r$fig_ready) {
-    #     } else {
-    #       plotNotAvailable()
-    #     }
-    #   },
-    #   res = 144
-    # )
+
   })
 }
