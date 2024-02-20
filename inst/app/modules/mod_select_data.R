@@ -4,17 +4,37 @@ mod_select_data_ui <- function(id) {
   tagList(
     div(
       id = "data_request",
-      h2("Data request", class = "col_1"),
-      radioButtons(ns("datatype"),
-        label = "Type of data",
-        choices = list(
-          "Species specific (qPCR)" = "qPCR",
-          "Multi-species (metabarcoding)" = "metabarcoding"
-        ),
-        selected = "qPCR",
-        inline = TRUE
-      ),
       fluidRow(
+        column(
+          8,
+          h2("Data request", class = "col_1")
+        ),
+        column(
+          4,
+          div(
+            id = "reset_button",
+            actionButton(ns("reset"), "Reset",
+              icon = icon("refresh"),
+              title = "reset selection to default values"
+            )
+          )
+        ),
+        column(
+          8,
+          radioButtons(ns("datatype"),
+            label = "Type of data",
+            choices = list(
+              "Species specific (qPCR)" = "qPCR",
+              "Multi-species (metabarcoding)" = "metabarcoding"
+            ),
+            selected = "qPCR",
+            inline = TRUE
+          ),
+        ),
+        column(
+          4,
+          selectInput(ns("primer"), "Primer", choices = "unkown")
+        ),
         column(
           6,
           selectInput(ns("slc_phy"), "Phylum", choices = "All"),
@@ -43,9 +63,9 @@ mod_select_data_ui <- function(id) {
               icon = icon("check"),
               title = "confirm spatial selection"
             ),
-            actionButton(ns("refresh"), "Refresh",
-              icon = icon("refresh"),
-              title = "refresh spatial selection"
+            actionButton(ns("refresh"), "Clear",
+              icon = icon("eraser"),
+              title = "clear current spatial selection"
             ),
           )
         )
@@ -62,9 +82,34 @@ mod_select_data_ui <- function(id) {
   )
 }
 
+
 mod_select_data_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    observe({
+      if (input$datatype == "qPCR") {
+        updateSelectInput(
+          session,
+          "primer",
+          choices = "not available"
+        )
+      } else {
+        tg <- table(r$data_filtered$target_subfragment) |>
+          sort() |>
+          rev()
+        updateSelectInput(
+          session,
+          "primer",
+          choices = names(tg),
+          selected = names(tg)[1]
+        )
+      }
+    })
+
+    observe(
+      r$primer <- input$primer
+    )
 
     observeEvent(input$datatype, {
       r$data_type <- input$datatype
@@ -153,14 +198,9 @@ mod_select_data_server <- function(id, r) {
         input$slc_phy, input$slc_cla, input$slc_gen,
         input$slc_spe
       )
+      r$fig_ready <- FALSE
       # count data
-      r$geom <- r$data_station |>
-        dplyr::inner_join(
-          r$data_filtered |>
-            dplyr::group_by(ecodistrict, station) |>
-            dplyr::summarise(count = n()),
-          join_by(ecodistrict, station)
-        )
+      r$geom <- filter_station(r)
       # reset figures
       r$reload_map <- r$reload_map + 1
     })
@@ -175,7 +215,8 @@ mod_select_data_server <- function(id, r) {
             r$geom <- r$geom[id_slc, ]
             r$data_filtered <- r$data_filtered |>
               dplyr::filter(station %in% r$geom$station)
-            # sf_edits <<- reactive(list(finished = NULL))
+            r$geom_slc <- sf_edits()$all
+            r$station_slc <- r$geom$station
           } else {
             showNotification("No station selected", type = "warning")
           }
@@ -191,6 +232,18 @@ mod_select_data_server <- function(id, r) {
 
     observeEvent(input$show_map_info, r$show_map_info <- TRUE)
 
+    observeEvent(input$reset, {
+      r$data_filtered <- filter_taxa_data(
+        gotedna_data[[input$datatype]], "All", "All", "All", "All"
+      )
+      updateSelectInput(session, "slc_phy",
+        selected = "All",
+        choices = c("All", unique(r$data_filtered$phylum))
+      )
+      r$geom_slc <- r$station_slc <- NULL
+      r$geom <- filter_station(r)
+      r$reload_map <- r$reload_map + 1
+    })
 
 
     observeEvent(input$refresh, {
@@ -198,13 +251,8 @@ mod_select_data_server <- function(id, r) {
         gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
         input$slc_gen, "All"
       )
-      r$geom <- r$data_station |>
-        dplyr::inner_join(
-          r$data_filtered |>
-            dplyr::group_by(ecodistrict, station) |>
-            dplyr::summarise(count = n()),
-          join_by(ecodistrict, station)
-        )
+      r$geom_slc <- r$station_slc <- NULL
+      r$geom <- filter_station(r)
       r$reload_map <- r$reload_map + 1
     })
 
@@ -215,15 +263,54 @@ mod_select_data_server <- function(id, r) {
     observeEvent(r$reload_map, {
       sf_edits <<- callModule(
         mapedit::editMod,
-        leafmap = leaflet(isolate(r$geom)) |>
-          addProviderTiles("Esri.OceanBasemap", group = "Ocean") |>
-          addMarkers(
-            data = isolate(r$geom),
-            clusterOptions = markerClusterOptions(),
-            label = ~ paste(count, "samples")
-          ),
+        leafmap = make_map(r),
         id = "map-select"
       )
     })
   })
+}
+
+
+# filter via inner join and used to count samples
+filter_station <- function(r) {
+  if (length(r$station_slc)) {
+    sta <- r$data_station |>
+      dplyr::filter(station %in% r$station_slc)
+  } else {
+    sta <- r$data_station
+  }
+  sta |>
+    dplyr::inner_join(
+      r$data_filtered |>
+        dplyr::group_by(ecodistrict, station) |>
+        dplyr::summarise(count = n()),
+      join_by(ecodistrict, station)
+    )
+}
+
+make_map <- function(r) {
+  out <- leaflet(isolate(r$geom)) |>
+    addProviderTiles("Esri.OceanBasemap", group = "Ocean") |>
+    addMarkers(
+      data = isolate(r$geom),
+      clusterOptions = markerClusterOptions(),
+      label = ~ paste(count, "samples")
+    )
+  if (!is.null(isolate(r$geom_slc))) {
+    geom_type <- isolate(r$geom_slc) |>
+      st_geometry_type() |>
+      as.character()
+    ind <- geom_type == "POLYGON"
+    # browser()
+    if (length(ind)) {
+      out <- out |>
+        addPolygons(data = isolate(r$geom_slc)[ind, ], color = "#53b2ad", fillOpacity = 0.1)
+    } else {
+      showNotification(
+        "Only rectangles and polygons can be used",
+        type = "warning"
+      )
+    }
+  }
+  out
 }

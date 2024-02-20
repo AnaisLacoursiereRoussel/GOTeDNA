@@ -3,9 +3,11 @@ server <- function(input, output, session) {
   r <- reactiveValues(
     geom = NULL,
     geom_slc = NULL,
-    fig_ready = FALSE,
+    station_slc = NULL,
     show_map_info = FALSE,
     reload_map = 0,
+    fig_ready = FALSE,
+    current_fig = "fig1"
   )
 
   observeEvent(r$data_filtered, {

@@ -58,12 +58,12 @@ get_taxon_level <- function(phy, cla, gen, spe) {
   }
 }
 
-plotText <- function(txt) {
+plotText <- function(txt, ...) {
   plot(c(-1, 1), c(-1, 1),
     ann = FALSE, bty = "n", type = "n", xaxt = "n",
     yaxt = "n"
   )
-  text(0, 0, txt)
+  text(0, 0, txt, ...)
 }
 
 plotNotAvailableSpeciesLevel <- function() {
@@ -71,7 +71,7 @@ plotNotAvailableSpeciesLevel <- function() {
 }
 
 plotNotAvailable <- function() {
-  plotText("Plot not available yet.")
+  plotText("Plot not available yet.", cex = 1.5)
 }
 
 plotNotAvailableForqPCR <- function() {
@@ -79,18 +79,22 @@ plotNotAvailableForqPCR <- function() {
 }
 
 
-
-placeholder_thumbnail <- function() {
-  img(
-    src = "img/GOTeDNA_wave.png",
-    alt = "GOTeDNA_logo",
-    id = "place_holder_logo_gotedna",
-    style = "height: 4rem"
+add_thumbnail_button <- function(id, src, alt = "Figure thumbnail") {
+  # https://stackoverflow.com/questions/44841346/adding-an-image-to-shiny-action-button
+  tags$button(
+    id = id,
+    class = "btn action-button",
+    tags$img(
+      src = src,
+      alt = alt,
+      id = "fig-thumbnail",
+      style = "height: 5rem"
+    )
   )
 }
 
 
-taglist_fig_info <- function(title, info, scr = NULL) {
+taglist_fig_info <- function(id, title, info, scr = NULL) {
   column(
     6,
     fluidRow(
@@ -101,7 +105,7 @@ taglist_fig_info <- function(title, info, scr = NULL) {
       ),
       column(
         4,
-        placeholder_thumbnail()
+        add_thumbnail_button(id, scr)
       ),
     )
   )

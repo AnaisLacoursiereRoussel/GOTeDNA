@@ -67,9 +67,9 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name) {
       labels = month.abb) +
     ggplot2::scale_size_continuous(limits = c(0, NA), breaks = seq(0, 50, 10)) +
     ggplot2::theme_minimal(base_size = 10) +
-    ggplot2::guides(size = guide_legend(order = 1),
-                    colour = guide_legend(order = 2,
-                                          label.theme = element_text(
+    ggplot2::guides(size = ggplot2::guide_legend(order = 1),
+                    colour = ggplot2::guide_legend(order = 2,
+                                          label.theme = ggplot2::element_text(
                                             face = "italic",
                                             size = 8
                                           )
