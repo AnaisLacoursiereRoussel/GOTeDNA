@@ -14,39 +14,17 @@ mod_select_figure_ui <- function(id) {
           icon = icon("gear"),
           style = "border-color: #53b2ad; border-width: 3px; font-size: 1.25rem; border-radius: 0.8rem"
         ),
-        h3("Data selected details"),
-        tags$table(
-          tags$tbody(
-            tags$tr(
-              tags$td("Optimal sampling period: ", style = "text-align:right;"),
-              tags$td(uiOutput(ns("opt_sampl")))
-            )
-          ),
-          tags$tbody(
-            tags$tr(
-              tags$td("Confidence: ", style = "text-align:right;"),
-              tags$td(uiOutput(ns("conf")))
-            )
-          ),
-          tags$tbody(
-            tags$tr(
-              tags$td("Variation among year: ", style = "text-align:right;"),
-              tags$td(uiOutput(ns("var_year")))
-            )
-          ),
-          tags$tbody(
-            tags$tr(
-              tags$td("Variation among primers: ", style = "text-align:right;"),
-              tags$td(uiOutput(ns("var_primer")))
-            )
-          ),
-          tags$tbody(
-            tags$tr(
-              tags$td("Variation among datasets: ", style = "text-align:right;"),
-              tags$td(uiOutput(ns("var_dat")))
-            )
-          ),
-        ),
+        h3("Sampling info"),
+        h6("Optimal sampling period: "),
+        uiOutput(ns("opt_sampl")),
+        h6("Confidence: "),
+        uiOutput(ns("conf"), fill = TRUE),
+        h6("Variation among year: "),
+        uiOutput(ns("var_year"))
+        # h5("Variation among primers: ")
+        # uiOutput(ns("var_primer"))
+        # h5("Variation among datasets: ")
+        # (uiOutput(ns("var_dat"))
       ),
       column(
         9,
@@ -58,7 +36,7 @@ mod_select_figure_ui <- function(id) {
       fluidRow(
         column(
           12,
-          h3(icon("info-circle"), "About the figures"),
+          h3(icon("info-circle"), "Figures"),
         ),
         fluidRow(
           taglist_fig_info(
@@ -118,56 +96,53 @@ mod_select_figure_server <- function(id, r) {
         if (r$taxon_slc[1] == "All") {
           showNotification("Select at least one phylum", type = "warning")
         } else {
-          # compute probabilities
-          cli::cli_alert_info("Computing probablities")
-          showNotification(
-            "Computing time window",
-            type = "message",
-            duration = NULL,
-            id = "notif_calc_win"
-          )
-          # filter for primer
-          if (r$primer != "not available") {
-            r$data_filtered2 <- r$data_filtered |>
-              dplyr::filter(target_subfragment == r$primer)
+          r$data_filtered2 <- prepare_data(r)
+          if (nrow(r$data_filtered2)) {
+            cli::cli_alert_info("Computing probablities")
+            showNotification(
+              "Computing time window",
+              type = "message",
+              duration = NULL,
+              id = "notif_calc_win"
+            )
+
+            newprob <- calc_det_prob(r$data_filtered2)
+            r$scaledprobs <- scale_newprob(r$data_filtered2, newprob)
+            cli::cli_alert_info("Computing optimal detection window")
+            win <- calc_window(
+              data = r$data_filtered2, threshold = input$threshold,
+              species.name = unique(r$data_filtered2$scientificName),
+              scaledprobs = r$scaledprobs
+            )
+            removeNotification(id = "notif_calc_win")
+
+            if (is.null(win)) {
+              showNotification("No optimal detection window", type = "warning")
+              output$opt_sampl <- renderUI("???")
+              output$conf <- renderUI("???")
+              output$var_year <- renderUI("???")
+            } else {
+              output$opt_sampl <- renderUI(win$period)
+              output$conf <- renderUI(win$confidence)
+              output$var_year <- renderUI(2)
+            }
+            #output$var_primer <- renderUI("TODO")
+            #output$var_dat <- renderUI("TODO")
+
+            r$fig_ready <- TRUE
+
+            # freeze taxon level selected
+            r$taxon_slc_compute <- r$taxon_slc
+            r$taxon_lvl_compute <- do.call(get_taxon_level, as.list(r$taxon_slc))
+            # taxon level selected
+            r$taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
+            r$taxon.level <- taxon_levels[r$taxon_lvl_compute]
           } else {
-            r$data_filtered2 <- r$data_filtered
+            showNotification("Data selection is empty", type = "warning")
           }
-          newprob <- calc_det_prob(r$data_filtered2)
-          r$scaledprobs <- scale_newprob(r$data_filtered2, newprob)
-          cli::cli_alert_info("Computing optimal detection window")
-          win <- calc_window(
-            data = r$data_filtered2, threshold = input$threshold,
-            species.name = unique(r$data_filtered2$scientificName),
-            scaledprobs = r$scaledprobs
-          )
-          removeNotification(id = "notif_calc_win")
-
-          if (is.null(win)) {
-            showNotification("No optimal detection window", type = "warning")
-            output$opt_sampl <- renderUI("???")
-            output$conf <- renderUI("???")
-            output$var_year <- renderUI("???")
-          } else {
-            output$opt_sampl <- renderUI(win$period)
-            output$conf <- renderUI(win$confidence)
-            output$var_year <- renderUI(2)
-          }
-          output$var_primer <- renderUI("TODO")
-          output$var_dat <- renderUI("TODO")
-
-          r$fig_ready <- TRUE
-
-          # freeze taxon level selected
-          r$taxon_slc_compute <- r$taxon_slc
-          r$taxon_lvl_compute <- do.call(get_taxon_level, as.list(r$taxon_slc))
-          # taxon level selected
-          r$taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
-          r$taxon.level <- taxon_levels[r$taxon_lvl_compute]
         }
       }
     })
-
 
     observeEvent(input$fig_heatmap, r$current_fig <- "fig1")
     observeEvent(input$fig_effort, r$current_fig <- "fig2")
@@ -176,18 +151,36 @@ mod_select_figure_server <- function(id, r) {
     observeEvent(input$fig_smooth, r$current_fig <- "fig5")
     observeEvent(input$fig_thresh, r$current_fig <- "fig6")
 
-    output$current_fig <- renderPlot({
-      switch(r$current_fig, 
-        fig1 = draw_fig1(r),
-        fig2 = draw_fig2(r),
-        fig3 = draw_fig3(r, taxon_levels),
-        fig4 = draw_fig4(r),
-        fig5 = draw_fig5(r),
-        fig6 = draw_fig6(r, input$threshold)
-      )
-    }, res = 150)
-
+    output$current_fig <- renderPlot(
+      {
+        switch(r$current_fig,
+          fig1 = draw_fig1(r),
+          fig2 = draw_fig2(r),
+          fig3 = draw_fig3(r, taxon_levels),
+          fig4 = draw_fig4(r),
+          fig5 = draw_fig5(r),
+          fig6 = draw_fig6(r, input$threshold)
+        )
+      },
+      res = 150
+    )
   })
+}
+
+
+prepare_data <- function(r) {
+  if (length(r$station_slc)) {
+    out <- r$data_filtered |>
+      dplyr::filter(station %in% r$station_slc)
+  } else {
+    out <- r$data_filtered
+  }
+
+  if (r$primer != "not available") {
+    r$data_filtered2 <- out |>
+      dplyr::filter(target_subfragment == r$primer)
+  }
+  out
 }
 
 
@@ -210,10 +203,6 @@ draw_fig2 <- function(r) {
       } else {
         data_slc <- r$scaledprobs$Pscaled_month |>
           dplyr::filter(species == r$taxon.name)
-        # if (r$primer != "not available") {
-        #   data_slc <- data_slc |>
-        #     dplyr::filter(primer == r$primer)
-        # }
         effort_needed_fig(data_slc)
       }
     }
@@ -241,7 +230,6 @@ draw_fig3 <- function(r, taxon_levels) {
 
 draw_fig4 <- function(r) {
   if (r$fig_ready) {
-    # not filtered for primer
     sample_size_fig(data = r$data_filtered, species.name = r$taxon.name)
   } else {
     plotNotAvailable()
@@ -268,13 +256,9 @@ draw_fig5 <- function(r) {
 draw_fig6 <- function(r, threshold) {
   if (r$fig_ready) {
     data_slc <- r$scaledprobs
-    # maybe better to change the input in thresh_fig.
-    if (r$primer != "not available") {
-      data_slc$Pscaled_month <- data_slc$Pscaled_month |>
-        dplyr::filter(primer == r$primer)
-    }
     thresh_fig(
-      r$taxon.level, r$taxon.name, threshold = threshold, scaledprobs = data_slc
+      r$taxon.level, r$taxon.name,
+      threshold = threshold, scaledprobs = data_slc
     )
   } else {
     plotNotAvailable()

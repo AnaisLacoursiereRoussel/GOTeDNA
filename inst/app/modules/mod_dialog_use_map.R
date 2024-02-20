@@ -4,8 +4,10 @@ mod_dialog_map_info_server <- function(id, r) {
         query_modal <- modalDialog(
             title = "How to select stations using the interactive map",
             tags$ol(
-                tags$li("Draw one or several polygons (or rectangles) that encapsulate the stations of interest."),
-                tags$li("Click on the 'confirm button'")
+                tags$li("Draw one or several polygons (or rectangles) that encapsulate the stations of interest. 
+                Note that points and lines will be ignored."),
+                tags$li("Click on 'Confirm' to conform the selection."),
+                tags$li("If you want to remove the current selection, click on 'clear'.")
             ),
             easyClose = TRUE,
             size = "l",

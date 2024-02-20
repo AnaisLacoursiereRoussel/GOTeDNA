@@ -8,8 +8,8 @@ h2 {
 }
 
 #logo_gotedna {
-  height: 6rem;
-  margin-left: 10%;
+  height: 5.2rem;
+  margin-left: 8%;
 }
 
 #data_request {
@@ -43,9 +43,11 @@ h2 {
   font-size: 1.4rem;
 }
 
-#gotedna_info {
+#gotedna_info,
+#reset_button {
   text-align: right;
 }
+
 
 #gotedna_info .btn {
   background-color: transparent;

@@ -3,6 +3,7 @@ server <- function(input, output, session) {
   r <- reactiveValues(
     geom = NULL,
     geom_slc = NULL,
+    station_slc = NULL,
     show_map_info = FALSE,
     reload_map = 0,
     fig_ready = FALSE,

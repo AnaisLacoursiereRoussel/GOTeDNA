@@ -79,16 +79,6 @@ plotNotAvailableForqPCR <- function() {
 }
 
 
-
-placeholder_thumbnail <- function() {
-  img(
-    src = "img/GOTeDNA_wave.png",
-    alt = "GOTeDNA_logo",
-    id = "place_holder_logo_gotedna",
-    style = "height: 4rem"
-  )
-}
-
 add_thumbnail_button <- function(id, src, alt = "Figure thumbnail") {
   # https://stackoverflow.com/questions/44841346/adding-an-image-to-shiny-action-button
   tags$button(
