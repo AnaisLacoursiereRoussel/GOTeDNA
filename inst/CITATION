@@ -3,7 +3,7 @@ citHeader("To cite assigner in publications use:")
 citEntry(
 entry="Manual",
 title = "gotedna: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs",
-year = "2023",
+year = "2024",
 author = personList(as.person("Anais Lacoursiere-Roussel et al.")),
 textVersion = paste("Lacoursiere-Roussel, A et al. (2023). gotedna: Guidance on optimal eDNA sampling periods to develop, optimize and interpret monitoring programs using R. R package version 0.1.")
 )
