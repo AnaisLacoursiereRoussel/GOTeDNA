@@ -5,14 +5,16 @@ mod_dialog_disclaimers_server <- function(id, r) {
       title = "Welcome to GOTeDNA!",
       tagList(
         p(em("Guidance on Optimal Timing for eDNA"), "is an interactive tool displaying coastal environmental DNA (eDNA) observations."),
-        p("GOTeDNA intends to guide the development of eDNA research and/or monitoring programs based on the observed and predicted optimal detection period(s) for the taxonomic group(s) of interest and biodiversity"),
+        p("GOTeDNA intends to guide the development of eDNA research and/or monitoring programs based on the observed and predicted optimal detection period(s) for the taxonomic group(s) of interest."),
         h5("Disclaimers:"),
         p("This tool intends to infer optimal eDNA detection periods only, not species spatial distribution."),
-        p("Caution should occur regarding potential errors in taxonomic assignment and/or non-specific amplification. Website
-        managers are not responsible for any lab and bioinformatic misidentification. Contact information for data owners are
-        provided for any questions relative to the data."),
-        p("We provide guidance on data limitation and interpretation to help communication between data owners and website users, but we recommend interpreting results with eDNA experts."),
-        p("This tool does not aim to quantify population. Caution should be exercised in interpreting species abundance from these data.")
+        p("Website managers are not responsible for possible errors in the data (e.g., taxonomic misidentification, non-specific amplification, false negative results, etc.). Contact information for data owners is provided for any questions pertaining to the data. "),
+        p("GOTeDNA aims to provide guidance on data trends, gaps and facilitate interpretation to help communication, but we recommend interpreting results with eDNA experts. "),
+        p("This tool does not aim to quantify species abundance from these data, and we strongly caution against doing so."),
+        p("All statistical analyses are provided in a R package at <placeholder>"),
+        br(),
+        p("This tool should be cited as the reference publication: Lacoursière-Roussel, A., Morrison, M., […] (In preparation) Guidance on Optimal Timing for eDNA […]."),
+        p("Data used should cite", em("Data owners"), "Reference is provided.")
       ),
       easyClose = FALSE,
       size = "xl",

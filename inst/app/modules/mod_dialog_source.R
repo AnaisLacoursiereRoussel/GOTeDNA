@@ -23,11 +23,12 @@ mod_dialog_source_server <- function(id, r) {
     output$source <- DT::renderDT(
       r$data_filtered |>
       dplyr::ungroup() |>
-        dplyr::select(
-          c("GOTeDNA_ID", "GOTeDNA_version", "target_gene", "ecodistrict", 
-          "station")
-        ) |>
-        dplyr::distinct()
+        dplyr::group_by(
+          GOTeDNA_ID, GOTeDNA_version, target_subfragment, ecodistrict
+        ) |> summarise(
+          samples = n(),
+          stations = length(unique(station))
+        )
     )
 
     observeEvent(input$dismiss, {

@@ -20,6 +20,34 @@ mod_select_data_ui <- function(id) {
           )
         ),
         column(
+          6,
+          radioButtons(ns("datasource"),
+            label = "Data source",
+            choices = list(
+              "GOTeDNA" = "gotedna",
+              "Your own data" = "external_data"
+            ),
+            selected = "gotedna",
+            inline = TRUE
+          ),
+        ),
+        column(
+          6,
+          div(
+            id = ns("external_files"),
+            fileInput(
+              ns("external_file"),
+              "upload your files",
+              multiple = TRUE,
+              accept = NULL,
+              width = NULL,
+              buttonLabel = "Browse...",
+              placeholder = "No file selected",
+              capture = NULL
+            )
+          )
+        ),
+        column(
           8,
           radioButtons(ns("datatype"),
             label = "Type of data",
@@ -73,9 +101,9 @@ mod_select_data_ui <- function(id) {
       mapedit::editModUI(ns("map-select"), height = "50vh"),
       div(
         id = "button_source",
-        actionButton("show_source", "Sources",
+        actionButton("show_source", "Reference data authorship",
           icon = icon("eye"),
-          title = "access data sources"
+          title = "access list of data authorship"
         )
       )
     )
@@ -86,6 +114,20 @@ mod_select_data_ui <- function(id) {
 mod_select_data_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+
+    observe({
+      # change when reading of external data is implemented
+      if (input$datasource == "gotedna") {
+        hide("external_files")
+        gotedna_data <- gotedna_data0
+        gotedna_station <- gotedna_station0
+      } else {
+        show("external_files")
+        gotedna_data <- gotedna_data0
+        gotedna_station <- gotedna_station0
+      }
+    })
 
     observe({
       if (input$datatype == "qPCR") {
@@ -301,7 +343,6 @@ make_map <- function(r) {
       st_geometry_type() |>
       as.character()
     ind <- geom_type == "POLYGON"
-    # browser()
     if (length(ind)) {
       out <- out |>
         addPolygons(data = isolate(r$geom_slc)[ind, ], color = "#53b2ad", fillOpacity = 0.1)

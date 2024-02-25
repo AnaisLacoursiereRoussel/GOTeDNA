@@ -20,11 +20,8 @@ gloss$Term <- paste0('<p align ="right"><b>', trimws(gloss$Term), "</b></p>")
 gloss$Definition <- trimws(gloss$Definition)
 
 # import all GOTeDNA data
-gotedna_data <- readRDS("data/gotedna_data.rds")
-gotedna_station <- readRDS("data/gotedna_station.rds")
-#
-newprob <- readRDS("data/newprob.rds")
-Pscaled <- readRDS("data/Pscaled.rds")
+gotedna_data0 <- readRDS("data/gotedna_data.rds")
+gotedna_station0 <- readRDS("data/gotedna_station.rds")
 
 taxon_levels <- c("phylum", "class", "genus", "species")
 
