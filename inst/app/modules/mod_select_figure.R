@@ -117,7 +117,7 @@ mod_select_figure_server <- function(id, r) {
             removeNotification(id = "notif_calc_win")
 
             if (is.null(win)) {
-              showNotification("No optimal detection window", type = "warning")
+              # showNotification("No optimal detection window", type = "warning")
               output$opt_sampl <- renderUI("???")
               output$conf <- renderUI("???")
               output$var_year <- renderUI("???")
