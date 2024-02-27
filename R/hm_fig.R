@@ -48,7 +48,6 @@ hm_fig <- function(
     ggplot2::scale_x_continuous(breaks = 1:12, labels = month.abb) +
     ggplot2::labs(
       fill = "Normalized \nDetection \nProbability", x = NULL, y = NULL,
-      title = "Species monthly normalized detection probability by primer",
       subtitle = paste0(stringr::str_to_title(taxon.level), ": ", taxon.name),
       colour = NULL
     ) +

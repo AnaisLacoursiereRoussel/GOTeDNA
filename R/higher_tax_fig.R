@@ -52,13 +52,13 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name) {
       mapping = ggplot2::aes(
         x = month,
         y = freq_det,
-        colour = scientificName,#!!dplyr::ensym(view.by.level),
+        colour = scientificName,
         size = n
       ),
       alpha = 0.9,
       na.rm = TRUE, width = 0.5, height = 0.01
     ) +
-    ggplot2::scale_colour_manual(values = palette("Alphabet"))+ #manual(values = RColorBrewer::brewer.pal(length(unique(data$taxon.name)), "Dark2")) +
+    ggplot2::scale_colour_manual(values = palette("Alphabet"))+
     ggh4x::facet_grid2(year ~ .,
       strip = ggh4x::strip_nested(bleed = TRUE)
     ) +
