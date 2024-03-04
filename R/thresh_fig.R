@@ -12,8 +12,9 @@
 #' @param threshold (required, character): Detection probability threshold for
 #' which data are to be displayed to visualize potential optimal detection windows.
 #' Choices = one of `"50","55","60","65","70","75","80","85","90","95")`
-#' @param scaledprobs (required, data.frame) Normalized detection
-#' probabilities as returned by [scale_newprob()].
+#' @param scaledprobs_month  (required, data.frame) Normalized detection
+#' probabilities as returned by the element `month` of the list returned by
+#' [scale_newprob()].
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname thresh_fig
@@ -24,10 +25,10 @@
 #' scaledprobs <- scale_newprob(D_mb_ex, newprob)
 #' thresh_fig(
 #'   taxon.level = "species", taxon.name = "Acartia hudsonica",
-#'   threshold = "90", scaledprobs
+#'   threshold = "90", scaledprobs$Pscaled_month
 #' )
 #' }
-thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs) {
+thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
   taxon.level <- match.arg(
     arg = taxon.level,
     choices = c("phylum", "class", "order", "family", "genus", "species")
@@ -40,7 +41,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs) {
     labels = thresh_slc
   )
 
-  Pthresh <- scaledprobs$Pscaled_month |>
+  Pthresh <- scaledprobs_month |>
     dplyr::mutate(
       thresh95 = (fill >= 0.94999) * 1,
       thresh90 = (fill >= 0.89999) * 1,

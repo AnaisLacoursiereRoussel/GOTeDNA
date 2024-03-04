@@ -66,3 +66,7 @@ Pscaled <- scale_newprob(
   newprob
 )
 saveRDS(Pscaled, "inst/app/data/Pscaled.rds")
+
+
+# newprob <- calc_det_prob(gotedna_data$metabarcoding)
+# scaledprobs <- scale_newprob(D_mb_ex, newprob)

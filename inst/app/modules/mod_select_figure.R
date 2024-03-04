@@ -20,64 +20,49 @@ mod_select_figure_ui <- function(id) {
         h6("Confidence: "),
         uiOutput(ns("conf"), fill = TRUE),
         h6("Variation among year: "),
-        uiOutput(ns("var_year"))
+        uiOutput(ns("var_year")),
         # h5("Variation among primers: ")
         # uiOutput(ns("var_primer"))
         # h5("Variation among datasets: ")
         # (uiOutput(ns("var_dat"))
+        h3("Figures"),
+        taglist_fig_info(
+          ns("fig_heatmap"),
+          "Species detection heatmap",
+          "",
+          "img/tn_heatmap.png"
+        ),
+        taglist_fig_info(
+          ns("fig_effort"),
+          "Sample size to achieve detection",
+          "",
+          "img/tn_effort.png"
+        ),
+        taglist_fig_info(
+          ns("fig_higher"),
+          "Field sample size for datasets",
+          "",
+          "img/tn_higher.png"
+        ),
+        taglist_fig_info(
+          ns("fig_detect"),
+          "Monthly eDNA detection probability",
+          "",
+          "img/tn_smooth.png"
+        )
       ),
       column(
         9,
         div(
+          id = "fig_caption",
+          uiOutput(ns("current_cap"), height = "15vh")
+        ),
+        div(
           id = "fig_panel",
-          plotOutput(ns("current_fig"), height = "60vh")
+          plotOutput(ns("current_fig"), height = "65vh")
         )
       ),
-      fluidRow(
-        column(
-          12,
-          h3(icon("info-circle"), "Figures"),
-        ),
-        fluidRow(
-          taglist_fig_info(
-            ns("fig_heatmap"),
-            "Heatmap",
-            "Heatmap of scaled monthly detection probabilities for taxon.",
-            "img/tn_heatmap.png"
-          ),
-          taglist_fig_info(
-            ns("fig_effort"),
-            "Sampling effort 1",
-            "Sampling effort needed to obtain different detection thresholds.",
-            "img/tn_effort.png"
-          ),
-          taglist_fig_info(
-            ns("fig_higher"),
-            "Sampling effort 2",
-            "Sampling effort of taxa within specified taxonomic group per year.",
-            "img/tn_higher.png"
-          ),
-          taglist_fig_info(
-            ns("fig_sample"),
-            "Sampling effort 3",
-            "Sampling effort by species, year, and region.",
-            "img/tn_sample_size.png"
-          ),
-          taglist_fig_info(
-            ns("fig_smooth"),
-            "Detection probability 1",
-            "Display species monthly detection probability.",
-            "img/tn_smooth.png"
-          ),
-          taglist_fig_info(
-            ns("fig_thresh"),
-            "Detection probability 2",
-            "Display monthly detection probabilities for selected taxon, and detection probability threshold.",
-            "img/tn_thresh.png"
-          )
-        )
-      )
-    ),
+    )
   )
 }
 
@@ -126,8 +111,8 @@ mod_select_figure_server <- function(id, r) {
               output$conf <- renderUI(win$confidence)
               output$var_year <- renderUI(2)
             }
-            #output$var_primer <- renderUI("TODO")
-            #output$var_dat <- renderUI("TODO")
+            # output$var_primer <- renderUI("TODO")
+            # output$var_dat <- renderUI("TODO")
 
             r$fig_ready <- TRUE
 
@@ -147,9 +132,7 @@ mod_select_figure_server <- function(id, r) {
     observeEvent(input$fig_heatmap, r$current_fig <- "fig1")
     observeEvent(input$fig_effort, r$current_fig <- "fig2")
     observeEvent(input$fig_higher, r$current_fig <- "fig3")
-    observeEvent(input$fig_sample, r$current_fig <- "fig4")
-    observeEvent(input$fig_smooth, r$current_fig <- "fig5")
-    observeEvent(input$fig_thresh, r$current_fig <- "fig6")
+    observeEvent(input$fig_detect, r$current_fig <- "fig4")
 
     output$current_fig <- renderPlot(
       {
@@ -157,13 +140,22 @@ mod_select_figure_server <- function(id, r) {
           fig1 = draw_fig1(r),
           fig2 = draw_fig2(r),
           fig3 = draw_fig3(r, taxon_levels),
-          fig4 = draw_fig4(r),
-          fig5 = draw_fig5(r),
-          fig6 = draw_fig6(r, input$threshold)
+          fig4 = draw_fig4(r, input$threshold)
         )
       },
       res = 150
     )
+
+    output$current_cap <- renderUI({
+      file <- switch(r$current_fig,
+        fig1 = "heatmap.html",
+        fig2 = "sample_size.html",
+        fig3 = "field_sample.html",
+        fig4 = "detection.html"
+      )
+      #browser()
+      includeHTML(file.path("www", "doc", "caption", file))
+    })
   })
 }
 
@@ -198,13 +190,13 @@ draw_fig2 <- function(r) {
       cli::cli_alert_danger("cannot render figure 2")
       plotNotAvailableSpeciesLevel()
     } else {
-      if (r$data_type == "qPCR") {
-        plotNotAvailableForqPCR()
-      } else {
-        data_slc <- r$scaledprobs$Pscaled_month |>
-          dplyr::filter(species == r$taxon.name)
-        effort_needed_fig(data_slc)
+      data_slc <- r$scaledprobs$Pscaled_month |>
+        dplyr::filter(species == r$taxon.name)
+      if (r$primer != "not available") {
+        data_slc <- data_slc |>
+          dplyr::filter(primer == r$primer)
       }
+      effort_needed_fig(data_slc)
     }
   } else {
     plotNotAvailable()
@@ -213,53 +205,35 @@ draw_fig2 <- function(r) {
 
 draw_fig3 <- function(r, taxon_levels) {
   if (r$fig_ready) {
-    if (r$data_type == "qPCR") {
-      plotNotAvailableForqPCR()
-    } else {
-      id_lvl <- which(r$taxon_slc != "All") |> which.max()
-      higher_tax_fig(
-        data = r$data_filtered,
-        higher.taxon.select = taxon_levels[min(id_lvl, 2)],
-        taxon.name = r$taxon_slc[min(id_lvl + 1, 2)]
-      )
+    id_lvl <- which(r$taxon_slc != "All") |> which.max()
+    higher_tax_fig(
+      data = r$data_filtered,
+      higher.taxon.select = taxon_levels[min(id_lvl, 2)],
+      taxon.name = r$taxon_slc[min(id_lvl + 1, 2)]
+    )
+  } else {
+    plotNotAvailable()
+  }
+}
+
+
+draw_fig4 <- function(r, threshold) {
+  if (r$fig_ready) {
+    data_slc <- r$data_filtered
+    if (r$primer != "not available") {
+      data_slc <- data_slc |>
+        dplyr::filter(target_subfragment == r$primer)
     }
-  } else {
-    plotNotAvailable()
-  }
-}
-
-draw_fig4 <- function(r) {
-  if (r$fig_ready) {
-    sample_size_fig(data = r$data_filtered, species.name = r$taxon.name)
-  } else {
-    plotNotAvailable()
-  }
-}
-
-draw_fig5 <- function(r) {
-  if (r$fig_ready) {
-    if (r$data_type == "qPCR") {
-      plotNotAvailableForqPCR()
-    } else {
-      data_slc <- r$data_filtered
-      if (r$primer != "not available") {
-        data_slc <- data_slc |>
-          dplyr::filter(target_subfragment == r$primer)
-      }
-      smooth_fig(data = data_slc, species.name = r$taxon.name)
+    p1 <- smooth_fig(data = data_slc, species.name = r$taxon.name)
+    if (r$primer != "not available") {
+      data_slc <- r$scaledprobs$Pscaled_month |>
+        dplyr::filter(primer == r$primer)
     }
-  } else {
-    plotNotAvailable()
-  }
-}
-
-draw_fig6 <- function(r, threshold) {
-  if (r$fig_ready) {
-    data_slc <- r$scaledprobs
-    thresh_fig(
+    p2 <- thresh_fig(
       r$taxon.level, r$taxon.name,
       threshold = threshold, scaledprobs = data_slc
     )
+    p1 + p2
   } else {
     plotNotAvailable()
   }

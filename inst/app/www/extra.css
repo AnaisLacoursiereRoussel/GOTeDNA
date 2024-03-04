@@ -158,3 +158,19 @@ shiny-plot-output {
 .selectize-dropdown {
   z-index: 1001 !important;
 }
+
+.thumbnail {
+  margin-bottom: 1rem;
+}
+
+#fig_caption {
+  font-size: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.definition {
+  font-weight: bold;
+}

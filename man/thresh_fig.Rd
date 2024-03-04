@@ -5,7 +5,7 @@
 \title{Display monthly detection probabilities for selected taxon, and
 detection probability threshold}
 \usage{
-thresh_fig(taxon.level, taxon.name, threshold, scaledprobs)
+thresh_fig(taxon.level, taxon.name, threshold, scaledprobs_month)
 }
 \arguments{
 \item{taxon.level}{(required, data.frame): Select taxonomic level to view.
@@ -18,8 +18,9 @@ provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genu
 which data are to be displayed to visualize potential optimal detection windows.
 Choices = one of \verb{"50","55","60","65","70","75","80","85","90","95")}}
 
-\item{scaledprobs}{(required, data.frame) Normalized detection
-probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
+\item{scaledprobs_month}{(required, data.frame) Normalized detection
+probabilities as returned by the element \code{month} of the list returned by
+\code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \description{
 This function displays detection probabilities in bins, with
@@ -32,7 +33,7 @@ newprob <- calc_det_prob(D_mb_ex)
 scaledprobs <- scale_newprob(D_mb_ex, newprob)
 thresh_fig(
   taxon.level = "species", taxon.name = "Acartia hudsonica",
-  threshold = "90", scaledprobs
+  threshold = "90", scaledprobs$Pscaled_month
 )
 }
 }

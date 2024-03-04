@@ -21,7 +21,7 @@ gloss$Definition <- trimws(gloss$Definition)
 
 # import all GOTeDNA data
 gotedna_data <- gotedna_data0 <- readRDS("data/gotedna_data.rds")
-gotedna_station  <- gotedna_station0 <- readRDS("data/gotedna_station.rds")
+gotedna_station <- gotedna_station0 <- readRDS("data/gotedna_station.rds")
 
 taxon_levels <- c("phylum", "class", "genus", "species")
 
@@ -85,29 +85,18 @@ add_thumbnail_button <- function(id, src, alt = "Figure thumbnail") {
       src = src,
       alt = alt,
       id = "fig-thumbnail",
-      style = "height: 5rem"
+      style = "height: 7rem;"
     )
   )
 }
 
 
 taglist_fig_info <- function(id, title, info, scr = NULL) {
-  column(
-    6,
-    fluidRow(
-      column(
-        8,
-        h5(title),
-        p(info)
-      ),
-      column(
-        4,
-        add_thumbnail_button(id, scr)
-      ),
+  tagList(
+    div(
+      class = "thumbnail",
+      h5(title),
+      add_thumbnail_button(id, scr)
     )
   )
 }
-
-
-newprob <- calc_det_prob(gotedna_data$metabarcoding)
-scaledprobs <- scale_newprob(D_mb_ex, newprob)
