@@ -124,41 +124,40 @@ read_data <- function(
   }
 
   samples <- lapply(samples, function(x) {
-    if (any(colnames(x) %in% "concentration")) {
+    if (choose.method == "qPCR") {
       x %>%
         tidyr::drop_na(date) %>% # drop lab/field blanks
         subset(!kingdom %in% "NA") %>%
-        dplyr::group_by(eventID) %>%
-        dplyr::mutate(detected = dplyr::case_when(
-          concentration > 0 ~ 1,
-          concentration == 0 ~ 0
-        )) %>% # ,
         dplyr::mutate(
-          concentration = suppressWarnings(as.numeric(concentration))
-        )
-      # is.na(quantificationCycle) ~ 0)) %>%#,
-      #   aboveLOD = dplyr::case_when(
-      # all(concentration >= pcr_primer_lod)  ~ 1,
-      # all(concentration < pcr_primer_lod) ~ 0))
+          concentration = suppressWarnings(as.numeric(concentration)),
+          materialSampleID = suppressWarnings(as.character(materialSampleID)),
+          GOTeDNA_version = suppressWarnings(as.numeric(GOTeDNA_version))) %>%
+        dplyr::mutate(
+          detected = dplyr::case_when(
+            is.na(concentration) ~ 0,
+            concentration >= pcr_primer_lod ~ 1,
+            concentration < pcr_primer_lod ~ 0))
+
     } else {
       x %>%
         tidyr::drop_na(date) %>%
         dplyr::filter(kingdom != "NA") %>%
-        dplyr::mutate(detected = dplyr::case_when(
-          organismQuantity != 0 ~ 1,
-          organismQuantity == 0 ~ 0
+        dplyr::mutate(
+          detected = dplyr::case_when(
+            organismQuantity != 0 ~ 1,
+            organismQuantity == 0 ~ 0),
+            materialSampleID = suppressWarnings(as.character(materialSampleID)),
+            GOTeDNA_version = suppressWarnings(as.numeric(GOTeDNA_version)
         ))
     }
   })
 
   GOTeDNA_df <- do.call(rbind, lapply(samples, function(x) {
     x[, names(x) %in% c(
-      "GOTeDNA_ID", "GOTeDNA_version", "eventID",
-      "target_gene", "target_subfragment", "scientificName",
-      "kingdom", "phylum", "class", "order", "family",
-      "genus", "date", "ecodistrict", "decimalLatitude", "decimalLongitude",
-      "station", "year", "month", "organismQuantity", "concentration",
-      "detected"
+      "GOTeDNA_ID", "GOTeDNA_version", "materialSampleID","eventID", "target_gene",
+      "target_subfragment", "scientificName", "kingdom", "phylum", "class", "order",
+      "family", "genus", "date", "ecodistrict", "decimalLatitude", "decimalLongitude",
+      "station", "year", "month", "organismQuantity", "concentration", "pcr_primer_lod", "detected"
     )]
   }))
   rownames(GOTeDNA_df) <- NULL
