@@ -20,8 +20,8 @@ gloss$Term <- paste0('<p align ="right"><b>', trimws(gloss$Term), "</b></p>")
 gloss$Definition <- trimws(gloss$Definition)
 
 # import all GOTeDNA data
-gotedna_data0 <- readRDS("data/gotedna_data.rds")
-gotedna_station0 <- readRDS("data/gotedna_station.rds")
+gotedna_data <- gotedna_data0 <- readRDS("data/gotedna_data.rds")
+gotedna_station  <- gotedna_station0 <- readRDS("data/gotedna_station.rds")
 
 taxon_levels <- c("phylum", "class", "genus", "species")
 
@@ -107,3 +107,7 @@ taglist_fig_info <- function(id, title, info, scr = NULL) {
     )
   )
 }
+
+
+newprob <- calc_det_prob(gotedna_data$metabarcoding)
+scaledprobs <- scale_newprob(D_mb_ex, newprob)

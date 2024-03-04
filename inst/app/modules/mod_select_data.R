@@ -83,7 +83,7 @@ mod_select_data_ui <- function(id) {
           6,
           div(
             id = "button_map",
-            actionButton(ns("show_map_info"), "Map info",
+            actionButton(ns("show_map_info"), "Map",
               icon = icon("info-circle"),
               title = "Display information about how to use the map below"
             ),
@@ -114,7 +114,6 @@ mod_select_data_ui <- function(id) {
 mod_select_data_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
 
     observe({
       # change when reading of external data is implemented
@@ -159,7 +158,7 @@ mod_select_data_server <- function(id, r) {
       r$data_station <- gotedna_station[[input$datatype]]
       updateSelectInput(session, "slc_phy",
         selected = "All",
-        choices = c("All", unique(r$data_filtered$phylum))
+        choices = c("All", unique(r$data_filtered$phylum) |> sort())
       )
     })
 
@@ -175,7 +174,7 @@ mod_select_data_server <- function(id, r) {
       } else {
         show(id = "slc_cla")
         updateSelectInput(session, "slc_cla",
-          choices = c("All", unique(r$data_filtered$class))
+          choices = c("All", unique(r$data_filtered$class) |> sort())
         )
       }
     })
@@ -191,7 +190,7 @@ mod_select_data_server <- function(id, r) {
       } else {
         show(id = "slc_gen")
         updateSelectInput(session, "slc_gen",
-          choices = c("All", unique(r$data_filtered$genus))
+          choices = c("All", unique(r$data_filtered$genus) |> sort())
         )
       }
     })
@@ -206,7 +205,7 @@ mod_select_data_server <- function(id, r) {
       } else {
         show(id = "slc_spe")
         updateSelectInput(session, "slc_spe",
-          choices = c("All", unique(r$data_filtered$scientificName))
+          choices = c("All", unique(r$data_filtered$scientificName) |> sort())
         )
       }
     })

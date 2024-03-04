@@ -5,6 +5,7 @@
 #' Ingests data produced with `[scale_newprob()]`.
 #'
 #' @param scaledprobs_month (required, data.frame): Normalized detection.
+#' @param taxon.level taxonomi level.
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname primer_sort
 #' @export
@@ -17,7 +18,6 @@
 primer_sort <- function(
     taxon.level = c("phylum", "class", "genus", "species"),
     scaledprobs_month) {
-
   taxon.level <- dplyr::ensym(taxon.level)
 
   # However the filtering happens (choosing the taxon level/name, region, and
@@ -28,9 +28,11 @@ primer_sort <- function(
 
   data %<>%
     dplyr::group_by(GOTeDNA_ID, !!taxon.level, primer) %>%
-    dplyr::summarise(success = sum(scaleP > 0.74449, na.rm = TRUE),
-                     total = sum(!is.na(nondetect)),
-                     perc = round(success/total*100)) %>%
+    dplyr::summarise(
+      success = sum(scaleP > 0.74449, na.rm = TRUE),
+      total = sum(!is.na(nondetect)),
+      perc = round(success / total * 100)
+    ) %>%
     dplyr::ungroup()
 
   data %>%

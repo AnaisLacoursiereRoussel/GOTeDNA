@@ -6,7 +6,7 @@ mod_select_figure_ui <- function(id) {
       column(
         3,
         h2("Observations"),
-        selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 90),
+        selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
         actionButton(
           ns("calc_window"),
           label = "Compute & visualize",

@@ -2,7 +2,7 @@ mod_dialog_source_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     query_modal <- modalDialog(
-      title = "Data source",
+      title = "Reference data authorship",
       tagList(
         DT::dataTableOutput(ns("source"))
       ),
@@ -25,10 +25,17 @@ mod_dialog_source_server <- function(id, r) {
       dplyr::ungroup() |>
         dplyr::group_by(
           GOTeDNA_ID, GOTeDNA_version, target_subfragment, ecodistrict
-        ) |> summarise(
-          samples = n(),
-          stations = length(unique(station))
+        ) |> 
+        summarise(
+          Samples = n(),
+          Stations = length(unique(station))
+        ) |>
+        mutate(Publication = "to be added") |> 
+        dplyr::select(
+          	GOTeDNA_ID,	GOTeDNA_version, Publication,	target_subfragment, 
+            ecodistrict, Samples,	Stations	
         )
+        
     )
 
     observeEvent(input$dismiss, {
