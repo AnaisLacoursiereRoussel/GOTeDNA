@@ -10,9 +10,11 @@ D_qPCR <- read_data(
 gotedna_data <- list(
   metabarcoding = D_mb |>
     dplyr::filter(!is.na(decimalLongitude)) |>
+    dplyr::ungroup() |>
     as.data.frame(),
   qPCR = D_qPCR |>
     dplyr::filter(!is.na(decimalLongitude), !is.na(phylum)) |>
+    dplyr::ungroup() |>
     as.data.frame()
 )
 saveRDS(gotedna_data, "inst/app/data/gotedna_data.rds")
@@ -64,3 +66,7 @@ Pscaled <- scale_newprob(
   newprob
 )
 saveRDS(Pscaled, "inst/app/data/Pscaled.rds")
+
+
+# newprob <- calc_det_prob(gotedna_data$metabarcoding)
+# scaledprobs <- scale_newprob(D_mb_ex, newprob)

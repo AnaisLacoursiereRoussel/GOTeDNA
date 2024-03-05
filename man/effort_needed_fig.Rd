@@ -9,7 +9,7 @@ effort_needed_fig(scaledprobs_month)
 \arguments{
 \item{scaledprobs_month}{(required, data.frame) Normalized detection
 probabilities as returned by the element \code{month} of the list returned by
-\code{\link[=scale_newprob]{scale_newprob()}} for one species ans one primer.}
+\code{\link[=scale_newprob]{scale_newprob()}} for one species anc one primer.}
 }
 \description{
 This function calculates number of samples needed to obtain

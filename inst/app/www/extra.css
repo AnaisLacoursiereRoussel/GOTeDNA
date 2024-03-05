@@ -94,6 +94,11 @@ h2 {
   color: #f2f2f2;
 }
 
+.align-text-left {
+  width: 100%;
+  text-align: left;
+}
+
 .align-text-right {
   width: 100%;
   text-align: right;
@@ -106,8 +111,8 @@ h2 {
 .shiny-notification {
   position:fixed;
   top: calc(1%);
-  left: calc(1%);
-  width: 98%;
+  left: calc(25%);
+  width: 50%;
   font-weight: bold;
   text-align: center;
 }
@@ -152,4 +157,20 @@ shiny-plot-output {
 
 .selectize-dropdown {
   z-index: 1001 !important;
+}
+
+.thumbnail {
+  margin-bottom: 1rem;
+}
+
+#fig_caption {
+  font-size: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.definition {
+  font-weight: bold;
 }

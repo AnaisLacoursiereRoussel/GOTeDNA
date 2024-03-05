@@ -3,8 +3,7 @@ test_that("higher_tax_fig returns a ggplot2 object", {
   p <- higher_tax_fig(
     data = D_mb_ex_slc,
     higher.taxon.select = "phylum",
-    taxon.name = "Bryozoa",
-    view.by.level = "genus"
+    taxon.name = "Bryozoa"
   )
 
   expect_s3_class(p$layers[[1L]]$geom, "GeomPoint")
@@ -19,8 +18,7 @@ test_that("higher_tax_fig returns a ggplot2 object", {
     higher_tax_fig(
       data = D_mb_ex_slc,
       higher.taxon.select = "phylum",
-      taxon.name = "Bryo",
-      view.by.level = "genus"
+      taxon.name = "Bryo"
     ),
     "Taxon not found in data"
   )
