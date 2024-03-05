@@ -11,7 +11,7 @@ ui <- fluidPage(
         column(
           9,
           img(
-            src = "img/GOTeDNA_logo_white.png",
+            src = "img/GOTeDNA_logo_new.png",
             alt = "GOTeDNA_logo",
             id = "logo_gotedna"
           )

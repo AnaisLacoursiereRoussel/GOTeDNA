@@ -106,8 +106,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       labels = month.abb
     ) +
     ggplot2::labs(
-      x = NULL, y = "Normalized detection probability",
-      title = scientific_name_formatter(taxon.name),
+      x = NULL, y = NULL,
       subtitle = paste0("Detection threshold: ", threshold, "%")
     ) +
     ggplot2::theme_minimal() +
