@@ -5,7 +5,7 @@
 #' Ingests data produced with `[scale_newprob()]`.
 #'
 #' @param scaledprobs_month (required, data.frame): Normalized detection.
-#' @param taxon.level taxonomi level.
+#' @param taxon.level taxonomic level.
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname primer_sort
 #' @export
