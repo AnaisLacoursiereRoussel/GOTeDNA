@@ -7,7 +7,7 @@
 #' @importFrom grDevices palette
 #' @importFrom magrittr %>% %<>%
 #' @importFrom stats dbinom fisher.test loess median predict reorder window
-# 
+#
 #' @export
 scientific_name_formatter <- function(raw_name) {
   # strsplit returns a list but we are passing in only
@@ -23,7 +23,7 @@ scientific_name_formatter <- function(raw_name) {
 }
 
 
-# Implement min max scaling of detection probabilities
-scale_min_max <- function(x) {
-  (x - min(x)) / (max(x) - min(x))
+# scaling of detection probabilities by max proportion
+scale_prop <- function(x) {
+  (x/max(x))
 }

@@ -47,7 +47,7 @@ smooth_fig <- function(data, species.name) {
   data %<>%
     dplyr::group_by(year) %>%
     tidyr::drop_na(prob) %>%
-    dplyr::mutate(scaleP = scale_min_max(prob)) %>%
+    dplyr::mutate(scaleP = scale_prop(prob)) %>%
     dplyr::mutate(scaleP = dplyr::case_when(
       scaleP == "NaN" ~ prob,
       scaleP != "NaN" ~ scaleP

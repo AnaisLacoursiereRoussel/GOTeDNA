@@ -99,7 +99,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       labeller = function(x) {
         x[2]
       }
-    ) + # will need to italicize the species name, but it would also be good if the name didn't show up if there is only one species to facet (if executing at higher taxonomy level [i.e., anything except species])
+    ) +
     ggplot2::scale_x_continuous(
       limits = c(0.5, 12.5),
       breaks = 1:12,

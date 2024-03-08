@@ -45,7 +45,7 @@ scale_newprob <- function(data, newprob) {
       dplyr::mutate(y, scaleP = dplyr::case_when(
         p == 1 ~ 1,
         p == 0 ~ 0,
-        p != 0 | 1 ~ scale_min_max(p)
+        p != 0 | 1 ~ scale_prop(p)
       ))
   })
   )
