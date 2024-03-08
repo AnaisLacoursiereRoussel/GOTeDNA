@@ -83,7 +83,7 @@ mod_select_figure_server <- function(id, r) {
         } else {
           r$data_filtered2 <- prepare_data(r)
           if (nrow(r$data_filtered2)) {
-            cli::cli_alert_info("Computing probablities")
+            cli::cli_alert_info("Computing probabilities")
             showNotification(
               "Computing time window",
               type = "message",
@@ -103,9 +103,9 @@ mod_select_figure_server <- function(id, r) {
 
             if (is.null(win)) {
               # showNotification("No optimal detection window", type = "warning")
-              output$opt_sampl <- renderUI("???")
-              output$conf <- renderUI("???")
-              output$var_year <- renderUI("???")
+              output$opt_sampl <- renderUI("NA")
+              output$conf <- renderUI("NA")
+              output$var_year <- renderUI("NA")
             } else {
               output$opt_sampl <- renderUI(win$period)
               output$conf <- renderUI(win$confidence)
