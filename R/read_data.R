@@ -152,7 +152,7 @@ read_data <- function(
     }
   })
 
-  GOTeDNA_df <- do.call(rbind, lapply(samples, function(x) {
+  GOTeDNA_df <- do.call(dplyr::bind_rows, lapply(samples, function(x) {
     x[, names(x) %in% c(
       "GOTeDNA_ID", "GOTeDNA_version", "materialSampleID","eventID", "target_gene",
       "target_subfragment", "scientificName", "kingdom", "phylum", "class", "order",

@@ -50,23 +50,12 @@ gotedna_station <- list(
 )
 saveRDS(gotedna_station, "inst/app/data/gotedna_station.rds")
 
-
-D_mb <- read_data(
-  choose.method = "metabarcoding", path.folder = "inst/app/data/raw_xlsx_files"
-)
-
 newprob <- calc_det_prob(
-  data = D_mb_ex,
-  ecodistrict.select = "Scotian Shelf"
+  data = D_mb[D_mb$GOTeDNA_ID %in% 8,]
 )
 saveRDS(newprob, "inst/app/data/newprob.rds")
 
 Pscaled <- scale_newprob(
-  D_mb_ex, "Scotian Shelf",
-  newprob
+  D_mb[D_mb$GOTeDNA_ID %in% 8,], newprob
 )
 saveRDS(Pscaled, "inst/app/data/Pscaled.rds")
-
-
-# newprob <- calc_det_prob(gotedna_data$metabarcoding)
-# scaledprobs <- scale_newprob(D_mb_ex, newprob)
