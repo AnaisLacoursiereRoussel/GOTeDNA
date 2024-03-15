@@ -28,10 +28,10 @@ get_station <- function(x) {
     dplyr::filter(!is.na(decimalLongitude)) |>
     dplyr::filter(!is.na(phylum)) |>
     dplyr::select(
-      c(decimalLongitude, decimalLatitude, ecodistrict, station)
+      c(decimalLongitude, decimalLatitude, station)
     ) |>
     dplyr::distinct() |>
-    dplyr::group_by(ecodistrict, station) |>
+    dplyr::group_by(station) |>
     dplyr::summarise(
       decimalLongitude = mean(as.numeric(decimalLongitude)),
       decimalLatitude = mean(as.numeric(decimalLatitude))
@@ -50,12 +50,24 @@ gotedna_station <- list(
 )
 saveRDS(gotedna_station, "inst/app/data/gotedna_station.rds")
 
-newprob <- calc_det_prob(
+# calculate and scale metabarcoding probabilities
+newprob_mb <- calc_det_prob(
   data = D_mb[D_mb$GOTeDNA_ID %in% 8,]
 )
-saveRDS(newprob, "inst/app/data/newprob.rds")
+saveRDS(newprob_mb, "inst/app/data/newprob_mb.rds")
 
-Pscaled <- scale_newprob(
-  D_mb[D_mb$GOTeDNA_ID %in% 8,], newprob
+Pscaled_mb <- scale_newprob(
+  D_mb[D_mb$GOTeDNA_ID %in% 8,], newprob_mb
 )
-saveRDS(Pscaled, "inst/app/data/Pscaled.rds")
+saveRDS(Pscaled_mb, "inst/app/data/Pscaled_mb.rds")
+
+# calculate and scale qPCR probabilities
+newprob_qp <- calc_det_prob(
+  data = D_qPCR[D_qPCR$GOTeDNA_ID %in% 11,]
+)
+saveRDS(newprob_qp, "inst/app/data/newprob_qp.rds")
+
+Pscaled_qp <- scale_newprob(
+  D_qPCR[D_qPCR$GOTeDNA_ID %in% 11,], newprob_qp
+)
+saveRDS(Pscaled_qp, "inst/app/data/Pscaled_qp.rds")

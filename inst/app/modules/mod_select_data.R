@@ -61,7 +61,7 @@ mod_select_data_ui <- function(id) {
         ),
         column(
           4,
-          selectInput(ns("primer"), "Primer", choices = "unkown")
+          selectInput(ns("primer"), "Primer", choices = "All")
         ),
         column(
           6,
@@ -130,10 +130,14 @@ mod_select_data_server <- function(id, r) {
 
     observe({
       if (input$datatype == "qPCR") {
+        tg <- table(r$data_filtered$target_gene) |>
+          sort() |>
+          rev()
         updateSelectInput(
           session,
           "primer",
-          choices = "not available"
+          choices = names(tg),
+          selected = names(tg)[1]
         )
       } else {
         tg <- table(r$data_filtered$target_subfragment) |>

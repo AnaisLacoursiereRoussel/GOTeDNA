@@ -11,7 +11,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' data <- D_mb_ex |> dplyr::filter(
+#' data <- D_mb |> dplyr::filter(
+#'      GOTeDNA_ID == 8,
 #'      scientificName == "Acartia longiremis",
 #'      target_subfragment == "COI1"
 #'  )
