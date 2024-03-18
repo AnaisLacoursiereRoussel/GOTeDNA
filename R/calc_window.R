@@ -43,9 +43,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(data = D_mb_ex)
-#' scaledprobs <- scale_newprob(D_mb_ex, newprob)
-#' calc_window(data = D_mb_ex, threshold = "90",
+#' newprob <- calc_det_prob(data = D_mb)
+#' scaledprobs <- scale_newprob(D_mb, newprob)
+#' calc_window(data = D_mb, threshold = "90",
 #'  species.name = "Acartia longiremis", scaledprobs)
 #' }
 calc_window <- function(data, threshold, species.name, scaledprobs) {
@@ -53,10 +53,6 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
   options(dplyr.summarise.inform = FALSE)
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
-
-  # if (! all(species.name %in% scaledprobs[[1]]$species)) {
-  #   stop("Species not found in data")
-  # }
 
   thresh_slc <- seq(50, 95, 5) %>% as.character()
   threshold <- match.arg(threshold, choices = thresh_slc)

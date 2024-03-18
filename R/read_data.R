@@ -129,6 +129,8 @@ read_data <- function(
         tidyr::drop_na(date) %>% # drop lab/field blanks
         subset(!kingdom %in% "NA") %>%
         dplyr::mutate(
+          decimalLatitude = suppressWarnings(as.numeric(decimalLatitude)),
+          decimalLongitude = suppressWarnings(as.numeric(decimalLongitude)),
           concentration = suppressWarnings(as.numeric(concentration)),
           materialSampleID = suppressWarnings(as.character(materialSampleID)),
           GOTeDNA_version = suppressWarnings(as.numeric(GOTeDNA_version))) %>%
@@ -146,6 +148,8 @@ read_data <- function(
           detected = dplyr::case_when(
             organismQuantity != 0 ~ 1,
             organismQuantity == 0 ~ 0),
+            decimalLatitude = suppressWarnings(as.numeric(decimalLatitude)),
+            decimalLongitude = suppressWarnings(as.numeric(decimalLongitude)),
             materialSampleID = suppressWarnings(as.character(materialSampleID)),
             GOTeDNA_version = suppressWarnings(as.numeric(GOTeDNA_version)
         ))
