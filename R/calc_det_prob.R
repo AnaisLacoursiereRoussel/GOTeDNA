@@ -24,10 +24,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#'  D_mb <- read_data(
-#'    choose.method = "metabarcoding", path.folder = "./inst/testdata"
-#'  )
-#'  calc_det_prob(data = D_mb_ex)
+#'  calc_det_prob(data = D_mb)
 #' }
 calc_det_prob <- function(data) {
   oop <- options("dplyr.summarise.inform")
@@ -82,7 +79,6 @@ calc_det_prob <- function(data) {
       dplyr::summarise(
         n = dplyr::n(),
         nd = sum(detected),
-        ecodistrict = unique(ecodistrict),
         p = nd/n,
         s = sqrt(p * (1 - p)/n)
       ) %>%

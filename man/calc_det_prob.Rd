@@ -32,10 +32,7 @@ separate. Outputs are used in subsequent functions.
 }
 \examples{
 \dontrun{
- D_mb <- read_data(
-   choose.method = "metabarcoding", path.folder = "./inst/testdata"
- )
- calc_det_prob(data = D_mb_ex)
+ calc_det_prob(data = D_mb)
 }
 }
 \author{

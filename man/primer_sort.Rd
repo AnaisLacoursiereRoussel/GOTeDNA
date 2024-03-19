@@ -10,7 +10,7 @@ primer_sort(
 )
 }
 \arguments{
-\item{taxon.level}{taxonomi level.}
+\item{taxon.level}{taxonomic level.}
 
 \item{scaledprobs_month}{(required, data.frame): Normalized detection.}
 }

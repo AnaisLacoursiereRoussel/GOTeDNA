@@ -30,8 +30,8 @@ representation.
 }
 \examples{
 \dontrun{
-newprob <- calc_det_prob(D_mb_ex)
-scaledprobs <- scale_newprob(D_mb_ex, newprob)
+newprob <- calc_det_prob(D_mb)
+scaledprobs <- scale_newprob(D_mb, newprob)
 hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
 }
 }

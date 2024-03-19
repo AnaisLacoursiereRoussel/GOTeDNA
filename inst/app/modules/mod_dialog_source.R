@@ -24,18 +24,22 @@ mod_dialog_source_server <- function(id, r) {
       r$data_filtered |>
       dplyr::ungroup() |>
         dplyr::group_by(
-          GOTeDNA_ID, GOTeDNA_version, target_subfragment, ecodistrict
-        ) |> 
-        summarise(
-          Samples = n(),
-          Stations = length(unique(station))
+          GOTeDNA_ID, GOTeDNA_version, materialSampleID
         ) |>
-        mutate(Publication = "to be added") |> 
+        summarise(
+          `Total number \nof samples` = n(),
+          `Total number \n of stations` = length(unique(station))
+        ) |>
+        mutate(`Data owner contact` = "To be added",
+               `Indigenous data labelling` = "To be added",
+               Publication = "DOI; To be added",
+               Reference = "To be added") |>
+        dplyr::ungroup() |>
         dplyr::select(
-          	GOTeDNA_ID,	GOTeDNA_version, Publication,	target_subfragment, 
-            ecodistrict, Samples,	Stations	
+          	Publication, `Data owner contact`, `Total number \nof samples`,
+          	`Total number \n of stations`, Reference
         )
-        
+
     )
 
     observeEvent(input$dismiss, {

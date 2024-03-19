@@ -10,6 +10,11 @@ D_qPCR <- read_data(
 gotedna_data <- list(
   metabarcoding = D_mb |>
     dplyr::filter(!is.na(decimalLongitude)) |>
+    dplyr::mutate(msct = case_when(
+      organismQuantity == 0 ~ TRUE,
+      organismQuantity > 10 ~ TRUE
+    )) |>
+    tidyr::drop_na(msct) |>
     dplyr::ungroup() |>
     as.data.frame(),
   qPCR = D_qPCR |>
@@ -20,7 +25,7 @@ gotedna_data <- list(
 saveRDS(gotedna_data, "inst/app/data/gotedna_data.rds")
 
 
-# for performances sake, we use a seperate object for station to only display
+# for performances sake, we use a separate object for station to only display
 # a few points on map
 get_station <- function(x) {
   x |>
@@ -45,19 +50,19 @@ get_station <- function(x) {
 }
 
 gotedna_station <- list(
-  metabarcoding = D_mb |> get_station(),
-  qPCR = D_qPCR |> get_station()
+  metabarcoding = gotedna_data$metabarcoding |> get_station(),
+  qPCR = gotedna_data$qPCR |> get_station()
 )
 saveRDS(gotedna_station, "inst/app/data/gotedna_station.rds")
 
 # calculate and scale metabarcoding probabilities
 newprob_mb <- calc_det_prob(
-  data = D_mb[D_mb$GOTeDNA_ID %in% 8,]
+  data = gotedna_data$metabarcoding[gotedna_data$metabarcoding$GOTeDNA_ID %in% 8,]
 )
 saveRDS(newprob_mb, "inst/app/data/newprob_mb.rds")
 
 Pscaled_mb <- scale_newprob(
-  D_mb[D_mb$GOTeDNA_ID %in% 8,], newprob_mb
+  gotedna_data$metabarcoding[gotedna_data$metabarcoding$GOTeDNA_ID %in% 8,], newprob_mb
 )
 saveRDS(Pscaled_mb, "inst/app/data/Pscaled_mb.rds")
 

@@ -329,7 +329,7 @@ filter_station <- function(r) {
       r$data_filtered |>
         dplyr::group_by(ecodistrict, station) |>
         dplyr::summarise(count = n()),
-      join_by(ecodistrict, station)
+      join_by(station)
     )
 }
 
