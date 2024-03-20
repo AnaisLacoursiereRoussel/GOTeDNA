@@ -18,11 +18,12 @@
 #' @param scaledprobs (required, list) Normalized detection probabilities
 #'  aggregated per month and year [scale_newprob()].
 #'
-#' @return A data.frame with 16 columns:
+#' @return A list of two data.frames with 16 to 17 columns:
 #' * `length` Number of months with optimal detection `(i.e., over
 #' the specified threshold)`.
 #' * `threshold` Detection probability threshold specified in function call.
 #' * `period` Range of months having optimal detection.
+#' * `year` Sampling year, only present in calculating variation in separate years.
 #' * `GOTeDNA_ID`
 #' * `species`
 #' * `primer`
@@ -69,13 +70,14 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
   df_thresh <- lapply(scaledprobs, function(x) {
     x |> dplyr::filter(
       species %in% species.name,
-        fill >= thresh.value
+      fill >= thresh.value
     )
   })
 
   # selects only a single month >= threshold
   onemonth <- lapply(df_thresh, function(x) {
     x %>%
+      dplyr::group_by(id) %>%
       dplyr::filter(
         dplyr::n() == 1
       )
@@ -87,6 +89,7 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
       suppressMessages(
         dplyr::anti_join(x, y)
       ) %>%
+        dplyr::group_by(id) %>%
         dplyr::mutate(
           prev_ = dplyr::lag(month), # the previous item
           next_ = dplyr::lead(month), # the next item
@@ -111,23 +114,25 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
   })
 
   # selects species with consecutive months >= threshold
-  consecmonth1 <- multmonth %>%
-    lapply(function(x) {
-      dplyr::filter(x, length(x$id) == sum(x$diff_y1) + 1)
-    })
+  consecmonth1 <- lapply(multmonth, function(x) {
+    x %>%
+      dplyr::group_by(id) %>%
+      dplyr::filter(length(id) == sum(diff_y1) + 1)
+  })
 
   # selects species with consecutive months being December-January >= threshold
   # keep rows with diff_y1 = 11, because that could mean Dec/Jan are consecutive
   # if diff_y1 = 11, keep the row before it.
   # if diff_y1 = 1, keep row before
-  consecmonth2 <- multmonth %>%
-    lapply(function(x) {
-      dplyr::filter(x, length(id) == 2 & sum(diff_y1) == 11)
-    })
+  consecmonth2 <- lapply(multmonth, function(x) {
+    x %>%
+      dplyr::group_by(id) %>%
+      dplyr::filter(length(id) == 2 & sum(diff_y1) == 11)
+  })
 
   # all of the species with consecutive windows AND single month window
   consec.det <- mapply(dplyr::bind_rows, onemonth, consecmonth1, consecmonth2,
-    SIMPLIFY = FALSE)
+                       SIMPLIFY = FALSE)
 
   # create df where species have no discernible window (for now, this means more than one non-consecutive period)
   optwin <- lapply(consec.det, function(x) {
@@ -177,14 +182,19 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
     x[sapply(x, function(y) nrow(y) == 2)]
   })
 
-
+  fshTest <- vector("list", 2L)
+  names(fshTest) <- names(both_in_out)
+  opt_sampling <- vector("list", 2L)
+  names(opt_sampling) <- names(both_in_out)
+  fshDF <- vector("list")
   # Fisher's exact test to compare detection probability within/outside the window for each species and primer
   for (var in names(both_in_out)) {
-    if (length(both_in_out[[var]]) != 0) {
+    if (length(both_in_out[[var]]) == 0) {
+      warning("No optimal detection window")
+      return(NULL)
+    } else {
       # gives the period and length of optimal detection window
-      fshTest <- vector("list", 2L)
-      names(fshTest) <- names(both_in_out)
-      opt_sampling <- vector("list")
+
 
       opt_sampling[[var]] <- optwin[[var]] %>%
         dplyr::summarise(
@@ -205,6 +215,7 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
           ),
           nrow = 2
         ))
+
         fshTest[[var]][[i]] <- data.frame(
           "odds ratio" = f$estimate,
           "p value" = scales::pvalue(f$p.value),
@@ -213,46 +224,49 @@ calc_window <- function(data, threshold, species.name, scaledprobs) {
           check.names = FALSE
         )
 
-        fshDF <- vector("list")
-
         fshDF[[var]] <- do.call(
-          dplyr::bind_rows, fshTest[[var]][[i]]
+          dplyr::bind_rows, fshTest[[var]]
         )
-        fshDF[[var]]$id <- names(fshTest[[var]])
-        fshDF2 <- do.call(dplyr::bind_rows, fshDF[[var]])
+        fshDF[[var]]$id <- names(fshTest[[var]]) }}}
 
-        if (lengths(strsplit(fshDF2$id[1], ";")) == 4) {
-          fshDF3 <- dplyr::full_join(fshDF2, opt_sampling$Pscaled_year, by = "id")
+  fshDF2 <- lapply(fshDF, function(x)
+    dplyr::bind_rows(x))
 
-          fshDF3[c("GOTeDNA_ID", "species", "primer", "year")] <- stringr::str_split_fixed(fshDF3$id, ";", 4)
-        } else {
-          fshDF3 <- dplyr::full_join(fshDF2, opt_sampling$Pscaled_month, by = "id")
+  fshDF_year <- dplyr::full_join(fshDF2$Pscaled_year, opt_sampling$Pscaled_year, by = "id")
+  fshDF_year[c("GOTeDNA_ID", "species", "primer", "year")] <- stringr::str_split_fixed(fshDF_year$id, ";", 4)
+  fshDF_year <- dplyr::left_join(fshDF_year, unique(
+    data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
+    by = c("species"="scientificName"),
+    multiple = "first"
+  ) %>%
+    dplyr::mutate(confidence = dplyr::case_when(
+      `p value` == "<0.001" ~ "Very high",
+      `p value` < "0.01" ~ "High",
+      `p value` < "0.05" ~ "Medium",
+      `p value` >= "0.05" ~ "Low",
+      is.na(`p value`) ~ "No optimal period"
+    )) %>%
+    dplyr::select(-"id", -"mid_month") %>%
+    dplyr::select(-"odds ratio", -"p value", -"Lower CI", -"Upper CI", -"confidence", dplyr::everything())
 
-          fshDF3[c("GOTeDNA_ID", "species", "primer")] <- stringr::str_split_fixed(fshDF3$id, ";", 3)
-        }
-      }
+  fshDF_month <- dplyr::full_join(fshDF2$Pscaled_month, opt_sampling$Pscaled_month, by = "id")
+  fshDF_month[c("GOTeDNA_ID", "species", "primer")] <- stringr::str_split_fixed(fshDF_month$id, ";", 3)
+  fshDF_month <- dplyr::left_join(fshDF_month, unique(
+    data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
+    by = c("species" = "scientificName"),
+    multiple = "first"
+  ) %>%
+    dplyr::mutate(confidence = dplyr::case_when(
+      `p value` == "<0.001" ~ "Very high",
+      `p value` < "0.01" ~ "High",
+      `p value` < "0.05" ~ "Medium",
+      `p value` >= "0.05" ~ "Low",
+      is.na(`p value`) ~ "No optimal period"
+    )) %>%
+    dplyr::select(-"id", -"mid_month") %>%
+    dplyr::select(-"odds ratio", -"p value", -"Lower CI", -"Upper CI", -"confidence", dplyr::everything())
 
-      fshDF4 <- fshDF3 %>%
-        dplyr::left_join(unique(data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
-          by = c("species" = "scientificName"),
-          multiple = "first"
-        ) %>%
-        dplyr::mutate(confidence = dplyr::case_when(
-          `p value` == "<0.001" ~ "Very high",
-          `p value` < "0.01" ~ "High",
-          `p value` < "0.05" ~ "Medium",
-          `p value` >= "0.05" ~ "Low",
-          is.na(`p value`) ~ "No optimal period"
-        ))
+  list(fshDF_month = fshDF_month, fshDF_year = fshDF_year) %>%
+    return()
 
-      fshDF4 <- fshDF4 %>%
-        dplyr::select(-"id", -"mid_month") %>%
-        dplyr::select(-"odds ratio", -"p value", -"Lower CI", -"Upper CI", -"confidence", dplyr::everything())
-
-      return(fshDF4)
-    } else {
-      warning("No optimal detection window")
-      return(NULL)
-    }
-  }
 }
