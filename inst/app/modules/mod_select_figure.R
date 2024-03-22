@@ -48,7 +48,7 @@ mod_select_figure_ui <- function(id) {
           ns("fig_detect"),
           "Monthly eDNA detection probability",
           "",
-          "img/tn_smooth.png"
+          "img/tn_thresh.png"
         )
       ),
       column(
@@ -153,7 +153,6 @@ mod_select_figure_server <- function(id, r) {
         fig3 = "field_sample.html",
         fig4 = "detection.html"
       )
-      #browser()
       includeHTML(file.path("www", "doc", "caption", file))
     })
   })

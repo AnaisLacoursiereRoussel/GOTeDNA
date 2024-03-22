@@ -19,10 +19,10 @@ gloss <- read.csv("data/glossary.csv")
 gloss$Term <- paste0('<p align ="right"><b>', trimws(gloss$Term), "</b></p>")
 gloss$Definition <- trimws(gloss$Definition)
 
-# import all GOTeDNA data
+# import GOTeDNA data
 gotedna_data <- gotedna_data0 <- readRDS("data/gotedna_data.rds")
 gotedna_station <- gotedna_station0 <- readRDS("data/gotedna_station.rds")
-
+gotedna_primer <- readRDS("data/gotedna_primer.rds")
 taxon_levels <- c("phylum", "class", "genus", "species")
 
 # function
@@ -41,6 +41,33 @@ filter_taxa_data <- function(x, phy, cla, gen, spe) {
     }
   }
   x
+}
+
+get_primer_selection <- function(lvl, data) {
+ if (lvl == "all") {
+    out <- table(data$target_subfragment) |>
+      sort() |>
+      rev()
+    names(out)
+  } else {
+    if (lvl == "species") {
+      tx_col <- "scientificName"
+    } else {
+      tx_col <- lvl
+    }
+    browser()
+    tmp <- gotedna_primer[[lvl]] |>
+      inner_join(
+        data |> select({{ tx_col }}, target_subfragment) |> distinct(),
+        join_by(primer == target_subfragment,{{ lvl }} == {{ tx_col }})) |>
+      mutate(
+        text = paste0(primer, " (", success, "/", total, " ", perc, "%)")
+      )
+    out <- as.list(tmp$primer)
+    names(out) <- tmp$text
+    # browser()
+    out
+  }
 }
 
 get_taxon_level <- function(phy, cla, gen, spe) {

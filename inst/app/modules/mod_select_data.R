@@ -128,33 +128,6 @@ mod_select_data_server <- function(id, r) {
       }
     })
 
-    observe({
-      if (input$datatype == "qPCR") {
-        tg <- table(r$data_filtered$target_gene) |>
-          sort() |>
-          rev()
-        updateSelectInput(
-          session,
-          "primer",
-          choices = names(tg),
-          selected = names(tg)[1]
-        )
-      } else {
-        tg <- table(r$data_filtered$target_subfragment) |>
-          sort() |>
-          rev()
-        updateSelectInput(
-          session,
-          "primer",
-          choices = names(tg),
-          selected = names(tg)[1]
-        )
-      }
-    })
-
-    observe(
-      r$primer <- input$primer
-    )
 
     observeEvent(input$datatype, {
       r$data_type <- input$datatype
@@ -175,11 +148,13 @@ mod_select_data_server <- function(id, r) {
         hide(id = "slc_gen")
         hide(id = "slc_spe")
         updateSelectInput(session, "slc_cla", select = "All")
+        r$slc_taxon_lvl <- "all"
       } else {
         show(id = "slc_cla")
         updateSelectInput(session, "slc_cla",
           choices = c("All", unique(r$data_filtered$class) |> sort())
         )
+        r$slc_taxon_lvl <- "phylum"
       }
     })
     observeEvent(input$slc_cla, {
@@ -196,6 +171,7 @@ mod_select_data_server <- function(id, r) {
         updateSelectInput(session, "slc_gen",
           choices = c("All", unique(r$data_filtered$genus) |> sort())
         )
+        r$slc_taxon_lvl <- "class"
       }
     })
     observeEvent(input$slc_gen, {
@@ -211,6 +187,7 @@ mod_select_data_server <- function(id, r) {
         updateSelectInput(session, "slc_spe",
           choices = c("All", unique(r$data_filtered$scientificName) |> sort())
         )
+        r$slc_taxon_lvl <- "genus"
       }
     })
     observeEvent(input$slc_spe, {
@@ -218,7 +195,29 @@ mod_select_data_server <- function(id, r) {
         gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
         input$slc_gen, input$slc_spe
       )
+      if (input$slc_spe != "All") r$slc_taxon_lvl <- "species"
     })
+
+    # primer
+    observe({
+      if (input$datatype == "qPCR") {
+        updateSelectInput(
+          session,
+          "primer",
+          choices = "not available"
+        )
+      } else {
+        updateSelectInput(
+          session,
+          "primer",
+          choices = get_primer_selection(r$slc_taxon_lvl, r$data_filtered)
+        )
+      }
+    })
+
+    observe(
+      r$primer <- input$primer
+    )
 
     output$n_smpl <- renderUI({
       tagList(

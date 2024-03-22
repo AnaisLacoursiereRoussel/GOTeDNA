@@ -20,11 +20,12 @@ Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 aggregated per month and year \code{\link[=scale_newprob]{scale_newprob()}}.}
 }
 \value{
-A data.frame with 16 columns:
+A list of two data.frames with 16 to 17 columns:
 \itemize{
 \item \code{length} Number of months with optimal detection \verb{(i.e., over the specified threshold)}.
 \item \code{threshold} Detection probability threshold specified in function call.
 \item \code{period} Range of months having optimal detection.
+\item \code{year} Sampling year, only present in calculating variation in separate years.
 \item \code{GOTeDNA_ID}
 \item \code{species}
 \item \code{primer}
