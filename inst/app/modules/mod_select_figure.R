@@ -107,9 +107,9 @@ mod_select_figure_server <- function(id, r) {
               output$conf <- renderUI("NA")
               output$var_year <- renderUI("NA")
             } else {
-              output$opt_sampl <- renderUI(win$period)
-              output$conf <- renderUI(win$confidence)
-              output$var_year <- renderUI(2)
+              output$opt_sampl <- renderUI(paste(win$fshDF_month$period, collapse = ", "))
+              output$conf <- renderUI(paste(win$fshDF_month$confidence, collapse = ", "))
+              output$var_year <- renderUI("todo")
             }
             # output$var_primer <- renderUI("TODO")
             # output$var_dat <- renderUI("TODO")
