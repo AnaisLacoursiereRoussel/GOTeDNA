@@ -28,6 +28,8 @@ server <- function(input, output, session) {
   mod_dialog_map_info_server("show_map_info", r)
 
   mod_dialog_source_server("show_source", r)
+  mod_glossary_server("glossary")
+
   observeEvent(input$show_source, r$show_source <- TRUE)
 
 

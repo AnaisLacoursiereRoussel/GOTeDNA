@@ -4,103 +4,154 @@ mod_select_data_ui <- function(id) {
   tagList(
     div(
       id = "data_request",
-      fluidRow(
-        column(
-          8,
-          h2("Data request", class = "col_1")
-        ),
-        column(
-          4,
-          div(
-            id = "reset_button",
-            actionButton(ns("reset"), "Reset",
-              icon = icon("refresh"),
-              title = "reset selection to default values"
+      div(
+        class = "section_header",
+        fluidRow(
+          # title and top buttons
+          column(8, h1("Data request")),
+          column(
+            4,
+            div(
+              id = "reset_button",
+              actionButton(ns("reset"), "Reset",
+                icon = icon("refresh"),
+                title = "reset selection to default values"
+              ),
+              actionButton(ns("hide"), "Hide/Show fields",
+                icon = icon("eye"),
+                title = "Hide or show fields"
+              )
             )
           )
         ),
-        column(
-          6,
-          radioButtons(ns("datasource"),
-            label = "Data source",
-            choices = list(
-              "GOTeDNA" = "gotedna",
-              "Your own data" = "external_data"
-            ),
-            selected = "gotedna",
-            inline = TRUE
-          ),
-        ),
-        column(
-          6,
+        # fields
+        div(
+          id = "data_request_fields",
+          ## top fields
           div(
-            id = ns("external_files"),
-            fileInput(
-              ns("external_file"),
-              "upload your files",
-              multiple = TRUE,
-              accept = NULL,
-              width = NULL,
-              buttonLabel = "Browse...",
-              placeholder = "No file selected",
-              capture = NULL
+            id = "data_request_top_fields",
+            fluidRow(
+              column(
+                3,
+                selectInput(ns("datasource"),
+                  label = "Data source",
+                  choices = list(
+                    "GOTeDNA" = "gotedna",
+                    "Your own data" = "external_data"
+                  ),
+                  selected = "gotedna"
+                )
+              ),
+              column(
+                3,
+                div(
+                  id = ns("external_files"),
+                  fileInput(
+                    ns("external_file"),
+                    "upload your files",
+                    multiple = TRUE,
+                    accept = NULL,
+                    width = NULL,
+                    buttonLabel = "Browse...",
+                    placeholder = "No file selected",
+                    capture = NULL
+                  )
+                )
+              ),
+              column(
+                3,
+                selectInput(ns("datatype"),
+                  label = "Type of data",
+                  choices = list(
+                    "Species specific (qPCR)" = "qPCR",
+                    "Multi-species (metabarcoding)" = "metabarcoding"
+                  ),
+                  selected = "qPCR"
+                )
+              ),
+              column(
+                3,
+                selectInput(ns("primer"), "Primer", choices = "All")
+              )
+            )
+          ),
+          ## bottom fields
+          div(
+            id = "data_request_bottom_fields",
+            fluidRow(
+              column(
+                3,
+                selectInput(ns("slc_dom"), "Domain", choices = "All")
+              ),
+              column(
+                3,
+                selectInput(ns("slc_kin"), "Kingdom", choices = "All")
+              ),
+              column(
+                3,
+                selectInput(ns("slc_phy"), "Phylum", choices = "All")
+              ),
+              column(
+                3,
+                selectInput(ns("slc_cla"), "Class", choices = "All")
+              ),
+              column(
+                3,
+                selectInput(ns("slc_ord"), "Order", choices = "All")
+              ),
+              column(
+                3,
+                selectInput(ns("slc_fam"), "Family", choices = "All")
+              ),
+              column(
+                3,
+                selectInput(ns("slc_gen"), "Genus", choices = "All")
+              ),
+              column(
+                3,
+                selectInput(ns("slc_spe"), "Species", choices = "All")
+              )
+            ),
+            div(
+              class = "section_footer",
+              column(12, uiOutput(outputId = ns("n_smpl")))
             )
           )
-        ),
-        column(
-          8,
-          radioButtons(ns("datatype"),
-            label = "Type of data",
-            choices = list(
-              "Species specific (qPCR)" = "qPCR",
-              "Multi-species (metabarcoding)" = "metabarcoding"
-            ),
-            selected = "qPCR",
-            inline = TRUE
-          ),
-        ),
-        column(
-          4,
-          selectInput(ns("primer"), "Primer", choices = "All")
-        ),
-        column(
-          6,
-          selectInput(ns("slc_phy"), "Phylum", choices = "All"),
-          selectInput(ns("slc_gen"), "Genus", choices = "All")
-        ),
-        column(
-          6,
-          selectInput(ns("slc_cla"), "Class", choices = "All"),
-          selectInput(ns("slc_spe"), "Species", choices = "All")
         )
-      ),
-      fluidRow(
-        column(
-          6,
-          uiOutput(outputId = ns("n_smpl"))
-        ),
-        column(
-          6,
-          div(
-            id = "button_map",
-            actionButton(ns("show_map_info"), "Map",
-              icon = icon("info-circle"),
-              title = "Display information about how to use the map below"
-            ),
-            actionButton(ns("confirm"), "Confirm",
-              icon = icon("check"),
-              title = "confirm spatial selection"
-            ),
-            actionButton(ns("refresh"), "Clear",
-              icon = icon("eraser"),
-              title = "clear current spatial selection"
-            ),
+      )
+    ),
+    div(
+      id = "area_selection",
+      div(
+        class = "section_header",
+        fluidRow(
+          column(8, h1("Area Selection")),
+          column(
+            4,
+            div(
+              id = "map_button",
+              div(
+                id = "button_map",
+                actionButton(ns("show_map_info"), "Map",
+                  icon = icon("info-circle"),
+                  title = "Display information about how to use the map below"
+                ),
+                actionButton(ns("confirm"), "Confirm",
+                  icon = icon("check"),
+                  title = "confirm spatial selection"
+                ),
+                actionButton(ns("refresh"), "Clear",
+                  icon = icon("eraser"),
+                  title = "clear current spatial selection"
+                ),
+              )
+            )
           )
         )
       ),
       mapedit::editModUI(ns("map-select"), height = "50vh"),
       div(
-        id = "button_source",
+        class = "section_footer",
         actionButton("show_source", "Reference data authorship",
           icon = icon("eye"),
           title = "access list of data authorship"
@@ -221,9 +272,12 @@ mod_select_data_server <- function(id, r) {
 
     output$n_smpl <- renderUI({
       tagList(
-        p(
-          "Total number of samples selected: ",
-          strong(format(r$n_sample, big.mark = ","))
+        div(
+          id = "sample_selected",
+          p(
+            "Sample selected: ",
+            strong(format(r$n_sample, big.mark = ","))
+          )
         )
       )
     })

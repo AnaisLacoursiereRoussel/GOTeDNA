@@ -1,26 +1,104 @@
+/*colors*/
+/* green-blue palette */
+/* #20e062 spring green */
+/* #75f9c6 aquamarine highlight*/
+/* #36dfd2 turquoise */
+/* #31b4db deepskyblue */
+/* #2f9ae6 dodgerblue */
+/* #2c62cb royalblue */
+
+/* medium blue #2241a7 */
+
+/* #333333 dark grey  */
+
+
+body {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+p {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  color: #2241a7;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+{
+font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.container-fluid {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.navbar.navbar-default {
+  background-color: #2241a7 !important;
+  padding: 1rem;
+}
+.nav-link {
+  color: white !important;
+}
+
+h1 {
+  color: #2241a7;
+}
+
 h2 {
   font-weight: bold;
-  color: #53b2ad;
+  color: #20e062;
 }
 
-#file_report {
-  color: #337ab7;
+.section_header {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  padding-bottom: 3rem;
 }
+
+.section_footer {
+  padding-right: 5rem;
+  padding-left: 5rem;
+}
+
+#data_request_fields {
+  padding-right: 5rem;
+  padding-left: 5rem;
+}
+
+
+
+#area_selection {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: #75f9c6;
+}
+
 
 #logo_gotedna {
-  height: 5.2rem;
+  height: 4rem;
   margin-left: 8%;
 }
 
-#data_request {
-  background-color: #f2f2f2;
-  min-height: 90vh;
-  padding: 0.5rem;
-  margin-top: 0rem !important;
+#footer {
+  background-color: #333333;
 }
 
-#data_request h2 {
-  margin-top: 0rem !important;
+
+
+#data_request {
+  min-height: 30vh;
+  padding: 1rem;
 }
 
 #observation_request {
@@ -30,7 +108,7 @@ h2 {
 }
 
 #observation_request .tabbable a {
-  color: #53b2ad;
+  color: #20e062;
 }
 
 #observation_request h2 {
@@ -38,7 +116,7 @@ h2 {
 }
 
 #observation_request h3 {
-  color: #53b2ad;
+  color: #20e062;
   margin-top: 2rem;
   font-size: 1.4rem;
 }
@@ -57,7 +135,7 @@ h2 {
 }
 
 #gotedna_info .btn i {
-  color: #53b2ad;
+  color: #20e062;
 }
 
 
@@ -72,10 +150,10 @@ h2 {
 
 
 #table_output table {
-    color: #53b2ad;
+  color: #20e062;
 }
 
-.pending{
+.pending {
   color: #ccc;
   font-size: 1.1em;
 }
@@ -83,7 +161,7 @@ h2 {
 
 
 .col_1 {
-  color: #53b2ad;
+  color: #20e062;
 }
 
 .col_grey1 {
@@ -109,7 +187,7 @@ h2 {
 }
 
 .shiny-notification {
-  position:fixed;
+  position: fixed;
   top: calc(1%);
   left: calc(25%);
   width: 50%;
