@@ -35,7 +35,6 @@ ui <- fluidPage(
     tabPanel("Partners"),
     tabPanel("Team"),
     tabPanel("Contact"),
-    icon("info-circle", class = "fa-2xl")
   ),
   div(
     id = "footer",

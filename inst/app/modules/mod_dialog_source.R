@@ -22,7 +22,7 @@ mod_dialog_source_server <- function(id, r) {
 
     output$source <- DT::renderDT(
       r$data_filtered |>
-      dplyr::ungroup() |>
+        dplyr::ungroup() |>
         dplyr::group_by(
           GOTeDNA_ID, GOTeDNA_version, materialSampleID
         ) |>
@@ -30,16 +30,17 @@ mod_dialog_source_server <- function(id, r) {
           `Total number \nof samples` = n(),
           `Total number \n of stations` = length(unique(station))
         ) |>
-        mutate(`Data owner contact` = "To be added",
-               `Indigenous data labelling` = "To be added",
-               Publication = "DOI; To be added",
-               Reference = "To be added") |>
+        mutate(
+          `Data owner contact` = "To be added",
+          `Indigenous data labelling` = "To be added",
+          Publication = "DOI; To be added",
+          Reference = "To be added"
+        ) |>
         dplyr::ungroup() |>
         dplyr::select(
-          	Publication, `Data owner contact`, `Total number \nof samples`,
-          	`Total number \n of stations`, Reference
+          Publication, `Data owner contact`, `Total number \nof samples`,
+          `Total number \n of stations`, Reference
         )
-
     )
 
     observeEvent(input$dismiss, {

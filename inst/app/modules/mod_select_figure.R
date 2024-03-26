@@ -66,33 +66,39 @@ mod_select_figure_ui <- function(id) {
     ),
     div(
       id = "observation",
-        div(
-          class = "section_header",
-          h1("Observation")
-        ),
-        fluidRow(
-          column(
-            3,
-            div(
-              id = "fig_left_panel",
-              selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
-          actionButton(
-            ns("calc_window"),
-            label = "Compute & visualize",
-            title = "Compute optimal detection window",
-            icon = icon("gear"),
-            class = "btn-blue"
-          ),
-          h4("Sampling info"),
-          h6("Optimal sampling period: "),
-          uiOutput(ns("opt_sampl"), class = "fig_text_output"),
-          h6("Confidence: "),
-          uiOutput(ns("conf"), class = "fig_text_output"),
-          h6("Variation among year: "),
-          uiOutput(ns("var_year"), class = "fig_text_output"),
-          h6("Variation among primers: "),
-          uiOutput(ns("var_primer"), class = "fig_text_output")
+      div(
+        class = "section_header",
+        h1("Observation")
+      ),
+      fluidRow(
+        column(
+          3,
+          div(
+            id = "fig_left_panel",
+            selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
+            actionButton(
+              ns("calc_window"),
+              label = "Compute & visualize",
+              title = "Compute optimal detection window",
+              icon = icon("gear"),
+              class = "btn-blue"
+            ),
+            h4("Sampling info"),
+            h6("Optimal sampling period: "),
+            uiOutput(ns("opt_sampl"), class = "fig_text_output"),
+            h6("Confidence: "),
+            uiOutput(ns("conf"), class = "fig_text_output"),
+            h6("Variation among year: "),
+            uiOutput(ns("var_year"), class = "fig_text_output"),
+            h6("Variation among primers: "),
+            uiOutput(ns("var_primer"), class = "fig_text_output"),
+            actionButton(
+              ns("export_pdf"),
+              "Export to PDF",
+              title = "Export figures to PDF",
+              class = "btn-blue"
             )
+          )
         ),
         column(
           9,
@@ -110,8 +116,20 @@ mod_select_figure_ui <- function(id) {
           ),
           div(
             id = "reference_data_authorship",
-            p("add ref table")
+            DT::DTOutput(ns("data_authorship"))
           ),
+        ),
+        column(3),
+        column(9,
+          div(
+            class = "section_footer",
+            actionButton(
+              ns("export_biblio"),
+              "Export references",
+              title = "Export references",
+              class = "btn-blue"
+            )
+          )
         )
       )
     )
@@ -165,9 +183,6 @@ mod_select_figure_server <- function(id, r) {
               output$conf <- renderUI(win$confidence)
               output$var_year <- renderUI(2)
             }
-            # output$var_primer <- renderUI("TODO")
-            # output$var_dat <- renderUI("TODO")
-
             r$fig_ready <- TRUE
 
             # freeze taxon level selected
@@ -208,6 +223,29 @@ mod_select_figure_server <- function(id, r) {
         fig4 = "detection.html"
       )
       includeHTML(file.path("www", "doc", "caption", file))
+    })
+
+    output$data_authorship <- DT::renderDT({
+      r$data_filtered |>
+        dplyr::ungroup() |>
+        dplyr::group_by(
+          GOTeDNA_ID, GOTeDNA_version, materialSampleID
+        ) |>
+        summarise(
+          `Total number \nof samples` = n(),
+          `Total number \n of stations` = length(unique(station))
+        ) |>
+        mutate(
+          `Data owner contact` = "To be added",
+          `Indigenous data labelling` = "To be added",
+          Publication = "DOI; To be added",
+          Reference = "To be added"
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::select(
+          Publication, `Data owner contact`, `Total number \nof samples`,
+          `Total number \n of stations`, Reference
+        )
     })
   })
 }

@@ -51,12 +51,9 @@ h6 {
   color: white !important;
 }
 
-h1 {
-  color: #2241a7;
-}
-
+h1,
 h2 {
-  color: #20e062;
+  color: #2241a7;
 }
 
 h4,
@@ -83,6 +80,7 @@ h6 {
 .section_footer {
   padding-right: 5rem;
   padding-left: 5rem;
+  padding-bottom: 2rem;
 }
 
 .btn {
@@ -117,7 +115,6 @@ h6 {
 }
 
 
-
 #area_selection {
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -150,7 +147,13 @@ h6 {
   padding-left: 2rem;
   padding-right: 2rem;
   margin-right: 5rem;
+}
 
+#reference_data_authorship {
+  background-color: white;
+  padding: 4rem;
+  margin-right: 5rem;
+  margin-top: 2rem;
 }
 
 .fig_text_output {
@@ -165,10 +168,24 @@ h6 {
 }
 
 #footer {
+  padding: 4rem;
   background-color: #333333;
   text-align: center;
+  align-items: center;
 }
 
+
+#logo_dfo {
+  height: 2rem;
+}
+
+#logo_undossd {
+  height: 7rem;
+}
+
+#logo_mswc {
+  height: 5rem;
+}
 
 #data_input table {
   font-size: 1.4rem;
