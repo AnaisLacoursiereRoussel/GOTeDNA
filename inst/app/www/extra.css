@@ -70,6 +70,37 @@ h6 {
   padding-top: 2rem;
 }
 
+/* Modal */
+.modal-content {
+  border-radius: 0px;
+}
+
+
+.modal-body {
+  padding: 0px;
+}
+
+#disclaimer_left {
+  text-align: center;
+  padding: 2rem;
+}
+
+#disclaimer_right {
+  background-color: #75f9c6;
+  padding: 2rem;
+}
+
+#disclaimer_footer_right {
+  background-color: #75f9c6;
+}
+
+#logo_disclaimer {
+  padding-top: 2rem;
+  padding-bottom: 5rem;
+}
+
+/* Section */
+
 .section_header {
   padding-right: 1rem;
   padding-left: 1rem;
