@@ -22,12 +22,8 @@ server <- function(input, output, session) {
 
   mod_dialog_disclaimers_server("show_dialog", r)
   observeEvent(input$show_dialog, r$show_dialog <- TRUE)
-  mod_dialog_definitions_server("show_help", r)
   observeEvent(input$show_help, r$show_help <- TRUE)
-
   mod_dialog_map_info_server("show_map_info", r)
-
-  mod_dialog_source_server("show_source", r)
   mod_glossary_server("glossary")
 
   observeEvent(input$show_source, r$show_source <- TRUE)
