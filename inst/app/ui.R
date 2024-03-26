@@ -37,21 +37,27 @@ ui <- fluidPage(
     tabPanel("Contact"),
     icon("info-circle", class = "fa-2xl")
   ),
-  fluidRow(
-    column(
-      12,
-      div(
-        id = "footer",
+  div(
+    id = "footer",
+    fluidRow(
+      column(
+        4,
         img(
           src = "img/logo_partners/logo_dfo.svg",
           alt = "Logo DFO",
           id = "logo_dfo"
-        ),
+        )
+      ),
+      column(
+        4,
         img(
           src = "img/logo_partners/logo_mswc.png",
           alt = "Logo Main eDNA",
           id = "logo_mswc"
-        ),
+        )
+      ),
+      column(
+        4,
         img(
           src = "img/logo_partners/logo_undossd.svg",
           alt = "Logo United Nations Decade of Ocean Science for Sustainable Development",

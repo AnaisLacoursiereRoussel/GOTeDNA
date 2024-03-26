@@ -60,23 +60,11 @@ saveRDS(gotedna_station, "inst/app/data/gotedna_station.rds")
 # Prepare primer data 
 gotedna_data <- readRDS("inst/app/data/gotedna_data.rds")
 newprob <- calc_det_prob(gotedna_data$metabarcoding)
-scaledprobs <- scale_newprob(D_mb_ex, newprob)
+scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob) 
 
-scaledprobs$Pscaled_month$phylum |> unique()
- [1] NA                "Chordata"        "Echinodermata"   "Cnidaria"        "Annelida"        "Arthropoda"      "Bryozoa"         "Mollusca"        "Nemertea"        "Platyhelminthes"
-[11] "Porifera"        "Xenacoelomorpha" "Rotifera"       
+gotedna_primer <- list()
 
-gotedna_data$metabarcoding$phylum |> unique()
-
-[1] "Chordata"        "Echinodermata"   "Cnidaria"        "Annelida"        "Arthropoda"      "Bryozoa"         "Ctenophora"      "Entoprocta"      "Hemichordata"    "Mollusca"       
-[11] "Nematoda"        "Nemertea"        "Platyhelminthes" "Porifera"        "Rotifera"        "Xenacoelomorpha" "Brachiopoda"     "Priapulida"      "Gastrotricha"    "Gnathifera"     
-[21] "Tardigrada"   
-
-
-gotedna_primer  <- list()
-
-for (i in c("phylum", "class", "genus", "species")) {
-  print(i)
+for (i in c("phylum", "class", "order", "family", "genus", "species")) {
   gotedna_primer[[i]] <- primer_sort(i, scaledprobs$Pscaled_month) |>
     mutate(text = paste0(primer, " (", success, "/", total, " ", perc, "%)")) 
 }

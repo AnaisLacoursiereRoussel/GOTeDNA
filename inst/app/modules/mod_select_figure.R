@@ -2,69 +2,123 @@
 mod_select_figure_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    fluidRow(
-      column(
-        3,
-        h2("Observations"),
-        selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
-        actionButton(
-          ns("calc_window"),
-          label = "Compute & visualize",
-          title = "Compute optimal detection window",
-          icon = icon("gear"),
-          style = "border-color: #53b2ad; border-width: 3px; font-size: 1.25rem; border-radius: 0.8rem"
-        ),
-        h3("Sampling info"),
-        h6("Optimal sampling period: "),
-        uiOutput(ns("opt_sampl")),
-        h6("Confidence: "),
-        uiOutput(ns("conf"), fill = TRUE),
-        h6("Variation among year: "),
-        uiOutput(ns("var_year")),
-        # h5("Variation among primers: ")
-        # uiOutput(ns("var_primer"))
-        # h5("Variation among datasets: ")
-        # (uiOutput(ns("var_dat"))
-        h3("Figures"),
-        taglist_fig_info(
-          ns("fig_heatmap"),
-          "Species detection heatmap",
-          "",
-          "img/tn_heatmap.png"
-        ),
-        taglist_fig_info(
-          ns("fig_effort"),
-          "Sample size to achieve detection",
-          "",
-          "img/tn_effort.png"
-        ),
-        taglist_fig_info(
-          ns("fig_higher"),
-          "Field sample size for datasets",
-          "",
-          "img/tn_higher.png"
-        ),
-        taglist_fig_info(
-          ns("fig_detect"),
-          "Monthly eDNA detection probability",
-          "",
-          "img/tn_thresh.png"
+    div(
+      id = "figure_selection",
+      div(
+        class = "section_header",
+        fluidRow(
+          column(8, h1("Figure selection")),
+          column(
+            4,
+            actionButton(ns("hide"), "Hide/Show fields",
+              icon = icon("eye"),
+              title = "Hide or show fields"
+            )
+          )
         )
       ),
-      column(
-        9,
-        div(
-          id = "fig_caption",
-          uiOutput(ns("current_cap"), height = "15vh")
+      div(
+        id = "figure_selection_main",
+        fluidRow(
+          column(
+            12,
+            actionButton(
+              ns("select_all"),
+              "Select all figures",
+              title = "Select all figures"
+            )
+          )
         ),
+        fluidRow(
+          add_figure_selection(
+            ns("fig_heatmap"),
+            "Species detection heatmap",
+            "img/thumbnails/tn_heatmap.png"
+          ),
+          add_figure_selection(
+            ns("fig_effort"),
+            "Sample size to achieve detection",
+            "img/thumbnails/tn_effort.png"
+          ),
+          add_figure_selection(
+            ns("fig_higher"),
+            "Field sample size for datasets",
+            "img/thumbnails/tn_higher.png"
+          ),
+          add_figure_selection(
+            ns("fig_detect"),
+            "Monthly eDNA detection probability",
+            "img/thumbnails/tn_thresh.png"
+          )
+        ),
+        fluidRow(
+          column(
+            12,
+            actionButton(
+              ns("confirm"),
+              "Confirm",
+              title = "Confirm selection",
+              class = "btn-blue"
+            )
+          )
+        ),
+      )
+    ),
+    div(
+      id = "observation",
         div(
-          id = "fig_panel",
-          plotOutput(ns("current_fig"), height = "65vh")
+          class = "section_header",
+          h1("Observation")
+        ),
+        fluidRow(
+          column(
+            3,
+            div(
+              id = "fig_left_panel",
+              selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
+          actionButton(
+            ns("calc_window"),
+            label = "Compute & visualize",
+            title = "Compute optimal detection window",
+            icon = icon("gear"),
+            class = "btn-blue"
+          ),
+          h4("Sampling info"),
+          h6("Optimal sampling period: "),
+          uiOutput(ns("opt_sampl"), class = "fig_text_output"),
+          h6("Confidence: "),
+          uiOutput(ns("conf"), class = "fig_text_output"),
+          h6("Variation among year: "),
+          uiOutput(ns("var_year"), class = "fig_text_output"),
+          h6("Variation among primers: "),
+          uiOutput(ns("var_primer"), class = "fig_text_output")
+            )
+        ),
+        column(
+          9,
+          div(
+            id = "fig_container",
+            h4("Figure Title"),
+            div(
+              id = "fig_caption",
+              uiOutput(ns("current_cap"), height = "15vh")
+            ),
+            div(
+              id = "fig_panel",
+              plotOutput(ns("current_fig"), height = "65vh")
+            )
+          ),
+          div(
+            id = "reference_data_authorship",
+            p("add ref table")
+          ),
         )
-      ),
+      )
     )
   )
 }
+
+
 
 mod_select_figure_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {

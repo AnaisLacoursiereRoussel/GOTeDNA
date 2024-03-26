@@ -30,9 +30,8 @@ h2,
 h3,
 h4,
 h5,
-h6
-{
-font-family: "Montserrat", sans-serif;
+h6 {
+  font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
@@ -47,6 +46,7 @@ font-family: "Montserrat", sans-serif;
   background-color: #2241a7 !important;
   padding: 1rem;
 }
+
 .nav-link {
   color: white !important;
 }
@@ -56,19 +56,59 @@ h1 {
 }
 
 h2 {
-  font-weight: bold;
   color: #20e062;
+}
+
+h4,
+h5,
+h6 {
+  color: #5a5a5a;
+}
+
+h4 {
+  padding-top: 4rem;
+}
+
+h6 {
+  padding-top: 2rem;
 }
 
 .section_header {
   padding-right: 1rem;
   padding-left: 1rem;
   padding-bottom: 3rem;
+  padding-top: 3rem;
 }
 
 .section_footer {
   padding-right: 5rem;
   padding-left: 5rem;
+}
+
+.btn {
+  background-color: white;
+  color: #2241a7;
+}
+
+.btn-blue {
+  background-color: #2241a7;
+  color: white;
+}
+
+.thumbnail {
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.thumbnail img {
+  border-width: 2px;
+  border-color: #75f9c6;
+}
+
+.thumbnail h5 {
+  text-align: center;
+  color: #2241a7;
 }
 
 #data_request_fields {
@@ -79,9 +119,43 @@ h2 {
 
 
 #area_selection {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
   background-color: #75f9c6;
+}
+
+#observation {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: #e8e8e8;
+}
+
+#figure_selection {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+#figure_selection_main {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+#fig_left_panel {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+#fig_container {
+  background-color: white;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-right: 5rem;
+
+}
+
+.fig_text_output {
+  min-height: 3rem;
+  background-color: #bcffd3;
 }
 
 
@@ -92,50 +166,7 @@ h2 {
 
 #footer {
   background-color: #333333;
-}
-
-
-
-#data_request {
-  min-height: 30vh;
-  padding: 1rem;
-}
-
-#observation_request {
-  background-color: #f2f2f2;
-  min-height: 97vh;
-  padding: 0.5rem;
-}
-
-#observation_request .tabbable a {
-  color: #20e062;
-}
-
-#observation_request h2 {
-  margin-top: 1rem;
-}
-
-#observation_request h3 {
-  color: #20e062;
-  margin-top: 2rem;
-  font-size: 1.4rem;
-}
-
-#gotedna_info,
-#reset_button {
-  text-align: right;
-}
-
-
-#gotedna_info .btn {
-  background-color: transparent;
-  border: none;
-  margin-top: 1rem;
-  padding: 0.25rem;
-}
-
-#gotedna_info .btn i {
-  color: #20e062;
+  text-align: center;
 }
 
 
@@ -153,24 +184,6 @@ h2 {
   color: #20e062;
 }
 
-.pending {
-  color: #ccc;
-  font-size: 1.1em;
-}
-
-
-
-.col_1 {
-  color: #20e062;
-}
-
-.col_grey1 {
-  color: #7f7f7f;
-}
-
-.col_grey3 {
-  color: #f2f2f2;
-}
 
 .align-text-left {
   width: 100%;

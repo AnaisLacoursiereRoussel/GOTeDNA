@@ -102,7 +102,7 @@ plotNotAvailableForqPCR <- function() {
 }
 
 
-add_thumbnail_button <- function(id, src, alt = "Figure thumbnail") {
+add_thumbnail_button <- function(id, src, title, alt = "Figure thumbnail") {
   # https://stackoverflow.com/questions/44841346/adding-an-image-to-shiny-action-button
   tags$button(
     id = id,
@@ -112,17 +112,17 @@ add_thumbnail_button <- function(id, src, alt = "Figure thumbnail") {
       alt = alt,
       id = "fig-thumbnail",
       style = "height: 7rem;"
-    )
+    ),
+    title = title
   )
 }
 
-
-taglist_fig_info <- function(id, title, info, scr = NULL) {
-  tagList(
+add_figure_selection <- function(id, title, scr = NULL, info = title) {
+  column(2,
     div(
       class = "thumbnail",
-      h5(title),
-      add_thumbnail_button(id, scr)
+      add_thumbnail_button(id, scr, info),
+      h5(title)
     )
   )
 }
