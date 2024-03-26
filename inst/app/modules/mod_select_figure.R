@@ -10,15 +10,17 @@ mod_select_figure_ui <- function(id) {
           column(8, h1("Figure selection")),
           column(
             4,
-            actionButton(ns("hide"), "Hide/Show fields",
-              icon = icon("eye"),
+            div(
+              class = "top_right_button",
+            actionButton(ns("hide_figs"), "Hide/Show figures",
               title = "Hide or show fields"
+            )
             )
           )
         )
       ),
       div(
-        id = "figure_selection_main",
+        id = ns("figure_selection_main"),
         fluidRow(
           column(
             12,
@@ -141,6 +143,10 @@ mod_select_figure_ui <- function(id) {
 mod_select_figure_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+     observeEvent(input$hide_figs, {
+       shinyjs::toggle("figure_selection_main")
+     })
 
 
     observeEvent(input$calc_window, {

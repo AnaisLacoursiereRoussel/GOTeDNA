@@ -12,13 +12,11 @@ mod_select_data_ui <- function(id) {
           column(
             4,
             div(
-              id = "reset_button",
+              class = "top_right_button",
               actionButton(ns("reset"), "Reset",
-                icon = icon("refresh"),
-                title = "reset selection to default values"
+                title = "Reset selection to default values"
               ),
-              actionButton(ns("hide"), "Hide/Show fields",
-                icon = icon("eye"),
+              actionButton(ns("hide_fields"), "Show/Hide fields",
                 title = "Hide or show fields"
               )
             )
@@ -26,7 +24,7 @@ mod_select_data_ui <- function(id) {
         ),
         # fields
         div(
-          id = "data_request_fields",
+          id = ns("data_request_fields"),
           ## top fields
           div(
             id = "data_request_top_fields",
@@ -114,6 +112,7 @@ mod_select_data_ui <- function(id) {
             ),
             div(
               class = "section_footer",
+              id = ns("section_footer_data_request"),
               column(12, uiOutput(outputId = ns("n_smpl")))
             )
           )
@@ -129,32 +128,34 @@ mod_select_data_ui <- function(id) {
           column(
             4,
             div(
-              id = "map_button",
+              class = "top_right_button",
               div(
                 id = "button_map",
-                actionButton(ns("show_map_info"), "Map",
-                  icon = icon("info-circle"),
-                  title = "Display information about how to use the map below"
-                ),
                 actionButton(ns("confirm"), "Confirm",
                   icon = icon("check"),
-                  title = "confirm spatial selection"
+                  title = "Confirm spatial selection"
                 ),
-                actionButton(ns("refresh"), "Clear",
-                  icon = icon("eraser"),
-                  title = "clear current spatial selection"
+                actionButton(ns("refresh"), "Clear area",
+                  title = "Clear current spatial selection"
                 ),
+                actionButton(ns("hide_map"), "Show/Hide map",
+                  title = "Hide or show map"
+                )
               )
             )
           )
         )
       ),
-      mapedit::editModUI(ns("map-select"), height = "50vh"),
+      div(
+        id = ns("map_container"),
+        mapedit::editModUI(ns("map-select"), height = "60vh")
+      ),
       div(
         class = "section_footer",
-        actionButton("show_source", "Reference data authorship",
-          icon = icon("eye"),
-          title = "access list of data authorship"
+        id = ns("section_footer_area_selection"),
+        actionButton(ns("show_map_info"), "How to select",
+          icon = icon("info-circle"),
+          title = "Display information about how to use the map below"
         )
       )
     )
@@ -169,14 +170,22 @@ mod_select_data_server <- function(id, r) {
     observe({
       # change when reading of external data is implemented
       if (input$datasource == "gotedna") {
-        hide("external_files")
         gotedna_data <- gotedna_data0
         gotedna_station <- gotedna_station0
       } else {
-        show("external_files")
         gotedna_data <- gotedna_data0
         gotedna_station <- gotedna_station0
       }
+    })
+
+    observeEvent(input$hide_fields, {
+      shinyjs::toggle("data_request_fields")
+      shinyjs::toggle("section_footer_data_request")
+    })
+
+    observeEvent(input$hide_map, {
+      shinyjs::toggle("map_container")
+      shinyjs::toggle("section_footer_area_selection")
     })
 
 
@@ -195,13 +204,9 @@ mod_select_data_server <- function(id, r) {
         gotedna_data[[input$datatype]], input$slc_phy, "All", "All", "All"
       )
       if (input$slc_phy == "All") {
-        hide(id = "slc_cla")
-        hide(id = "slc_gen")
-        hide(id = "slc_spe")
         updateSelectInput(session, "slc_cla", select = "All")
         r$slc_taxon_lvl <- "all"
       } else {
-        show(id = "slc_cla")
         updateSelectInput(session, "slc_cla",
           choices = c("All", unique(r$data_filtered$class) |> sort())
         )
@@ -214,11 +219,8 @@ mod_select_data_server <- function(id, r) {
         "All", "All"
       )
       if (input$slc_cla == "All") {
-        hide(id = "slc_gen")
-        hide(id = "slc_spe")
         updateSelectInput(session, "slc_gen", select = "All")
       } else {
-        show(id = "slc_gen")
         updateSelectInput(session, "slc_gen",
           choices = c("All", unique(r$data_filtered$genus) |> sort())
         )
@@ -234,7 +236,6 @@ mod_select_data_server <- function(id, r) {
         hide(id = "slc_spe")
         updateSelectInput(session, "slc_spe", select = "All")
       } else {
-        show(id = "slc_spe")
         updateSelectInput(session, "slc_spe",
           choices = c("All", unique(r$data_filtered$scientificName) |> sort())
         )

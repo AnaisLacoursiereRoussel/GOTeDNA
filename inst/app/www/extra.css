@@ -75,6 +75,11 @@ h6 {
   border-radius: 0px;
 }
 
+.modal-title h4 {
+  color: #2241a7;
+  padding: 1rem;
+}
+
 
 .modal-body {
   padding: 0px;
@@ -115,13 +120,25 @@ h6 {
 }
 
 .btn {
-  background-color: white;
+  background-color: transparent;
   color: #2241a7;
+  border-color: #2241a7;
+}
+
+.btn:hover {
+  background-color: #2241a7;
+  color: white;
+  border-color: #2241a7;
 }
 
 .btn-blue {
   background-color: #2241a7;
   color: white;
+}
+
+.btn-blue :hover {
+  background-color: transparent;
+  color: #2241a7;
 }
 
 .thumbnail {
@@ -247,6 +264,11 @@ h6 {
   margin-right: 1rem;
 }
 
+.top_right_button {
+  text-align: right;
+  padding-right: 4rem;
+}
+
 .shiny-notification {
   position: fixed;
   top: calc(1%);
@@ -257,35 +279,31 @@ h6 {
 }
 
 .shiny-notification-message {
-  color: #0fbadc;
-  background-color: #e7fafe;
-  border: 1px solid #8de6f8;
+  color: #2241a7;
+  background-color: white;
+  border: 2px solid #333333;
+  font-size: 1.4em;
 }
 
 .shiny-notification-warning {
-  color: #f1b708;
-  background-color: #111;
-  border: 2px solid #ffedb7;
+  color: #2241a7;
+  background-color: #75f9c6;
+  border: 2px solid #333333;
+  font-size: 1.4em;
 }
 
 .shiny-notification-error {
   color: #c93342;
-  background-color: #111;
-  border: 1px solid #f8d5d8;
+  background-color: #75f9c6;
+  border: 2px solid #c93342;
+  font-size: 1.4em;
 }
 
 shiny-plot-output {
   height: 500px;
 }
 
-#button_map {
-  text-align: right;
-}
 
-#button_source {
-  margin-top: 0.2rem;
-  text-align: right;
-}
 
 /* remove some leaflettool */
 /* .leaflet-draw-draw-polyline, 
