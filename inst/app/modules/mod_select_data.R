@@ -58,7 +58,7 @@ mod_select_data_ui <- function(id) {
               ),
               column(
                 3,
-                selectInput(ns("datatype"),
+                selectInput(ns("data_type"),
                   label = "Type of data",
                   choices = list(
                     "Species specific (qPCR)" = "qPCR",
@@ -230,13 +230,13 @@ mod_select_data_server <- function(id, r) {
       }
     })
 
-    observeEvent(input$datatype, {
-      r$data_type <- input$datatype
-      r$cur_data <- r$data_filtered <- gotedna_data[[input$datatype]]
-      r$data_station <- gotedna_station[[input$datatype]]
+    observeEvent(input$data_type, {
+      r$data_type <- input$data_type
+      r$cur_data <- gotedna_data[[input$data_type]]
+      r$data_station <- gotedna_station[[input$data_type]]
       updateSelectInput(session, "slc_phy",
         selected = "All",
-        choices = c("All", unique(r$data_filtered$phylum) |> sort())
+        choices = c("All", unique(r$r$cur_data$phylum) |> sort())
       )
     })
 
@@ -286,7 +286,9 @@ mod_select_data_server <- function(id, r) {
           "slc_spe",
           choices = c(
             "All",
-            r$data_filtered$scientificName |> unique() |> sort()
+            r$cur_data_sta_slc$scientificName |>
+              unique() |>
+              sort()
           ),
           selected = "All",
         )
@@ -307,7 +309,7 @@ mod_select_data_server <- function(id, r) {
 
     # primer
     observe({
-      if (input$datatype == "qPCR") {
+      if (input$data_type == "qPCR") {
         updateSelectInput(
           session,
           "primer",
@@ -317,7 +319,11 @@ mod_select_data_server <- function(id, r) {
         updateSelectInput(
           session,
           "primer",
-          choices = get_primer_selection(r$taxon_lvl_slc, r$data_filtered)
+          choices = get_primer_selection(
+            r$taxon_lvl_slc, filter_taxon(
+              r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
+            )
+          )
         )
       }
     })
@@ -354,13 +360,13 @@ mod_select_data_server <- function(id, r) {
         )
       )
     })
-    
+
 
     listenMapData <- reactive({
       list(
         input$taxo_id,
         input$slc_spe,
-        input$datatype
+        input$data_type
       )
     })
     observeEvent(listenMapData() |> debounce(100), {
@@ -381,12 +387,10 @@ mod_select_data_server <- function(id, r) {
       if (!is.null(sf_edits()$all)) {
         cli::cli_alert_info("Using geom(s) drawn to select region")
         if (!is.null(r$geom)) {
-          id_slc <- st_contains(sf_edits()$all, r$geom, sparse = FALSE) |>
+          id_slc <- sf::st_contains(sf_edits()$all, r$geom, sparse = FALSE) |>
             apply(2, any)
           if (sum(id_slc)) {
             r$geom <- r$geom[id_slc, ]
-            # r$data_filtered <- r$data_filtered |>
-            #   dplyr::filter(station %in% r$geom$station)
             r$geom_slc <- sf_edits()$all
             r$station_slc <- r$geom$station
           } else {
@@ -409,7 +413,6 @@ mod_select_data_server <- function(id, r) {
     })
 
     observeEvent(input$clear_area, {
-      # r$data_filtered <- gotedna_data[[input$datatype]]
       r$geom_slc <- r$station_slc <- NULL
       r$geom <- filter_station(r)
       r$reload_map <- r$reload_map + 1
@@ -432,19 +435,7 @@ filter_station <- function(r) {
   } else {
     sta <- r$data_station
   }
-  dff <- r$cur_data
-  if (!is.null(r$taxon_lvl_slc)) {
-    if (r$taxon_lvl_slc == "species") {
-      dff <- dff |>
-        dplyr::filter(scientificName == r$species)
-    } else {
-      if (r$taxon_id_slc != "All") {
-        dff <- dff[
-          dff[[r$taxon_lvl_slc]] == r$taxon_id_slc,
-        ]
-      }
-    }
-  }
+  dff <- filter_taxon(r$cur_data, r$taxon_lvl_slc, r$taxon_id_slc, r$species)
   sta |>
     dplyr::inner_join(
       dff |>
@@ -454,6 +445,23 @@ filter_station <- function(r) {
     )
 }
 
+
+filter_taxon <- function(data, taxon_lvl, taxon_id, species) {
+  out <- data
+  if (!is.null(taxon_lvl)) {
+    if (taxon_lvl == "species") {
+      out <- out |>
+        dplyr::filter(scientificName == species)
+    } else {
+      if (taxon_id != "All") {
+        out <- out[
+          out[[taxon_lvl]] == taxon_id,
+        ]
+      }
+    }
+  }
+  out
+}
 
 update_map <- function(proxy, geom, geom_slc, lock_view = FALSE) {
   proxy |>
@@ -474,7 +482,7 @@ update_map <- function(proxy, geom, geom_slc, lock_view = FALSE) {
       proxy |>
         addPolygons(
           data = geom_slc[ind, ],
-          color = "#75f9c6;",
+          color = "#75f9c6",
           fillOpacity = 0.1,
           group = "select_polygon"
         )

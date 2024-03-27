@@ -1,19 +1,18 @@
-library(cli)
+library(GOTeDNA)
 library(dplyr)
 library(ggplot2)
-library(GOTeDNA)
-library(leaflet)
 library(patchwork)
+library(leaflet)
 library(sf)
 library(shiny)
 library(shinyjs)
-cli_alert_info("Packages loaded")
+cli::cli_alert_info("Packages loaded")
 
 list.files("modules", full.names = TRUE) |>
   lapply(source)
-cli_alert_info("Modules loaded")
+cli::cli_alert_info("Modules loaded")
 
-# Generic helpers 
+# Generic helpers
 trans_letters <- function(x, pos = 1, fun = toupper) {
   strsplit(x, split = "") |>
     lapply(\(y) {
@@ -33,9 +32,9 @@ gloss$Definition <- trimws(gloss$Definition)
 gotedna_data <- gotedna_data0 <- readRDS("data/gotedna_data.rds")
 gotedna_station <- gotedna_station0 <- readRDS("data/gotedna_station.rds")
 gotedna_primer <- readRDS("data/gotedna_primer.rds")
-taxon_levels <- c("phylum", "class", "genus", "species")
 
-taxonomic_ranks <- list("kingdom", "phylum", "family", "order", "class", "genus")
+# taxonomic_ranks <- list("kingdom", "phylum", "family", "order", "class", "genus")
+taxonomic_ranks <- list("phylum", "family", "order", "class", "genus")
 names(taxonomic_ranks) <- trans_letters(taxonomic_ranks |> unlist())
 
 # function
@@ -58,7 +57,10 @@ filter_taxa_data <- function(x, phy, cla, gen, spe) {
 
 
 get_primer_selection <- function(lvl, data) {
- if (lvl == "kingdom") {
+  if (is.null(lvl)) {
+    return("not available")
+  }
+  if (lvl == "kingdom") {
     out <- table(data$target_subfragment) |>
       sort() |>
       rev()
@@ -69,16 +71,28 @@ get_primer_selection <- function(lvl, data) {
     } else {
       tx_col <- lvl
     }
-    tmp <- gotedna_primer[[lvl]] |>
-      inner_join(
-        data |> select({{ tx_col }}, target_subfragment) |> distinct(),
-        join_by(primer == target_subfragment,{{ lvl }} == {{ tx_col }})) |>
-      mutate(
-        text = paste0(primer, " (", success, "/", total, " ; ", perc, "%)")
-      )
-    out <- as.list(tmp$primer)
-    names(out) <- tmp$text
-    out
+    data_available <- data |>
+      select({{ tx_col }}, target_subfragment) |>
+      distinct()
+    if (!is.null(data_available) && nrow(data_available)) {
+      tmp <- gotedna_primer[[lvl]] |>
+        inner_join(
+          data_available,
+          join_by(primer == target_subfragment, {{ lvl }} == {{ tx_col }})
+        ) |>
+        mutate(
+          text = paste0(primer, " (", success, "/", total, " ; ", perc, "%)")
+        )
+      out <- as.list(tmp$primer)
+      names(out) <- tmp$text
+      if (is.null(out)) {
+        return("not available")
+      } else {
+        return(out)
+      }
+    } else {
+      return("not available")
+    }
   }
 }
 
@@ -93,4 +107,3 @@ get_taxon_level <- function(phy, cla, gen, spe) {
     out <- 1
   }
 }
-

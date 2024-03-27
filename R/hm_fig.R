@@ -77,7 +77,7 @@ hm_fig <- function(
                                                          fill = "white"),
                                      order = 3)
     ) +
-    ggplot2::theme_minimal(base_size = 10) +
+    ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
       panel.border = ggplot2::element_rect(fill = NA, colour = "lightgrey"),
       panel.grid = ggplot2::element_blank(),
@@ -90,5 +90,5 @@ hm_fig <- function(
       strip.text.y.left = ggplot2::element_text(angle = 0),
       axis.text.x = ggplot2::element_text(angle = 30, vjust = 1, hjust = 1, size = 8)
     ) +
-   ggh4x::force_panelsizes(rows = unit(1, "cm"))
+   ggh4x::force_panelsizes(rows = unit(2, "cm"))
 }

@@ -94,15 +94,18 @@ mod_select_figure_ui <- function(id) {
               icon = icon("gear"),
               class = "btn-blue"
             ),
-            h4("Sampling info"),
-            h6("Optimal sampling period: "),
-            uiOutput(ns("opt_sampl"), class = "fig_text_output"),
-            h6("Confidence: "),
-            uiOutput(ns("conf"), class = "fig_text_output"),
-            h6("Variation among year: "),
-            uiOutput(ns("var_year"), class = "fig_text_output"),
-            h6("Variation among primers: "),
-            uiOutput(ns("var_primer"), class = "fig_text_output"),
+            div(
+              id = "fig_sampling_info",
+              h4("Sampling info"),
+              h6("Optimal sampling period: "),
+              uiOutput(ns("opt_sampl"), class = "fig_text_output"),
+              h6("Confidence: "),
+              uiOutput(ns("conf"), class = "fig_text_output"),
+              h6("Variation among year: "),
+              uiOutput(ns("var_year"), class = "fig_text_output"),
+              h6("Variation among primers: "),
+              uiOutput(ns("var_primer"), class = "fig_text_output")
+            ),
             actionButton(
               ns("export_pdf"),
               "Export to PDF",
@@ -115,10 +118,10 @@ mod_select_figure_ui <- function(id) {
           9,
           div(
             id = "fig_main_container",
-            ui_figure(1, "Species detection heatmap", "heatmap.html", ns),
-            ui_figure(2, "Sample size to achieve detection", "sample_size.html", ns),
-            ui_figure(3, "Field sample size for ", "field_sample.html", ns),
-            ui_figure(4, "Monthly eDNA detection probability", "detection.html", ns)
+            ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
+            ui_figure("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
+            ui_figure("fig_higher", "Field sample size for ", "field_sample.html", ns),
+            ui_figure("fig_detect", "Monthly eDNA detection probability", "detection.html", ns)
           ),
           div(
             id = "reference_data_authorship",
@@ -155,64 +158,73 @@ mod_select_figure_server <- function(id, r) {
 
     observeEvent(input$select_all, {
       for (i in c("fig_heatmap", "fig_effort", "fig_higher", "fig_detect")) {
-        shinyjs::show(paste0(i, "_thumbnail_selected"))
+        show_fig(i)
         r$fig_slc[[i]] <- TRUE
       }
     })
 
-    shinyjs::hide(paste0("fig_heatmap", "_thumbnail_selected"))
+    hide_fig("fig_heatmap")
     observeEvent(input$fig_heatmap, {
-      shinyjs::toggle(paste0("fig_heatmap", "_thumbnail_selected"))
+      toggle_fig("fig_heatmap")
       r$fig_slc$fig_heatmap <- !r$fig_slc$fig_heatmap
     })
 
-    shinyjs::hide(paste0("fig_effort", "_thumbnail_selected"))
+    hide_fig("fig_effort")
     observeEvent(input$fig_effort, {
-      shinyjs::toggle(paste0("fig_effort", "_thumbnail_selected"))
+      toggle_fig("fig_effort")
       r$fig_slc$fig_effort <- !r$fig_slc$fig_effort
     })
 
-    shinyjs::hide(paste0("fig_higher", "_thumbnail_selected"))
+    hide_fig("fig_higher")
     observeEvent(input$fig_higher, {
-      shinyjs::toggle(paste0("fig_higher", "_thumbnail_selected"))
+      toggle_fig("fig_higher")
       r$fig_slc$fig_higher <- !r$fig_slc$fig_higher
     })
 
-    shinyjs::hide(paste0("fig_detect", "_thumbnail_selected"))
+    hide_fig("fig_detect")
     observeEvent(input$fig_detect, {
-      shinyjs::toggle(paste0("fig_detect", "_thumbnail_selected"))
+      toggle_fig("fig_detect")
       r$fig_slc$fig_detect <- !r$fig_slc$fig_detect
     })
 
-    # toggle_selected("fig_heatmap", input$fig_heatmap, "fig_heatmap")
-    # shinyjs::hide("fig_heatmap_thumbnail_selected")
 
     observeEvent(input$calc_window, {
-      if (r$taxon_slc[4] == "All" && r$data_type == "qPCR") {
+      #
+      if (r$species == "All" && r$data_type == "qPCR") {
         showNotification(
           "For qPCR data, one species should be selected.",
           type = "warning"
         )
       } else {
-        if (r$taxon_slc[1] == "All") {
-          showNotification("Select at least one phylum", type = "warning")
+        if (r$species == "All" && r$taxon_id_slc == "All") {
+          showNotification(
+            "The current selection is too broad, restrict your selection to one
+            specific taxonomic level or to one species.",
+            type = "warning",
+            duration = 10
+          )
         } else {
-          r$data_filtered2 <- prepare_data(r)
-          if (nrow(r$data_filtered2)) {
-            cli::cli_alert_info("Computing probabilities")
+          r$data_ready <- prepare_data(r)
+          if (nrow(r$data_ready)) {
             showNotification(
-              "Computing time window",
+              paste0(
+                "Computing time window",
+                ifelse(
+                  nrow(r$data_ready) > 1e4,
+                  paste0("(", nrow(r$data_ready), " samples, this make takes some time)"),
+                  ""
+                )
+              ),
               type = "message",
               duration = NULL,
               id = "notif_calc_win"
             )
-
-            newprob <- calc_det_prob(r$data_filtered2)
-            r$scaledprobs <- scale_newprob(r$data_filtered2, newprob)
+            newprob <- calc_det_prob(r$data_ready)
+            r$scaledprobs <- scale_newprob(r$data_ready, newprob)
             cli::cli_alert_info("Computing optimal detection window")
             win <- calc_window(
-              data = r$data_filtered2, threshold = input$threshold,
-              species.name = unique(r$data_filtered2$scientificName),
+              data = r$data_ready, threshold = input$threshold,
+              species.name = unique(r$data_ready$scientificName),
               scaledprobs = r$scaledprobs
             )
             removeNotification(id = "notif_calc_win")
@@ -223,18 +235,11 @@ mod_select_figure_server <- function(id, r) {
               output$conf <- renderUI("NA")
               output$var_year <- renderUI("NA")
             } else {
-              output$opt_sampl <- renderUI(win$period)
-              output$conf <- renderUI(win$confidence)
-              output$var_year <- renderUI(2)
+              output$opt_sampl <- renderUI(paste(win$fshDF_month$period, collapse = ", "))
+              output$conf <- renderUI(paste(win$fshDF_month$confidence, collapse = ", "))
+              output$var_year <- renderUI("todo")
             }
             r$fig_ready <- TRUE
-
-            # freeze taxon level selected
-            r$taxon_slc_compute <- r$taxon_slc
-            r$taxon_lvl_compute <- do.call(get_taxon_level, as.list(r$taxon_slc))
-            # taxon level selected
-            r$taxon.name <- r$taxon_slc_compute[r$taxon_lvl_compute]
-            r$taxon.level <- taxon_levels[r$taxon_lvl_compute]
           } else {
             showNotification("Data selection is empty", type = "warning")
           }
@@ -242,53 +247,49 @@ mod_select_figure_server <- function(id, r) {
       }
     })
 
-    observeEvent(input$fig_heatmap, r$current_fig <- "fig1")
-    observeEvent(input$fig_effort, r$current_fig <- "fig2")
-    observeEvent(input$fig_higher, r$current_fig <- "fig3")
-    observeEvent(input$fig_detect, r$current_fig <- "fig4")
-
-    output$current_fig <- renderPlot(
-      {
-        switch(r$current_fig,
-          fig1 = draw_fig1(r),
-          fig2 = draw_fig2(r),
-          fig3 = draw_fig3(r, taxon_levels),
-          fig4 = draw_fig4(r, input$threshold)
-        )
-      },
-      res = 150
-    )
-
-    output$current_cap <- renderUI({
-      file <- switch(r$current_fig,
-        fig1 = "heatmap.html",
-        fig2 = "sample_size.html",
-        fig3 = "field_sample.html",
-        fig4 = "detection.html"
-      )
-      includeHTML(file.path("www", "doc", "caption", file))
+    output$fig_heatmap_plot_output <- renderPlot({
+      # figure must be selected and ready to be drawn
+      draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
     })
 
+    output$fig_effort_plot_output <- renderPlot({
+      draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
+    })
+
+    output$fig_higher_plot_output <- renderPlot({
+      draw_fig_higher(r, r$fig_ready && r$fig_slc$fig_higher)
+    })
+
+    output$fig_detect_plot_output <- renderPlot({
+      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
+    })
+
+
     output$data_authorship <- DT::renderDT({
-      r$data_filtered |>
+      r$cur_data_sta_slc |>
         dplyr::ungroup() |>
         dplyr::group_by(
-          GOTeDNA_ID, GOTeDNA_version, materialSampleID
+          GOTeDNA_ID,
+          GOTeDNA_version,
+          target_subfragment,
+          ecodistrict
         ) |>
         summarise(
-          `Total number \nof samples` = n(),
-          `Total number \n of stations` = length(unique(station))
+          `Samples #` = n(),
+          `Stations #` = length(unique(station))
         ) |>
         mutate(
           `Data owner contact` = "To be added",
           `Indigenous data labelling` = "To be added",
-          Publication = "DOI; To be added",
+          Publication = "DOI to be added",
           Reference = "To be added"
         ) |>
         dplyr::ungroup() |>
         dplyr::select(
-          Publication, `Data owner contact`, `Total number \nof samples`,
-          `Total number \n of stations`, Reference
+          GOTeDNA_ID, GOTeDNA_version, Publication,
+          ecodistrict,
+          `Data owner contact`, `Samples #`,
+          `Stations #`
         )
     })
   })
@@ -298,7 +299,7 @@ mod_select_figure_server <- function(id, r) {
 
 ui_figure <- function(fig_id, title, caption_file, ns) {
   div(
-    id = ns(paste0("fig_container_", fig_id)),
+    id = paste0(ns(fig_id), "_fig_container"),
     class = "fig_container",
     h4(title),
     div(
@@ -307,44 +308,59 @@ ui_figure <- function(fig_id, title, caption_file, ns) {
     ),
     div(
       class = "fig_panel",
-      plotOutput(ns(paste0("fig_plot_area", fig_id)), height = "65vh")
+      plotOutput(paste0(ns(fig_id), "_plot_output"), height = "65vh")
     )
   )
 }
 
 
 prepare_data <- function(r) {
+  out <- r$cur_data
   if (length(r$station_slc)) {
-    out <- r$data_filtered |>
+    out <- out |>
       dplyr::filter(station %in% r$station_slc)
-  } else {
-    out <- r$data_filtered
   }
-
-  if (r$primer != "not available") {
-    r$data_filtered2 <- out |>
-      dplyr::filter(target_subfragment == r$primer)
+  if (!is.null(r$taxon_lvl_slc)) {
+    if (r$taxon_lvl_slc == "species") {
+      out <- out |>
+        dplyr::filter(scientificName == r$species)
+    } else {
+      if (r$taxon_id_slc != "All") {
+        out <- out[
+          out[[r$taxon_lvl_slc]] == r$taxon_id_slc,
+        ]
+      }
+    }
   }
+  # do we want to subset?
+  # if (r$primer != "not available") {
+  #   out <- out |>
+  #     dplyr::filter(target_subfragment == r$primer)
+  # }
   out
 }
 
 
-draw_fig1 <- function(r) {
-  if (r$fig_ready) {
-    hm_fig(r$taxon.level, r$taxon.name, r$scaledprobs)
+draw_fig_heatmap <- function(r, ready) {
+  if (ready) {
+    hm_fig(
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
+      r$scaledprobs
+    )
   } else {
     plotNotAvailable()
   }
 }
 
-draw_fig2 <- function(r) {
-  if (r$fig_ready) {
-    if (r$taxon.level != "species") {
+draw_fig_effort <- function(r, ready) {
+  if (ready) {
+    if (r$taxon_lvl_slc != "species") {
       cli::cli_alert_danger("cannot render figure 2")
       plotNotAvailableSpeciesLevel()
     } else {
       data_slc <- r$scaledprobs$Pscaled_month |>
-        dplyr::filter(species == r$taxon.name)
+        dplyr::filter(species == r$species)
       if (r$primer != "not available") {
         data_slc <- data_slc |>
           dplyr::filter(primer == r$primer)
@@ -356,48 +372,54 @@ draw_fig2 <- function(r) {
   }
 }
 
-draw_fig3 <- function(r, taxon_levels) {
-  if (r$fig_ready) {
-    id_lvl <- which(r$taxon_slc != "All") |> which.max()
-    higher_tax_fig(
-      data = r$data_filtered,
-      higher.taxon.select = taxon_levels[min(id_lvl, 2)],
-      taxon.name = r$taxon_slc[min(id_lvl + 1, 2)]
-    )
+draw_fig_higher <- function(r, ready) {
+  if (ready) {
+    if (r$taxon_lvl_slc == "species") {
+      plotNotAvailableTaxoLevel()
+    } else {
+      higher_tax_fig(
+        data = r$data_ready,
+        higher.taxon.select = r$taxon_lvl_slc,
+        taxon.name = r$taxon_id_slc
+      )
+    }
   } else {
     plotNotAvailable()
   }
 }
 
-
-draw_fig4 <- function(r, threshold) {
-  if (r$fig_ready) {
-    data_slc <- r$data_filtered
+draw_fig_detect <- function(r, ready, threshold) {
+  if (ready) {
+    taxon_level <- r$taxon_lvl_slc
+    taxon_id <- ifelse(taxon_level == "species", r$species, r$taxon_id_slc)
+    data_slc <- r$data_ready
     if (r$primer != "not available") {
       data_slc <- data_slc |>
         dplyr::filter(target_subfragment == r$primer)
     }
-    p1 <- smooth_fig(data = data_slc, species.name = r$taxon.name)
+    p1 <- smooth_fig(data = data_slc, species.name = taxon_id)
     if (r$primer != "not available") {
       data_slc <- r$scaledprobs$Pscaled_month |>
         dplyr::filter(primer == r$primer)
     }
-    p2 <- thresh_fig(
-      r$taxon.level, r$taxon.name,
-      threshold = threshold, scaledprobs = data_slc
-    )
+    p2 <- thresh_fig(taxon_level, taxon_id, threshold = threshold, scaledprobs = data_slc)
     p1 + p2
   } else {
     plotNotAvailable()
   }
 }
 
+
 plotText <- function(txt, ...) {
   plot(c(-1, 1), c(-1, 1),
     ann = FALSE, bty = "n", type = "n", xaxt = "n",
     yaxt = "n"
   )
-  text(0, 0, txt, ...)
+  text(0, 0, txt, cex = 2, ...)
+}
+
+plotNotAvailableTaxoLevel <- function() {
+  plotText("Plot not available at the species level.")
 }
 
 plotNotAvailableSpeciesLevel <- function() {
@@ -405,7 +427,7 @@ plotNotAvailableSpeciesLevel <- function() {
 }
 
 plotNotAvailable <- function() {
-  plotText("Plot not available yet.", cex = 1.5)
+  plotText("Plot not available. Click on 'Compute & visualize'")
 }
 
 plotNotAvailableForqPCR <- function() {
@@ -448,12 +470,24 @@ add_figure_selection <- function(id, title, scr = NULL, info = title) {
   )
 }
 
+show_fig <- function(fig_id) {
+  shinyjs::show(paste0(fig_id, "_thumbnail_selected"))
+  shinyjs::show(paste0(fig_id, "_fig_container"))
+}
+hide_fig <- function(fig_id) {
+  shinyjs::hide(paste0(fig_id, "_thumbnail_selected"))
+  shinyjs::hide(paste0(fig_id, "_fig_container"))
+}
+toggle_fig <- function(fig_id) {
+  shinyjs::toggle(paste0(fig_id, "_thumbnail_selected"))
+  shinyjs::toggle(paste0(fig_id, "_fig_container"))
+}
+
+
 # toggle_selected <- function(class_id, input_button, fig_id) {
 #   cls_id <- paste0(class_id, "_thumbnail_selected")
-#  # browser()
 #   shinyjs::hide(cls_id)
 #   observeEvent(input_button, {
-#     browser()
 #     shinyjs::toggle(cls_id)
 #     r$fig_slc[[fig_id]] <- !r$fig_slc[[fig_id]]
 #   })

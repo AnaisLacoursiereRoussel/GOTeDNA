@@ -8,13 +8,11 @@ mod_dialog_map_info_server <- function(id, r) {
             easyClose = TRUE,
             size = "l"
         )
-
         observe({
             if (r$show_map_info) {
                 showModal(query_modal)
                 r$show_map_info <- FALSE
             }
         })
-
     })
 }
