@@ -80,7 +80,6 @@ h6 {
   padding: 1rem;
 }
 
-
 .modal-body {
   padding: 0px;
 }
@@ -102,6 +101,16 @@ h6 {
 #logo_disclaimer {
   padding-top: 2rem;
   padding-bottom: 5rem;
+}
+
+.modal_help {
+  background-color: #75f9c6;
+  color: #2241a7;
+  padding: 4rem;
+}
+
+.modal-help ol {
+  margin: 0rem;
 }
 
 /* Section */
@@ -191,6 +200,7 @@ h6 {
   padding: 0rem;
   height: 7rem;
   width: 8rem;
+  border-radius: .375rem;
 }
 
 .thumbnail_selected {
