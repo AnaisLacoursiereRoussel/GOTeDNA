@@ -4,10 +4,13 @@ server <- function(input, output, session) {
     geom = NULL,
     geom_slc = NULL,
     station_slc = NULL,
+    taxon_lvl_slc = NULL,
+    taxon_id_slc = NULL,
     show_map_info = FALSE,
     reload_map = 0,
     fig_ready = FALSE,
-    current_fig = "fig1"
+    current_fig = "fig1",
+    lock_view = FALSE
   )
 
   observeEvent(r$data_filtered, {

@@ -117,6 +117,7 @@ h6 {
   padding-right: 5rem;
   padding-left: 5rem;
   padding-bottom: 2rem;
+  padding-top: 2rem;
 }
 
 .btn {
@@ -157,7 +158,11 @@ h6 {
   color: #2241a7;
 }
 
-#data_request_fields {
+.lock {
+  font-size: 0.9em;
+}
+
+#slc_data-data_request_fields {
   padding-right: 5rem;
   padding-left: 5rem;
 }
@@ -209,6 +214,26 @@ h6 {
   background-color: #bcffd3;
 }
 
+.sample_selected {
+  text-align: right;
+  margin-right: 5rem;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.sample_selected_data {
+  margin-left: 1rem;
+  padding: 0.8rem;
+  background-color: #75f9c6;
+  border-radius: 3rem;
+}
+
+.sample_selected_map {
+  margin-left: 1rem;
+  padding: 0.8rem;
+  background-color: white;
+  border-radius: 3rem;
+}
 
 #logo_gotedna {
   height: 4rem;

@@ -23,6 +23,7 @@ Imports:
     grid,
     htmlwidgets,
     knitr,
+    leafem,
     leaflet,
     mapedit (>= 0.6.0),
     magrittr,

@@ -79,41 +79,34 @@ mod_select_data_ui <- function(id) {
             fluidRow(
               column(
                 3,
-                selectInput(ns("slc_dom"), "Domain", choices = "All")
+                selectInput(
+                  ns("taxo_lvl"), "Taxonomic rank",
+                  choices = taxonomic_ranks
+                )
               ),
               column(
                 3,
-                selectInput(ns("slc_kin"), "Kingdom", choices = "All")
+                selectInput(
+                  ns("taxo_id"), "Taxonomic group",
+                  choices = "All"
+                )
               ),
               column(
                 3,
-                selectInput(ns("slc_phy"), "Phylum", choices = "All")
+                selectizeInput(ns("slc_spe"), "Species", choices = "All")
               ),
               column(
                 3,
-                selectInput(ns("slc_cla"), "Class", choices = "All")
-              ),
-              column(
-                3,
-                selectInput(ns("slc_ord"), "Order", choices = "All")
-              ),
-              column(
-                3,
-                selectInput(ns("slc_fam"), "Family", choices = "All")
-              ),
-              column(
-                3,
-                selectInput(ns("slc_gen"), "Genus", choices = "All")
-              ),
-              column(
-                3,
-                selectInput(ns("slc_spe"), "Species", choices = "All")
+                div(
+                  id = ns("msg_spatial_area"),
+                  p(icon("warning"), "Selection restricted to spatial area")
+                )
               )
             ),
             div(
               class = "section_footer",
               id = ns("section_footer_data_request"),
-              column(12, uiOutput(outputId = ns("n_smpl")))
+              column(12, uiOutput(outputId = ns("n_smpl_data")))
             )
           )
         )
@@ -124,7 +117,10 @@ mod_select_data_ui <- function(id) {
       div(
         class = "section_header",
         fluidRow(
-          column(8, h1("Area Selection")),
+          column(
+            8,
+            h1("Area Selection", span(id = ns("lock"), class = "lock", icon("lock")))
+          ),
           column(
             4,
             div(
@@ -132,10 +128,12 @@ mod_select_data_ui <- function(id) {
               div(
                 id = "button_map",
                 actionButton(ns("confirm"), "Confirm",
-                  icon = icon("check"),
                   title = "Confirm spatial selection"
                 ),
-                actionButton(ns("refresh"), "Clear area",
+                actionButton(ns("lock"), "Lock view",
+                  title = "Set and lock map bounds"
+                ),
+                actionButton(ns("clear_area"), "Clear area",
                   title = "Clear current spatial selection"
                 ),
                 actionButton(ns("hide_map"), "Show/Hide map",
@@ -153,9 +151,18 @@ mod_select_data_ui <- function(id) {
       div(
         class = "section_footer",
         id = ns("section_footer_area_selection"),
-        actionButton(ns("show_map_info"), "How to select",
-          icon = icon("info-circle"),
-          title = "Display information about how to use the map below"
+        fluidRow(
+          column(
+            6,
+            actionButton(ns("show_map_info"), "How to select",
+              icon = icon("info-circle"),
+              title = "Display information about how to use the map below"
+            )
+          ),
+          column(
+            6,
+            uiOutput(outputId = ns("n_smpl_map"))
+          )
         )
       )
     )
@@ -167,17 +174,25 @@ mod_select_data_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    observe({
-      # change when reading of external data is implemented
-      if (input$datasource == "gotedna") {
-        gotedna_data <- gotedna_data0
-        gotedna_station <- gotedna_station0
-      } else {
-        gotedna_data <- gotedna_data0
-        gotedna_station <- gotedna_station0
-      }
-    })
+    # Generate map
+    sf_edits <<- callModule(
+      mapedit::editMod,
+      leafmap = leaflet() |>
+        leafem::addMouseCoordinates() |>
+        leaflet::addProviderTiles("Esri.OceanBasemap", group = "OceaBasemap") |>
+        leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
+        leaflet::addLayersControl(
+          baseGroups = c("OpenStreetMap", "Ocean Basemap"),
+          position = "bottomleft"
+        ) |>
+        leaflet::addScaleBar(
+          position = c("bottomright"),
+          options = leaflet::scaleBarOptions(maxWidth = 200)
+        ),
+      id = "map-select"
+    )
 
+    ## hide and show
     observeEvent(input$hide_fields, {
       shinyjs::toggle("data_request_fields")
       shinyjs::toggle("section_footer_data_request")
@@ -188,10 +203,36 @@ mod_select_data_server <- function(id, r) {
       shinyjs::toggle("section_footer_area_selection")
     })
 
+    observe({
+      if (is.null(r$geom_slc)) {
+        shinyjs::hide("msg_spatial_area")
+      } else {
+        shinyjs::show("msg_spatial_area")
+      }
+    })
+
+    shinyjs::hide("lock")
+    observeEvent(input$lock, {
+      shinyjs::toggle("lock")
+      r$lock_view <- !(r$lock_view)
+    })
+
+
+    ## load data
+    observe({
+      # 2B changed when reading of external data is implemented
+      if (input$datasource == "gotedna") {
+        gotedna_data <- gotedna_data0
+        gotedna_station <- gotedna_station0
+      } else {
+        gotedna_data <- gotedna_data0
+        gotedna_station <- gotedna_station0
+      }
+    })
 
     observeEvent(input$datatype, {
       r$data_type <- input$datatype
-      r$data_filtered <- gotedna_data[[input$datatype]]
+      r$cur_data <- r$data_filtered <- gotedna_data[[input$datatype]]
       r$data_station <- gotedna_station[[input$datatype]]
       updateSelectInput(session, "slc_phy",
         selected = "All",
@@ -199,56 +240,70 @@ mod_select_data_server <- function(id, r) {
       )
     })
 
-    observeEvent(input$slc_phy, {
-      r$data_filtered <- filter_taxa_data(
-        gotedna_data[[input$datatype]], input$slc_phy, "All", "All", "All"
-      )
-      if (input$slc_phy == "All") {
-        updateSelectInput(session, "slc_cla", select = "All")
-        r$slc_taxon_lvl <- "all"
+    observe(
+      if (!is.null(r$station_slc)) {
+        r$cur_data_sta_slc <- r$cur_data |>
+          dplyr::filter(station %in% r$station_slc)
       } else {
-        updateSelectInput(session, "slc_cla",
-          choices = c("All", unique(r$data_filtered$class) |> sort())
+        r$cur_data_sta_slc <- r$cur_data
+      }
+    )
+
+
+    ## update Taxo data
+    observe({
+      updateSelectInput(
+        session,
+        "taxo_id",
+        choices = c(
+          "All",
+          r$cur_data_sta_slc[[input$taxo_lvl]] |>
+            unique() |>
+            sort()
+        ),
+        selected = "All"
+      )
+    })
+
+    observe({
+      if (input$taxo_id != "All") {
+        updateSelectizeInput(
+          session,
+          "slc_spe",
+          choices = c(
+            "All",
+            r$cur_data_sta_slc[
+              r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
+            ]$scientificName |>
+              unique() |>
+              sort()
+          ),
+          selected = "All"
         )
-        r$slc_taxon_lvl <- "phylum"
+      } else {
+        updateSelectizeInput(
+          session,
+          "slc_spe",
+          choices = c(
+            "All",
+            r$data_filtered$scientificName |> unique() |> sort()
+          ),
+          selected = "All",
+        )
       }
     })
-    observeEvent(input$slc_cla, {
-      r$data_filtered <- filter_taxa_data(
-        gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
-        "All", "All"
+
+    observeEvent(input$reset, {
+      updateSelectInput(
+        session,
+        "taxo_lvl",
+        selected = "kingdom"
       )
-      if (input$slc_cla == "All") {
-        updateSelectInput(session, "slc_gen", select = "All")
-      } else {
-        updateSelectInput(session, "slc_gen",
-          choices = c("All", unique(r$data_filtered$genus) |> sort())
-        )
-        r$slc_taxon_lvl <- "class"
-      }
+      r$geom_slc <- r$station_slc <- NULL
+      r$geom <- filter_station(r)
+      r$reload_map <- r$reload_map + 1
     })
-    observeEvent(input$slc_gen, {
-      r$data_filtered <- filter_taxa_data(
-        gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
-        input$slc_gen, "All"
-      )
-      if (input$slc_gen == "All") {
-        hide(id = "slc_spe")
-        updateSelectInput(session, "slc_spe", select = "All")
-      } else {
-        updateSelectInput(session, "slc_spe",
-          choices = c("All", unique(r$data_filtered$scientificName) |> sort())
-        )
-        r$slc_taxon_lvl <- "genus"
-      }
-    })
-    observeEvent(input$slc_spe, {
-      r$data_filtered <- filter_taxa_data(
-        gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
-        input$slc_gen, input$slc_spe
-      )
-      if (input$slc_spe != "All") r$slc_taxon_lvl <- "species"
-    })
+
 
     # primer
     observe({
@@ -262,45 +317,63 @@ mod_select_data_server <- function(id, r) {
         updateSelectInput(
           session,
           "primer",
-          choices = get_primer_selection(r$slc_taxon_lvl, r$data_filtered)
+          choices = get_primer_selection(r$taxon_lvl_slc, r$data_filtered)
         )
       }
     })
 
-    observe(
-      r$primer <- input$primer
-    )
+    observe(r$primer <- input$primer)
 
-    output$n_smpl <- renderUI({
+
+    # sample number
+    output$n_smpl_data <- renderUI({
       tagList(
         div(
-          id = "sample_selected",
+          class = "sample_selected",
           p(
             "Sample selected: ",
-            strong(format(r$n_sample, big.mark = ","))
+            span(
+              class = "sample_selected_data",
+              format(r$n_sample, big.mark = ",")
+            )
           )
         )
       )
     })
+    output$n_smpl_map <- renderUI({
+      tagList(
+        div(
+          class = "sample_selected",
+          p(
+            "Sample selected: ",
+            span(
+              class = "sample_selected_map",
+              format(r$n_sample, big.mark = ",")
+            )
+          )
+        )
+      )
+    })
+    
 
     listenMapData <- reactive({
       list(
-        input$slc_phy,
-        input$slc_cla,
-        input$slc_gen,
+        input$taxo_id,
         input$slc_spe,
         input$datatype
       )
     })
-    observeEvent(listenMapData(), {
-      r$taxon_slc <- c(
-        input$slc_phy, input$slc_cla, input$slc_gen,
-        input$slc_spe
-      )
+    observeEvent(listenMapData() |> debounce(100), {
+      r$species <- input$slc_spe
+      r$taxon_id_slc <- input$taxo_id
+      if (!is.null(input$slc_spe) && input$slc_spe != "All") {
+        r$taxon_lvl_slc <- "species"
+      } else {
+        r$taxon_lvl_slc <- input$taxo_lvl
+      }
       r$fig_ready <- FALSE
       # count data
       r$geom <- filter_station(r)
-      # reset figures
       r$reload_map <- r$reload_map + 1
     })
 
@@ -312,8 +385,8 @@ mod_select_data_server <- function(id, r) {
             apply(2, any)
           if (sum(id_slc)) {
             r$geom <- r$geom[id_slc, ]
-            r$data_filtered <- r$data_filtered |>
-              dplyr::filter(station %in% r$geom$station)
+            # r$data_filtered <- r$data_filtered |>
+            #   dplyr::filter(station %in% r$geom$station)
             r$geom_slc <- sf_edits()$all
             r$station_slc <- r$geom$station
           } else {
@@ -331,40 +404,21 @@ mod_select_data_server <- function(id, r) {
 
     observeEvent(input$show_map_info, r$show_map_info <- TRUE)
 
-    observeEvent(input$reset, {
-      r$data_filtered <- filter_taxa_data(
-        gotedna_data[[input$datatype]], "All", "All", "All", "All"
-      )
-      updateSelectInput(session, "slc_phy",
-        selected = "All",
-        choices = c("All", unique(r$data_filtered$phylum))
-      )
-      r$geom_slc <- r$station_slc <- NULL
-      r$geom <- filter_station(r)
-      r$reload_map <- r$reload_map + 1
-    })
-
-
-    observeEvent(input$refresh, {
-      r$data_filtered <- filter_taxa_data(
-        gotedna_data[[input$datatype]], input$slc_phy, input$slc_cla,
-        input$slc_gen, "All"
-      )
-      r$geom_slc <- r$station_slc <- NULL
-      r$geom <- filter_station(r)
-      r$reload_map <- r$reload_map + 1
-    })
-
     observeEvent(r$geom, {
       r$n_sample <- sum(r$geom$count)
     })
 
+    observeEvent(input$clear_area, {
+      # r$data_filtered <- gotedna_data[[input$datatype]]
+      r$geom_slc <- r$station_slc <- NULL
+      r$geom <- filter_station(r)
+      r$reload_map <- r$reload_map + 1
+    })
+
     observeEvent(r$reload_map, {
-      sf_edits <<- callModule(
-        mapedit::editMod,
-        leafmap = make_map(r),
-        id = "map-select"
-      )
+      prx <- leaflet::leafletProxy("map-select")
+      prx$id <- "slc_data-map-select-map"
+      update_map(prx, isolate(r$geom), isolate(r$geom_slc), lock_view = r$lock_view)
     })
   })
 }
@@ -378,31 +432,52 @@ filter_station <- function(r) {
   } else {
     sta <- r$data_station
   }
+  dff <- r$cur_data
+  if (!is.null(r$taxon_lvl_slc)) {
+    if (r$taxon_lvl_slc == "species") {
+      dff <- dff |>
+        dplyr::filter(scientificName == r$species)
+    } else {
+      if (r$taxon_id_slc != "All") {
+        dff <- dff[
+          dff[[r$taxon_lvl_slc]] == r$taxon_id_slc,
+        ]
+      }
+    }
+  }
   sta |>
     dplyr::inner_join(
-      r$data_filtered |>
+      dff |>
         dplyr::group_by(ecodistrict, station) |>
         dplyr::summarise(count = n()),
       join_by(station)
     )
 }
 
-make_map <- function(r) {
-  out <- leaflet(isolate(r$geom)) |>
-    addProviderTiles("Esri.OceanBasemap", group = "Ocean") |>
+
+update_map <- function(proxy, geom, geom_slc, lock_view = FALSE) {
+  proxy |>
+    clearGroup("station") |>
+    clearGroup("select_polygon") |>
     addMarkers(
-      data = isolate(r$geom),
+      data = geom,
       clusterOptions = markerClusterOptions(),
-      label = ~ paste(count, "samples")
+      label = ~ paste(count, "samples"),
+      group = "station"
     )
-  if (!is.null(isolate(r$geom_slc))) {
-    geom_type <- isolate(r$geom_slc) |>
-      st_geometry_type() |>
+  if (!is.null(geom_slc)) {
+    geom_type <- geom_slc |>
+      sf::st_geometry_type() |>
       as.character()
     ind <- geom_type == "POLYGON"
     if (length(ind)) {
-      out <- out |>
-        addPolygons(data = isolate(r$geom_slc)[ind, ], color = "#53b2ad", fillOpacity = 0.1)
+      proxy |>
+        addPolygons(
+          data = geom_slc[ind, ],
+          color = "#75f9c6;",
+          fillOpacity = 0.1,
+          group = "select_polygon"
+        )
     } else {
       showNotification(
         "Only rectangles and polygons can be used",
@@ -410,5 +485,11 @@ make_map <- function(r) {
       )
     }
   }
-  out
+  if (!lock_view) {
+    bb <- geom |>
+      sf::st_bbox() |>
+      as.vector()
+    proxy |>
+      fitBounds(bb[1], bb[2], bb[3], bb[4])
+  }
 }

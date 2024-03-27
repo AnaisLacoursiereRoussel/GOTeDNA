@@ -38,6 +38,7 @@ Suggests:
     gridExtra,
     htmlwidgets,
     knitr,
+    leafem,
     leaflet,
     lme4,
     mapedit,
