@@ -142,22 +142,6 @@ h6 {
   color: #2241a7;
 }
 
-.thumbnail {
-  text-align: center;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
-.thumbnail img {
-  border-width: 2px;
-  border-color: #75f9c6;
-}
-
-.thumbnail h5 {
-  text-align: center;
-  color: #2241a7;
-}
-
 .lock {
   font-size: 0.9em;
 }
@@ -166,7 +150,6 @@ h6 {
   padding-right: 5rem;
   padding-left: 5rem;
 }
-
 
 #area_selection {
   padding-top: 2rem;
@@ -179,6 +162,75 @@ h6 {
   padding-bottom: 2rem;
   background-color: #e8e8e8;
 }
+
+/* Figures */
+#thumbnail_container {
+  margin-left: 5rem;
+  margin-right: 5rem;
+  text-align: center;
+}
+
+.thumbnail {
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-bottom: 1rem;
+}
+
+.thumnail_button_container {
+  position: relative;
+}
+
+.thumnail_button_container .btn {
+  position: relative;
+  padding: 0rem;
+}
+
+.thumnail_button_container .btn img {
+  position: relative;
+  padding: 0rem;
+  height: 7rem;
+  width: 8rem;
+}
+
+.thumbnail_selected {
+  position: absolute;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background-color: #75f9c6;
+  opacity: 0.8;
+  height: 7rem;
+  width: 8rem;
+  /* https: //stackoverflow.com/questions/29266338/clicking-on-buttons-through-a-container-mask */
+  pointer-events: none;
+}
+
+.thumbnail_selected p {
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.thumbnail .btn {
+  border-width: 2px;
+  padding: 0rem;
+  border-color: #75f9c6;
+}
+
+.thumbnail .btn:hover {
+  background-color: #75f9c6;
+}
+
+.thumbnail h5 {
+  text-align: center;
+  color: #2241a7;
+  padding-top: 0.5rem;
+}
+
+
 
 #figure_selection {
   padding-top: 2rem;
@@ -195,11 +247,15 @@ h6 {
   padding-right: 5rem;
 }
 
-#fig_container {
+.fig_container {
   background-color: white;
   padding-left: 2rem;
   padding-right: 2rem;
   margin-right: 5rem;
+}
+
+.fig_caption {
+  height: 15vh;
 }
 
 #reference_data_authorship {
@@ -207,6 +263,17 @@ h6 {
   padding: 4rem;
   margin-right: 5rem;
   margin-top: 2rem;
+}
+
+#select_all_figures {
+  text-align: center;
+  padding-bottom: 1rem;
+}
+
+#confirm_figures_selection {
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .fig_text_output {
@@ -339,10 +406,6 @@ shiny-plot-output {
 
 .selectize-dropdown {
   z-index: 1001 !important;
-}
-
-.thumbnail {
-  margin-bottom: 1rem;
 }
 
 #fig_caption {
