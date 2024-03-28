@@ -75,6 +75,24 @@ h6 {
   padding-top: 2rem;
 }
 
+.selectize-input, 
+.selectize-dropdown {
+  border: 2px solid #75f9c6;
+  background-color: #f1f9ff;
+  border-radius: 10px;
+  color: #2241a7;
+}
+
+.checkbox,
+.control-label {
+  color: #2241a7;
+}
+
+.option:hover {
+  background-color: #75f9c6;
+}
+
+
 /* Modal */
 .modal-content {
   border-radius: 0px;
@@ -135,6 +153,7 @@ h6 {
   background-color: transparent;
   color: #2241a7;
   border-color: #2241a7;
+  margin-left: 1rem;
 }
 
 .btn:hover {

@@ -257,7 +257,8 @@ mod_select_data_server <- function(id, r) {
         "taxo_id",
         choices = c(
           "All",
-          r$cur_data_sta_slc[[input$taxo_lvl]] |>
+          r$cur_data[[input$taxo_lvl]] |>
+          # r$cur_data_sta_slc[[input$taxo_lvl]] |>
             unique() |>
             sort()
         ),
@@ -272,9 +273,12 @@ mod_select_data_server <- function(id, r) {
           "slc_spe",
           choices = c(
             "All",
-            r$cur_data_sta_slc[
-              r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
-            ]$scientificName |>
+            # r$cur_data_sta_slc[
+            #   r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
+            # ]$scientificName |>
+            r$cur_data[
+               r$cur_data[[input$taxo_lvl]] == input$taxo_id,
+             ]$scientificName |>
               unique() |>
               sort()
           ),
