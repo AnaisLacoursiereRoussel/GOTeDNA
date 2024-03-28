@@ -23,7 +23,7 @@ Ingests data produced with \verb{[scale_newprob()]}.
 \dontrun{
 newprob <- calc_det_prob(D_mb_ex)
 scaledprobs <- scale_newprob(D_mb_ex, newprob)
-primer_sort(taxon.level, scaledprobs$Pscaled_month)
+primer_sort("phylum", scaledprobs$Pscaled_month)
 }
 }
 \author{

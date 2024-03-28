@@ -1,65 +1,353 @@
-h2 {
-  font-weight: bold;
-  color: #53b2ad;
+/*colors*/
+/* green-blue palette */
+/* #20e062 spring green */
+/* #75f9c6 aquamarine highlight*/
+/* #36dfd2 turquoise */
+/* #31b4db deepskyblue */
+/* #2f9ae6 dodgerblue */
+/* #2c62cb royalblue */
+
+/* medium blue #2241a7 */
+
+/* #333333 dark grey  */
+
+
+body {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
-#file_report {
-  color: #337ab7;
+p {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  color: #2241a7;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.container-fluid {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.navbar.navbar-default {
+  background-color: #2241a7 !important;
+  padding: 1.5rem;
+}
+
+
+.navbar-brand {
+  padding-right: 5rem;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+h1,
+h2 {
+  color: #2241a7;
+}
+
+h4,
+h5,
+h6 {
+  color: #5a5a5a;
+}
+
+h4 {
+  padding-top: 4rem;
+}
+
+h6 {
+  padding-top: 2rem;
+}
+
+/* Modal */
+.modal-content {
+  border-radius: 0px;
+}
+
+.modal-title h4 {
+  color: #2241a7;
+  padding: 1rem;
+}
+
+.modal-body {
+  padding: 0px;
+}
+
+#disclaimer_left {
+  text-align: center;
+  padding: 2rem;
+}
+
+#disclaimer_right {
+  background-color: #75f9c6;
+  padding: 2rem;
+}
+
+#disclaimer_footer_right {
+  background-color: #75f9c6;
+}
+
+#logo_disclaimer {
+  padding-top: 2rem;
+  padding-bottom: 5rem;
+}
+
+.modal_help {
+  background-color: #75f9c6;
+  color: #2241a7;
+  padding: 4rem;
+}
+
+.modal-help ol {
+  margin: 0rem;
+}
+
+/* Section */
+
+.section_header {
+  padding: 2rem;
+}
+
+.section_footer {
+  padding-right: 5rem;
+  padding-left: 5rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.btn {
+  background-color: transparent;
+  color: #2241a7;
+  border-color: #2241a7;
+}
+
+.btn:hover {
+  background-color: #2241a7;
+  color: white;
+  border-color: #2241a7;
+}
+
+.btn-blue {
+  background-color: #2241a7;
+  color: white;
+}
+
+.btn-blue :hover {
+  background-color: transparent;
+  color: #2241a7;
+}
+
+.lock {
+  font-size: 0.9em;
+}
+
+#slc_data-data_request_fields {
+  padding-right: 5rem;
+  padding-left: 5rem;
+}
+
+#area_selection {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: #75f9c6;
+}
+
+#observation {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: #e8e8e8;
+}
+
+/* Figures */
+#thumbnail_container {
+  margin-left: 5rem;
+  margin-right: 5rem;
+  text-align: center;
+}
+
+.thumbnail {
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-bottom: 1rem;
+}
+
+.thumnail_button_container {
+  position: relative;
+}
+
+.thumnail_button_container .btn {
+  position: relative;
+  padding: 0rem;
+}
+
+.thumnail_button_container .btn img {
+  position: relative;
+  padding: 0rem;
+  height: 7rem;
+  width: 8rem;
+  border-radius: .375rem;
+}
+
+.thumbnail_selected {
+  position: absolute;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background-color: #75f9c6;
+  opacity: 0.8;
+  height: 7rem;
+  width: 8rem;
+  /* https: //stackoverflow.com/questions/29266338/clicking-on-buttons-through-a-container-mask */
+  pointer-events: none;
+}
+
+.thumbnail_selected p {
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.thumbnail .btn {
+  border-width: 2px;
+  padding: 0rem;
+  border-color: #75f9c6;
+}
+
+.thumbnail .btn:hover {
+  background-color: #75f9c6;
+}
+
+.thumbnail h5 {
+  text-align: center;
+  color: #2241a7;
+  padding-top: 0.5rem;
+}
+
+
+
+#figure_selection {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+#figure_selection_main {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+#fig_left_panel {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+#fig_sampling_info {
+  padding-bottom: 2rem;
+}
+
+.fig_container {
+  background-color: white;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-right: 5rem;
+}
+
+.fig_caption {
+  height: 5vh;
+}
+
+.fig_panel {
+  padding: 2rem;
+}
+
+#reference_data_authorship {
+  background-color: white;
+  padding: 4rem;
+  margin-right: 5rem;
+  margin-top: 2rem;
+}
+
+#select_all_figures {
+  text-align: center;
+  padding-bottom: 1rem;
+}
+
+#confirm_figures_selection {
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.fig_text_output {
+  min-height: 2.5rem;
+  background-color: #bcffd3;
+  color: #333333;
+  padding: 0.5rem;
+}
+
+.sample_selected {
+  text-align: right;
+  margin-right: 5rem;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.sample_selected_data {
+  margin-left: 1rem;
+  padding: 0.8rem;
+  background-color: #75f9c6;
+  border-radius: 3rem;
+}
+
+.sample_selected_map {
+  margin-left: 1rem;
+  padding: 0.8rem;
+  background-color: white;
+  border-radius: 3rem;
 }
 
 #logo_gotedna {
-  height: 5.2rem;
+  height: 4rem;
   margin-left: 8%;
 }
 
-#data_request {
-  background-color: #f2f2f2;
-  min-height: 90vh;
-  padding: 0.5rem;
-  margin-top: 0rem !important;
-}
-
-#data_request h2 {
-  margin-top: 0rem !important;
-}
-
-#observation_request {
-  background-color: #f2f2f2;
-  min-height: 97vh;
-  padding: 0.5rem;
-}
-
-#observation_request .tabbable a {
-  color: #53b2ad;
-}
-
-#observation_request h2 {
-  margin-top: 1rem;
-}
-
-#observation_request h3 {
-  color: #53b2ad;
-  margin-top: 2rem;
-  font-size: 1.4rem;
-}
-
-#gotedna_info,
-#reset_button {
-  text-align: right;
+#footer {
+  padding: 4rem;
+  background-color: #333333;
+  text-align: center;
+  align-items: center;
 }
 
 
-#gotedna_info .btn {
-  background-color: transparent;
-  border: none;
-  margin-top: 1rem;
-  padding: 0.25rem;
+#logo_dfo {
+  height: 2rem;
 }
 
-#gotedna_info .btn i {
-  color: #53b2ad;
+#logo_undossd {
+  height: 7rem;
 }
 
+#logo_mswc {
+  height: 5rem;
+}
 
 #data_input table {
   font-size: 1.4rem;
@@ -72,27 +360,9 @@ h2 {
 
 
 #table_output table {
-    color: #53b2ad;
+  color: #20e062;
 }
 
-.pending{
-  color: #ccc;
-  font-size: 1.1em;
-}
-
-
-
-.col_1 {
-  color: #53b2ad;
-}
-
-.col_grey1 {
-  color: #7f7f7f;
-}
-
-.col_grey3 {
-  color: #f2f2f2;
-}
 
 .align-text-left {
   width: 100%;
@@ -108,8 +378,13 @@ h2 {
   margin-right: 1rem;
 }
 
+.top_right_button {
+  text-align: right;
+  padding-right: 4rem;
+}
+
 .shiny-notification {
-  position:fixed;
+  position: fixed;
   top: calc(1%);
   left: calc(25%);
   width: 50%;
@@ -118,35 +393,34 @@ h2 {
 }
 
 .shiny-notification-message {
-  color: #0fbadc;
-  background-color: #e7fafe;
-  border: 1px solid #8de6f8;
+  color: #2241a7;
+  background-color: white;
+  border: 2px solid #333333;
+  font-size: 1.4em;
 }
 
 .shiny-notification-warning {
-  color: #f1b708;
-  background-color: #111;
-  border: 2px solid #ffedb7;
+  color: #2241a7;
+  background-color: #75f9c6;
+  border: 2px solid #333333;
+  font-size: 1.4em;
 }
 
 .shiny-notification-error {
   color: #c93342;
-  background-color: #111;
-  border: 1px solid #f8d5d8;
+  background-color: #75f9c6;
+  border: 2px solid #c93342;
+  font-size: 1.4em;
 }
 
 shiny-plot-output {
   height: 500px;
 }
 
-#button_map {
-  text-align: right;
+.progress-bar {
+  background-color: #20e062;
 }
 
-#button_source {
-  margin-top: 0.2rem;
-  text-align: right;
-}
 
 /* remove some leaflettool */
 /* .leaflet-draw-draw-polyline, 
@@ -157,10 +431,6 @@ shiny-plot-output {
 
 .selectize-dropdown {
   z-index: 1001 !important;
-}
-
-.thumbnail {
-  margin-bottom: 1rem;
 }
 
 #fig_caption {

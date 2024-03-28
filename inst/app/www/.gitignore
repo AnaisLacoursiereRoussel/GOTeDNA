@@ -1,4 +1,4 @@
 *.html
-!doc/caption/*.html
+!doc/**/*.html
 *.md
 *.pdf

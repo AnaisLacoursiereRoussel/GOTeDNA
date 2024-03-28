@@ -55,24 +55,18 @@ gotedna_station <- list(
 )
 saveRDS(gotedna_station, "inst/app/data/gotedna_station.rds")
 
-# calculate and scale metabarcoding probabilities
-newprob_mb <- calc_det_prob(
-  data = gotedna_data$metabarcoding[gotedna_data$metabarcoding$GOTeDNA_ID %in% 8,]
-)
-saveRDS(newprob_mb, "inst/app/data/newprob_mb.rds")
 
-Pscaled_mb <- scale_newprob(
-  gotedna_data$metabarcoding[gotedna_data$metabarcoding$GOTeDNA_ID %in% 8,], newprob_mb
-)
-saveRDS(Pscaled_mb, "inst/app/data/Pscaled_mb.rds")
 
-# calculate and scale qPCR probabilities
-newprob_qp <- calc_det_prob(
-  data = D_qPCR[D_qPCR$GOTeDNA_ID %in% 11,]
-)
-saveRDS(newprob_qp, "inst/app/data/newprob_qp.rds")
+# Prepare primer data 
+gotedna_data <- readRDS("inst/app/data/gotedna_data.rds")
+newprob <- calc_det_prob(gotedna_data$metabarcoding)
+scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob) 
 
-Pscaled_qp <- scale_newprob(
-  D_qPCR[D_qPCR$GOTeDNA_ID %in% 11,], newprob_qp
-)
-saveRDS(Pscaled_qp, "inst/app/data/Pscaled_qp.rds")
+gotedna_primer <- list()
+
+for (i in c("phylum", "class", "order", "family", "genus", "species")) {
+  gotedna_primer[[i]] <- primer_sort(i, scaledprobs$Pscaled_month) |>
+    mutate(text = paste0(primer, " (", success, "/", total, " ", perc, "%)")) 
+}
+
+saveRDS(gotedna_primer, "inst/app/data/gotedna_primer.rds")

@@ -4,10 +4,19 @@ server <- function(input, output, session) {
     geom = NULL,
     geom_slc = NULL,
     station_slc = NULL,
+    taxon_lvl_slc = NULL,
+    taxon_id_slc = NULL,
     show_map_info = FALSE,
     reload_map = 0,
     fig_ready = FALSE,
-    current_fig = "fig1"
+    fig_slc = list(
+      fig_heatmap = FALSE, 
+      fig_effort = FALSE,
+      fig_higher = FALSE, 
+      fig_detect = FALSE
+    ),
+    current_fig = "fig1",
+    lock_view = FALSE
   )
 
   observeEvent(r$data_filtered, {
@@ -22,12 +31,10 @@ server <- function(input, output, session) {
 
   mod_dialog_disclaimers_server("show_dialog", r)
   observeEvent(input$show_dialog, r$show_dialog <- TRUE)
-  mod_dialog_definitions_server("show_help", r)
   observeEvent(input$show_help, r$show_help <- TRUE)
-
   mod_dialog_map_info_server("show_map_info", r)
+  mod_glossary_server("glossary")
 
-  mod_dialog_source_server("show_source", r)
   observeEvent(input$show_source, r$show_source <- TRUE)
 
 

@@ -2,6 +2,8 @@
 *.html
 inst/app/data/raw_xlsx_files
 tmp/
+TODO.md
+
 
 # History files
 .Rhistory
