@@ -377,9 +377,9 @@ draw_fig_higher <- function(r, ready) {
     if (r$taxon_lvl_slc == "species") {
       plotNotAvailableTaxoLevel()
     } else {
-      higher_tax_fig(
+      field_sample_fig(
         data = r$data_ready,
-        higher.taxon.select = r$taxon_lvl_slc,
+        taxon.select = r$taxon_lvl_slc,
         taxon.name = r$taxon_id_slc
       )
     }

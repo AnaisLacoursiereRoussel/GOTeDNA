@@ -46,13 +46,15 @@ effort_needed_fig <- function(scaledprobs_month) {
   }
 
   ggplot2::ggplot(DF2, ggplot2::aes(y = P, x = n, colour = as.factor(month))) +
-    ggplot2::geom_point(size = 3) +
-    ggplot2::theme_classic() +
+    ggplot2::geom_point(size = 5) +
+    ggplot2::theme_classic(base_size = 24) +
+    ggplot2::expand_limits(x = 0, y = 0) +
     ggplot2::scale_y_continuous("Detection probability",
       limits = c(0, 1),
       expand = c(0, 0.01)
     ) +
     ggplot2::scale_x_continuous(
+      #expand = c(0, 0),
       limits = c(1, 10),
       breaks = 1:10
     ) +
@@ -63,8 +65,15 @@ effort_needed_fig <- function(scaledprobs_month) {
     ) +
     ggplot2::labs(
       colour = "Month",
-      title = scientific_name_formatter(species.name),
+      title = species.name,
       subtitle = paste("Primer:", primer.select),
       x = "Number of samples"
-    )
+    ) +
+    ggplot2::guides(colour = ggplot2::guide_legend(
+      label.position = "left",
+      label.hjust = 1
+    )) +
+    theme_gotedna
+
+
 }

@@ -81,7 +81,7 @@ hm_fig <- function(
     ggplot2::theme(
       panel.border = ggplot2::element_rect(fill = NA, colour = "lightgrey"),
       panel.grid = ggplot2::element_blank(),
-      legend.spacing = grid::unit(0, "cm"),
+      legend.spacing = ggplot2::unit(0, "cm"),
       legend.position = "bottom",
       legend.margin = ggplot2::margin(0, 0, 0, 0, "cm"),
       legend.justification = "left",
@@ -90,5 +90,5 @@ hm_fig <- function(
       strip.text.y.left = ggplot2::element_text(angle = 0),
       axis.text.x = ggplot2::element_text(angle = 30, vjust = 1, hjust = 1, size = 8)
     ) +
-   ggh4x::force_panelsizes(rows = unit(2, "cm"))
+   ggh4x::force_panelsizes(rows = ggplot2::unit(2, "cm"))
 }

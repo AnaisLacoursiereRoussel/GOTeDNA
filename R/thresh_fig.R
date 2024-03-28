@@ -110,9 +110,10 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       subtitle = paste0("Detection threshold: ", threshold, "%")
     ) +
     ggplot2::theme_minimal() +
-    ggplot2::theme(
-      panel.grid = ggplot2::element_blank(),
-      axis.title.y = ggplot2::element_text(hjust = 1, vjust = 2),
-      plot.background = ggplot2::element_rect(fill = "white", colour = NA)
-    )
+    theme_gotedna
+  #  ggplot2::theme(
+     # panel.grid = ggplot2::element_blank(),
+    #  axis.title.y = ggplot2::element_text(hjust = 1, vjust = 2),
+     # plot.background = ggplot2::element_rect(fill = "white", colour = NA)
+   # )
 }

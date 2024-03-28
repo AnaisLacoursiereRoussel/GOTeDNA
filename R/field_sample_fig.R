@@ -1,17 +1,17 @@
 #' Display actual sampling effort of taxa within specified taxonomic group.
 #'
 #' @description This function displays the actual number of eDNA samples taken
-#' for all species of a specified higher taxonomic group per year.
+#' for all species of a specified taxonomic group per year.
 #'
 #' @param data (required, data.frame): Data.frame read in with [read_data()]
-#' @param higher.taxon.select (required, character): Higher taxonomic level of
-#' interest. Choices = one of `c("kingdom", "phylum", "class", "order", "family")`
+#' @param taxon.select (required, character): Taxonomic level of interest
+#' Choices = one of `c("kingdom", "phylum", "class", "order", "family", "genus)`
 #' @param taxon.name (required, character): Select taxon name that matches the level
 #' provided in `higher.taxon.select`. E.g., if `taxon.level = "class"`
 #' enter class name, etc..
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
-#' @rdname higher_tax_fig
+#' @rdname field_sample_fig
 #' @export
 #' @examples
 #' \dontrun{
@@ -21,25 +21,25 @@
 #'   taxon.name = "Bryozoa"
 #' )
 #' }
-higher_tax_fig <- function(data, higher.taxon.select, taxon.name) {
+field_sample_fig <- function(data, taxon.select, taxon.name) {
   oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
   on.exit(options(dplyr.summarise.inform = oop))
 
-  if (!taxon.name %in% data[[higher.taxon.select]]) {
+  if (!taxon.name %in% data[[taxon.select]]) {
     stop("Taxon not found in data")
   }
 
-  if (!is.null(higher.taxon.select)) {
-    higher.taxon.select <- match.arg(
-      arg = higher.taxon.select,
-      choices = c("kingdom", "phylum", "class", "order", "family"),
+  if (!is.null(taxon.select)) {
+    taxon.select <- match.arg(
+      arg = taxon.select,
+      choices = c("kingdom", "phylum", "class", "order", "family", "genus"),
       several.ok = FALSE
     )
   }
 
   data %<>%
-    dplyr::filter(!!dplyr::ensym(higher.taxon.select) %in% taxon.name) %>%
+    dplyr::filter(!!dplyr::ensym(taxon.select) %in% taxon.name) %>%
     dplyr::group_by(kingdom, phylum, class, order, family, genus, scientificName, year, month) %>%
     dplyr::summarise(
       n = dplyr::n(),
@@ -76,20 +76,9 @@ higher_tax_fig <- function(data, higher.taxon.select, taxon.name) {
                                           )) +
     ggplot2::labs(
       x = "Month", y = "Proportion of positive samples",
-      title = paste(stringr::str_to_title(higher.taxon.select), taxon.name),
+      title = paste(stringr::str_to_title(taxon.select), taxon.name),
       colour = "Species",
       size = "Sampling effort"
     ) +
-    ggplot2::theme(
-      panel.background = ggplot2::element_blank(),
-      panel.grid = ggplot2::element_blank(),
-      panel.border = ggplot2::element_rect(colour = "black", fill = NA),
-      axis.line = ggplot2::element_blank(),
-      panel.grid.minor.x = ggplot2::element_line(colour = "lightgrey"),
-      axis.ticks = ggplot2::element_line(),
-      legend.position = NULL,
-      strip.background = ggplot2::element_rect(fill = "grey95", colour = "black"),
-      strip.text.y.left = ggplot2::element_text(angle = 0),
-      strip.placement = "outside"
-    )
+   theme_gotedna
 }

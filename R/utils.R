@@ -27,3 +27,60 @@ scientific_name_formatter <- function(raw_name) {
 scale_prop <- function(x) {
   (x/max(x))
 }
+
+# custom theme for all figures
+theme_gotedna <- ggplot2::theme(
+    # plotting components
+
+    ## drop minor gridlines
+  panel.grid = ggplot2::element_blank(),
+  # change grid lines to gray
+#  panel.grid.major =  element_line(color = "#d0d0d0"),
+  # fill the plot and panel spaces with grey and remove border
+#  panel.background = element_blank(),
+ # plot.background = element_blank(),
+  panel.border = ggplot2::element_blank(),
+  # remove strip background
+  strip.background = ggplot2::element_blank(),
+  # adjust the margins of plots and remove axis ticks
+  plot.margin = ggplot2::margin(0.5, 1, 0.5, 1,
+                                unit = "cm"),
+  axis.ticks = ggplot2::element_line(
+    linewidth = 0.1,
+    colour = "#939598"),
+  # change text family, size, and adjust position of titles
+  text = ggplot2::element_text(
+    family = "Arial", size = 24),
+  axis.text = ggplot2::element_text(
+    colour = "#939598", size = 20),
+  axis.title = ggplot2::element_text(colour = "#5A5A5A",
+                                     size = 24),
+  axis.title.x = ggplot2::element_text(
+    margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
+    hjust = 0),
+  axis.title.y = ggplot2::element_text(
+    margin = ggplot2::margin(b = 0.66,
+                             unit = "cm"),
+    hjust = 0),
+  axis.line = ggplot2::element_line(
+    linewidth = 0.1,
+    colour = "#939598"),
+  plot.title = ggplot2::element_text(
+    face = "bold",
+    size = 30,
+    hjust = 0,
+    colour = "#5A5A5A"),
+  plot.title.position = "plot",
+  plot.subtitle = ggplot2::element_text(size = 24,
+                                        margin = ggplot2::margin(b = 0.66, unit = "cm"),
+                                        colour = "#5A5A5A",
+                                        hjust = 0),
+  legend.title.align = 1,
+  legend.text = ggplot2::element_text(size = 20, colour = "#939598"),
+  #legend.text.align = 0,
+  legend.spacing.y = ggplot2::unit(20, "pt"),
+  legend.title = ggplot2::element_text(colour = "#5A5A5A")
+#    strip.text = element_text(size = rel(1.33), face = "bold"),
+
+  )
+
