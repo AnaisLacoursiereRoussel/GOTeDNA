@@ -69,15 +69,25 @@ smooth_fig <- function(data, species.name) {
   NEW2 <- NEW[NEW$month > 12 & NEW$month <= 24, ]
   NEW2$month <- NEW2$month - 12
 
-  ggplot2::ggplot() +
+p <- ggplot2::ggplot() +
     ggplot2::geom_hline(ggplot2::aes(yintercept = y), data.frame(y = c(0:4) / 4), color = "lightgrey") +
     ggplot2::geom_vline(ggplot2::aes(xintercept = x), data.frame(x = 0:12), color = "lightgrey") +
-    ggplot2::geom_path(data = NEW2, ggplot2::aes(x = month, y = PRED), show.legend = TRUE, colour = "blue") +
-    ggplot2::geom_point(data = data, ggplot2::aes(x = month, y = scaleP, col = as.factor(year)), show.legend = TRUE, alpha = .9, size = 2) +
-    ggplot2::coord_polar() +
+    ggplot2::geom_path(data = NEW2,
+                       ggplot2::aes(x = month,
+                                    y = PRED),
+                       show.legend = TRUE, colour = "blue") +
+    ggplot2::geom_point(data = data,
+                        ggplot2::aes(x = month,
+                                     y = scaleP,
+                                     col = as.factor(year)),
+                        show.legend = TRUE,
+                        alpha = .9, size = 5) +
+    ggplot2::coord_polar(
+      clip = "off"
+    ) +
     ggplot2::labs(
       col = "Year", x = NULL, y = "Normalized detection probability",
-      title = scientific_name_formatter(species.name),
+      title = species.name,
       subtitle = subt
     ) +
     ggplot2::theme_minimal() +
@@ -87,9 +97,21 @@ smooth_fig <- function(data, species.name) {
       breaks = 1:12,
       labels = month.abb
     ) +
-    ggplot2::scale_y_continuous(limits = c(-0.1, 1), breaks = c(0, 0.25, 0.50, 0.75, 1)) +
-    ggplot2::theme(
-      panel.grid = ggplot2::element_blank(),
-      axis.title.y = ggplot2::element_text(hjust = 1)
-    )
+    ggplot2::guides(colour = ggplot2::guide_legend(
+      label.position = "left",
+      label.hjust = 1
+    )) +
+    ggplot2::scale_y_continuous(limits = c(-0.1, 1.01), breaks = c(0, 0.25, 0.50, 0.75, 1)) +
+    theme_circle
+
+y_text = ggpubr::text_grob(label = "1.00\n\n0.75\n\n0.50\n\n0.25\n\n0",
+                           size = 20,
+                           just = c(0, 1))
+
+cowplot::plot_grid(y_text, p,
+                   ncol = 2,
+                   rel_widths = c(1,4),
+                   rel_heights = c(1, 20))
+
 }
+

@@ -110,7 +110,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       subtitle = paste0("Detection threshold: ", threshold, "%")
     ) +
     ggplot2::theme_minimal() +
-    theme_gotedna
+    theme_circle
   #  ggplot2::theme(
      # panel.grid = ggplot2::element_blank(),
     #  axis.title.y = ggplot2::element_text(hjust = 1, vjust = 2),

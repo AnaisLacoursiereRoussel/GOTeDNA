@@ -67,18 +67,75 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       labels = month.abb) +
     ggplot2::scale_size_continuous(limits = c(0, NA), breaks = seq(0, 50, 10)) +
     ggplot2::theme_minimal(base_size = 10) +
-    ggplot2::guides(size = ggplot2::guide_legend(order = 1),
+    ggplot2::guides(size = ggplot2::guide_legend(order = 1,
+                                                 label.position = "left",
+                                                 label.hjust = 1),
                     colour = ggplot2::guide_legend(order = 2,
-                                          label.theme = ggplot2::element_text(
-                                            face = "italic",
-                                            size = 8
+                                                   label.position = "left",
+                                                   label.hjust = 1
                                           )
-                                          )) +
+                                          ) +
     ggplot2::labs(
       x = "Month", y = "Proportion of positive samples",
       title = paste(stringr::str_to_title(taxon.select), taxon.name),
       colour = "Species",
       size = "Sampling effort"
     ) +
-   theme_gotedna
+    ggplot2::theme(
+      # plotting components
+
+      ## drop minor gridlines
+      panel.grid = ggplot2::element_blank(),
+      # change grid lines to gray
+      panel.grid.minor.x =  ggplot2::element_line(color = "#d0d0d0"),
+      # fill the plot and panel spaces with grey and remove border
+      #  panel.background = element_blank(),
+      # plot.background = element_blank(),
+      panel.border = ggplot2::element_blank(),
+      # remove strip background
+      strip.background = ggplot2::element_blank(),
+      strip.text = ggplot2::element_text(angle = 180,
+                                         colour = "#939598",
+                                         vjust = 0 ),
+      # adjust the margins of plots and remove axis ticks
+      plot.margin = ggplot2::margin(0.5, 1, 0.5, 1,
+                                    unit = "cm"),
+      axis.ticks = ggplot2::element_line(
+        linewidth = 0.1,
+        colour = "#939598"),
+      axis.line = ggplot2::element_line(
+        linewidth = 0.1,
+        colour = "#939598"),
+      # change text family, size, and adjust position of titles
+      text = ggplot2::element_text(
+        family = "Arial", size = 24),
+      axis.text = ggplot2::element_text(
+        colour = "#939598", size = 20),
+      axis.title = ggplot2::element_text(colour = "#5A5A5A",
+                                         size = 24),
+      axis.title.x = ggplot2::element_text(
+        margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
+        hjust = 0),
+      axis.title.y = ggplot2::element_text(
+        margin = ggplot2::margin(b = 0.66,
+                                 unit = "cm"),
+        hjust = 0),
+      plot.title = ggplot2::element_text(
+        face = "bold",
+        size = 30,
+        hjust = 0,
+        colour = "#5A5A5A"),
+      plot.title.position = "plot",
+      plot.subtitle = ggplot2::element_text(size = 24,
+                                            margin = ggplot2::margin(b = 0.66, unit = "cm"),
+                                            colour = "#5A5A5A",
+                                            hjust = 0),
+      legend.title.align = 1,
+      legend.text = ggplot2::element_text(size = 20, colour = "#939598"),
+      #legend.text.align = 0,
+      legend.spacing.y = ggplot2::unit(20, "pt"),
+      legend.title = ggplot2::element_text(colour = "#5A5A5A")
+      #    strip.text = element_text(size = rel(1.33), face = "bold"),
+
+    )
 }
