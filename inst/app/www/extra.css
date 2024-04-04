@@ -43,7 +43,7 @@ h6 {
 }
 
 .tab-content {
-  min-height: 65vh;
+  min-height: 75vh;
 }
 
 /* #NavbarCSS */
@@ -353,26 +353,45 @@ h6 {
 
 .selectize-dropdown {
   overflow: hidden;
+  color: #2241a7;
+}
+
+.selectize-dropdown:hover {
+  background-color: #75f9c6;
+  color: #2241a7;
+}
+
+.selectize-dropdown:active {
+  background-color: #75f9c6;
+  color: #2241a7;
 }
 
 .selectize-dropdown-content {
   padding: 0;
 }
 
-.selectize-dropdown .option {
+.selectize-dropdown .option,
+.selectize-dropdown .selected
+ {
   background-color: #fff;
   padding: 10px 12px 12px;
 }
 
-.selectize-dropdown .active:not(.selected) {
-  background-color: #f1f9ff;
-  color: #2241a7;
-}
-
-.selectize-dropdown .selected {
+.selectize-dropdown .active {
   background-color: #75f9c6;
   color: #2241a7;
 }
+
+
+/* .selectize-dropdown .active:not(.selected) {
+  background-color: #75f9c6;
+  color: #2241a7;
+} */
+
+/* .selectize-dropdown .selected {
+  background-color: #75f9c6;
+  color: #2241a7;
+} */
 
 /* #AreaCSS*/
 #area_selection {
@@ -511,12 +530,18 @@ h6 {
 
 .fig_container {
   background-color: white;
-  padding-left: 2rem;
-  padding-right: 2rem;
 }
 
 .fig_panel {
   padding: 2rem;
+}
+
+.fig_caption {
+  font-size: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 
 .fig_text_output {
@@ -674,10 +699,6 @@ table.dataTable.display>tbody>tr>td {
   font-size: 1.4rem;
 }
 
-#figure_output {
-  margin-bottom: 2rem;
-  height: 50vh;
-}
 
 
 #table_output table {
@@ -744,13 +765,6 @@ shiny-plot-output {
   z-index: 1001 !important;
 }
 
-#fig_caption {
-  font-size: 1.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
-}
 
 .definition {
   font-weight: bold;
