@@ -6,25 +6,24 @@ mod_select_data_ui <- function(id) {
       id = "data_request",
       div(
         class = "section_header",
-        fluidRow(
+        div(
           # title and top buttons
-          column(8, h1("Data request")),
-          column(
-            4,
-            div(
-              class = "top_right_button",
-              actionButton(ns("reset"), "Reset",
-                title = "Reset selection to default values"
-              ),
-              actionButton(ns("hide_fields"), "Show/Hide fields",
-                title = "Hide or show fields"
-              )
+          class = "title-container",
+          h1("Data request"),
+          div(
+            class = "buttons-container",
+            actionButton(ns("reset"), "Reset",
+              title = "Reset selection to default values"
+            ),
+            actionButton(ns("hide_fields"), "Show/Hide fields",
+              title = "Hide or show fields"
             )
           )
         ),
         # fields
         div(
           id = ns("data_request_fields"),
+          class = "inputs-container",
           ## top fields
           div(
             id = "data_request_top_fields",
@@ -44,9 +43,10 @@ mod_select_data_ui <- function(id) {
                 3,
                 div(
                   id = ns("external_files"),
+                  class = "file_input-container",
                   fileInput(
                     ns("external_file"),
-                    "upload your files",
+                    "Upload your files",
                     multiple = TRUE,
                     accept = NULL,
                     width = NULL,
@@ -102,67 +102,61 @@ mod_select_data_ui <- function(id) {
                   p(icon("warning"), "Selection restricted to spatial area")
                 )
               )
-            ),
-            div(
-              class = "section_footer",
-              id = ns("section_footer_data_request"),
-              column(12, uiOutput(outputId = ns("n_smpl_data")))
             )
           )
         )
+      ),
+      div(
+        class = "section_footer",
+        id = ns("section_footer_data_request"),
+        column(12, uiOutput(outputId = ns("n_smpl_data")))
       )
     ),
     div(
       id = "area_selection",
       div(
         class = "section_header",
-        fluidRow(
-          column(
-            8,
-            h1("Area Selection", span(id = ns("lock"), class = "lock", icon("lock")))
+        div(
+          class = "title-container",
+          h1(
+            "Area Selection",
+            span(
+              id = ns("lock"),
+              class = "lock", icon("lock")
+            )
           ),
-          column(
-            4,
-            div(
-              class = "top_right_button",
-              div(
-                id = "button_map",
-                actionButton(ns("confirm"), "Confirm",
-                  title = "Confirm spatial selection"
-                ),
-                actionButton(ns("lock"), "Lock view",
-                  title = "Set and lock map bounds"
-                ),
-                actionButton(ns("clear_area"), "Clear area",
-                  title = "Clear current spatial selection"
-                ),
-                actionButton(ns("hide_map"), "Show/Hide map",
-                  title = "Hide or show map"
-                )
-              )
+          div(
+            class = "buttons-container",
+            id = "button_map",
+            actionButton(ns("confirm"), "Confirm",
+              title = "Confirm spatial selection"
+            ),
+            actionButton(ns("lock"), "Lock view",
+              title = "Set and lock map bounds"
+            ),
+            actionButton(ns("clear_area"), "Clear area",
+              title = "Clear current spatial selection"
+            ),
+            actionButton(ns("hide_map"), "Show/Hide map",
+              title = "Hide or show map"
             )
           )
         )
       ),
       div(
         id = ns("map_container"),
-        mapedit::editModUI(ns("map-select"), height = "60vh")
+        mapedit::editModUI(ns("map-select"), height = "75vh")
       ),
       div(
         class = "section_footer",
         id = ns("section_footer_area_selection"),
-        fluidRow(
-          column(
-            6,
-            actionButton(ns("show_map_info"), "How to select",
-              icon = icon("info-circle"),
-              title = "Display information about how to use the map below"
-            )
-          ),
-          column(
-            6,
-            uiOutput(outputId = ns("n_smpl_map"))
+        div(
+          actionButton(ns("show_map_info"), "How to select",
+            title = "Display information about how to use the map below"
           )
+        ),
+        div(
+          uiOutput(outputId = ns("n_smpl_map"))
         )
       )
     )
@@ -257,7 +251,8 @@ mod_select_data_server <- function(id, r) {
         "taxo_id",
         choices = c(
           "All",
-          r$cur_data_sta_slc[[input$taxo_lvl]] |>
+          r$cur_data[[input$taxo_lvl]] |>
+            # r$cur_data_sta_slc[[input$taxo_lvl]] |>
             unique() |>
             sort()
         ),
@@ -272,8 +267,11 @@ mod_select_data_server <- function(id, r) {
           "slc_spe",
           choices = c(
             "All",
-            r$cur_data_sta_slc[
-              r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
+            # r$cur_data_sta_slc[
+            #   r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
+            # ]$scientificName |>
+            r$cur_data[
+              r$cur_data[[input$taxo_lvl]] == input$taxo_id,
             ]$scientificName |>
               unique() |>
               sort()
