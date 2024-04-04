@@ -35,22 +35,22 @@ mod_select_figure_ui <- function(id) {
             add_figure_selection(
               ns("fig_heatmap"),
               "Species detection heatmap",
-              "img/thumbnails/tn_heatmap.png"
+              "img/thumbnails/tn_heatmap.svg"
             ),
             add_figure_selection(
               ns("fig_effort"),
               "Sample size to achieve detection",
-              "img/thumbnails/tn_effort.png"
+              "img/thumbnails/tn_effort.svg"
             ),
             add_figure_selection(
               ns("fig_higher"),
               "Field sample size for datasets",
-              "img/thumbnails/tn_higher.png"
+              "img/thumbnails/tn_higher.svg"
             ),
             add_figure_selection(
               ns("fig_detect"),
               "Monthly eDNA detection probability",
-              "img/thumbnails/tn_thresh.png"
+              "img/thumbnails/tn_thresh.svg"
             )
           )
         ),
