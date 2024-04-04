@@ -39,6 +39,7 @@ ui <- fluidPage(
   div(
     id = "footer",
     fluidRow(
+      class = "align-items-center",
       column(
         4,
         img(

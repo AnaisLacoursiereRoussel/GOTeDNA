@@ -6,37 +6,32 @@ mod_select_figure_ui <- function(id) {
       id = "figure_selection",
       div(
         class = "section_header",
-        fluidRow(
-          column(8, h1("Figure selection")),
-          column(
-            4,
-            div(
-              class = "top_right_button",
-              actionButton(ns("hide_figs"), "Hide/Show figures",
-                title = "Hide or show fields"
-              )
+        div(
+          class = "title-container",
+          h1("Figure selection"),
+          div(
+            class = "buttons-container",
+            actionButton(ns("hide_figs"), "Hide/Show figures",
+              title = "Hide or show fields"
             )
           )
         )
       ),
       div(
         id = ns("figure_selection_main"),
-        fluidRow(
-          column(
-            12,
-            div(
-              id = "select_all_figures",
-              actionButton(
-                ns("select_all"),
-                "Select all figures",
-                title = "Select all figures"
-              )
-            )
+        div(
+          class = "d-flex justify-content-center",
+          id = "select_all_figures",
+          actionButton(
+            ns("select_all"),
+            "Select all figures",
+            title = "Select all figures"
           )
         ),
         div(
           id = "thumbnail_container",
           fluidRow(
+            class = "justify-content-center",
             add_figure_selection(
               ns("fig_heatmap"),
               "Species detection heatmap",
@@ -59,31 +54,29 @@ mod_select_figure_ui <- function(id) {
             )
           )
         ),
-        fluidRow(
-          column(
-            12,
-            div(
-              id = "confirm_figures_selection",
-              actionButton(
-                ns("confirm"),
-                "Confirm",
-                title = "Confirm selection",
-                class = "btn-blue"
-              )
-            )
+        div(
+          class = "d-flex justify-content-center",
+          id = "confirm_figures_selection",
+          actionButton(
+            ns("confirm"),
+            "Confirm",
+            title = "Confirm selection",
+            class = "primary-button"
           )
         ),
       )
     ),
     div(
       id = "observation",
-      div(
-        class = "section_header",
-        h1("Observation")
-      ),
       fluidRow(
+        class = "panels-container",
         column(
           3,
+          class = "control-panel",
+          div(
+            class = "section_header",
+            h1("Observation")
+          ),
           div(
             id = "fig_left_panel",
             selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
@@ -92,30 +85,43 @@ mod_select_figure_ui <- function(id) {
               label = "Compute & visualize",
               title = "Compute optimal detection window",
               icon = icon("gear"),
-              class = "btn-blue"
+              class = "primary-button"
             ),
             div(
               id = "fig_sampling_info",
               h4("Sampling info"),
-              h6("Optimal sampling period: "),
-              uiOutput(ns("opt_sampl"), class = "fig_text_output"),
-              h6("Confidence: "),
-              uiOutput(ns("conf"), class = "fig_text_output"),
-              h6("Variation among year: "),
-              uiOutput(ns("var_year"), class = "fig_text_output"),
-              h6("Variation among primers: "),
-              uiOutput(ns("var_primer"), class = "fig_text_output")
+              div(
+                class = "sampling_info-item",
+                h6("Optimal sampling period: "),
+                uiOutput(ns("opt_sampl"), class = "fig_text_output")
+              ),
+              div(
+                class = "sampling_info-item",
+                h6("Confidence: "),
+                uiOutput(ns("conf"), class = "fig_text_output")
+              ),
+              div(
+                class = "sampling_info-item",
+                h6("Variation among year: "),
+                uiOutput(ns("var_year"), class = "fig_text_output"),
+              ),
+              div(
+                class = "sampling_info-item",
+                h6("Variation among primers: "),
+                uiOutput(ns("var_primer"), class = "fig_text_output")
+              )
             ),
             actionButton(
               ns("export_pdf"),
               "Export to PDF",
               title = "Export figures to PDF",
-              class = "btn-blue"
+              class = "primary-button"
             )
           )
         ),
         column(
           9,
+          class = "show-panels",
           div(
             id = "fig_main_container",
             ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
@@ -125,23 +131,23 @@ mod_select_figure_ui <- function(id) {
           ),
           div(
             id = "reference_data_authorship",
+            div(
+              class = "table_title-container",
+              h2("Lorem Title")
+            ),
             DT::DTOutput(ns("data_authorship"))
           ),
-        ),
-        column(3),
-        column(
-          9,
-          div(
-            class = "section_footer",
-            actionButton(
-              ns("export_biblio"),
-              "Export references",
-              title = "Export references",
-              class = "btn-blue"
-            )
-          )
         )
-      )
+      ),
+      # div(
+      #   class = "section_footer",
+      #   actionButton(
+      #     ns("export_biblio"),
+      #     "Export references",
+      #     title = "Export references",
+      #     class = "primary-button"
+      #   )
+      # )
     )
   )
 }
