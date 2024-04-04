@@ -145,7 +145,7 @@ mod_select_data_ui <- function(id) {
       ),
       div(
         id = ns("map_container"),
-        mapedit::editModUI(ns("map-select"), height = "88vh")
+        mapedit::editModUI(ns("map-select"), height = "75vh")
       ),
       div(
         class = "section_footer",

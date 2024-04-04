@@ -18,23 +18,54 @@ ui <- fluidPage(
     ),
     tabPanel(
       "Glossary",
-      fluidRow(
-        column(2),
-        column(8, mod_glossary_ui("glossary")),
-        column(2)
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_80",
+          mod_glossary_ui("glossary")
+        )
       )
     ),
     tabPanel(
       "Disclaimer",
-      fluidRow(
-        column(3),
-        column(6, includeHTML(file.path("www", "doc", "disclaimer.html"))),
-        column(3)
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          includeHTML(file.path("www", "doc", "disclaimer.html"))
+        )
       )
     ),
-    tabPanel("Partners"),
-    tabPanel("Team"),
-    tabPanel("Contact"),
+    tabPanel(
+      "Partners",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          h1("Partners")
+        )
+      )
+    ),
+    tabPanel(
+      "Team",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          h1("Team")
+        )
+      )
+    ),
+    tabPanel(
+      "Contact",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          h1("Contact")
+        )
+      )
+    ),
   ),
   div(
     id = "footer",
@@ -51,7 +82,7 @@ ui <- fluidPage(
       column(
         4,
         img(
-          src = "img/logo_partners/logo_mswc.png",
+          src = "img/logo_partners/logo_Maine_eDNA_nbg_w.png",
           alt = "Logo Main eDNA",
           id = "logo_mswc"
         )

@@ -42,6 +42,10 @@ h6 {
   padding-right: 0px;
 }
 
+.tab-content {
+  min-height: 65vh;
+}
+
 /* #NavbarCSS */
 .navbar {
   height: 110px;
@@ -95,6 +99,25 @@ h4,
 h5,
 h6 {
   color: #5a5a5a;
+}
+
+
+.standalone_container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+
+.standalone_60 {
+  width: 60%;
+  padding: 25px 0px;
+}
+
+.standalone_80 {
+  width: 80%;
+  padding: 25px 0px;
 }
 
 /* Modal */
@@ -189,7 +212,8 @@ h6 {
 
 .btn:hover {
   background-color: #2241a7;
-  color: fff;
+  border: solid 2px #2241a7;
+  color: #fff;
 }
 
 .btn:active {
@@ -265,17 +289,6 @@ h6 {
   background-color: #20e062;
   border-radius: 10px;
   font-size: 0;
-}
-
-
-.btn-blue {
-  background-color: #2241a7;
-  color: white;
-}
-
-.btn-blue :hover {
-  background-color: transparent;
-  color: #2241a7;
 }
 
 .lock {

@@ -133,7 +133,7 @@ mod_select_figure_ui <- function(id) {
             id = "reference_data_authorship",
             div(
               class = "table_title-container",
-              h2("Lorem Title")
+              h2("Reference data authorship")
             ),
             DT::DTOutput(ns("data_authorship"))
           ),
