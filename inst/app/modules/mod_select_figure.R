@@ -124,10 +124,10 @@ mod_select_figure_ui <- function(id) {
           class = "show-panels",
           div(
             id = "fig_main_container",
-            ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
+            ui_figure("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
             ui_figure("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
-            ui_figure("fig_higher", "Field sample size for ", "field_sample.html", ns),
-            ui_figure("fig_detect", "Monthly eDNA detection probability", "detection.html", ns)
+            ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
+            ui_figure("fig_higher", "Field sample size", "field_sample.html", ns),
           ),
           div(
             id = "reference_data_authorship",
@@ -163,16 +163,16 @@ mod_select_figure_server <- function(id, r) {
     })
 
     observeEvent(input$select_all, {
-      for (i in c("fig_heatmap", "fig_effort", "fig_higher", "fig_detect")) {
+      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_higher")) {
         show_fig(i)
         r$fig_slc[[i]] <- TRUE
       }
     })
 
-    hide_fig("fig_heatmap")
-    observeEvent(input$fig_heatmap, {
-      toggle_fig("fig_heatmap")
-      r$fig_slc$fig_heatmap <- !r$fig_slc$fig_heatmap
+    hide_fig("fig_detect")
+    observeEvent(input$fig_detect, {
+      toggle_fig("fig_detect")
+      r$fig_slc$fig_detect <- !r$fig_slc$fig_detect
     })
 
     hide_fig("fig_effort")
@@ -181,17 +181,19 @@ mod_select_figure_server <- function(id, r) {
       r$fig_slc$fig_effort <- !r$fig_slc$fig_effort
     })
 
+    hide_fig("fig_heatmap")
+    observeEvent(input$fig_heatmap, {
+      toggle_fig("fig_heatmap")
+      r$fig_slc$fig_heatmap <- !r$fig_slc$fig_heatmap
+    })
+
     hide_fig("fig_higher")
     observeEvent(input$fig_higher, {
       toggle_fig("fig_higher")
       r$fig_slc$fig_higher <- !r$fig_slc$fig_higher
     })
 
-    hide_fig("fig_detect")
-    observeEvent(input$fig_detect, {
-      toggle_fig("fig_detect")
-      r$fig_slc$fig_detect <- !r$fig_slc$fig_detect
-    })
+
 
 
     observeEvent(input$calc_window, {
@@ -278,8 +280,7 @@ mod_select_figure_server <- function(id, r) {
           GOTeDNA_ID,
           GOTeDNA_version,
           target_subfragment,
-          ecodistrict
-        ) |>
+         ) |>
         summarise(
           `Samples #` = n(),
           `Stations #` = length(unique(station))
@@ -293,7 +294,6 @@ mod_select_figure_server <- function(id, r) {
         dplyr::ungroup() |>
         dplyr::select(
           GOTeDNA_ID, GOTeDNA_version, Publication,
-          ecodistrict,
           `Data owner contact`, `Samples #`,
           `Stations #`
         )
