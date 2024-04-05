@@ -50,7 +50,7 @@ theme_circle <- ggplot2::theme(
     family = "Arial", size = 24),
   axis.text = ggplot2::element_text(
     colour = "#939598", size = 20),
-  axis.text.y = ggplot2::element_blank(),
+ # axis.text.y = ggplot2::element_blank(),
   axis.title = ggplot2::element_text(colour = "#5A5A5A",
                                      size = 24),
   axis.title.y = ggplot2::element_text(

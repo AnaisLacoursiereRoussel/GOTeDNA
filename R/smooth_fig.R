@@ -69,7 +69,7 @@ smooth_fig <- function(data, species.name) {
   NEW2 <- NEW[NEW$month > 12 & NEW$month <= 24, ]
   NEW2$month <- NEW2$month - 12
 
-p <- ggplot2::ggplot() +
+ggplot2::ggplot() +
     ggplot2::geom_hline(ggplot2::aes(yintercept = y), data.frame(y = c(0:4) / 4), color = "lightgrey") +
     ggplot2::geom_vline(ggplot2::aes(xintercept = x), data.frame(x = 0:12), color = "lightgrey") +
     ggplot2::geom_path(data = NEW2,
@@ -104,14 +104,6 @@ p <- ggplot2::ggplot() +
     ggplot2::scale_y_continuous(limits = c(-0.1, 1.01), breaks = c(0, 0.25, 0.50, 0.75, 1)) +
     theme_circle
 
-y_text = ggpubr::text_grob(label = "1.00\n\n0.75\n\n0.50\n\n0.25\n\n0",
-                           size = 20,
-                           just = c(0, 1))
-
-cowplot::plot_grid(y_text, p,
-                   ncol = 2,
-                   rel_widths = c(1,4),
-                   rel_heights = c(1, 20))
-
 }
+
 
