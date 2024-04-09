@@ -62,6 +62,7 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
   thresh.value <- switch(threshold,
     thresh$values[thresh$labels == threshold]
   )
+
   data <- Pthresh[Pthresh[[taxon.level]] %in% taxon.name, ]
 
   ggplot2::ggplot() +
@@ -77,20 +78,20 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
     ) +
     ggplot2::geom_col(
       data[data[[thresh.value]] %in% "1", ],
-      mapping = ggplot2::aes(x = month, y = fill), position = "dodge2",
-      width = 0.9, show.legend = TRUE, alpha = .9, fill = viridis::viridis(1)
+      mapping = ggplot2::aes(x = month, y = fill, fill = viridis::viridis(1)), position = "dodge2",
+      width = 0.9, show.legend = TRUE, alpha = .9#, fill = viridis::viridis(1)
     ) +
     ggplot2::geom_col(
       data[data[[thresh.value]] %in% "0", ],
-      mapping = ggplot2::aes(x = month, y = fill), position = "dodge2",
-      width = 0.9, show.legend = TRUE, alpha = .9, fill = "darkgrey"
+      mapping = ggplot2::aes(x = month, y = fill, fill = "darkgrey"), position = "dodge2",
+      width = 0.9, show.legend = TRUE, alpha = .9#, fill = "darkgrey"
     ) +
     # To make the interpolated data stand out
     ggpattern::geom_col_pattern(
       dplyr::filter(data, is.na(scaleP)),
       mapping = ggplot2::aes(x = month, y = fill),
       position = "dodge2",
-      width = 0.9, show.legend = TRUE, fill = NA,
+      width = 0.9, show.legend = FALSE, fill = NA,
       pattern_color = "white", pattern_density = 0.05, pattern_spacing = 0.015, pattern_key_scale_factor = 0.6
     ) +
     ggplot2::coord_polar() +
@@ -108,6 +109,12 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
     ggplot2::labs(
       x = NULL, y = NULL,
       subtitle = paste0("Detection threshold: ", threshold, "%")
+    ) +
+    ggplot2::scale_fill_identity(
+      name = "Detection \nprobability",
+      guide = "legend",
+      labels = c(paste("\u2265",threshold, "%"),
+                 paste("<", threshold, "%"))
     ) +
     ggplot2::theme_minimal() +
     theme_circle

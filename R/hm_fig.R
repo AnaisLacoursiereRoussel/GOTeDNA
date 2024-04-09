@@ -49,7 +49,7 @@ hm_fig <- function(
                                               y = reorder(year, dplyr::desc(year)),
                                               alpha = "Not detected"),
                        fill = "lightgrey")+
-    ggh4x::facet_grid2(species ~ primer,
+    ggh4x::facet_grid2(species ~ .,
                        scales = "free",
                        space = "free",
                        switch = "y",

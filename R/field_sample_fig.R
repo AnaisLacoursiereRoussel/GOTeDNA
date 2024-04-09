@@ -59,9 +59,11 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       na.rm = TRUE, width = 0.5, height = 0.01
     ) +
     ggplot2::scale_colour_manual(values = palette("Alphabet"))+
-    ggh4x::facet_grid2(year ~ .,
-      strip = ggh4x::strip_nested(bleed = TRUE)
-    ) +
+  #  ggh4x::facet_grid2(year ~ .,
+   #   strip = ggh4x::strip_nested(bleed = TRUE)
+   # ) +
+    lemon::facet_rep_grid(year ~ .) +
+    lemon::coord_capped_cart(bottom='both') +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1)) +
     ggplot2::scale_x_continuous(limits = c(1, 12), breaks = 1:12,
       labels = month.abb) +
@@ -117,7 +119,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
         margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
         hjust = 0),
       axis.title.y = ggplot2::element_text(
-        margin = ggplot2::margin(b = 0.66,
+        margin = ggplot2::margin(r = 0.66,
                                  unit = "cm"),
         hjust = 0),
       plot.title = ggplot2::element_text(
