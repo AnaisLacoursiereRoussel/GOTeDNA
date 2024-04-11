@@ -66,10 +66,6 @@ mod_select_data_ui <- function(id) {
                   ),
                   selected = "qPCR"
                 )
-              ),
-              column(
-                3,
-                selectInput(ns("primer"), "Primer", choices = "All")
               )
             )
           ),
@@ -80,27 +76,18 @@ mod_select_data_ui <- function(id) {
               column(
                 3,
                 selectInput(
-                  ns("taxo_lvl"), "Taxonomic rank",
+                  ns("taxo_lvl"), "Taxonomy selection",
                   choices = taxonomic_ranks
                 )
               ),
-              column(
-                3,
-                selectInput(
-                  ns("taxo_id"), "Taxonomic group",
-                  choices = "All"
-                )
-              ),
+              column(3, selectInput(ns("taxo_id"), "", choices = "All")),
               column(
                 3,
                 selectizeInput(ns("slc_spe"), "Species", choices = "All")
               ),
               column(
                 3,
-                div(
-                  id = ns("msg_spatial_area"),
-                  p(icon("warning"), "Selection restricted to spatial area")
-                )
+                selectInput(ns("primer"), "Primer", choices = "All")
               )
             )
           )
@@ -122,7 +109,13 @@ mod_select_data_ui <- function(id) {
             "Area Selection",
             span(
               id = ns("lock"),
-              class = "lock", icon("lock")
+              class = "lock", icon("lock"),
+              title = "Map view locked"
+            ),
+            span(
+              id = ns("restrict"),
+              class = "restrict", icon("warning"),
+              title = "Selection restricted to spatial area"
             )
           ),
           div(
@@ -199,9 +192,9 @@ mod_select_data_server <- function(id, r) {
 
     observe({
       if (is.null(r$geom_slc)) {
-        shinyjs::hide("msg_spatial_area")
+        shinyjs::hide("restrict")
       } else {
-        shinyjs::show("msg_spatial_area")
+        shinyjs::show("restrict")
       }
     })
 
@@ -335,7 +328,7 @@ mod_select_data_server <- function(id, r) {
         div(
           class = "sample_selected",
           p(
-            "Sample selected: ",
+            "Total number of observations: ",
             span(
               class = "sample_selected_data",
               format(r$n_sample, big.mark = ",")
@@ -349,7 +342,7 @@ mod_select_data_server <- function(id, r) {
         div(
           class = "sample_selected",
           p(
-            "Sample selected: ",
+            "Total number of observations: ",
             span(
               class = "sample_selected_map",
               format(r$n_sample, big.mark = ",")

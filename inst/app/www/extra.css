@@ -291,7 +291,7 @@ h6 {
   font-size: 0;
 }
 
-.lock {
+.restrict, .lock {
   font-size: 0.9em;
 }
 
