@@ -47,6 +47,16 @@ ui <- fluidPage(
       )
     ),
     tabPanel(
+      "Indigenous Contributions",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          h1("Indigenous Contributions")
+        )
+      )
+    ),
+    tabPanel(
       "Team",
       div(
         class = "standalone_container",
@@ -62,7 +72,24 @@ ui <- fluidPage(
         class = "standalone_container",
         div(
           class = "standalone_60",
-          h1("Contact")
+          h1("Contact"),
+          fluidRow(
+            column(
+              4,
+              div(
+                style = "text-align:center",
+                img(
+                  src = "img/logo/logo_disclaimer.svg",
+                  alt = "Logo GOTeDNA",
+                  id = "logo_gotedna_contact"
+                )
+              )
+            ),
+            column(
+              8,
+              includeHTML(file.path("www", "doc", "contact.html"))
+            )
+          )
         )
       )
     ),
@@ -72,15 +99,15 @@ ui <- fluidPage(
     fluidRow(
       class = "align-items-center",
       column(
-        4,
+        3,
         img(
-          src = "img/logo_partners/logo_dfo.svg",
+          src = "img/logo_partners/DFO_logo_sq.svg",
           alt = "Logo DFO",
           id = "logo_dfo"
         )
       ),
       column(
-        4,
+        3,
         img(
           src = "img/logo_partners/logo_Maine_eDNA_nbg_w.png",
           alt = "Logo Main eDNA",
@@ -88,7 +115,15 @@ ui <- fluidPage(
         )
       ),
       column(
-        4,
+        3,
+        img(
+          src = "img/logo_partners/logo_obon.svg",
+          alt = "Logo OBONt",
+          id = "logo_obon"
+        )
+      ),
+      column(
+        3,
         img(
           src = "img/logo_partners/logo_undossd.svg",
           alt = "Logo United Nations Decade of Ocean Science for Sustainable Development",

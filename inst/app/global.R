@@ -37,6 +37,9 @@ gotedna_primer <- readRDS("data/gotedna_primer.rds")
 taxonomic_ranks <- list("phylum", "family", "order", "class", "genus")
 names(taxonomic_ranks) <- trans_letters(taxonomic_ranks |> unlist())
 
+ls_threshold <- as.list(seq(50, 95, 5))
+names(ls_threshold) <- paste0(seq(50, 95, 5), "%")
+
 # function
 ## filter data based on user choices of taxa
 filter_taxa_data <- function(x, phy, cla, gen, spe) {

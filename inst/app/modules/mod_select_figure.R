@@ -79,7 +79,7 @@ mod_select_figure_ui <- function(id) {
           ),
           div(
             id = "fig_left_panel",
-            selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
+            selectInput(ns("threshold"), "Threshold", choices = ls_threshold, selected = 75),
             actionButton(
               ns("re_calc_window"),
               label = "Update computation",
@@ -207,10 +207,10 @@ mod_select_figure_server <- function(id, r) {
             showNotification(
               paste0(
                 "Computing time window with threshold set to ",
-                input$threshold, "% ",
+                input$threshold, "%",
                 ifelse(
                   nrow(r$data_ready) > 1e4,
-                  paste0("(", nrow(r$data_ready), " Observations, this make takes some time)"),
+                  paste0(" (", nrow(r$data_ready), " Observations, this make takes some time)"),
                   ""
                 )
               ),
@@ -283,7 +283,7 @@ mod_select_figure_server <- function(id, r) {
         ) |>
         mutate(
           `Data owner contact` = "To be added",
-          `Indigenous data labelling` = "To be added",
+          `Indigenous contribution` = "To be added",
           Publication = "DOI to be added",
           Reference = "To be added"
         ) |>
