@@ -164,18 +164,7 @@ mod_select_data_server <- function(id, r) {
     # Generate map
     sf_edits <<- callModule(
       mapedit::editMod,
-      leafmap = leaflet() |>
-        leafem::addMouseCoordinates() |>
-        leaflet::addProviderTiles("Esri.OceanBasemap", group = "OceaBasemap") |>
-        leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
-        leaflet::addLayersControl(
-          baseGroups = c("OpenStreetMap", "Ocean Basemap"),
-          position = "bottomleft"
-        ) |>
-        leaflet::addScaleBar(
-          position = c("bottomright"),
-          options = leaflet::scaleBarOptions(maxWidth = 200)
-        ),
+      leafmap = basemap(),
       id = "map-select"
     )
 
@@ -406,6 +395,12 @@ mod_select_data_server <- function(id, r) {
     observeEvent(input$clear_area, {
       r$geom_slc <- r$station_slc <- NULL
       r$geom <- filter_station(r)
+      # Reload module
+      sf_edits <<- callModule(
+        mapedit::editMod,
+        leafmap = basemap(),
+        id = "map-select"
+      )
       r$reload_map <- r$reload_map + 1
     })
 

@@ -58,6 +58,21 @@ filter_taxa_data <- function(x, phy, cla, gen, spe) {
   x
 }
 
+basemap <- function() {
+  leaflet() |>
+    leafem::addMouseCoordinates() |>
+    leaflet::addProviderTiles("Esri.OceanBasemap", group = "OceaBasemap") |>
+    leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
+    leaflet::addLayersControl(
+      baseGroups = c("OpenStreetMap", "Ocean Basemap"),
+      position = "bottomleft"
+    ) |>
+    leaflet::addScaleBar(
+      position = c("bottomright"),
+      options = leaflet::scaleBarOptions(maxWidth = 200)
+    )
+}
+
 
 get_primer_selection <- function(lvl, data) {
   if (is.null(lvl)) {
