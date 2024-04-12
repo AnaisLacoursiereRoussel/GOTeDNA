@@ -2,14 +2,27 @@
 D_mb <- read_data(
   choose.method = "metabarcoding", path.folder = "inst/app/data/raw_xlsx_files"
 )
+
+D_mb_nodetect <- D_mb %>%
+  dplyr::group_by(
+    GOTeDNA_ID, scientificName, target_subfragment, station) %>%
+  dplyr::summarise(num_detected = sum(detected)) %>%
+  dplyr::filter(num_detected == 0)
+
+D_mb_clean <- dplyr::anti_join(D_mb, D_mb_nodetect,
+                               by = c("GOTeDNA_ID","scientificName","target_subfragment", "station"))
+
 D_qPCR <- read_data(
   choose.method = "qPCR", path.folder = "inst/app/data/raw_xlsx_files"
 )
 
 # make a list of two data frames
 gotedna_data <- list(
-  metabarcoding = D_mb |>
-    dplyr::filter(!is.na(decimalLongitude)) |>
+  metabarcoding = D_mb_clean |>
+    dplyr::filter(!is.na(decimalLongitude),
+                  !class %in% c("Aves","Insecta", "Hexapoda"),
+                  !order %in% c("Primates","Artiodactyla","Perissodactyla","Rodentia"),
+                  !family %in% c("Felidae","Canidae","Procyonidae")) |>
     dplyr::mutate(msct = case_when(
       organismQuantity == 0 ~ TRUE,
       organismQuantity > 10 ~ TRUE
@@ -57,16 +70,16 @@ saveRDS(gotedna_station, "inst/app/data/gotedna_station.rds")
 
 
 
-# Prepare primer data 
+# Prepare primer data
 gotedna_data <- readRDS("inst/app/data/gotedna_data.rds")
 newprob <- calc_det_prob(gotedna_data$metabarcoding)
-scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob) 
+scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 
 gotedna_primer <- list()
 
 for (i in c("phylum", "class", "order", "family", "genus", "species")) {
   gotedna_primer[[i]] <- primer_sort(i, scaledprobs$Pscaled_month) |>
-    mutate(text = paste0(primer, " (", success, "/", total, " ", perc, "%)")) 
+    mutate(text = paste0(primer, " (", success, "/", total, " ", perc, "%)"))
 }
 
 saveRDS(gotedna_primer, "inst/app/data/gotedna_primer.rds")
