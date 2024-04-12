@@ -58,9 +58,9 @@ mod_select_figure_ui <- function(id) {
           class = "d-flex justify-content-center",
           id = "confirm_figures_selection",
           actionButton(
-            ns("confirm"),
-            "Confirm",
-            title = "Confirm selection",
+            ns("calc_window"),
+            label = "Compute & visualize",
+            title = "Compute optimal detection window",
             class = "primary-button"
           )
         ),
@@ -79,12 +79,11 @@ mod_select_figure_ui <- function(id) {
           ),
           div(
             id = "fig_left_panel",
-            selectInput(ns("threshold"), "Threshold", choices = seq(50, 95, 5), selected = 75),
+            selectInput(ns("threshold"), "Threshold", choices = ls_threshold, selected = 75),
             actionButton(
-              ns("calc_window"),
-              label = "Compute & visualize",
-              title = "Compute optimal detection window",
-              icon = icon("gear"),
+              ns("re_calc_window"),
+              label = "Update computation",
+              title = "Compute optimal detection window with updated values",
               class = "primary-button"
             ),
             div(
@@ -138,16 +137,7 @@ mod_select_figure_ui <- function(id) {
             DT::DTOutput(ns("data_authorship"))
           ),
         )
-      ),
-      # div(
-      #   class = "section_footer",
-      #   actionButton(
-      #     ns("export_biblio"),
-      #     "Export references",
-      #     title = "Export references",
-      #     class = "primary-button"
-      #   )
-      # )
+      )
     )
   )
 }
@@ -194,9 +184,9 @@ mod_select_figure_server <- function(id, r) {
     })
 
 
-
-
-    observeEvent(input$calc_window, {
+    observeEvent(
+      ignoreInit = TRUE, 
+      list(input$re_calc_window, input$calc_window), {
       #
       if (r$species == "All" && r$data_type == "qPCR") {
         showNotification(
@@ -216,10 +206,11 @@ mod_select_figure_server <- function(id, r) {
           if (nrow(r$data_ready)) {
             showNotification(
               paste0(
-                "Computing time window",
+                "Computing time window with threshold set to ",
+                input$threshold, "%",
                 ifelse(
                   nrow(r$data_ready) > 1e4,
-                  paste0("(", nrow(r$data_ready), " samples, this make takes some time)"),
+                  paste0(" (", nrow(r$data_ready), " Observations, this make takes some time)"),
                   ""
                 )
               ),
@@ -274,7 +265,12 @@ mod_select_figure_server <- function(id, r) {
 
 
     output$data_authorship <- DT::renderDT({
-      r$cur_data_sta_slc |>
+      if (!is.null(r$data_ready)) {
+        tmp <- r$data_ready
+      } else {
+        tmp <- r$cur_data_sta_slc
+      }
+      tmp |>
         dplyr::ungroup() |>
         dplyr::group_by(
           GOTeDNA_ID,
@@ -282,19 +278,19 @@ mod_select_figure_server <- function(id, r) {
           target_subfragment,
          ) |>
         summarise(
-          `Samples #` = n(),
+          `Observations #` = n(),
           `Stations #` = length(unique(station))
         ) |>
         mutate(
           `Data owner contact` = "To be added",
-          `Indigenous data labelling` = "To be added",
+          `Indigenous contribution` = "To be added",
           Publication = "DOI to be added",
           Reference = "To be added"
         ) |>
         dplyr::ungroup() |>
         dplyr::select(
           GOTeDNA_ID, GOTeDNA_version, Publication,
-          `Data owner contact`, `Samples #`,
+          `Data owner contact`, `Observations #`,
           `Stations #`
         )
     })
@@ -383,7 +379,7 @@ draw_fig_higher <- function(r, ready) {
     if (r$taxon_lvl_slc == "species") {
       plotNotAvailableTaxoLevel()
     } else {
-      field_sample_fig(
+      field_Observation_fig(
         data = r$data_ready,
         taxon.select = r$taxon_lvl_slc,
         taxon.name = r$taxon_id_slc

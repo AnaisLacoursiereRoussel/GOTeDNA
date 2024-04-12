@@ -120,6 +120,10 @@ h6 {
   padding: 25px 0px;
 }
 
+.standalone_60 h1 {
+  padding-bottom: 4rem;
+}
+
 /* Modal */
 .modal-content {
   border-radius: 0px;
@@ -291,7 +295,7 @@ h6 {
   font-size: 0;
 }
 
-.lock {
+.restrict, .lock {
   font-size: 0.9em;
 }
 
@@ -684,16 +688,25 @@ table.dataTable.display>tbody>tr>td {
 
 
 #logo_dfo {
-  height: 2rem;
-}
-
-#logo_undossd {
-  height: 7rem;
+  height: 6.5rem;
 }
 
 #logo_mswc {
-  height: 5rem;
+  height: 8rem;
 }
+
+#logo_obon {
+  height: 6rem;
+}
+
+#logo_undossd {
+  height: 8.5rem;
+}
+
+#logo_gotedna_contact {
+  width: 300px;
+}
+
 
 #data_input table {
   font-size: 1.4rem;

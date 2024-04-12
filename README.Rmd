@@ -55,6 +55,14 @@ You can install the development version of GOTeDNA from [GitHub](https://github.
 ``` r
 # install.packages("devtools")
 devtools::install_github("mkmor/GOTeDNA")
+devtools::install_github("mkmor/GOTeDNA", dependencies = TRUE)
+```
+
+Or if you have a local copy of the repo:
+
+``` r
+install.packages("devtools")
+devtools::install_local("path/to/the/repo", dependencies = TRUE)
 ```
 
 ## Usage

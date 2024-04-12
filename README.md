@@ -25,6 +25,7 @@ We recommend to use R and RStudio:
 
 2.  Install R Studio
 
+
 #### Install the package
 
 You first need to have access to the archive `GoteDNA_{version}.tar.gz`.
@@ -40,9 +41,17 @@ You can install the development version of GOTeDNA from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("mkmor/GOTeDNA")
+install.packages("devtools")
+devtools::install_github("mkmor/GOTeDNA", dependencies = TRUE)
 ```
+
+Or if you have a local copy of the repo:
+
+``` r
+install.packages("devtools")
+devtools::install_local("path/to/the/repo", dependencies = TRUE)
+```
+
 
 ## Usage
 

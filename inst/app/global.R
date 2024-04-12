@@ -37,6 +37,9 @@ gotedna_primer <- readRDS("data/gotedna_primer.rds")
 taxonomic_ranks <- list("phylum", "family", "order", "class", "genus")
 names(taxonomic_ranks) <- trans_letters(taxonomic_ranks |> unlist())
 
+ls_threshold <- as.list(seq(50, 95, 5))
+names(ls_threshold) <- paste0(seq(50, 95, 5), "%")
+
 # function
 ## filter data based on user choices of taxa
 filter_taxa_data <- function(x, phy, cla, gen, spe) {
@@ -53,6 +56,21 @@ filter_taxa_data <- function(x, phy, cla, gen, spe) {
     }
   }
   x
+}
+
+basemap <- function() {
+  leaflet() |>
+    leafem::addMouseCoordinates() |>
+    leaflet::addProviderTiles("Esri.OceanBasemap", group = "OceaBasemap") |>
+    leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
+    leaflet::addLayersControl(
+      baseGroups = c("OpenStreetMap", "Ocean Basemap"),
+      position = "bottomleft"
+    ) |>
+    leaflet::addScaleBar(
+      position = c("bottomright"),
+      options = leaflet::scaleBarOptions(maxWidth = 200)
+    )
 }
 
 
