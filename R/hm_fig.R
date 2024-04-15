@@ -32,7 +32,7 @@ hm_fig <- function(
     scaledprobs$Pscaled_year[[taxon.level]] %in% c(taxon.name),
   ]
 
-  p <- ggplot2::ggplot(
+  ggplot2::ggplot(
     data,
     ggplot2::aes(x = month, y = reorder(year, dplyr::desc(year)))
   ) +

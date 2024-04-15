@@ -64,7 +64,7 @@ mod_select_data_ui <- function(id) {
                     "Species specific (qPCR)" = "qPCR",
                     "Multi-species (metabarcoding)" = "metabarcoding"
                   ),
-                  selected = "qPCR"
+                  selected = "metabarcoding"
                 )
               )
             )
@@ -226,7 +226,7 @@ mod_select_data_server <- function(id, r) {
     )
 
 
-    ## update Taxo data
+    ## update Taxon data
     observe({
       updateSelectInput(
         session,
@@ -425,7 +425,7 @@ filter_station <- function(r) {
   sta |>
     dplyr::inner_join(
       dff |>
-        dplyr::group_by(ecodistrict, station) |>
+        dplyr::group_by(ecodistrict, station, materialSampleID) |>
         dplyr::summarise(count = n()),
       join_by(station)
     )

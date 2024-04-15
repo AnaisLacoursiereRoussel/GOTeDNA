@@ -120,10 +120,14 @@ effort_needed_fig <- function(scaledprobs_month) {
                                             colour = "#5A5A5A",
                                             hjust = 0),
       legend.title.align = 1,
-      legend.text = ggplot2::element_text(size = 20, colour = "#939598"),
-      #legend.text.align = 0,
+      legend.text = ggplot2::element_text(size = 20,
+                                          colour = "#939598"),
+      legend.position = "right",
+      legend.box.just = "right",
+      legend.key.spacing.y = ggplot2::unit(20, "pt"),
       legend.spacing.y = ggplot2::unit(20, "pt"),
-      legend.title = ggplot2::element_text(colour = "#5A5A5A")
+      legend.title = ggplot2::element_text(colour = "#5A5A5A",
+                                           margin = margin(b = 20))
 
     )
 

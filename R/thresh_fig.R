@@ -78,12 +78,12 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
     ) +
     ggplot2::geom_col(
       data[data[[thresh.value]] %in% "1", ],
-      mapping = ggplot2::aes(x = month, y = fill, fill = viridis::viridis(1)), position = "dodge2",
+      mapping = ggplot2::aes(x = month, y = fill), fill = viridis::viridis(1), position = "dodge2",
       width = 0.9, show.legend = TRUE, alpha = .9#, fill = viridis::viridis(1)
     ) +
     ggplot2::geom_col(
       data[data[[thresh.value]] %in% "0", ],
-      mapping = ggplot2::aes(x = month, y = fill, fill = "darkgrey"), position = "dodge2",
+      mapping = ggplot2::aes(x = month, y = fill), fill = "darkgrey", position = "dodge2",
       width = 0.9, show.legend = TRUE, alpha = .9#, fill = "darkgrey"
     ) +
     # To make the interpolated data stand out
@@ -109,12 +109,6 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
     ggplot2::labs(
       x = NULL, y = NULL,
       subtitle = paste0("Detection threshold: ", threshold, "%")
-    ) +
-    ggplot2::scale_fill_identity(
-      name = "Detection \nprobability",
-      guide = "legend",
-      labels = c(paste("\u2265",threshold, "%"),
-                 paste("<", threshold, "%"))
     ) +
     ggplot2::theme_minimal() +
     theme_circle

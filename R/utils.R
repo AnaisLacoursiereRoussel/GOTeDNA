@@ -68,10 +68,14 @@ theme_circle <- ggplot2::theme(
                                         margin = ggplot2::margin(b = 0.66, unit = "cm"),
                                         colour = "#5A5A5A",
                                         hjust = 0),
-  legend.title.align = 1,
-  legend.text = ggplot2::element_text(size = 20, colour = "#939598"),
-  legend.spacing.y = ggplot2::unit(20, "pt"),
-  legend.title = ggplot2::element_text(colour = "#5A5A5A")
-  #    strip.text = element_text(size = rel(1.33), face = "bold"),
+ legend.title.align = 1,
+ legend.text = ggplot2::element_text(size = 20,
+                                     colour = "#939598"),
+ legend.position = "right",
+ legend.box.just = "right",
+ legend.key.spacing.y = ggplot2::unit(20, "pt"),
+ legend.spacing.y = ggplot2::unit(20, "pt"),
+ legend.title = ggplot2::element_text(colour = "#5A5A5A",
+                                      margin = margin(b = 20))
 
 )

@@ -5,9 +5,10 @@
 #'
 #' @param data (required, data.frame): Data.frame read in with [read_data()]
 #' @param taxon.select (required, character): Taxonomic level of interest
-#' Choices = one of `c("kingdom", "phylum", "class", "order", "family", "genus)`
+#' Choices = one of `c("kingdom", "phylum", "class", "order", "family", "genus",`
+#' `"species")`.
 #' @param taxon.name (required, character): Select taxon name that matches the level
-#' provided in `higher.taxon.select`. E.g., if `taxon.level = "class"`
+#' provided in `taxon.select`. E.g., if `taxon.level = "class"`
 #' enter class name, etc..
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
@@ -33,7 +34,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
   if (!is.null(taxon.select)) {
     taxon.select <- match.arg(
       arg = taxon.select,
-      choices = c("kingdom", "phylum", "class", "order", "family", "genus"),
+      choices = c("kingdom", "phylum", "class", "order", "family", "genus", "scientificName"),
       several.ok = FALSE
     )
   }
@@ -63,10 +64,14 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
    #   strip = ggh4x::strip_nested(bleed = TRUE)
    # ) +
     lemon::facet_rep_grid(year ~ .) +
-    lemon::coord_capped_cart(bottom='both') +
-    ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1)) +
+    lemon::coord_capped_cart(bottom = 'both') +
+    ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1),
+                                expand = c(0, 0)
+                                ) +
     ggplot2::scale_x_continuous(limits = c(1, 12), breaks = 1:12,
-      labels = month.abb) +
+      labels = month.abb,
+      expand = c(0, 0)
+      ) +
     ggplot2::scale_size_continuous(limits = c(0, NA), breaks = seq(0, 50, 10)) +
     ggplot2::theme_minimal(base_size = 10) +
     ggplot2::guides(size = ggplot2::guide_legend(order = 1,
@@ -74,12 +79,16 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
                                                  label.hjust = 1),
                     colour = ggplot2::guide_legend(order = 2,
                                                    label.position = "left",
-                                                   label.hjust = 1
+                                                   label.hjust = 1,
+                                                   override.aes = list(size = 5)
                                           )
                                           ) +
     ggplot2::labs(
       x = "Month", y = "Proportion of positive samples",
-      title = paste(stringr::str_to_title(taxon.select), taxon.name),
+      title = ifelse(
+        taxon.select != "scientificName",
+        paste(stringr::str_to_title(taxon.select), taxon.name),
+        paste(taxon.name)),
       colour = "Species",
       size = "Sampling effort"
     ) +
@@ -97,8 +106,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       # remove strip background
       strip.background = ggplot2::element_blank(),
       strip.text = ggplot2::element_text(angle = 180,
-                                         colour = "#939598",
-                                         vjust = 0 ),
+                                         colour = "#939598"),
       # adjust the margins of plots and remove axis ticks
       plot.margin = ggplot2::margin(0.5, 1, 0.5, 1,
                                     unit = "cm"),
@@ -113,31 +121,39 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
         family = "Arial", size = 24),
       axis.text = ggplot2::element_text(
         colour = "#939598", size = 20),
+      axis.text.x = ggplot2::element_text(
+        margin = margin(t = 10, unit = "pt")),
+      axis.text.y = ggplot2::element_text(
+        margin = margin(r = 10, unit = "pt")
+      ),
       axis.title = ggplot2::element_text(colour = "#5A5A5A",
                                          size = 24),
       axis.title.x = ggplot2::element_text(
         margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
         hjust = 0),
       axis.title.y = ggplot2::element_text(
-        margin = ggplot2::margin(r = 0.66,
-                                 unit = "cm"),
+        margin = ggplot2::margin(r = 20,
+                                 unit = "pt"),
         hjust = 0),
       plot.title = ggplot2::element_text(
         face = "bold",
         size = 30,
         hjust = 0,
-        colour = "#5A5A5A"),
+        colour = "#5A5A5A",
+        margin = margin(b = 20, unit = "pt")),
       plot.title.position = "plot",
       plot.subtitle = ggplot2::element_text(size = 24,
-                                            margin = ggplot2::margin(b = 0.66, unit = "cm"),
+                                            margin = ggplot2::margin(b = 20, unit = "pt"),
                                             colour = "#5A5A5A",
                                             hjust = 0),
       legend.title.align = 1,
-      legend.text = ggplot2::element_text(size = 20, colour = "#939598"),
-      #legend.text.align = 0,
+      legend.text = ggplot2::element_text(size = 20,
+                                          colour = "#939598"),
+      legend.position = "right",
+      legend.box.just = "right",
+      legend.key.spacing.y = ggplot2::unit(20, "pt"),
       legend.spacing.y = ggplot2::unit(20, "pt"),
-      legend.title = ggplot2::element_text(colour = "#5A5A5A")
-      #    strip.text = element_text(size = rel(1.33), face = "bold"),
-
-    )
+      legend.title = ggplot2::element_text(colour = "#5A5A5A",
+                                           margin = margin(b = 20))
+     )
 }

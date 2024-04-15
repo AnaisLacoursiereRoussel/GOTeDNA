@@ -33,9 +33,9 @@ mod_select_figure_ui <- function(id) {
           fluidRow(
             class = "justify-content-center",
             add_figure_selection(
-              ns("fig_heatmap"),
-              "Species detection heatmap",
-              "img/thumbnails/tn_heatmap.svg"
+              ns("fig_detect"),
+              "Monthly eDNA detection probability",
+              "img/thumbnails/tn_thresh.svg"
             ),
             add_figure_selection(
               ns("fig_effort"),
@@ -43,14 +43,14 @@ mod_select_figure_ui <- function(id) {
               "img/thumbnails/tn_effort.svg"
             ),
             add_figure_selection(
+              ns("fig_heatmap"),
+              "Species detection heatmap",
+              "img/thumbnails/tn_heatmap.svg"
+            ),
+            add_figure_selection(
               ns("fig_higher"),
               "Field sample size for datasets",
               "img/thumbnails/tn_higher.svg"
-            ),
-            add_figure_selection(
-              ns("fig_detect"),
-              "Monthly eDNA detection probability",
-              "img/thumbnails/tn_thresh.svg"
             )
           )
         ),
@@ -106,7 +106,7 @@ mod_select_figure_ui <- function(id) {
               ),
               div(
                 class = "sampling_info-item",
-                h6("Variation among primers: "),
+                h6("Variation among datasets: "),
                 uiOutput(ns("var_primer"), class = "fig_text_output")
               )
             ),
@@ -185,7 +185,7 @@ mod_select_figure_server <- function(id, r) {
 
 
     observeEvent(
-      ignoreInit = TRUE, 
+      ignoreInit = TRUE,
       list(input$re_calc_window, input$calc_window), {
       #
       if (r$species == "All" && r$data_type == "qPCR") {
@@ -246,22 +246,27 @@ mod_select_figure_server <- function(id, r) {
       }
     })
 
-    output$fig_heatmap_plot_output <- renderPlot({
-      # figure must be selected and ready to be drawn
-      draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
-    })
+ # figure must be selected and ready to be drawn
+   output$fig_detect_plot_output <- renderPlot({
+      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
+    },
+    height = "auto")
 
     output$fig_effort_plot_output <- renderPlot({
       draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
     })
 
+    output$fig_heatmap_plot_output <- renderPlot({
+      draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
+    },
+    height = "auto")
+
     output$fig_higher_plot_output <- renderPlot({
       draw_fig_higher(r, r$fig_ready && r$fig_slc$fig_higher)
-    })
+    },
+    height = "auto")
 
-    output$fig_detect_plot_output <- renderPlot({
-      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
-    })
+
 
 
     output$data_authorship <- DT::renderDT({
@@ -342,14 +347,22 @@ prepare_data <- function(r) {
   out
 }
 
-
-draw_fig_heatmap <- function(r, ready) {
+draw_fig_detect <- function(r, ready, threshold) {
   if (ready) {
-    hm_fig(
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
-      r$scaledprobs
-    )
+    taxon_level <- r$taxon_lvl_slc
+    taxon_id <- ifelse(taxon_level == "species", r$species, r$taxon_id_slc)
+    data_slc <- r$data_ready
+    if (r$primer != "not available") {
+      data_slc <- data_slc |>
+        dplyr::filter(target_subfragment == r$primer)
+    }
+    p1 <- smooth_fig(data = data_slc, species.name = taxon_id)
+    if (r$primer != "not available") {
+      data_slc <- r$scaledprobs$Pscaled_month |>
+        dplyr::filter(primer == r$primer)
+    }
+    p2 <- thresh_fig(taxon_level, taxon_id, threshold = threshold, scaledprobs = data_slc)
+    p1 / p2
   } else {
     plotNotAvailable()
   }
@@ -374,12 +387,28 @@ draw_fig_effort <- function(r, ready) {
   }
 }
 
+draw_fig_heatmap <- function(r, ready) {
+  if (ready) {
+    hm_fig(
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
+      r$scaledprobs
+    )
+  } else {
+    plotNotAvailable()
+  }
+}
+
 draw_fig_higher <- function(r, ready) {
   if (ready) {
     if (r$taxon_lvl_slc == "species") {
-      plotNotAvailableTaxoLevel()
+      field_sample_fig(
+        data = r$data_ready,
+        taxon.select = "scientificName",
+        taxon.name = r$taxon_id_slc
+      )
     } else {
-      field_Observation_fig(
+      field_sample_fig(
         data = r$data_ready,
         taxon.select = r$taxon_lvl_slc,
         taxon.name = r$taxon_id_slc
@@ -390,26 +419,7 @@ draw_fig_higher <- function(r, ready) {
   }
 }
 
-draw_fig_detect <- function(r, ready, threshold) {
-  if (ready) {
-    taxon_level <- r$taxon_lvl_slc
-    taxon_id <- ifelse(taxon_level == "species", r$species, r$taxon_id_slc)
-    data_slc <- r$data_ready
-    if (r$primer != "not available") {
-      data_slc <- data_slc |>
-        dplyr::filter(target_subfragment == r$primer)
-    }
-    p1 <- smooth_fig(data = data_slc, species.name = taxon_id)
-    if (r$primer != "not available") {
-      data_slc <- r$scaledprobs$Pscaled_month |>
-        dplyr::filter(primer == r$primer)
-    }
-    p2 <- thresh_fig(taxon_level, taxon_id, threshold = threshold, scaledprobs = data_slc)
-    p1 + p2
-  } else {
-    plotNotAvailable()
-  }
-}
+
 
 
 plotText <- function(txt, ...) {
@@ -424,9 +434,9 @@ plotNotAvailableTaxoLevel <- function() {
   plotText("Plot not available at the species level.")
 }
 
-plotNotAvailableSpeciesLevel <- function() {
-  plotText("Plot only available at the species level.")
-}
+#plotNotAvailableSpeciesLevel <- function() {
+#  plotText("Plot only available at the species level.")
+#}
 
 plotNotAvailable <- function() {
   plotText("Plot not available. Click on 'Compute & visualize'")
