@@ -86,14 +86,14 @@ ggplot2::ggplot() +
       clip = "off"
     ) +
     ggplot2::labs(
-      col = "Year", x = NULL, y = "Normalized detection probability",
+      col = "Year", x = NULL, y = NULL,
       title = species.name,
       subtitle = subt
     ) +
     ggplot2::theme_minimal() +
     ggplot2::scale_colour_manual(values = palette("Alphabet")) +
     ggplot2::scale_x_continuous(
-      limits = c(0, 12),
+      limits = c(0.5, 12.5),
       breaks = 1:12,
       labels = month.abb
     ) +

@@ -76,6 +76,6 @@ theme_circle <- ggplot2::theme(
  legend.key.spacing.y = ggplot2::unit(20, "pt"),
  legend.spacing.y = ggplot2::unit(20, "pt"),
  legend.title = ggplot2::element_text(colour = "#5A5A5A",
-                                      margin = margin(b = 20))
+                                      margin = ggplot2::margin(b = 20))
 
 )

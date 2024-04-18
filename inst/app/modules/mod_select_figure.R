@@ -246,11 +246,11 @@ mod_select_figure_server <- function(id, r) {
       }
     })
 
+
  # figure must be selected and ready to be drawn
    output$fig_detect_plot_output <- renderPlot({
       draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
-    },
-    height = "auto")
+    })
 
     output$fig_effort_plot_output <- renderPlot({
       draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
@@ -258,13 +258,11 @@ mod_select_figure_server <- function(id, r) {
 
     output$fig_heatmap_plot_output <- renderPlot({
       draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
-    },
-    height = "auto")
+    })
 
     output$fig_higher_plot_output <- renderPlot({
       draw_fig_higher(r, r$fig_ready && r$fig_slc$fig_higher)
-    },
-    height = "auto")
+    })
 
 
 

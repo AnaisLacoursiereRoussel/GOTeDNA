@@ -44,10 +44,10 @@ hm_fig <- function(
                        mapping = ggplot2::aes(x = month,
                                               y = reorder(year, dplyr::desc(year))),
                        fill = "lightgrey")+
-    ggh4x::facet_grid2(species ~ .,
+    ggh4x::facet_wrap2(species ~ .,
                        scales = "free",
-                       space = "free",
-                       switch = "y",
+                      # space = "free",
+                      # switch = "y",
                        strip = ggh4x::strip_nested(clip = "off",
                                             size = "variable")) +
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0.00001, 1), na.value = "white",
@@ -58,21 +58,31 @@ hm_fig <- function(
     ggplot2::scale_y_discrete(expand = c(0,0)) +
     ggplot2::labs(
       fill = NULL, x = NULL, y = NULL,
-      subtitle = paste0(stringr::str_to_title(taxon.level), ": ", taxon.name)
+      title = ifelse(
+        taxon.level != "species",
+        paste0(stringr::str_to_title(taxon.level), ": ", taxon.name),
+        ""
+        )
     ) +
     ggplot2::scale_colour_manual(values = "white") +
     ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
       panel.border = ggplot2::element_rect(fill = NA, colour = "lightgrey"),
       panel.grid = ggplot2::element_blank(),
+      plot.title = ggplot2::element_text(face = "bold",
+                                         size = 30,
+                                         hjust = 0,
+                                         colour = "#5A5A5A",
+                                         margin = ggplot2::margin(b = 20, unit = "pt")),
       strip.placement = "outside",
-      strip.background = ggplot2::element_rect(fill = "grey95", colour = "white"),
-      strip.text.y.left = ggplot2::element_text(angle = 0),
+      strip.background = ggplot2::element_rect(fill = NULL, colour = NULL),
+      strip.text.y.left = ggplot2::element_text(angle = 0, size = 20, colour = "#939598"),
       axis.text.x = ggplot2::element_text(
        # vjust = 1, hjust = 1,
-        size = 20, colour = "#939598")
+        size = 20, colour = "#939598"),
+      axis.text.y = ggplot2::element_text(size = 20, colour = "#939598")
     ) +
    ggh4x::force_panelsizes(rows = ggplot2::unit(2, "cm"))
 
-  # cowplot::draw_plot(p, width = ggplot2::unit())
+
 }

@@ -27,16 +27,20 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
   options(dplyr.summarise.inform = FALSE)
   on.exit(options(dplyr.summarise.inform = oop))
 
-  if (!taxon.name %in% data[[taxon.select]]) {
-    stop("Taxon not found in data")
-  }
+  #if (!taxon.name %in% data[[taxon.select]]) {
+  #  stop("Taxon not found in data")
+  #}
 
   if (!is.null(taxon.select)) {
     taxon.select <- match.arg(
       arg = taxon.select,
-      choices = c("kingdom", "phylum", "class", "order", "family", "genus", "scientificName"),
+      choices = c("kingdom", "phylum", "class", "order", "family", "genus", "species"),
       several.ok = FALSE
     )
+  }
+
+  if (taxon.select == "species"){
+
   }
 
   data %<>%
@@ -122,9 +126,9 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       axis.text = ggplot2::element_text(
         colour = "#939598", size = 20),
       axis.text.x = ggplot2::element_text(
-        margin = margin(t = 10, unit = "pt")),
+        margin = ggplot2::margin(t = 10, unit = "pt")),
       axis.text.y = ggplot2::element_text(
-        margin = margin(r = 10, unit = "pt")
+        margin = ggplot2::margin(r = 10, unit = "pt")
       ),
       axis.title = ggplot2::element_text(colour = "#5A5A5A",
                                          size = 24),
@@ -140,7 +144,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
         size = 30,
         hjust = 0,
         colour = "#5A5A5A",
-        margin = margin(b = 20, unit = "pt")),
+        margin = ggplot2::margin(b = 20, unit = "pt")),
       plot.title.position = "plot",
       plot.subtitle = ggplot2::element_text(size = 24,
                                             margin = ggplot2::margin(b = 20, unit = "pt"),
@@ -154,6 +158,6 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       legend.key.spacing.y = ggplot2::unit(20, "pt"),
       legend.spacing.y = ggplot2::unit(20, "pt"),
       legend.title = ggplot2::element_text(colour = "#5A5A5A",
-                                           margin = margin(b = 20))
+                                           margin = ggplot2::margin(b = 20))
      )
 }
