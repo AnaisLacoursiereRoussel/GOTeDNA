@@ -432,9 +432,9 @@ plotNotAvailableTaxoLevel <- function() {
   plotText("Plot not available at the species level.")
 }
 
-#plotNotAvailableSpeciesLevel <- function() {
-#  plotText("Plot only available at the species level.")
-#}
+plotNotAvailableSpeciesLevel <- function() {
+  plotText("Plot only available at the species level.")
+}
 
 plotNotAvailable <- function() {
   plotText("Plot not available. Click on 'Compute & visualize'")
