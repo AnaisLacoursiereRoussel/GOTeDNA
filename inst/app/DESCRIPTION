@@ -2,8 +2,8 @@ Package: GOTeDNA.app
 Type: Shiny App
 Encoding: UTF-8
 Title: GOTeDNA Shiny App
-Date: 2024-03-26
-Version: 0.0.2.9000
+Date: 2024-05-02
+Version: 0.5.0.9004
 Authors@R: c(person("Anaïs", "Lacoursière et al.", email = "Anais.Lacoursiere@dfo-mpo.gc.ca", role = c("aut", "cre")))
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
 Description: The purpose of this Shiny App is to offer an user interface for the package GOTeDNA.
@@ -17,7 +17,6 @@ Imports:
     dplyr (>= 1.0.0),
     DT,
     fs,
-    ggh4x (>= 0.2.8),
     ggplot2,
     GOTeDNA,
     grid,
@@ -37,3 +36,4 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 LazyData: true
+

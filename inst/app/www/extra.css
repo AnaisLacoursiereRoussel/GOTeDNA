@@ -295,7 +295,8 @@ h6 {
   font-size: 0;
 }
 
-.restrict, .lock {
+.restrict,
+.lock {
   font-size: 0.9em;
 }
 
@@ -375,10 +376,13 @@ h6 {
 }
 
 .selectize-dropdown .option,
-.selectize-dropdown .selected
- {
+.selectize-dropdown .selected {
   background-color: #fff;
   padding: 10px 12px 12px;
+}
+
+.selectize-dropdown .selected {
+  color: #2241a7;
 }
 
 .selectize-dropdown .active {
@@ -392,10 +396,6 @@ h6 {
   color: #2241a7;
 } */
 
-/* .selectize-dropdown .selected {
-  background-color: #75f9c6;
-  color: #2241a7;
-} */
 
 /* #AreaCSS*/
 #area_selection {
@@ -521,32 +521,67 @@ h6 {
   padding: 11px 0;
 }
 
-#fig_main_container {
+.fig_main_container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: #fff;
   margin-top: 30px;
-  padding: 100px;
+  padding: 80px;
   border-radius: 17px;
+  width: 100%;
+  min-height: 5vh;
+}
+
+.fig_main_container-header {
+  justify-content: left;
+  align-items: left;
+}
+
+.fig_main_container-fig {
+  justify-content: center;
+  align-items: center;
 }
 
 .fig_container {
+  width: 100%;
   background-color: white;
+  padding: 50px;
 }
 
-.fig_panel {
-  padding: 2rem;
+.fig_caption_container {
+  width: 100%;
 }
 
 .fig_caption {
+  padding: 50px;
   font-size: 1.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
 }
+
+.fig_panel_container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: end; 
+}
+
+.fig_panel {
+  width: 80%;
+  padding: 30px;
+}
+
+.fig_legend {
+  width: 20%;
+  padding: 15px;
+}
+
+.fig_legend img {
+  max-width: 100%;
+}
+
 
 .fig_text_output {
   min-height: 2.5rem;
