@@ -34,7 +34,7 @@ mod_select_data_ui <- function(id) {
                   label = "Data source",
                   choices = list(
                     "GOTeDNA" = "gotedna",
-                    "Your own data" = "external_data"
+                    "Upload data" = "external_data"
                   ),
                   selected = "gotedna"
                 )
@@ -61,8 +61,8 @@ mod_select_data_ui <- function(id) {
                 selectInput(ns("data_type"),
                   label = "Type of data",
                   choices = list(
-                    "Species specific (qPCR)" = "qPCR",
-                    "Multi-species (metabarcoding)" = "metabarcoding"
+                    "Multi-species (metabarcoding)" = "metabarcoding",
+                    "Species specific (qPCR)" = "qPCR"
                   ),
                   selected = "metabarcoding"
                 )
@@ -76,18 +76,38 @@ mod_select_data_ui <- function(id) {
               column(
                 3,
                 selectInput(
-                  ns("taxo_lvl"), "Taxonomy selection",
+                  ns("taxo_lvl"),
+                  "Taxonomy selection",
                   choices = taxonomic_ranks
                 )
               ),
-              column(3, selectInput(ns("taxo_id"), "", choices = "All")),
+              column(
+                3, selectInput(ns("taxo_id"),
+                               "Taxa",
+                               choices = "All")),
               column(
                 3,
-                selectizeInput(ns("slc_spe"), "Species", choices = "All")
+                selectizeInput(ns("slc_spe"),
+                               "Species",
+                               choices = "All")
               ),
               column(
                 3,
-                selectInput(ns("primer"), "Primer", choices = "All")
+                selectInput(ns("primer"),
+                            div("Primer set",
+                                list(
+                                 # a(
+                                    actionLink(
+                                      inputId = "primer_info_link",
+                                      label = img(
+                                        src = "img/info_icon.png",
+                                      title = "Details",
+                                      style = "width: 20px"))
+                                    )
+                                 )
+                                ,
+                            choices = "All")
+
               )
             )
           )
@@ -106,7 +126,7 @@ mod_select_data_ui <- function(id) {
         div(
           class = "title-container",
           h1(
-            "Area Selection",
+            "Area selection",
             span(
               id = ns("lock"),
               class = "lock", icon("lock"),
@@ -251,10 +271,10 @@ mod_select_data_server <- function(id, r) {
             "All",
             # r$cur_data_sta_slc[
             #   r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
-            # ]$scientificName |>
+            # ]$species |>
             r$cur_data[
               r$cur_data[[input$taxo_lvl]] == input$taxo_id,
-            ]$scientificName |>
+            ]$species |>
               unique() |>
               sort()
           ),
@@ -266,7 +286,7 @@ mod_select_data_server <- function(id, r) {
           "slc_spe",
           choices = c(
             "All",
-            r$cur_data_sta_slc$scientificName |>
+            r$cur_data_sta_slc$species |>
               unique() |>
               sort()
           ),
@@ -279,7 +299,7 @@ mod_select_data_server <- function(id, r) {
       updateSelectInput(
         session,
         "taxo_lvl",
-        selected = "kingdom"
+        selected = "domain"
       )
       r$geom_slc <- r$station_slc <- NULL
       r$geom <- filter_station(r)
@@ -288,12 +308,28 @@ mod_select_data_server <- function(id, r) {
 
 
     # primer
+
+    # Tried to make the info icon clickable and open new window directly to the Primers page.
+
+  #  observeEvent(input$primer_info_link, {
+  #    updateTabsetPanel(
+  #      session,
+  #      "navbar",
+  #      selected = "primer_info")
+  #  })
+
+
+
     observe({
       if (input$data_type == "qPCR") {
         updateSelectInput(
           session,
           "primer",
-          choices = "not available"
+          choices = get_primer_selection(
+            r$taxon_lvl_slc, filter_taxon(
+              r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
+            )
+          )
         )
       } else {
         updateSelectInput(
@@ -310,28 +346,13 @@ mod_select_data_server <- function(id, r) {
 
     observe(r$primer <- input$primer)
 
-
-    # sample number
-    output$n_smpl_data <- renderUI({
-      tagList(
-        div(
-          class = "sample_selected",
-          p(
-            "Total number of observations: ",
-            span(
-              class = "sample_selected_data",
-              format(r$n_sample, big.mark = ",")
-            )
-          )
-        )
-      )
-    })
+   # sample number
     output$n_smpl_map <- renderUI({
       tagList(
         div(
           class = "sample_selected",
           p(
-            "Total number of observations: ",
+            "Total number of samples: ",
             span(
               class = "sample_selected_map",
               format(r$n_sample, big.mark = ",")
@@ -373,7 +394,8 @@ mod_select_data_server <- function(id, r) {
             r$geom <- r$geom[id_slc, ]
             r$geom_slc <- sf_edits()$all
             r$station_slc <- r$geom$station
-          } else {
+
+            } else {
             showNotification("No station selected", type = "warning")
           }
         } else {
@@ -427,6 +449,10 @@ filter_station <- function(r) {
       dff |>
         dplyr::group_by(ecodistrict, station, materialSampleID) |>
         dplyr::summarise(count = n()),
+       # dplyr::group_by(station, primer, species) |>
+       # dplyr::summarise(
+       #   success = sum(detected),
+       #   count = dplyr::n_distinct(materialSampleID)),
       join_by(station)
     )
 }
@@ -437,7 +463,7 @@ filter_taxon <- function(data, taxon_lvl, taxon_id, species) {
   if (!is.null(taxon_lvl)) {
     if (taxon_lvl == "species") {
       out <- out |>
-        dplyr::filter(scientificName == species)
+        dplyr::filter(species == species)
     } else {
       if (taxon_id != "All") {
         out <- out[

@@ -34,8 +34,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-#' scale_newprob(data = D_mb, newprob)
+#' newprob <- calc_det_prob(gotedna_data$metabarcoding, "Scotian Shelf")
+#' scale_newprob(data = gotedna_data$metabarcoding, newprob)
 #' }
 scale_newprob <- function(data, newprob) {
 
@@ -70,12 +70,12 @@ scale_newprob <- function(data, newprob) {
     dplyr::tibble()
   row.names(DFmo) <- NULL
 
-  DFmo[c("GOTeDNA_ID", "species", "primer")] <- stringr::str_split_fixed(DFmo$id, ";", 3)
+  DFmo[c("GOTeDNA_ID.v", "species", "primer")] <- stringr::str_split_fixed(DFmo$id, ";", 3)
 
   DFmo <- DFmo |>
     dplyr::left_join(
-      unique(data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
-      by = c("species" = "scientificName"),
+      unique(data[, c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")]),
+      by = c("species"),
       multiple = "first"
     )
   # Interpolate missing months
@@ -141,11 +141,12 @@ scale_newprob <- function(data, newprob) {
     dplyr::tibble()
   row.names(DFyr) <- NULL
 
-  DFyr[c("GOTeDNA_ID", "species", "primer", "year")] <- stringr::str_split_fixed(DFyr$id, ";", 4)
+  DFyr[c("GOTeDNA_ID.v", "species", "primer", "year")] <- stringr::str_split_fixed(DFyr$id, ";", 4)
 
   DFyr <- DFyr |>
-    dplyr::left_join(unique(data[, c("phylum", "class", "order", "family", "genus", "scientificName")]),
-                     by = c("species" = "scientificName"),
+    dplyr::left_join(
+      unique(data[, c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")]),
+                     by = "species",
                      multiple = "first"
     )
 

@@ -19,7 +19,7 @@ containing 5-7 columns:
 \item \code{nd} number of positive detections per month
 \item \code{p} calculated monthly detection probability
 \item \code{s} standard deviation
-\item \code{GOTeDNA_ID}
+\item \code{GOTeDNA_ID.v}
 \item \code{year}
 \item \code{yr.mo} year;month concatenated
 }

@@ -10,9 +10,9 @@ server <- function(input, output, session) {
     reload_map = 0,
     fig_ready = FALSE,
     fig_slc = list(
-      fig_heatmap = FALSE, 
+      fig_heatmap = FALSE,
       fig_effort = FALSE,
-      fig_higher = FALSE, 
+      fig_samples = FALSE,
       fig_detect = FALSE
     ),
     current_fig = "fig1",

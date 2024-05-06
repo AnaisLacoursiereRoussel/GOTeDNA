@@ -116,6 +116,7 @@ read_data <- function(
         pattern = "(-?[:digit:])"
       )
 
+    samples[[j]]$GOTeDNA_version <- metadata[[j]]$GOTeDNA_version[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLatitude <- metadata[[j]]$decimalLatitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLongitude <- metadata[[j]]$decimalLongitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$station <- metadata[[j]]$samplingStation[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
@@ -138,7 +139,8 @@ read_data <- function(
           detected = dplyr::case_when(
             is.na(concentration) ~ 0,
             concentration >= pcr_primer_lod ~ 1,
-            concentration < pcr_primer_lod ~ 0))
+            concentration < pcr_primer_lod ~ 0)) %>%
+        dplyr::rename("primer" = "target_gene")
 
     } else {
       x %>%
@@ -152,18 +154,21 @@ read_data <- function(
             decimalLongitude = suppressWarnings(as.numeric(decimalLongitude)),
             materialSampleID = suppressWarnings(as.character(materialSampleID)),
             GOTeDNA_version = suppressWarnings(as.numeric(GOTeDNA_version)
-        ))
+        )) %>%
+        dplyr::rename("primer" = "target_subfragment")
     }
   })
 
   GOTeDNA_df <- do.call(dplyr::bind_rows, lapply(samples, function(x) {
     x[, names(x) %in% c(
-      "GOTeDNA_ID", "GOTeDNA_version", "materialSampleID","eventID", "target_gene",
-      "target_subfragment", "scientificName", "kingdom", "phylum", "class", "order",
+      "GOTeDNA_ID", "GOTeDNA_version", "materialSampleID","eventID", "primer",
+      "scientificName", "domain","kingdom", "phylum", "class", "order",
       "family", "genus", "date", "ecodistrict", "decimalLatitude", "decimalLongitude",
       "station", "year", "month", "organismQuantity", "concentration", "pcr_primer_lod", "detected"
     )]
-  }))
+  })) |>
+    dplyr::rename("species" = "scientificName")
   rownames(GOTeDNA_df) <- NULL
+
   return(GOTeDNA_df)
 }

@@ -34,7 +34,7 @@ gotedna_station <- gotedna_station0 <- readRDS("data/gotedna_station.rds")
 gotedna_primer <- readRDS("data/gotedna_primer.rds")
 
 # taxonomic_ranks <- list("kingdom", "phylum", "family", "order", "class", "genus")
-taxonomic_ranks <- list("phylum", "family", "order", "class", "genus")
+taxonomic_ranks <- list("domain", "kingdom", "phylum", "class", "order", "family", "genus")
 names(taxonomic_ranks) <- trans_letters(taxonomic_ranks |> unlist())
 
 ls_threshold <- as.list(seq(50, 95, 5))
@@ -50,7 +50,7 @@ filter_taxa_data <- function(x, phy, cla, gen, spe) {
       if (gen != "All") {
         x <- x |> dplyr::filter(genus == gen)
         if (spe != "All") {
-          x <- x |> dplyr::filter(scientificName == spe)
+          x <- x |> dplyr::filter(species == spe)
         }
       }
     }
@@ -76,27 +76,27 @@ basemap <- function() {
 
 get_primer_selection <- function(lvl, data) {
   if (is.null(lvl)) {
-    return("not available")
+    return("Not available")
   }
   if (lvl == "kingdom") {
-    out <- table(data$target_subfragment) |>
+    out <- table(data$primer) |>
       sort() |>
       rev()
     names(out)
   } else {
     if (lvl == "species") {
-      tx_col <- "scientificName"
+      tx_col <- "species"
     } else {
       tx_col <- lvl
     }
     data_available <- data |>
-      select({{ tx_col }}, target_subfragment) |>
+      select({{ tx_col }}, primer) |>
       distinct()
     if (!is.null(data_available) && nrow(data_available)) {
       tmp <- gotedna_primer[[lvl]] |>
         inner_join(
           data_available,
-          join_by(primer == target_subfragment, {{ lvl }} == {{ tx_col }})
+          join_by(primer == primer, {{ lvl }} == {{ tx_col }})
         ) |>
         mutate(
           text = paste0(primer, " (", success, "/", total, " ; ", perc, "%)")
@@ -104,12 +104,12 @@ get_primer_selection <- function(lvl, data) {
       out <- as.list(tmp$primer)
       names(out) <- tmp$text
       if (is.null(out)) {
-        return("not available")
+        return("Not available")
       } else {
         return(out)
       }
     } else {
-      return("not available")
+      return("Not available")
     }
   }
 }

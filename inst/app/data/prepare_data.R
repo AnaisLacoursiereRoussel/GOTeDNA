@@ -3,14 +3,21 @@ D_mb <- read_data(
   choose.method = "metabarcoding", path.folder = "inst/app/data/raw_xlsx_files"
 )
 
-D_mb_nodetect <- D_mb %>%
+D_mb_msct <- D_mb %>%
+  dplyr::mutate(msct = case_when(
+    organismQuantity == 0 ~ TRUE,
+    organismQuantity > 10 ~ TRUE
+  )) |>
+  tidyr::drop_na(msct)
+
+D_mb_nodetect <- D_mb_msct %>%
   dplyr::group_by(
-    GOTeDNA_ID, scientificName, target_subfragment, station) %>%
+    GOTeDNA_ID, GOTeDNA_version, species, primer, station) %>%
   dplyr::summarise(num_detected = sum(detected)) %>%
   dplyr::filter(num_detected == 0)
 
-D_mb_clean <- dplyr::anti_join(D_mb, D_mb_nodetect,
-                               by = c("GOTeDNA_ID","scientificName","target_subfragment", "station"))
+D_mb_clean <- dplyr::anti_join(D_mb_msct, D_mb_nodetect,
+                               by = c("GOTeDNA_ID","GOTeDNA_version","species","primer", "station"))
 
 D_qPCR <- read_data(
   choose.method = "qPCR", path.folder = "inst/app/data/raw_xlsx_files"
@@ -23,11 +30,6 @@ gotedna_data <- list(
                   !class %in% c("Aves","Insecta", "Hexapoda"),
                   !order %in% c("Primates","Artiodactyla","Perissodactyla","Rodentia"),
                   !family %in% c("Felidae","Canidae","Procyonidae")) |>
-    dplyr::mutate(msct = case_when(
-      organismQuantity == 0 ~ TRUE,
-      organismQuantity > 10 ~ TRUE
-    )) |>
-    tidyr::drop_na(msct) |>
     dplyr::ungroup() |>
     as.data.frame(),
   qPCR = D_qPCR |>
@@ -69,16 +71,21 @@ gotedna_station <- list(
 saveRDS(gotedna_station, "inst/app/data/gotedna_station.rds")
 
 
-
+#### Need to do for both qPCR and metabarcoding
 # Prepare primer data
 gotedna_data <- readRDS("inst/app/data/gotedna_data.rds")
-newprob <- calc_det_prob(gotedna_data$metabarcoding)
-scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
+
+newprob_mb <- calc_det_prob(gotedna_data$metabarcoding)
+newprob_q <- calc_det_prob(gotedna_data$qPCR)
+
+scaledprobs_mb <- scale_newprob(gotedna_data$metabarcoding, newprob_mb)
+scaledprobs_q <- scale_newprob(gotedna_data$qPCR, newprob_q)
 
 gotedna_primer <- list()
 
-for (i in c("phylum", "class", "order", "family", "genus", "species")) {
-  gotedna_primer[[i]] <- primer_sort(i, scaledprobs$Pscaled_month) |>
+# this needs to be based on the area selection
+for (i in c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")) {
+  gotedna_primer[[i]] <- primer_sort(i, dplyr::bind_rows(scaledprobs_mb$Pscaled_month, scaledprobs_q$Pscaled_month)) |>
     mutate(text = paste0(primer, " (", success, "/", total, " ", perc, "%)"))
 }
 

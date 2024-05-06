@@ -26,7 +26,7 @@ A list of two data.frames with 16 to 17 columns:
 \item \code{threshold} Detection probability threshold specified in function call.
 \item \code{period} Range of months having optimal detection.
 \item \code{year} Sampling year, only present in calculating variation in separate years.
-\item \code{GOTeDNA_ID}
+\item \code{GOTeDNA_ID.v}
 \item \code{species}
 \item \code{primer}
 \item \code{phylum}
@@ -56,7 +56,7 @@ showing the variation within year and among years, if applicable
 \dontrun{
 newprob <- calc_det_prob(data = D_mb)
 scaledprobs <- scale_newprob(D_mb, newprob)
-calc_window(data = D_mb, threshold = "90",
+calc_window(data = D_mb, threshold = "75",
  species.name = "Acartia longiremis", scaledprobs)
 }
 }

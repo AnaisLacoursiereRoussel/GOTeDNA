@@ -19,7 +19,7 @@ monthly detection probabilities with LOESS smoothing over years.
 \dontrun{
 data <- D_mb |> dplyr::filter(
      GOTeDNA_ID == 8,
-     scientificName == "Acartia longiremis",
+     species == "Acartia longiremis",
      target_subfragment == "COI1"
  )
 smooth_fig(data = data, species.name = "Acartia longiremis")

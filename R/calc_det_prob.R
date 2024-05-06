@@ -15,7 +15,7 @@
 #' * `nd` number of positive detections per month
 #' * `p` calculated monthly detection probability
 #' * `s` standard deviation
-#' * `GOTeDNA_ID`
+#' * `GOTeDNA_ID.v`
 #' * `year`
 #' * `yr.mo` year;month concatenated
 #'
@@ -34,10 +34,11 @@ calc_det_prob <- function(data) {
 
   data %<>%
     dplyr::mutate(.,
-      id = if (!all(is.na(target_subfragment))) paste0(GOTeDNA_ID, ";", scientificName, ";", target_subfragment) else paste0(GOTeDNA_ID, ";", scientificName, ";", target_gene),
-      id.yr = if (!all(is.na(target_subfragment))) paste0(GOTeDNA_ID, ";", scientificName, ";", target_subfragment, ";", year) else paste0(GOTeDNA_ID, ";", scientificName, ";", target_gene, ";", year)
+      id = paste0(GOTeDNA_ID, ".", GOTeDNA_version, ";", species, ";", primer),
+      id.yr = paste0(GOTeDNA_ID, ".", GOTeDNA_version, ";", species, ";", primer, ";", year)
     )
-  # Create a variable so detection probability is calculated separately for each GOTeDNA_ID, species, and primer
+  # Create a variable so detection probability is calculated separately for each
+  # GOTeDNA_ID, version, species, and primer
 
   # create new list variables to store outputs
   lnd <- length(unique(data$id))
@@ -47,9 +48,9 @@ calc_det_prob <- function(data) {
   names(COM) <- unique(data$id)
 
   # calculate detection probabilities - year aggregated
-  for (species in unique(data$id)) {
+  for (occurrence in unique(data$id)) {
     SDF <- data %>%
-      dplyr::filter(id == species) %>%
+      dplyr::filter(id == occurrence) %>%
       dplyr::group_by(month) %>%
       dplyr::summarise(
         n = dplyr::n(),
@@ -60,21 +61,22 @@ calc_det_prob <- function(data) {
       as.data.frame()
 
     if (any(SDF$n > 1)) {
-      newP[[species]] <- SDF
+      newP[[occurrence]] <- SDF
     }
   }
   newP_agg <- newP[lengths(newP) != 0]
+
 
   # calculate monthly detection probability for each year
   lny <- length(unique(data$id.yr))
   newP <- vector("list", lny)
   names(newP) <- unique(data$id.yr)
-  SUM <- COM <- comps <- vector("list", lny)
+  SUM <- COM <- comps <- vector("list", length(unique(data$id.yr)))
   names(COM) <- unique(data$id.yr)
 
-  for (species in unique(data$id.yr)) {
+  for (occurrence in unique(data$id.yr)) {
     SDF <- data %>%
-      dplyr::filter(id.yr == species) %>%
+      dplyr::filter(id.yr == occurrence) %>%
       dplyr::group_by(month) %>%
       dplyr::summarise(
         n = dplyr::n(),
@@ -85,7 +87,7 @@ calc_det_prob <- function(data) {
       as.data.frame()
 
     if (any(SDF$n > 1)) {
-      newP[[species]] <- SDF
+      newP[[occurrence]] <- SDF
     }
   }
   newP <- newP[lengths(newP) != 0]
@@ -93,7 +95,7 @@ calc_det_prob <- function(data) {
 
   newP_yr <- lapply(newP_yr, function(x) {
     dplyr::mutate(x,
-      GOTeDNA_ID = stringr::word(x$id.yr, 1, sep = stringr::fixed(";")),
+      GOTeDNA_ID.v = stringr::word(x$id.yr, 1, sep = stringr::fixed(";")),
       year = stringr::word(x$id.yr, -1, sep = stringr::fixed(";")),
       yr.mo = paste0(year, ";", month),
       id.yr = NULL

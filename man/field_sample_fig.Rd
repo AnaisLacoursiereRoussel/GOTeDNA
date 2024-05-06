@@ -10,10 +10,11 @@ field_sample_fig(data, taxon.select, taxon.name)
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}}
 
 \item{taxon.select}{(required, character): Taxonomic level of interest
-Choices = one of \verb{c("kingdom", "phylum", "class", "order", "family", "genus)}}
+Choices = one of \verb{c("domain", "kingdom", "phylum", "class", "order", "family",}
+\verb{"genus", "species")}.}
 
 \item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{higher.taxon.select}. E.g., if \code{taxon.level = "class"}
+provided in \code{taxon.select}. E.g., if \code{taxon.select = "class"}
 enter class name, etc..}
 }
 \description{
@@ -22,9 +23,9 @@ for all species of a specified taxonomic group per year.
 }
 \examples{
 \dontrun{
-higher_tax_fig(
-  data = D_mb_ex,
-  higher.taxon.select = "phylum",
+field_sample_fig(
+  data = gotedna_data$metabarcoding,
+  taxon.select = "phylum",
   taxon.name = "Bryozoa"
 )
 }

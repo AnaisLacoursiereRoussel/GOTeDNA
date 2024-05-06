@@ -21,17 +21,18 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(D_mb_ex)
-#' scaledprobs <- scale_newprob(D_mb_ex, newprob)
+#' newprob <- calc_det_prob(gotedna_data$metabarcoding)
+#' scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 #' thresh_fig(
 #'   taxon.level = "species", taxon.name = "Acartia hudsonica",
 #'   threshold = "90", scaledprobs$Pscaled_month
 #' )
 #' }
 thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
+
   taxon.level <- match.arg(
     arg = taxon.level,
-    choices = c("phylum", "class", "order", "family", "genus", "species")
+    choices = c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")
   )
 
   thresh_slc <- as.character(seq(50, 95, 5))
@@ -41,7 +42,25 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
     labels = thresh_slc
   )
 
-  Pthresh <- scaledprobs_month |>
+  thresh.value <- switch(threshold,
+                         thresh$values[thresh$labels == threshold]
+  )
+ # primer.select <- unique(scaledprobs_month$primer)
+#  stopifnot(length(primer.select) == 1)
+
+ # if (!primer.select %in% scaledprobs_month$primer) {
+  #  cli::cli_alert_warning("Primer not found in data -- cannot render figure")
+   # return(NULL)
+  #}
+
+  data <- scaledprobs_month |>
+    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), month, primer) |>
+    dplyr::summarise(
+      nd = sum(detect, na.rm = TRUE),
+      n = sum(detect, nondetect, na.rm = TRUE),
+      fill = mean(fill, na.rm = TRUE),
+      scaleP = mean(scaleP, na.rm = TRUE)
+    ) |>
     dplyr::mutate(
       thresh95 = (fill >= 0.94999) * 1,
       thresh90 = (fill >= 0.89999) * 1,
@@ -54,16 +73,12 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       thresh55 = (fill >= 0.54999) * 1,
       thresh50 = (fill >= 0.49999) * 1
     ) |>
-    tidyr::drop_na(fill)
+    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name)
 
-  Pthresh[Pthresh$phylum == "Chordata", ] %>%
-    tidyr::drop_na(class)
+  plots = vector("list")
 
-  thresh.value <- switch(threshold,
-    thresh$values[thresh$labels == threshold]
-  )
-
-  data <- Pthresh[Pthresh[[taxon.level]] %in% taxon.name, ]
+  for (proj in unique(data$GOTeDNA_ID.v)) {
+    plots[[proj]] <- with(data[data$GOTeDNA_ID.v %in% proj, ],
 
   ggplot2::ggplot() +
     ggplot2::geom_hline(
@@ -77,44 +92,40 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       color = "lightgrey"
     ) +
     ggplot2::geom_col(
-      data[data[[thresh.value]] %in% "1", ],
+      dplyr::filter(data, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "1"),
       mapping = ggplot2::aes(x = month, y = fill), fill = viridis::viridis(1), position = "dodge2",
-      width = 0.9, show.legend = TRUE, alpha = .9#, fill = viridis::viridis(1)
+      width = 0.9, show.legend = FALSE, alpha = .9#, fill = viridis::viridis(1)
     ) +
     ggplot2::geom_col(
-      data[data[[thresh.value]] %in% "0", ],
+      dplyr::filter(data, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "0"),
       mapping = ggplot2::aes(x = month, y = fill), fill = "darkgrey", position = "dodge2",
-      width = 0.9, show.legend = TRUE, alpha = .9#, fill = "darkgrey"
+      width = 0.9, show.legend = FALSE, alpha = .9#, fill = "darkgrey"
     ) +
     # To make the interpolated data stand out
     ggpattern::geom_col_pattern(
-      dplyr::filter(data, is.na(scaleP)),
+      dplyr::filter(data, GOTeDNA_ID.v %in% proj & is.nan(scaleP)),
       mapping = ggplot2::aes(x = month, y = fill),
       position = "dodge2",
       width = 0.9, show.legend = FALSE, fill = NA,
       pattern_color = "white", pattern_density = 0.05, pattern_spacing = 0.015, pattern_key_scale_factor = 0.6
     ) +
     ggplot2::coord_polar() +
-    ggplot2::facet_wrap(~ GOTeDNA_ID + primer + species,
-      ncol = 2,
-      labeller = function(x) {
-        x[2]
-      }
-    ) +
     ggplot2::scale_x_continuous(
       limits = c(0.5, 12.5),
       breaks = 1:12,
       labels = month.abb
     ) +
     ggplot2::labs(
-      x = NULL, y = NULL,
-      subtitle = paste0("Detection threshold: ", threshold, "%")
+      x = NULL, y = NULL
     ) +
     ggplot2::theme_minimal() +
     theme_circle
+    )
   #  ggplot2::theme(
      # panel.grid = ggplot2::element_blank(),
     #  axis.title.y = ggplot2::element_text(hjust = 1, vjust = 2),
      # plot.background = ggplot2::element_rect(fill = "white", colour = NA)
    # )
+  }
+  return(plots)
 }

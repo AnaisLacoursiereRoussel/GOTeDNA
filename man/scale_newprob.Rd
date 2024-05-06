@@ -45,8 +45,8 @@ calculation functions.
 }
 \examples{
 \dontrun{
-newprob <- calc_det_prob(D_mb_ex, "Scotian Shelf")
-scale_newprob(data = D_mb, newprob)
+newprob <- calc_det_prob(gotedna_data$metabarcoding, "Scotian Shelf")
+scale_newprob(data = gotedna_data$metabarcoding, newprob)
 }
 }
 \author{

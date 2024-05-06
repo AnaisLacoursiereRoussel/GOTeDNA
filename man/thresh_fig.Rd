@@ -29,8 +29,8 @@ threshold in grey.
 }
 \examples{
 \dontrun{
-newprob <- calc_det_prob(D_mb_ex)
-scaledprobs <- scale_newprob(D_mb_ex, newprob)
+newprob <- calc_det_prob(gotedna_data$metabarcoding)
+scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 thresh_fig(
   taxon.level = "species", taxon.name = "Acartia hudsonica",
   threshold = "90", scaledprobs$Pscaled_month

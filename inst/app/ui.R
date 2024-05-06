@@ -3,9 +3,11 @@ ui <- fluidPage(
   useShinyjs(),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "extra.css"),
-    tags$link(rel = "stylesheet", type = "text/css", href = "fonts.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "fonts.css"),
+    tags$style(type = "text/css", "body {padding-top: 70px;}")
   ),
-  navbarPage(
+  navbarPage(id = "navbar",
+             position = "fixed-top",
     img(
       src = "img/logo/GOTeDNA_logo_white_got.svg",
       alt = "GOTeDNA_logo",
@@ -27,24 +29,52 @@ ui <- fluidPage(
       )
     ),
     tabPanel(
-      "Disclaimer",
+      "Disclaimers",
       div(
         class = "standalone_container",
         div(
           class = "standalone_60",
+          h1("Disclaimers"),
           includeHTML(file.path("www", "doc", "disclaimer.html"))
         )
       )
     ),
     tabPanel(
-      "Partners",
+      "Interpretation Guide",
       div(
         class = "standalone_container",
         div(
           class = "standalone_60",
-          h1("Partners")
+          h1("Interpretation Guide"),
+          includeHTML(file.path("www", "doc", "interp_guide.html"))
         )
       )
+    ),
+    tabPanel(
+      title = "Primers",
+      value = "primer_info",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          h1("Primers"),
+          includeHTML(file.path("www", "doc", "primers.html"))
+        )
+      )
+    ),
+    tabPanel(
+        title = a("Partners",
+        href = "https://sites.google.com/view/gotedna/partners",
+        target = "_blank")#,
+      #style = "title {text-: center;}",
+      #div(
+      #  class = "standalone_container",
+      #  )#,
+        #div(
+          #class = "standalone_60",
+          #h1(a("Partners")
+      #  )
+    #  )
     ),
     tabPanel(
       "Indigenous Contributions",
@@ -62,7 +92,13 @@ ui <- fluidPage(
         class = "standalone_container",
         div(
           class = "standalone_60",
-          h1("Team")
+          h1("Team"),
+          wellPanel(
+            helpText(a("Meet the GOTeDNA team!",
+                       href="https://sites.google.com/view/gotedna/the-team",
+                       target = "_blank")
+            )
+          )
         )
       )
     ),
@@ -80,8 +116,9 @@ ui <- fluidPage(
                 style = "text-align:center",
                 img(
                   src = "img/logo/logo_disclaimer.svg",
-                  alt = "Logo GOTeDNA",
-                  id = "logo_gotedna_contact"
+                  alt = "GOTeDNA Logo",
+                  id = "logo_gotedna_contact",
+                  style = "width: 230px"
                 )
               )
             ),
@@ -100,34 +137,51 @@ ui <- fluidPage(
       class = "align-items-center",
       column(
         3,
-        img(
-          src = "img/logo_partners/DFO_logo_sq.svg",
-          alt = "Logo DFO",
-          id = "logo_dfo"
+        a(
+          img(
+            title = "Fisheries and Oceans Canada",
+            src = "img/logo_partners/DFO_logo_sq.svg",
+            alt = "Fisheries and Oceans Canada Logo",
+            id = "logo_dfo"),
+          href = "https://www.dfo-mpo.gc.ca/index-eng.html",
+          target = "_blank"
         )
       ),
       column(
         3,
-        img(
-          src = "img/logo_partners/logo_Maine_eDNA_nbg_w.png",
-          alt = "Logo Main eDNA",
-          id = "logo_mswc"
+        a(
+          img(
+            title = "Maine-eDNA",
+            src = "img/logo_partners/logo_Maine_eDNA_nbg_w.png",
+            alt = "Maine-eDNA Logo",
+            id = "logo_mswc"),
+          href = "https://umaine.edu/edna/",
+          target = "_blank"
         )
       ),
       column(
         3,
-        img(
-          src = "img/logo_partners/logo_obon.svg",
-          alt = "Logo OBONt",
-          id = "logo_obon"
+        a(
+          img(
+            title = "United Nations Ocean Decade",
+            src = "img/logo_partners/logo_undossd.svg",
+            alt = "United Nations Decade of Ocean Science for Sustainable Development Logo",
+            id = "logo_undossd"),
+          href = "https://oceandecade.org/",
+          target = "_blank"
         )
       ),
       column(
         3,
-        img(
-          src = "img/logo_partners/logo_undossd.svg",
-          alt = "Logo United Nations Decade of Ocean Science for Sustainable Development",
-          id = "logo_undossd"
+        a(
+          img(
+            title = "Ocean Biomolecular Observing Network",
+            src = "img/logo_partners/logo_obon.svg",
+            alt = "Ocean Biomolecular Observing Network Logo",
+            id = "logo_obon"),
+          href = "https://obon-ocean.org/",
+          target = "_blank"
+
         )
       )
     )

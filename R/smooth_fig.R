@@ -4,40 +4,46 @@
 #' monthly detection probabilities with LOESS smoothing over years.
 #'
 #' @param data (required, data.frame): Data.frame read in with [read_data()].
-#' @param species.name (required, character): Full binomial species name.
+#' @param taxon.level (required, character): Taxonomic level selection.
+#' @param taxon.name (required, character): Full binomial species name.
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname smooth_fig
 #' @export
 #' @examples
 #' \dontrun{
-#' data <- D_mb |> dplyr::filter(
-#'      GOTeDNA_ID == 8,
-#'      scientificName == "Acartia longiremis",
-#'      target_subfragment == "COI1"
+#' data <- gotedna_data$metabarcoding |> dplyr::filter(
+#'      species == "Acartia longiremis",
+#'      primer == "COI1"
 #'  )
 #' smooth_fig(data = data, species.name = "Acartia longiremis")
 #' }
-smooth_fig <- function(data, species.name) {
+smooth_fig <- function(data, taxon.level, taxon.name) {
   oop <- options("dplyr.summarise.inform")
   options(dplyr.summarise.inform = FALSE)
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
 
-  primer.select <- unique(data$target_subfragment)
-  if (length(primer.select) > 1) {
-    cli::cli_alert_warning("Primer not unique")
-    subt <- paste("Primer:", paste0(primer.select, collapse = ", "))
-  } else {
-    if (is.na(primer.select)) {
-      subt <- NULL
-    } else {
-      subt <- paste("Primer:", primer.select)
-    }
-  }
+ # primer.select <- unique(data$target_subfragment)
+  #if (length(primer.select) > 1) {
+   # cli::cli_alert_warning("Primer not unique")
+    #subt <- paste("Primer:", paste0(primer.select, collapse = ", "))
+#  } else {
+ #   if (is.na(primer.select)) {
+  #    subt <- NULL
+   # } else {
+    #  subt <- paste("Primer:", primer.select)
+  #  }
+  #}
+
+  taxon.level <- match.arg(
+    arg = taxon.level,
+    choices = c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")
+  )
 
   data %<>%
-    dplyr::group_by(scientificName, year, month) %>%
+    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
+    dplyr::group_by(!!dplyr::ensym(taxon.level), year, month) %>%
     dplyr::summarise(n = dplyr::n(), nd = sum(detected))
 
   # Do smoothing by making continuous time (rbind time series and focus on middle period)
@@ -86,9 +92,9 @@ ggplot2::ggplot() +
       clip = "off"
     ) +
     ggplot2::labs(
-      col = "Year", x = NULL, y = NULL,
-      title = species.name,
-      subtitle = subt
+      col = "Year", x = NULL, y = NULL#,
+     # title = species.name,
+     # subtitle = subt
     ) +
     ggplot2::theme_minimal() +
     ggplot2::scale_colour_manual(values = palette("Alphabet")) +
