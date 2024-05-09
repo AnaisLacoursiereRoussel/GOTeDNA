@@ -4,22 +4,25 @@ ui <- fluidPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "extra.css"),
     tags$link(rel = "stylesheet", type = "text/css", href = "fonts.css"),
-    tags$style(type = "text/css", "body {padding-top: 70px;}")
+    tags$style(type = "text/css", "body {padding-top: 100px;}")
   ),
   navbarPage(id = "navbar",
              position = "fixed-top",
     img(
       src = "img/logo/GOTeDNA_logo_white_got.svg",
-      alt = "GOTeDNA_logo",
+      alt = "GOTeDNA logo",
+      title = "GOTeDNA logo",
       id = "logo_gotedna"
     ),
     tabPanel(
       "Home",
+      value = "home",
       mod_select_data_ui("slc_data"),
       mod_select_figure_ui("slc_fig")
     ),
     tabPanel(
       "Glossary",
+      value = "glossary",
       div(
         class = "standalone_container",
         div(
@@ -30,6 +33,7 @@ ui <- fluidPage(
     ),
     tabPanel(
       "Disclaimers",
+      value = "disc",
       div(
         class = "standalone_container",
         div(
@@ -41,6 +45,7 @@ ui <- fluidPage(
     ),
     tabPanel(
       "Interpretation Guide",
+      value = "interp-guide",
       div(
         class = "standalone_container",
         div(
@@ -52,7 +57,7 @@ ui <- fluidPage(
     ),
     tabPanel(
       title = "Primers",
-      value = "primer_info",
+      value = "primer-info",
       div(
         class = "standalone_container",
         div(
@@ -63,47 +68,29 @@ ui <- fluidPage(
       )
     ),
     tabPanel(
-        title = a("Partners",
-        href = "https://sites.google.com/view/gotedna/partners",
-        target = "_blank")#,
-      #style = "title {text-: center;}",
-      #div(
-      #  class = "standalone_container",
-      #  )#,
-        #div(
-          #class = "standalone_60",
-          #h1(a("Partners")
-      #  )
-    #  )
-    ),
+        title = "Partners",
+        value = "partners",
+        class = "nav-link"
+     ),
     tabPanel(
       "Indigenous Contributions",
+      value = "fn-conts",
       div(
         class = "standalone_container",
         div(
           class = "standalone_60",
-          h1("Indigenous Contributions")
+          h1("Indigenous Contributions"),
+          includeHTML(file.path("www", "doc", "indigenous.html"))
         )
       )
     ),
     tabPanel(
-      "Team",
-      div(
-        class = "standalone_container",
-        div(
-          class = "standalone_60",
-          h1("Team"),
-          wellPanel(
-            helpText(a("Meet the GOTeDNA team!",
-                       href="https://sites.google.com/view/gotedna/the-team",
-                       target = "_blank")
-            )
-          )
-        )
-      )
-    ),
+      title = "Team",
+      value = "team"
+      ),
     tabPanel(
       "Contact",
+      value = "contact",
       div(
         class = "standalone_container",
         div(

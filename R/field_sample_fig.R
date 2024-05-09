@@ -5,10 +5,10 @@
 #'
 #' @param data (required, data.frame): Data.frame read in with [read_data()]
 #' @param taxon.select (required, character): Taxonomic level of interest
-#' Choices = one of `c("kingdom", "phylum", "class", "order", "family", "genus",`
-#' `"species")`.
+#' Choices = one of `c("domain", "kingdom", "phylum", "class", "order", "family",`
+#' `"genus", "species")`.
 #' @param taxon.name (required, character): Select taxon name that matches the level
-#' provided in `taxon.select`. E.g., if `taxon.level = "class"`
+#' provided in `taxon.select`. E.g., if `taxon.select = "class"`
 #' enter class name, etc..
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
@@ -16,9 +16,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' higher_tax_fig(
-#'   data = D_mb_ex,
-#'   higher.taxon.select = "phylum",
+#' field_sample_fig(
+#'   data = gotedna_data$metabarcoding,
+#'   taxon.select = "phylum",
 #'   taxon.name = "Bryozoa"
 #' )
 #' }
@@ -27,9 +27,9 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
   options(dplyr.summarise.inform = FALSE)
   on.exit(options(dplyr.summarise.inform = oop))
 
-  #if (!taxon.name %in% data[[taxon.select]]) {
-  #  stop("Taxon not found in data")
-  #}
+ # if (!taxon.name %in% data[[taxon.select]]) {
+#    stop("Taxon not found in data")
+ # }
 
   if (!is.null(taxon.select)) {
     taxon.select <- match.arg(
@@ -39,13 +39,10 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
     )
   }
 
-  if (taxon.select == "species"){
-
-  }
 
   data %<>%
     dplyr::filter(!!dplyr::ensym(taxon.select) %in% taxon.name) %>%
-    dplyr::group_by(kingdom, phylum, class, order, family, genus, scientificName, year, month) %>%
+    dplyr::group_by(kingdom, phylum, class, order, family, genus, species, year, month) %>%
     dplyr::summarise(
       n = dplyr::n(),
       nd = sum(detected),
@@ -57,7 +54,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       mapping = ggplot2::aes(
         x = month,
         y = freq_det,
-        colour = scientificName,
+        colour = species,
         size = n
       ),
       alpha = 0.9,
@@ -67,14 +64,18 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
   #  ggh4x::facet_grid2(year ~ .,
    #   strip = ggh4x::strip_nested(bleed = TRUE)
    # ) +
-    lemon::facet_rep_grid(year ~ .) +
-    lemon::coord_capped_cart(bottom = 'both') +
+    ggh4x::facet_wrap2(~year,
+                        ncol = 1,
+                        axes = "all",
+                       remove_labels = TRUE,
+                       strip.position = "right") +
+    #lemon::coord_capped_cart(bottom = 'both') +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1),
-                                expand = c(0, 0)
+                                expand = c(0, 0.03)
                                 ) +
     ggplot2::scale_x_continuous(limits = c(1, 12), breaks = 1:12,
       labels = month.abb,
-      expand = c(0, 0)
+      expand = c(0.04, 0)
       ) +
     ggplot2::scale_size_continuous(limits = c(0, NA), breaks = seq(0, 50, 10)) +
     ggplot2::theme_minimal(base_size = 10) +
@@ -89,10 +90,10 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
                                           ) +
     ggplot2::labs(
       x = "Month", y = "Proportion of positive samples",
-      title = ifelse(
-        taxon.select != "scientificName",
-        paste(stringr::str_to_title(taxon.select), taxon.name),
-        paste(taxon.name)),
+     # title = ifelse(
+      #  taxon.select != "species",
+       # paste(stringr::str_to_title(taxon.select), taxon.name),
+        #paste(taxon.name)),
       colour = "Species",
       size = "Sampling effort"
     ) +
@@ -103,6 +104,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       panel.grid = ggplot2::element_blank(),
       # change grid lines to gray
       panel.grid.minor.x =  ggplot2::element_line(color = "#d0d0d0"),
+      panel.spacing = ggplot2::unit(25, "pt"),
       # fill the plot and panel spaces with grey and remove border
       #  panel.background = element_blank(),
       # plot.background = element_blank(),
@@ -159,5 +161,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       legend.spacing.y = ggplot2::unit(20, "pt"),
       legend.title = ggplot2::element_text(colour = "#5A5A5A",
                                            margin = ggplot2::margin(b = 20))
-     )
+     )+
+    ggh4x::force_panelsizes(rows = ggplot2::unit(100, "pt"),
+                            total_width = ggplot2::unit(620, "pt"))
 }

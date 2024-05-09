@@ -116,6 +116,7 @@ read_data <- function(
         pattern = "(-?[:digit:])"
       )
 
+    samples[[j]]$LClabel <- metadata[[j]]$LClabel[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$GOTeDNA_version <- metadata[[j]]$GOTeDNA_version[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLatitude <- metadata[[j]]$decimalLatitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLongitude <- metadata[[j]]$decimalLongitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
@@ -163,7 +164,7 @@ read_data <- function(
     x[, names(x) %in% c(
       "GOTeDNA_ID", "GOTeDNA_version", "materialSampleID","eventID", "primer",
       "scientificName", "domain","kingdom", "phylum", "class", "order",
-      "family", "genus", "date", "ecodistrict", "decimalLatitude", "decimalLongitude",
+      "family", "genus", "date", "ecodistrict", "LClabel", "decimalLatitude", "decimalLongitude",
       "station", "year", "month", "organismQuantity", "concentration", "pcr_primer_lod", "detected"
     )]
   })) |>

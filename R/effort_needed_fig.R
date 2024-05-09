@@ -13,8 +13,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' newprob <- calc_det_prob(D_mb_ex)
-#' scaledprobs <- scale_newprob(D_mb_ex, newprob)
+#' newprob <- calc_det_prob(gotedna_data$metabarcoding)
+#' scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 #' effort_needed_fig(
 #'   scaledprobs$Pscaled_month |> dplyr::filter(
 #'       species %in% "Acartia hudsonica",
@@ -22,31 +22,38 @@
 #'   )
 #' )
 #' }
-effort_needed_fig <- function(scaledprobs_month) {
+effort_needed_fig <- function(
+    taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
+    taxon.name,
+    scaledprobs) {
 
-  species.name <- unique(scaledprobs_month$species)
-  stopifnot(length(unique(scaledprobs_month$species)) == 1)
 
-  primer.select <- unique(scaledprobs_month$primer)
-  stopifnot(length(primer.select) == 1)
+  data <- scaledprobs$Pscaled_month[
+    scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name),
+  ]
 
-  if (!primer.select %in% scaledprobs_month$primer) {
-    cli::cli_alert_warning("Primer not found in data -- cannot render figure")
-    return(NULL)
-  }
+  DF2 <- vector("list")
 
-  DF2 <- expand.grid(p = scaledprobs_month$fill, n = seq_len(10), P = NA)
-  DF2 <- DF2 |>
+  for (sp in unique(data$species)) {
+
+  DF2[[sp]] <- expand.grid(p = scaledprobs_month[scaledprobs_month$species == sp,]$fill, n = seq_len(10), P = NA)
+
+  DF2[[sp]] <- DF2[[sp]] |>
     merge(
-      data.frame(p = scaledprobs_month$fill, month = scaledprobs_month$month)
+      data.frame(p = scaledprobs_month[scaledprobs_month$species == sp,]$fill,
+                 month = scaledprobs_month[scaledprobs_month$species == sp,]$month,
+                 species = scaledprobs_month[scaledprobs_month$species == sp,]$species)
     )
 
-  for (i in seq_len(nrow(DF2))) {
-    DF2$P[i] <- 1 - dbinom(0, size = DF2$n[i], prob = DF2$p[i]) # 1 - probability of zero detects
+  for (i in seq_len(nrow(DF2[[sp]]))) {
+    DF2[[sp]]$P[i] <- 1 - dbinom(0, size = DF2[[sp]]$n[i], prob = DF2[[sp]]$p[i]) # 1 - probability of zero detects
+  }
   }
 
-  ggplot2::ggplot(DF2, ggplot2::aes(y = P, x = n, colour = as.factor(month))) +
-    ggplot2::geom_point(size = 5) +
+  DF_tot <- dplyr::bind_rows(DF2)
+
+  ggplot2::ggplot(DF_tot, ggplot2::aes(y = P, x = n, colour = as.factor(month))) +
+    ggplot2::geom_point(size = 5, show.legend = FALSE) +
     ggplot2::theme_classic(base_size = 24) +
     ggplot2::expand_limits(x = 0, y = 0) +
     ggplot2::scale_y_continuous("Detection probability",
@@ -63,16 +70,20 @@ effort_needed_fig <- function(scaledprobs_month) {
       breaks = 1:12,
       labels = month.abb
     ) +
+    ggh4x::facet_wrap2(species ~ .,
+                       ncol = 1,
+                       strip = ggh4x::strip_nested(clip = "off",
+                                                   size = "variable")) +
     ggplot2::labs(
-      colour = "Month",
-      title = species.name,
-      subtitle = paste("Primer:", primer.select),
+     # colour = "Month",
+     # title = species.name,
+     # subtitle = scaledprobs_month$species,
       x = "Number of samples"
     ) +
-    ggplot2::guides(colour = ggplot2::guide_legend(
-      label.position = "left",
-      label.hjust = 1
-    )) +
+   # ggplot2::guides(colour = ggplot2::guide_legend(
+  #    label.position = "left",
+   #   label.hjust = 1
+  #  )) +
     ggplot2::theme(
       # plotting components
 
@@ -84,6 +95,7 @@ effort_needed_fig <- function(scaledprobs_month) {
       #  panel.background = element_blank(),
       # plot.background = element_blank(),
       panel.border = ggplot2::element_blank(),
+      panel.spacing = ggplot2::unit(25, "pt"),
       # remove strip background
       strip.background = ggplot2::element_blank(),
       # adjust the margins of plots and remove axis ticks
@@ -103,33 +115,38 @@ effort_needed_fig <- function(scaledprobs_month) {
         margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
         hjust = 0),
       axis.title.y = ggplot2::element_text(
-        margin = ggplot2::margin(b = 0.66,
+        margin = ggplot2::margin(r = 0.66,
                                  unit = "cm"),
         hjust = 0),
       axis.line = ggplot2::element_line(
         linewidth = 0.1,
         colour = "#939598"),
-      plot.title = ggplot2::element_text(
-        face = "bold",
-        size = 30,
-        hjust = 0,
-        colour = "#5A5A5A"),
+      strip.placement = "outside",
+      strip.text = ggplot2::element_text(size = 20, colour = "#5A5A5A", hjust = 0,
+                                         margin = ggplot2::margin(b = 15, unit = "pt")),
+   #   plot.title = ggplot2::element_text(
+  #      face = "bold",
+  #      size = 30,
+  #      hjust = 0,
+  #      colour = "#5A5A5A"),
       plot.title.position = "plot",
       plot.subtitle = ggplot2::element_text(size = 24,
                                             margin = ggplot2::margin(b = 0.66, unit = "cm"),
                                             colour = "#5A5A5A",
-                                            hjust = 0),
-      legend.title.align = 1,
-      legend.text = ggplot2::element_text(size = 20,
-                                          colour = "#939598"),
-      legend.position = "right",
-      legend.box.just = "right",
-      legend.key.spacing.y = ggplot2::unit(20, "pt"),
-      legend.spacing.y = ggplot2::unit(20, "pt"),
-      legend.title = ggplot2::element_text(colour = "#5A5A5A",
-                                           margin = ggplot2::margin(b = 20))
+                                            hjust = 0)
+    #  legend.title.align = 1,
+     # legend.text = ggplot2::element_text(size = 20,
+    #                                      colour = "#939598"),
+     # legend.position = "right",
+      #legend.box.just = "right",
+    #  legend.key.spacing.y = ggplot2::unit(20, "pt"),
+     # legend.spacing.y = ggplot2::unit(20, "pt"),
+      #legend.title = ggplot2::element_text(colour = "#5A5A5A",
+       #                                    margin = ggplot2::margin(b = 20))
 
-    )
+    ) +
+    ggh4x::force_panelsizes(rows = ggplot2::unit(200, "pt"),
+                            total_width = ggplot2::unit(620, "pt"))
 
 
 }

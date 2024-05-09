@@ -2,6 +2,9 @@
 mod_select_data_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    tags$head(
+      tags$script(type = "text/javascript", src = "shinyLink.js")
+      ),
     div(
       id = "data_request",
       div(
@@ -95,15 +98,12 @@ mod_select_data_ui <- function(id) {
                 3,
                 selectInput(ns("primer"),
                             div("Primer set",
-                                list(
-                                 # a(
-                                    actionLink(
-                                      inputId = "primer_info_link",
-                                      label = img(
-                                        src = "img/info_icon.png",
-                                      title = "Details",
-                                      style = "width: 20px"))
-                                    )
+                                shinyLink(to = "primer-info",
+                                          label = img(
+                                            src = "img/info_icon.png",
+                                            title = "Details",
+                                            style = "width: 20px"))
+
                                  )
                                 ,
                             choices = "All")
@@ -307,19 +307,6 @@ mod_select_data_server <- function(id, r) {
     })
 
 
-    # primer
-
-    # Tried to make the info icon clickable and open new window directly to the Primers page.
-
-  #  observeEvent(input$primer_info_link, {
-  #    updateTabsetPanel(
-  #      session,
-  #      "navbar",
-  #      selected = "primer_info")
-  #  })
-
-
-
     observe({
       if (input$data_type == "qPCR") {
         updateSelectInput(
@@ -370,6 +357,7 @@ mod_select_data_server <- function(id, r) {
         input$data_type
       )
     })
+
     observeEvent(listenMapData() |> debounce(100), {
       r$species <- input$slc_spe
       r$taxon_id_slc <- input$taxo_id

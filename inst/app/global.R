@@ -125,3 +125,13 @@ get_taxon_level <- function(phy, cla, gen, spe) {
     out <- 1
   }
 }
+
+shinyLink <- function(to, label) {
+  tags$a(
+    class = "shiny__link",
+    href = to,
+    label
+  )
+}
+
+#coord_tab <- na.omit(data.frame(longitude = NA_real_, latitude = NA_real_))

@@ -48,9 +48,9 @@ mod_select_figure_ui <- function(id) {
               "img/thumbnails/tn_heatmap.svg"
             ),
             add_figure_selection(
-              ns("fig_higher"),
+              ns("fig_samples"),
               "Field sample size for datasets",
-              "img/thumbnails/tn_higher.svg"
+              "img/thumbnails/tn_samples.svg"
             )
           )
         ),
@@ -88,10 +88,10 @@ mod_select_figure_ui <- function(id) {
             ),
             div(
               id = "fig_sampling_info",
-              h4("Sampling info"),
+              h4("Guidance"),
               div(
                 class = "sampling_info-item",
-                h6("Optimal sampling period: "),
+                h6("Optimal timing: "),
                 uiOutput(ns("opt_sampl"), class = "fig_text_output")
               ),
               div(
@@ -101,13 +101,8 @@ mod_select_figure_ui <- function(id) {
               ),
               div(
                 class = "sampling_info-item",
-                h6("Variation among year: "),
+                h6("Variation among years: "),
                 uiOutput(ns("var_year"), class = "fig_text_output"),
-              ),
-              div(
-                class = "sampling_info-item",
-                h6("Variation among datasets: "),
-                uiOutput(ns("var_primer"), class = "fig_text_output")
               )
             ),
             actionButton(
@@ -177,10 +172,10 @@ mod_select_figure_server <- function(id, r) {
       r$fig_slc$fig_heatmap <- !r$fig_slc$fig_heatmap
     })
 
-    hide_fig("fig_higher")
-    observeEvent(input$fig_higher, {
-      toggle_fig("fig_higher")
-      r$fig_slc$fig_higher <- !r$fig_slc$fig_higher
+    hide_fig("fig_samples")
+    observeEvent(input$fig_samples, {
+      toggle_fig("fig_samples")
+      r$fig_slc$fig_samples <- !r$fig_slc$fig_samples
     })
 
 
@@ -222,8 +217,10 @@ mod_select_figure_server <- function(id, r) {
             r$scaledprobs <- scale_newprob(r$data_ready, newprob)
             cli::cli_alert_info("Computing optimal detection window")
             win <- calc_window(
-              data = r$data_ready, threshold = input$threshold,
-              species.name = unique(r$data_ready$scientificName),
+              data = r$data_ready |> dplyr::filter(primer == r$primer),
+              threshold = input$threshold,
+              taxon.level = "species",#r$taxon_lvl_slc),
+              taxon.name = unique(r$data_ready$species),
               scaledprobs = r$scaledprobs
             )
             removeNotification(id = "notif_calc_win")
@@ -234,9 +231,10 @@ mod_select_figure_server <- function(id, r) {
               output$conf <- renderUI("NA")
               output$var_year <- renderUI("NA")
             } else {
-              output$opt_sampl <- renderUI(paste(win$fshDF_month$period, collapse = ", "))
-              output$conf <- renderUI(paste(win$fshDF_month$confidence, collapse = ", "))
-              output$var_year <- renderUI("todo")
+              output$opt_sampl <- renderUI(
+                paste(win$fshDF_month$period[1])) #, collapse = ", "))
+              output$conf <- renderUI(paste(win$fshDF_month$confidence[1])) #, collapse = ", "))
+              output$var_year <- renderUI("TBD")
             }
             r$fig_ready <- TRUE
           } else {
@@ -278,24 +276,32 @@ mod_select_figure_server <- function(id, r) {
         dplyr::group_by(
           GOTeDNA_ID,
           GOTeDNA_version,
-          target_subfragment,
          ) |>
         summarise(
-          `Observations #` = n(),
-          `Stations #` = length(unique(station))
+          `Sample #` = dplyr::n_distinct(materialSampleID),
+          `Station #` = length(unique(station)),
+          LCicon = unique(LClabel)
         ) |>
         mutate(
-          `Data owner contact` = "To be added",
-          `Indigenous contribution` = "To be added",
-          Publication = "DOI to be added",
-          Reference = "To be added"
+          `Data owner contact` = paste0("anais.lacoursiere@dfo-mpo.gc.ca"),
+          `Indigenous contribution` = ifelse(
+            !is.na(LCicon), c('<img src="img/fn_logo.png" height="25"></img>'),
+            NA),
+          Publication = "DOI:xx.xxxxx",
+          Reference = "Lacoursiere, A. (2019) ....",
+          LCicon = NULL
         ) |>
         dplyr::ungroup() |>
-        dplyr::select(
-          GOTeDNA_ID, GOTeDNA_version, Publication,
-          `Data owner contact`, `Observations #`,
-          `Stations #`
-        )
+        dplyr::relocate(
+           GOTeDNA_ID, GOTeDNA_version, Publication,`Data owner contact`,
+           `Sample #`, `Station #`, `Indigenous contribution`, Reference
+        ) |>
+        dplyr::rename("GOTeDNA ID" = "GOTeDNA_ID",
+                      "Version" = "GOTeDNA_version") |>
+        DT::datatable(escape = FALSE, rownames = FALSE,
+                      options = list(
+                        columnDefs = list(list(className = 'dt-center', targets = "_all"))
+                      ))
     })
   })
 }
@@ -328,7 +334,7 @@ prepare_data <- function(r) {
   if (!is.null(r$taxon_lvl_slc)) {
     if (r$taxon_lvl_slc == "species") {
       out <- out |>
-        dplyr::filter(scientificName == r$species)
+        dplyr::filter(species == r$species)
     } else {
       if (r$taxon_id_slc != "All") {
         out <- out[
@@ -338,11 +344,11 @@ prepare_data <- function(r) {
     }
   }
   # do we want to subset?
-  # if (r$primer != "not available") {
+ #  if (r$primer != "not available") {
   #   out <- out |>
-  #     dplyr::filter(target_subfragment == r$primer)
-  # }
-  out
+   #    dplyr::filter(primer == r$primer)
+   #}
+ # out
 }
 
 draw_fig_detect <- function(r, ready, threshold) {
@@ -352,15 +358,24 @@ draw_fig_detect <- function(r, ready, threshold) {
     data_slc <- r$data_ready
     if (r$primer != "not available") {
       data_slc <- data_slc |>
-        dplyr::filter(target_subfragment == r$primer)
+        dplyr::filter(primer == r$primer)
     }
-    p1 <- smooth_fig(data = data_slc, species.name = taxon_id)
+    p1 <- smooth_fig(data = data_slc, taxon.level = taxon_level, taxon.name = taxon_id)
+
     if (r$primer != "not available") {
       data_slc <- r$scaledprobs$Pscaled_month |>
         dplyr::filter(primer == r$primer)
+      # to present the figure of the GOTeDNA_ID and version with the highest sample size
+      max_n <- data_slc |>
+        dplyr::summarise(n = sum(detect, nondetect, na.rm = TRUE),
+                         .by = GOTeDNA_ID.v
+        )
+
     }
+    # p2 is now a list of figures, separated by GOTeDNA_ID and version.
+    # goal is to display all figures, but in tabs so user can see all projects
     p2 <- thresh_fig(taxon_level, taxon_id, threshold = threshold, scaledprobs = data_slc)
-    p1 / p2
+    p1 / p2[[max_n[which.max(max_n$n),]$GOTeDNA_ID.v]]
   } else {
     plotNotAvailable()
   }
@@ -368,18 +383,10 @@ draw_fig_detect <- function(r, ready, threshold) {
 
 draw_fig_effort <- function(r, ready) {
   if (ready) {
-    if (r$taxon_lvl_slc != "species") {
-      cli::cli_alert_danger("cannot render figure 2")
-      plotNotAvailableSpeciesLevel()
-    } else {
-      data_slc <- r$scaledprobs$Pscaled_month |>
-        dplyr::filter(species == r$species)
-      if (r$primer != "not available") {
-        data_slc <- data_slc |>
-          dplyr::filter(primer == r$primer)
-      }
-      effort_needed_fig(data_slc)
-    }
+    effort_needed_fig(
+        r$taxon_lvl_slc,
+        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
+        r$scaledprobs)
   } else {
     plotNotAvailable()
   }
@@ -397,21 +404,13 @@ draw_fig_heatmap <- function(r, ready) {
   }
 }
 
-draw_fig_higher <- function(r, ready) {
+draw_fig_samples <- function(r, ready) {
   if (ready) {
-    if (r$taxon_lvl_slc == "species") {
-      field_sample_fig(
-        data = r$data_ready,
-        taxon.select = "scientificName",
-        taxon.name = r$taxon_id_slc
-      )
-    } else {
-      field_sample_fig(
+    field_sample_fig(
         data = r$data_ready,
         taxon.select = r$taxon_lvl_slc,
-        taxon.name = r$taxon_id_slc
+        taxon.name =  ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
       )
-    }
   } else {
     plotNotAvailable()
   }

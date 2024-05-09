@@ -27,6 +27,16 @@ server <- function(input, output, session) {
     )
   })
 
+  observeEvent(input$navbar, {
+    if (input$navbar == "partners") {
+      browseURL("https://sites.google.com/view/gotedna/partners")
+    }
+
+    if (input$navbar == "team") {
+      browseURL("https://sites.google.com/view/gotedna/the-team")
+    }
+  })
+
   mod_select_data_server("slc_data", r)
 
   mod_dialog_disclaimers_server("show_dialog", r)
