@@ -354,7 +354,8 @@ mod_select_data_server <- function(id, r) {
       list(
         input$taxo_id,
         input$slc_spe,
-        input$data_type
+        input$data_type,
+        input$primer
       )
     })
 
@@ -431,12 +432,14 @@ filter_station <- function(r) {
   } else {
     sta <- r$data_station
   }
-  dff <- filter_taxon(r$cur_data, r$taxon_lvl_slc, r$taxon_id_slc, r$species)
+  dff <- filter_taxon(r$cur_data, r$taxon_lvl_slc, r$taxon_id_slc, r$species,
+                      r$primer)
   sta |>
     dplyr::inner_join(
       dff |>
-        dplyr::group_by(ecodistrict, station, materialSampleID) |>
-        dplyr::summarise(count = n()),
+        dplyr::group_by(station, materialSampleID) |>
+        dplyr::summarise(count = dplyr::n(),
+                         success = sum(detected)),
        # dplyr::group_by(station, primer, species) |>
        # dplyr::summarise(
        #   success = sum(detected),
@@ -446,12 +449,12 @@ filter_station <- function(r) {
 }
 
 
-filter_taxon <- function(data, taxon_lvl, taxon_id, species) {
+filter_taxon <- function(data, taxon_lvl, taxon_id, species, primer) {
   out <- data
   if (!is.null(taxon_lvl)) {
     if (taxon_lvl == "species") {
       out <- out |>
-        dplyr::filter(species == species)
+        dplyr::filter(species == species, primer == primer)
     } else {
       if (taxon_id != "All") {
         out <- out[

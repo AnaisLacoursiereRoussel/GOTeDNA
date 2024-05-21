@@ -25,9 +25,10 @@ primer_sort <- function(
   out <- scaledprobs_month |>
     dplyr::group_by(dplyr::across(dplyr::all_of(taxon.level)), primer) |>
     dplyr::summarise(
-      success = sum(scaleP > 0.74449, na.rm = TRUE),
-      total = sum(!is.na(nondetect)),
-      perc = round(success / total * 100)
+      detects = sum(detect, na.rm = TRUE),
+      nondetects = sum(nondetect, na.rm = TRUE),
+      total = sum(detects + nondetects),
+      perc = round(detects / total * 100)
     ) |>
     dplyr::ungroup() |>
     dplyr::arrange(dplyr::across(dplyr::all_of(taxon.level)), -total, -perc) # sort by total number of samples first,

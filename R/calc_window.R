@@ -121,7 +121,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
   consecmonth1 <- lapply(multmonth, function(x) {
     x %>%
       dplyr::group_by(id, consec = cumsum(c(1, diff(month) != 1))) %>%
-      dplyr::filter(n() > 1) %>%
+      dplyr::filter(dplyr::n() > 1) %>%
       dplyr::ungroup()
       #dplyr::filter(diff_y1 == 1, diff_y1 )#length(id) == sum(diff_y1) + 1)
   })

@@ -24,18 +24,6 @@ smooth_fig <- function(data, taxon.level, taxon.name) {
   # reset option on exit
   on.exit(options(dplyr.summarise.inform = oop))
 
- # primer.select <- unique(data$target_subfragment)
-  #if (length(primer.select) > 1) {
-   # cli::cli_alert_warning("Primer not unique")
-    #subt <- paste("Primer:", paste0(primer.select, collapse = ", "))
-#  } else {
- #   if (is.na(primer.select)) {
-  #    subt <- NULL
-   # } else {
-    #  subt <- paste("Primer:", primer.select)
-  #  }
-  #}
-
   taxon.level <- match.arg(
     arg = taxon.level,
     choices = c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")
@@ -43,7 +31,8 @@ smooth_fig <- function(data, taxon.level, taxon.name) {
 
   data %<>%
     dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
-    dplyr::group_by(!!dplyr::ensym(taxon.level), year, month) %>%
+    dplyr::mutate(GOTeDNA_ID.v = paste0(GOTeDNA_ID, ".", GOTeDNA_version)) %>%
+    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), year, month) %>%
     dplyr::summarise(n = dplyr::n(), nd = sum(detected))
 
   # Do smoothing by making continuous time (rbind time series and focus on middle period)
@@ -52,7 +41,7 @@ smooth_fig <- function(data, taxon.level, taxon.name) {
   data$month <- as.numeric(data$month)
 
   data %<>%
-    dplyr::group_by(year) %>%
+    dplyr::group_by(GOTeDNA_ID.v, year) %>%
     tidyr::drop_na(prob) %>%
     dplyr::mutate(scaleP = scale_prop(prob)) %>%
     dplyr::mutate(scaleP = dplyr::case_when(
@@ -60,11 +49,19 @@ smooth_fig <- function(data, taxon.level, taxon.name) {
       scaleP != "NaN" ~ scaleP
     ))
 
-  Dsummary24 <- Dsummary12 <- data
-  Dsummary12$month <- data$month + 12
-  Dsummary24$month <- data$month + 24
+  data.split <- split(data, data$GOTeDNA_ID.v)
 
-  Dsummary_comb <- rbind(data, Dsummary12, Dsummary24)
+  plots <- vector("list")
+
+  NEW_data <- lapply(data.split, function(x) {
+
+  Dsummary24 <- Dsummary12 <- x
+  Dsummary12$month <- x$month + 12
+  Dsummary24$month <- x$month + 24
+
+  Dsummary_comb <- rbind(x,
+                         Dsummary12,
+                         Dsummary24)
 
   # Loess smoother. Span = 3/12
   loessmod <- loess(scaleP ~ month, Dsummary_comb, span = 3 / 12) # 1 month before and after to smooth)
@@ -75,14 +72,21 @@ smooth_fig <- function(data, taxon.level, taxon.name) {
   NEW2 <- NEW[NEW$month > 12 & NEW$month <= 24, ]
   NEW2$month <- NEW2$month - 12
 
-ggplot2::ggplot() +
-    ggplot2::geom_hline(ggplot2::aes(yintercept = y), data.frame(y = c(0:4) / 4), color = "lightgrey") +
-    ggplot2::geom_vline(ggplot2::aes(xintercept = x), data.frame(x = 0:12), color = "lightgrey") +
-    ggplot2::geom_path(data = NEW2,
-                       ggplot2::aes(x = month,
+  list(NEW2) |> dplyr::bind_rows()
+  })
+
+  plots = vector("list")
+
+  for (proj in names(data.split)){
+    plots[[proj]] <- with(data.split[[proj]],
+    ggplot2::ggplot() +
+      ggplot2::geom_hline(ggplot2::aes(yintercept = y), data.frame(y = c(0:4) / 4), color = "lightgrey") +
+      ggplot2::geom_vline(ggplot2::aes(xintercept = x), data.frame(x = 0:12), color = "lightgrey") +
+      ggplot2::geom_path(data = NEW_data[[proj]],
+                         ggplot2::aes(x = month,
                                     y = PRED),
                        show.legend = TRUE, colour = "blue") +
-    ggplot2::geom_point(data = data,
+    ggplot2::geom_point(data = data.split[[proj]],
                         ggplot2::aes(x = month,
                                      y = scaleP,
                                      col = as.factor(year)),
@@ -109,6 +113,10 @@ ggplot2::ggplot() +
     )) +
     ggplot2::scale_y_continuous(limits = c(-0.1, 1.01), breaks = c(0, 0.25, 0.50, 0.75, 1)) +
     theme_circle
+  )
+  }
+
+  return(plots)
 
 }
 

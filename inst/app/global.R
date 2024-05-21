@@ -77,12 +77,12 @@ basemap <- function() {
 get_primer_selection <- function(lvl, data) {
   if (is.null(lvl)) {
     return("Not available")
-  }
-  if (lvl == "kingdom") {
-    out <- table(data$primer) |>
-      sort() |>
-      rev()
-    names(out)
+ # }
+ # if (lvl == "kingdom") {
+#    out <- table(data$primer) |>
+ #     sort() |>
+#      rev()
+ #   names(out)
   } else {
     if (lvl == "species") {
       tx_col <- "species"
@@ -99,7 +99,7 @@ get_primer_selection <- function(lvl, data) {
           join_by(primer == primer, {{ lvl }} == {{ tx_col }})
         ) |>
         mutate(
-          text = paste0(primer, " (", success, "/", total, " ; ", perc, "%)")
+          text = paste0(primer, " (", detects, "/", total, " ; ", perc, "%)")
         )
       out <- as.list(tmp$primer)
       names(out) <- tmp$text

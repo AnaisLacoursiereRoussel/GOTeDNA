@@ -86,7 +86,7 @@ gotedna_primer <- list()
 # this needs to be based on the area selection
 for (i in c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")) {
   gotedna_primer[[i]] <- primer_sort(i, dplyr::bind_rows(scaledprobs_mb$Pscaled_month, scaledprobs_q$Pscaled_month)) |>
-    mutate(text = paste0(primer, " (", success, "/", total, " ", perc, "%)"))
+    mutate(text = paste0(primer, " (", detects, "/", total, " ", perc, "%)"))
 }
 
 saveRDS(gotedna_primer, "inst/app/data/gotedna_primer.rds")

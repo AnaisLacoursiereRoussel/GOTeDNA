@@ -4,7 +4,10 @@ ui <- fluidPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "extra.css"),
     tags$link(rel = "stylesheet", type = "text/css", href = "fonts.css"),
-    tags$style(type = "text/css", "body {padding-top: 100px;}")
+    tags$style(type = "text/css", "body {padding-top: 100px;}"),
+    tags$script(type = "text/javascript", src = "scrollPage.js"),
+    tags$button(id = "scroll-top", "^ Top",
+                onclick = "topFunction()")
   ),
   navbarPage(id = "navbar",
              position = "fixed-top",
@@ -16,7 +19,7 @@ ui <- fluidPage(
     ),
     tabPanel(
       "Home",
-      value = "home",
+     # value = "home",
       mod_select_data_ui("slc_data"),
       mod_select_figure_ui("slc_fig")
     ),
@@ -96,24 +99,24 @@ ui <- fluidPage(
         div(
           class = "standalone_60",
           h1("Contact"),
-          fluidRow(
-            column(
-              4,
-              div(
-                style = "text-align:center",
-                img(
-                  src = "img/logo/logo_disclaimer.svg",
-                  alt = "GOTeDNA Logo",
-                  id = "logo_gotedna_contact",
-                  style = "width: 230px"
-                )
-              )
-            ),
-            column(
-              8,
+          #fluidRow(
+          #  column(
+          #  4,
+          #    div(
+          #      style = "text-align:center",
+                #img(
+                 # src = "img/logo/logo_disclaimer.svg",
+                #  alt = "GOTeDNA Logo",
+                #  id = "logo_gotedna_contact",
+                #  style = "width: 230px"
+          #      )
+          #    )
+            #),
+          #  column(
+           #   8,
               includeHTML(file.path("www", "doc", "contact.html"))
-            )
-          )
+            #)
+          #)
         )
       )
     ),

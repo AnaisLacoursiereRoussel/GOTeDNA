@@ -36,13 +36,13 @@ effort_needed_fig <- function(
 
   for (sp in unique(data$species)) {
 
-  DF2[[sp]] <- expand.grid(p = scaledprobs_month[scaledprobs_month$species == sp,]$fill, n = seq_len(10), P = NA)
+  DF2[[sp]] <- expand.grid(p = data[data$species == sp,]$fill, n = seq_len(10), P = NA)
 
   DF2[[sp]] <- DF2[[sp]] |>
     merge(
-      data.frame(p = scaledprobs_month[scaledprobs_month$species == sp,]$fill,
-                 month = scaledprobs_month[scaledprobs_month$species == sp,]$month,
-                 species = scaledprobs_month[scaledprobs_month$species == sp,]$species)
+      data.frame(p = data[data$species == sp,]$fill,
+                 month = data[data$species == sp,]$month,
+                 species = data[data$species == sp,]$species)
     )
 
   for (i in seq_len(nrow(DF2[[sp]]))) {

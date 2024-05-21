@@ -47,6 +47,9 @@ server <- function(input, output, session) {
 
   observeEvent(input$show_source, r$show_source <- TRUE)
 
+  observeEvent(input$reset, {
+    shinyjs::reset("data_authorship")
+  })
 
   mod_select_figure_server("slc_fig", r)
 }

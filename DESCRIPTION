@@ -13,6 +13,7 @@ Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.1)
 Imports:
+    bslib,
     dplyr (>= 1.0.0),
     fs,
     ggh4x,
@@ -29,7 +30,6 @@ Imports:
     tidyr,
     viridis
 Suggests:
-    bslib,
     cli,
     cowplot,
     DT,
