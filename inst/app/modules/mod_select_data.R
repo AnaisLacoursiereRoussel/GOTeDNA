@@ -451,7 +451,7 @@ filter_taxon <- function(data, taxon_lvl, taxon_id, species) {
   if (!is.null(taxon_lvl)) {
     if (taxon_lvl == "species") {
       out <- out |>
-        dplyr::filter(species == species)
+        dplyr::filter(species == {{species}}) 
     } else {
       if (taxon_id != "All") {
         out <- out[

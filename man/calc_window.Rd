@@ -4,7 +4,7 @@
 \alias{calc_window}
 \title{Calculate species optimal detection window}
 \usage{
-calc_window(data, threshold, species.name, scaledprobs)
+calc_window(data, threshold, taxon.level, taxon.name, scaledprobs)
 }
 \arguments{
 \item{data}{(required, data.frame) Data.frame read in with \code{\link[=read_data]{read_data()}}.}
@@ -14,7 +14,9 @@ which data are to be displayed to visualize potential optimal detection
 windows.
 Choices = one of \code{c("50","55","60","65","70","75","80","85","90","95")}}
 
-\item{species.name}{(required, character): Full binomial species name.}
+\item{taxon.level}{(required, character): Taxonomic selection.}
+
+\item{taxon.name}{(required, character): Full taxon name.}
 
 \item{scaledprobs}{(required, list) Normalized detection probabilities
 aggregated per month and year \code{\link[=scale_newprob]{scale_newprob()}}.}
@@ -57,7 +59,7 @@ showing the variation within year and among years, if applicable
 newprob <- calc_det_prob(data = D_mb)
 scaledprobs <- scale_newprob(D_mb, newprob)
 calc_window(data = D_mb, threshold = "75",
- species.name = "Acartia longiremis", scaledprobs)
+ taxon.name = "Acartia longiremis", scaledprobs)
 }
 }
 \author{

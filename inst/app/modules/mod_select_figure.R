@@ -117,11 +117,18 @@ mod_select_figure_ui <- function(id) {
           9,
           class = "show-panels",
           div(
-            id = "fig_main_container",
-            ui_figure("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
-            ui_figure("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
-            ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
-            ui_figure("fig_higher", "Field sample size", "field_sample.html", ns),
+            class = "fig_main_container",
+            div(
+              class = "fig_main_container-header",
+              h2("Figures")
+            ),
+            div(
+              class = "fig_main_container-fig",
+              ui_figure("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
+              ui_figure("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
+              ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns, legend_file = "hm_legend.png"),
+              ui_figure("fig_samples", "Field sample size", "field_sample.html", ns)
+            )
           ),
           div(
             id = "reference_data_authorship",
@@ -148,7 +155,7 @@ mod_select_figure_server <- function(id, r) {
     })
 
     observeEvent(input$select_all, {
-      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_higher")) {
+      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_samples")) {
         show_fig(i)
         r$fig_slc[[i]] <- TRUE
       }
@@ -181,72 +188,75 @@ mod_select_figure_server <- function(id, r) {
 
     observeEvent(
       ignoreInit = TRUE,
-      list(input$re_calc_window, input$calc_window), {
-      #
-      if (r$species == "All" && r$data_type == "qPCR") {
-        showNotification(
-          "For qPCR data, one species should be selected.",
-          type = "warning"
-        )
-      } else {
-        if (r$species == "All" && r$taxon_id_slc == "All") {
+      list(input$re_calc_window, input$calc_window),
+      {
+        #
+        if (r$species == "All" && r$data_type == "qPCR") {
           showNotification(
-            "The current selection is too broad, restrict your selection to one
-            specific taxonomic level or to one species.",
-            type = "warning",
-            duration = 10
+            "For qPCR data, one species should be selected.",
+            type = "warning"
           )
         } else {
-          r$data_ready <- prepare_data(r)
-          if (nrow(r$data_ready)) {
+          if (r$species == "All" && r$taxon_id_slc == "All") {
             showNotification(
-              paste0(
-                "Computing time window with threshold set to ",
-                input$threshold, "%",
-                ifelse(
-                  nrow(r$data_ready) > 1e4,
-                  paste0(" (", nrow(r$data_ready), " Observations, this make takes some time)"),
-                  ""
-                )
-              ),
-              type = "message",
-              duration = NULL,
-              id = "notif_calc_win"
+              "The current selection is too broad, restrict your selection to one
+            specific taxonomic level or to one species.",
+              type = "warning",
+              duration = 10
             )
-            newprob <- calc_det_prob(r$data_ready)
-            r$scaledprobs <- scale_newprob(r$data_ready, newprob)
-            cli::cli_alert_info("Computing optimal detection window")
-            win <- calc_window(
-              data = r$data_ready |> dplyr::filter(primer == r$primer),
-              threshold = input$threshold,
-              taxon.level = "species",#r$taxon_lvl_slc),
-              taxon.name = unique(r$data_ready$species),
-              scaledprobs = r$scaledprobs
-            )
-            removeNotification(id = "notif_calc_win")
-
-            if (is.null(win)) {
-              # showNotification("No optimal detection window", type = "warning")
-              output$opt_sampl <- renderUI("NA")
-              output$conf <- renderUI("NA")
-              output$var_year <- renderUI("NA")
-            } else {
-              output$opt_sampl <- renderUI(
-                paste(win$fshDF_month$period[1])) #, collapse = ", "))
-              output$conf <- renderUI(paste(win$fshDF_month$confidence[1])) #, collapse = ", "))
-              output$var_year <- renderUI("TBD")
-            }
-            r$fig_ready <- TRUE
           } else {
-            showNotification("Data selection is empty", type = "warning")
+            r$data_ready <- prepare_data(r)
+            if (nrow(r$data_ready)) {
+              showNotification(
+                paste0(
+                  "Computing time window with threshold set to ",
+                  input$threshold, "%",
+                  ifelse(
+                    nrow(r$data_ready) > 1e4,
+                    paste0(" (", nrow(r$data_ready), " Observations, this make takes some time)"),
+                    ""
+                  )
+                ),
+                type = "message",
+                duration = NULL,
+                id = "notif_calc_win"
+              )
+              newprob <- calc_det_prob(r$data_ready)
+              r$scaledprobs <- scale_newprob(r$data_ready, newprob)
+              cli::cli_alert_info("Computing optimal detection window")
+              win <- calc_window(
+                data = r$data_ready |> dplyr::filter(primer == r$primer), 
+                threshold = input$threshold,
+                taxon.level = "species",
+                taxon.name = unique(r$data_ready$species),
+                scaledprobs = r$scaledprobs
+              )
+              removeNotification(id = "notif_calc_win")
+
+              if (is.null(win)) {
+                # showNotification("No optimal detection window", type = "warning")
+                output$opt_sampl <- renderUI("NA")
+                output$conf <- renderUI("NA")
+                output$var_year <- renderUI("NA")
+              } else {
+                output$opt_sampl <- renderUI(
+                  paste(win$fshDF_month$period[1])
+                ) # , collapse = ", "))
+                output$conf <- renderUI(paste(win$fshDF_month$confidence[1])) # , collapse = ", "))
+                output$var_year <- renderUI("TBD")
+              }
+              r$fig_ready <- TRUE
+            } else {
+              showNotification("Data selection is empty", type = "warning")
+            }
           }
         }
       }
-    })
+    )
 
 
- # figure must be selected and ready to be drawn
-   output$fig_detect_plot_output <- renderPlot({
+    # figure must be selected and ready to be drawn
+    output$fig_detect_plot_output <- renderPlot({
       draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
     })
 
@@ -258,8 +268,8 @@ mod_select_figure_server <- function(id, r) {
       draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
     })
 
-    output$fig_higher_plot_output <- renderPlot({
-      draw_fig_higher(r, r$fig_ready && r$fig_slc$fig_higher)
+    output$fig_samples_plot_output <- renderPlot({
+      draw_fig_samples(r, r$fig_ready && r$fig_slc$fig_samples)
     })
 
 
@@ -275,7 +285,7 @@ mod_select_figure_server <- function(id, r) {
         dplyr::ungroup() |>
         dplyr::group_by(
           GOTeDNA_ID,
-          GOTeDNA_version,
+          GOTeDNA_version
          ) |>
         summarise(
           `Sample #` = dplyr::n_distinct(materialSampleID),
@@ -308,18 +318,28 @@ mod_select_figure_server <- function(id, r) {
 
 
 
-ui_figure <- function(fig_id, title, caption_file, ns) {
+ui_figure <- function(fig_id, title, caption_file, ns, legend_file = NULL) {
   div(
     id = paste0(ns(fig_id), "_fig_container"),
     class = "fig_container",
     h4(title),
     div(
-      class = "fig_caption",
-      includeHTML(file.path("www", "doc", "caption", caption_file))
+      class = "fig_caption-container",
+      div(
+        class = "fig_caption",
+        includeHTML(file.path("www", "doc", "caption", caption_file))
+      )
     ),
     div(
-      class = "fig_panel",
-      plotOutput(paste0(ns(fig_id), "_plot_output"), height = "65vh")
+      class = "fig_panel_container",
+      div(
+        class = "fig_panel",
+        plotOutput(paste0(ns(fig_id), "_plot_output"))
+      ),
+      div(
+        class = "fig_legend",
+        add_fixed_legend(legend_file)
+     )
     )
   )
 }
@@ -416,8 +436,17 @@ draw_fig_samples <- function(r, ready) {
   }
 }
 
-
-
+add_fixed_legend <- function(file) {
+  if (is.null(file)) {
+    tagList()
+  } else {
+    img(
+      # id = "fig_legend_img",
+      src = file.path("img", "fixed-legends", file),
+      alt = "Legend of the figure"
+    )
+  }
+}
 
 plotText <- function(txt, ...) {
   plot(c(-1, 1), c(-1, 1),
