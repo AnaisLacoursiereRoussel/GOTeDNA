@@ -4,7 +4,11 @@
 \alias{effort_needed_fig}
 \title{Calculate sampling effort needed to obtain different detection thresholds.}
 \usage{
-effort_needed_fig(scaledprobs_month)
+effort_needed_fig(
+  taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
+  taxon.name,
+  scaledprobs
+)
 }
 \arguments{
 \item{scaledprobs_month}{(required, data.frame) Normalized detection

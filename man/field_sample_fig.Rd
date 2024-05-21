@@ -10,11 +10,11 @@ field_sample_fig(data, taxon.select, taxon.name)
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}}
 
 \item{taxon.select}{(required, character): Taxonomic level of interest
-Choices = one of \verb{c("kingdom", "phylum", "class", "order", "family", "genus",}
-\verb{"species")}.}
+Choices = one of \verb{c("domain", "kingdom", "phylum", "class", "order", "family",}
+\verb{"genus", "species")}.}
 
 \item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.select}. E.g., if \code{taxon.level = "class"}
+provided in \code{taxon.select}. E.g., if \code{taxon.select = "class"}
 enter class name, etc..}
 }
 \description{

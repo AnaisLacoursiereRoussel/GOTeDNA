@@ -127,7 +127,7 @@ mod_select_figure_ui <- function(id) {
               ui_figure("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
               ui_figure("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
               ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns, legend_file = "hm_legend.png"),
-              ui_figure("fig_higher", "Field sample size", "field_sample.html", ns)
+              ui_figure("fig_samples", "Field sample size", "field_sample.html", ns)
             )
           ),
           div(
@@ -155,7 +155,7 @@ mod_select_figure_server <- function(id, r) {
     })
 
     observeEvent(input$select_all, {
-      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_higher")) {
+      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_samples")) {
         show_fig(i)
         r$fig_slc[[i]] <- TRUE
       }
@@ -225,8 +225,10 @@ mod_select_figure_server <- function(id, r) {
               r$scaledprobs <- scale_newprob(r$data_ready, newprob)
               cli::cli_alert_info("Computing optimal detection window")
               win <- calc_window(
-                data = r$data_ready, threshold = input$threshold,
-                species.name = unique(r$data_ready$scientificName),
+                data = r$data_ready |> dplyr::filter(primer == r$primer), 
+                threshold = input$threshold,
+                taxon.level = "species",
+                taxon.name = unique(r$data_ready$species),
                 scaledprobs = r$scaledprobs
               )
               removeNotification(id = "notif_calc_win")
@@ -237,9 +239,11 @@ mod_select_figure_server <- function(id, r) {
                 output$conf <- renderUI("NA")
                 output$var_year <- renderUI("NA")
               } else {
-                output$opt_sampl <- renderUI(paste(win$fshDF_month$period, collapse = ", "))
-                output$conf <- renderUI(paste(win$fshDF_month$confidence, collapse = ", "))
-                output$var_year <- renderUI("todo")
+                output$opt_sampl <- renderUI(
+                  paste(win$fshDF_month$period[1])
+                ) # , collapse = ", "))
+                output$conf <- renderUI(paste(win$fshDF_month$confidence[1])) # , collapse = ", "))
+                output$var_year <- renderUI("TBD")
               }
               r$fig_ready <- TRUE
             } else {
@@ -264,8 +268,8 @@ mod_select_figure_server <- function(id, r) {
       draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
     })
 
-    output$fig_higher_plot_output <- renderPlot({
-      draw_fig_higher(r, r$fig_ready && r$fig_slc$fig_higher)
+    output$fig_samples_plot_output <- renderPlot({
+      draw_fig_samples(r, r$fig_ready && r$fig_slc$fig_samples)
     })
 
 
