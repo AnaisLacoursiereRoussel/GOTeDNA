@@ -2,6 +2,59 @@
 mod_select_figure_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    tags$head(
+      tags$script(HTML("
+                             /* In coherence with the original Shiny way, tab names are created with random numbers.
+                             To avoid duplicate IDs, we collect all generated IDs.  */
+                             var hrefCollection = [];
+
+                             Shiny.addCustomMessageHandler('addTabToTabset', function(message){
+                             var hrefCodes = [];
+                             /* Getting the right tabsetPanel */
+                             var tabsetTarget = document.getElementById(message.tabsetName);
+
+                             /* Iterating through all Panel elements */
+                             for(var i = 0; i < message.titles.length; i++){
+                             /* Creating 6-digit tab ID and check, whether it was already assigned. */
+                             do {
+                             hrefCodes[i] = Math.floor(Math.random()*100000);
+                             }
+                             while(hrefCollection.indexOf(hrefCodes[i]) != -1);
+                             hrefCollection = hrefCollection.concat(hrefCodes[i]);
+
+                             /* Creating node in the navigation bar */
+                             var navNode = document.createElement('li');
+                             var linkNode = document.createElement('a');
+
+                             linkNode.appendChild(document.createTextNode(message.titles[i]));
+                             linkNode.setAttribute('data-toggle', 'tab');
+                             linkNode.setAttribute('data-value', message.titles[i]);
+                             linkNode.setAttribute('href', '#tab-' + hrefCodes[i]);
+
+                             navNode.appendChild(linkNode);
+                             tabsetTarget.appendChild(navNode);
+                             };
+
+                             /* Move the tabs content to where they are normally stored. Using timeout, because
+                             it can take some 20-50 millis until the elements are created. */
+                             setTimeout(function(){
+                             var creationPool = document.getElementById('creationPool').childNodes;
+                             var tabContainerTarget = document.getElementsByClassName('tab-content')[0];
+
+                             /* Again iterate through all Panels. */
+                             for(var i = 0; i < creationPool.length; i++){
+                             var tabContent = creationPool[i];
+                             tabContent.setAttribute('id', 'tab-' + hrefCodes[i]);
+
+                             tabContainerTarget.appendChild(tabContent);
+                             };
+                             }, 100);
+                             });
+                             ")),
+      tags$style("#slc_fig-fig_effort_plot_output {height:100vh !important;}
+                  #slc_fig-fig_heatmap_plot_output {height:100vh !important;}
+                  #slc_fig-fig_samples_plot_output {height:100vh !important;}")
+    ),
     div(
       id = "figure_selection",
       div(
@@ -109,7 +162,7 @@ mod_select_figure_ui <- function(id) {
               ns("export_pdf"),
               "Export to PDF",
               title = "Export figures to PDF",
-              class = "primary-button"
+             # class = "primary-button"
             )
           )
         ),
@@ -118,11 +171,11 @@ mod_select_figure_ui <- function(id) {
           class = "show-panels",
           div(
             id = "fig_main_container",
-            ui_figure("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
+            ui_fig_detect("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
             ui_figure("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
-            ui_figure("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
-            ui_figure("fig_higher", "Field sample size", "field_sample.html", ns),
-          ),
+            ui_fig_hm("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
+            ui_figure("fig_samples", "Field sample size", "field_sample.html", ns),
+            ),
           div(
             id = "reference_data_authorship",
             div(
@@ -148,7 +201,7 @@ mod_select_figure_server <- function(id, r) {
     })
 
     observeEvent(input$select_all, {
-      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_higher")) {
+      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_samples")) {
         show_fig(i)
         r$fig_slc[[i]] <- TRUE
       }
@@ -156,6 +209,7 @@ mod_select_figure_server <- function(id, r) {
 
     hide_fig("fig_detect")
     observeEvent(input$fig_detect, {
+      toggle_legends("thresh_legend")
       toggle_fig("fig_detect")
       r$fig_slc$fig_detect <- !r$fig_slc$fig_detect
     })
@@ -246,21 +300,61 @@ mod_select_figure_server <- function(id, r) {
 
 
  # figure must be selected and ready to be drawn
-   output$fig_detect_plot_output <- renderPlot({
-      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
+ #  output$fig_detect_plot_output <- renderPlot({
+#      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
+#    })
+
+    # Important! : creationPool should be hidden to avoid elements flashing before they are moved.
+    #              But hidden elements are ignored by shiny, unless this option below is set.
+
+    output$creationPool <- renderUI({})
+    outputOptions(output, "creationPool", suspendWhenHidden = FALSE)
+
+    # Important! : This is the make-easy wrapper for adding new tabPanels.
+    addTabToTabset <- function(Panels, tabsetName){
+      titles <- lapply(Panels, function(Panel){return(Panel$attribs$title)})
+      Panels <- lapply(Panels, function(Panel){Panel$attribs$title <- NULL; return(Panel)})
+
+      output$creationPool <- renderUI({Panels})
+      session$sendCustomMessage(type = "addTabToTabset", message = list(titles = titles, tabsetName = tabsetName))
+    }
+    # End Important
+
+    output$creationInfo <- renderText({
+      paste0("The next tab will be named:")
     })
+
+    observeEvent(input$`slc_fig-fig_detect_plot_output`, {
+      nr <- input$`slc_fig-fig_detect_plot_output`
+
+      newTabPanels <- list(
+        tabPanel(paste0("GOTeDNA ID:", nr),
+            plotOutput("fig_detect_plot_output", nr)
+        )
+      )
+
+      addTabToTabset(newTabPanels, "mainTabset")
+    })
+
+  #  reactivedata <- reactive({
+   #   p1[[as.integer(input$)]]
+  #  })
+
+
 
     output$fig_effort_plot_output <- renderPlot({
       draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
-    })
+    }
+    )
 
     output$fig_heatmap_plot_output <- renderPlot({
       draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
     })
 
-    output$fig_higher_plot_output <- renderPlot({
-      draw_fig_higher(r, r$fig_ready && r$fig_slc$fig_higher)
-    })
+    output$fig_samples_plot_output <- renderPlot({
+      draw_fig_samples(r, r$fig_ready && r$fig_slc$fig_samples)
+    }
+  )
 
 
 
@@ -303,10 +397,92 @@ mod_select_figure_server <- function(id, r) {
                         columnDefs = list(list(className = 'dt-center', targets = "_all"))
                       ))
     })
+
+    output$export_pdf <- downloadHandler(
+      # For PDF output, change this to "report.pdf"
+      filename = "report.pdf",
+      content = function(file) {
+        # Copy the report file to a temporary directory before processing it, in
+        # case we don't have write permissions to the current working dir (which
+        # can happen when deployed).
+        tempReport <- file.path(tempdir(), "report.Rmd")
+        file.copy("report.Rmd", tempReport, overwrite = TRUE)
+
+        # Set up parameters to pass to Rmd document
+        params <- list(figs = input$fig_main_container)
+
+        # Knit the document, passing in the `params` list, and eval it in a
+        # child of the global environment (this isolates the code in the document
+        # from the code in this app).
+        rmarkdown::render(tempReport, output_file = file,
+                          params = params,
+                          envir = new.env(parent = globalenv())
+        )
+      }
+    )
   })
+
+
+
 }
 
+max_plots = c(1.1, 2.1, 2.2, 2.3, 2.4)
 
+ui_fig_detect <- function(fig_id, title, caption_file, ns) {
+  div(
+    id = paste0(ns(fig_id), "_fig_container"),
+    class = "fig_container",
+    h4(title),
+    div(
+      class = "fig_caption",
+      includeHTML(file.path("www", "doc", "caption", caption_file))
+    ),
+    div(
+      class = "fig_panel",
+      bslib::layout_columns(
+         bslib::card_image(file = "www/img/fixed-legends/thresh_axis.png",
+                     fill = FALSE,
+                     width = "80px"),
+         tabsetPanel(id = "mainTabset",
+                     tabPanel("InitialPanel1", "this is the first tab",
+                              textOutput("creationInfo"),
+                              uiOutput("creationPool"))
+                     ),
+
+      bslib::card_body(
+            bslib::card_body(height = "250px"),
+            bslib::card_image(file = "www/img/fixed-legends/thresh_legend.png",
+                     fill = FALSE,
+                     width = "200px")),
+         col_widths = c(2, 6, 4)
+      )
+  ))
+}
+
+ui_fig_hm <- function(fig_id, title, caption_file, ns) {
+  div(
+    id = paste0(ns(fig_id), "_fig_container"),
+    class = "fig_container",
+    h4(title),
+    div(
+      class = "fig_caption",
+      includeHTML(file.path("www", "doc", "caption", caption_file))
+    ),
+    div(class = "fig_panel",
+        bslib::layout_columns(
+          bslib::card_body(
+            plotOutput(paste0(ns(fig_id), "_plot_output"), width = "800px"),
+            fillable = TRUE
+          ),
+          bslib::card_image(file = "www/img/fixed-legends/hm_legend.png",
+                     fill = FALSE,
+                     width = "200px"),
+          col_widths = c(9, 3)
+        )
+
+    )
+  )
+}
 
 ui_figure <- function(fig_id, title, caption_file, ns) {
   div(
@@ -319,8 +495,16 @@ ui_figure <- function(fig_id, title, caption_file, ns) {
     ),
     div(
       class = "fig_panel",
-      plotOutput(paste0(ns(fig_id), "_plot_output"), height = "65vh")
-    )
+       bslib::layout_columns(
+        fillable = TRUE,
+        bslib::card_body(
+          plotOutput(paste0(ns(fig_id), "_plot_output"), width = "1000px"),
+                 #    width = "65vh",
+                  #   height = "auto"),
+      )
+      )
+
+      )
   )
 }
 
@@ -351,6 +535,16 @@ prepare_data <- function(r) {
  # out
 }
 
+#num_projects <- function(r) {
+#  proj_ids <- r$data_ready |>
+#      dplyr::summarise(n = sum(detect, nondetect, na.rm = TRUE),
+#                         .by = GOTeDNA_ID.v
+#        ) |>
+#      sort(n, decreasing = TRUE) |>
+#      select(GOTeDNA_ID.v)#
+
+#}
+
 draw_fig_detect <- function(r, ready, threshold) {
   if (ready) {
     taxon_level <- r$taxon_lvl_slc
@@ -360,33 +554,45 @@ draw_fig_detect <- function(r, ready, threshold) {
       data_slc <- data_slc |>
         dplyr::filter(primer == r$primer)
     }
-    p1 <- smooth_fig(data = data_slc, taxon.level = taxon_level, taxon.name = taxon_id)
 
-    if (r$primer != "not available") {
-      data_slc <- r$scaledprobs$Pscaled_month |>
-        dplyr::filter(primer == r$primer)
+
+#    if (r$primer != "not available") {
+#      data_slc <- r$scaledprobs$Pscaled_month |>
+#        dplyr::filter(primer == r$primer)
       # to present the figure of the GOTeDNA_ID and version with the highest sample size
-      max_n <- data_slc |>
+      proj_ids <- data_slc |>
         dplyr::summarise(n = sum(detect, nondetect, na.rm = TRUE),
                          .by = GOTeDNA_ID.v
-        )
+        ) |>
+        dplyr::arrange(dplyr::desc(n)) |>
+        dplyr::select(GOTeDNA_ID.v)
 
-    }
+p1 <-  smooth_fig(data = data_slc, taxon.level = taxon_level, taxon.name = taxon_id)
+#    }
     # p2 is now a list of figures, separated by GOTeDNA_ID and version.
     # goal is to display all figures, but in tabs so user can see all projects
-    p2 <- thresh_fig(taxon_level, taxon_id, threshold = threshold, scaledprobs = data_slc)
-    p1 / p2[[max_n[which.max(max_n$n),]$GOTeDNA_ID.v]]
-  } else {
-    plotNotAvailable()
+#    p2 <- thresh_fig(taxon_level, taxon_id, threshold = threshold, scaledprobs = data_slc)
+
+  #  for (i in names(p2)) {
+     # print(
+#    p1[[2]] / p2[[2]]
+  #  )
+      #}
+    p1[[1]]
+
+    } else {
+    paste("Plot not available. Click 'Compute & visualize'")
   }
 }
 
 draw_fig_effort <- function(r, ready) {
   if (ready) {
-    effort_needed_fig(
+    p <- effort_needed_fig(
         r$taxon_lvl_slc,
         ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
         r$scaledprobs)
+
+    p
   } else {
     plotNotAvailable()
   }
@@ -394,11 +600,14 @@ draw_fig_effort <- function(r, ready) {
 
 draw_fig_heatmap <- function(r, ready) {
   if (ready) {
-    hm_fig(
+    p <- hm_fig(
       r$taxon_lvl_slc,
       ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
       r$scaledprobs
     )
+
+    p
+
   } else {
     plotNotAvailable()
   }
@@ -406,11 +615,14 @@ draw_fig_heatmap <- function(r, ready) {
 
 draw_fig_samples <- function(r, ready) {
   if (ready) {
-    field_sample_fig(
+    p <- field_sample_fig(
         data = r$data_ready,
         taxon.select = r$taxon_lvl_slc,
         taxon.name =  ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
       )
+
+    p
+
   } else {
     plotNotAvailable()
   }
@@ -436,7 +648,7 @@ plotNotAvailableSpeciesLevel <- function() {
 }
 
 plotNotAvailable <- function() {
-  plotText("Plot not available. Click on 'Compute & visualize'")
+  plotText(stringr::str_wrap("Plot not available. Click 'Compute & visualize'"))
 }
 
 plotNotAvailableForqPCR <- function() {
@@ -483,10 +695,16 @@ show_fig <- function(fig_id) {
   shinyjs::show(paste0(fig_id, "_thumbnail_selected"))
   shinyjs::show(paste0(fig_id, "_fig_container"))
 }
+
 hide_fig <- function(fig_id) {
   shinyjs::hide(paste0(fig_id, "_thumbnail_selected"))
   shinyjs::hide(paste0(fig_id, "_fig_container"))
 }
+
+toggle_legends <- function(legend_id) {
+  shinyjs::toggle(legend_id)
+}
+
 toggle_fig <- function(fig_id) {
   shinyjs::toggle(paste0(fig_id, "_thumbnail_selected"))
   shinyjs::toggle(paste0(fig_id, "_fig_container"))

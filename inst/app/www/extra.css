@@ -73,6 +73,28 @@ ul.nav.navbar-nav {
   font-weight: 700;
 }
 
+/* scroll to top button */
+#scroll-top {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #5A5A5A;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 10px;
+  width: 80px;
+}
+
+#scroll-top:hover {
+  background-color: #75f9c6;
+}
+
+
 /* #TypoCSS */
 h1 {
   font-size: 40px;
@@ -536,8 +558,39 @@ h6 {
   background-color: white;
 }
 
+.tab_box{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: none ;
+}
+
+.tab_box .tab_btn {
+  font-size: 18px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  padding: 18px;
+  cursor: pointer;
+}
+
+.tab_box .tab_btn.active {
+  color: #5A5A5A;
+
+
+}
+
 .fig_panel {
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: top;
+  margin: auto;
+}
+
+.fig_panel.active {
+  display: block;
 }
 
 .fig_caption {
@@ -764,12 +817,13 @@ table.dataTable.display>tbody>tr>td {
 }
 
 shiny-plot-output {
-  height: 500px;
+  height: auto;
+  margin: auto;
 }
 
 /* remove some leaflettool */
-/* .leaflet-draw-draw-polyline, 
-.leaflet-draw-draw-marker, 
+/* .leaflet-draw-draw-polyline,
+.leaflet-draw-draw-marker,
 .leaflet-draw-draw-circlemarker {
   visibility: hidden !important;
 } */
