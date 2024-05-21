@@ -454,12 +454,11 @@ filter_taxon <- function(data, taxon_lvl, taxon_id, species, primer) {
   if (!is.null(taxon_lvl)) {
     if (taxon_lvl == "species") {
       out <- out |>
-        dplyr::filter(species == species, primer == primer)
+        dplyr::filter(species == {{species}}, primer == primer )
     } else {
       if (taxon_id != "All") {
-        out <- out[
-          out[[taxon_lvl]] == taxon_id,
-        ]
+        out <- out |>
+          dplyr::filter(!!dplyr::ensym(taxon_lvl) == taxon_id, primer == primer)
       }
     }
   }

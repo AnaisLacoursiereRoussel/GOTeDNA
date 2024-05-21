@@ -1,8 +1,8 @@
 Package: GOTeDNA
 Type: Package
 Title: Guidance on optimal eDNA sampling periods to develop, optimize, and interpret monitoring programs
-Date: 2024-03-28
-Version: 0.5.0.9003
+Date: 2024-05-02
+Version: 0.5.0.9004
 Authors@R: c(person("Anaïs", "Lacoursière-Roussel et al.", email = "Anais.Lacoursiere@dfo-mpo.gc.ca", role = c("aut", "cre")))
 Maintainer: Anais Lacoursiere-Roussel <anais.lacoursiere@dfo-mpo.gc.ca>
 Description: The purpose of this package is to compile eDNA qPCR and    
@@ -33,9 +33,7 @@ Suggests:
     cli,
     cowplot,
     DT,
-    ggExtra,
     ggpattern,
-    ggpubr,
     gridExtra,
     htmlwidgets,
     knitr,
@@ -44,11 +42,8 @@ Suggests:
     lme4,
     mapedit,
     methods,
-    multcomp,
-    parallel,
     patchwork,
     purrr,
-    RColorBrewer,
     readr (>= 2.1.0),
     rlang,
     rmarkdown,
@@ -56,7 +51,6 @@ Suggests:
     shinyjs,
     stringi,
     stringr,
-    taxize,
     testthat (>= 3.0.0),
     tibble,
     tidyselect

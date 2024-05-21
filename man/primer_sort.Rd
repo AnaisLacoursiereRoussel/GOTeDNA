@@ -22,8 +22,8 @@ Ingests data produced with \verb{[scale_newprob()]}.
 }
 \examples{
 \dontrun{
-newprob <- calc_det_prob(D_mb_ex)
-scaledprobs <- scale_newprob(D_mb_ex, newprob)
+newprob <- calc_det_prob(gotedna_data$metabarcoding)
+scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 primer_sort("phylum", scaledprobs$Pscaled_month)
 }
 }

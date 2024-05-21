@@ -4,12 +4,14 @@
 \alias{smooth_fig}
 \title{Display species monthly detection probability by primer and region.}
 \usage{
-smooth_fig(data, species.name)
+smooth_fig(data, taxon.level, taxon.name)
 }
 \arguments{
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}.}
 
-\item{species.name}{(required, character): Full binomial species name.}
+\item{taxon.level}{(required, character): Taxonomic level selection.}
+
+\item{taxon.name}{(required, character): Full binomial species name.}
 }
 \description{
 This function displays the species optimal detection period as
@@ -17,10 +19,9 @@ monthly detection probabilities with LOESS smoothing over years.
 }
 \examples{
 \dontrun{
-data <- D_mb |> dplyr::filter(
-     GOTeDNA_ID == 8,
+data <- gotedna_data$metabarcoding |> dplyr::filter(
      species == "Acartia longiremis",
-     target_subfragment == "COI1"
+     primer == "COI1"
  )
 smooth_fig(data = data, species.name = "Acartia longiremis")
 }
