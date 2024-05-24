@@ -36,7 +36,7 @@ hm_fig <- function(
     data,
     ggplot2::aes(x = month, y = reorder(year, dplyr::desc(year)))
   ) +
-    ggplot2::geom_tile(dplyr::filter(data, scaleP > 0),
+    ggplot2::geom_tile(dplyr::filter(data, scaleP > 0 | is.na(scaleP)),
                        mapping = ggplot2::aes(x = month,
                                               y = reorder(year, dplyr::desc(year)),
                                               fill = scaleP)) +
@@ -66,6 +66,7 @@ hm_fig <- function(
     ggplot2::scale_colour_manual(values = "white") +
     ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
+     # plot.margin = ggplot2::unit(c(20, 20, 20, 20), "pt"),
       panel.border = ggplot2::element_rect(fill = NA, colour = "lightgrey"),
       panel.grid = ggplot2::element_blank(),
       panel.spacing = ggplot2::unit(25, "pt"),

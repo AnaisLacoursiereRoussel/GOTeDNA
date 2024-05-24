@@ -24,29 +24,6 @@ ui <- fluidPage(
       mod_select_figure_ui("slc_fig")
     ),
     tabPanel(
-      "Glossary",
-      value = "glossary",
-      div(
-        class = "standalone_container",
-        div(
-          class = "standalone_80",
-          mod_glossary_ui("glossary")
-        )
-      )
-    ),
-    tabPanel(
-      "Disclaimers",
-      value = "disc",
-      div(
-        class = "standalone_container",
-        div(
-          class = "standalone_60",
-          h1("Disclaimers"),
-          includeHTML(file.path("www", "doc", "disclaimer.html"))
-        )
-      )
-    ),
-    tabPanel(
       "Interpretation Guide",
       value = "interp-guide",
       div(
@@ -99,28 +76,34 @@ ui <- fluidPage(
         div(
           class = "standalone_60",
           h1("Contact"),
-          #fluidRow(
-          #  column(
-          #  4,
-          #    div(
-          #      style = "text-align:center",
-                #img(
-                 # src = "img/logo/logo_disclaimer.svg",
-                #  alt = "GOTeDNA Logo",
-                #  id = "logo_gotedna_contact",
-                #  style = "width: 230px"
-          #      )
-          #    )
-            #),
-          #  column(
-           #   8,
-              includeHTML(file.path("www", "doc", "contact.html"))
-            #)
-          #)
+        includeHTML(file.path("www", "doc", "contact.html"))
+
         )
       )
     ),
-  ),
+    tabPanel(
+      "Disclaimers",
+      value = "disc",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          h1("Disclaimers"),
+          includeHTML(file.path("www", "doc", "disclaimer.html"))
+        )
+      )
+    ),
+    tabPanel(
+      "Glossary",
+      value = "glossary",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_80",
+          mod_glossary_ui("glossary")
+        )
+      )
+  )),
   div(
     id = "footer",
     fluidRow(

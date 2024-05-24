@@ -3,9 +3,9 @@ mod_select_figure_ui <- function(id) {
   ns <- NS(id)
   tagList(
     tags$head(
-      tags$style("#slc_fig-fig_effort_plot_output {height:100vh !important;}
-                  #slc_fig-fig_heatmap_plot_output {height:100vh !important;}
-                  #slc_fig-fig_samples_plot_output {height:100vh !important;}")
+      tags$style("#slc_fig-fig_samples_plot_output {height:100vh !important;}",
+                 "#slc_fig-fig_heatmap_plot_output {height:100vh !important;}")
+
     ),
     div(
       id = "figure_selection",
@@ -106,7 +106,7 @@ mod_select_figure_ui <- function(id) {
               ),
               div(
                 class = "sampling_info-item",
-                h6("Variation among years: "),
+                h6("Consistency: "),
                 uiOutput(ns("var_year"), class = "fig_text_output"),
               )
             ),
@@ -130,9 +130,9 @@ mod_select_figure_ui <- function(id) {
             div(
               class = "fig_main_container-fig",
               ui_fig_detect("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
-              ui_figure("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
+              ui_fig_effort("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
               ui_fig_hm("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
-              ui_figure("fig_samples", "Field sample size", "field_sample.html", ns)
+              ui_fig_samples("fig_samples", "Field sample size", "field_sample.html", ns)
             )
           ),
           div(
@@ -237,6 +237,9 @@ mod_select_figure_server <- function(id, r) {
                 taxon.name = unique(r$data_ready$species),
                 scaledprobs = r$scaledprobs
               )
+
+
+
               removeNotification(id = "notif_calc_win")
 
               if (is.null(win)) {
@@ -249,7 +252,7 @@ mod_select_figure_server <- function(id, r) {
                   paste(win$fshDF_month$period[1])
                 ) # , collapse = ", "))
                 output$conf <- renderUI(paste(win$fshDF_month$confidence[1])) # , collapse = ", "))
-                output$var_year <- renderUI("TBD")
+                output$var_year <- renderUI("High")
               }
               r$fig_ready <- TRUE
             } else {
@@ -261,22 +264,71 @@ mod_select_figure_server <- function(id, r) {
     )
 
 
+
+
     # figure must be selected and ready to be drawn
     output$fig_detect_plot_output <- renderPlot({
       draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
     })
 
-    output$fig_effort_plot_output <- renderPlot({
-      draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
+    output$fig_effort_plot_output <- plotly::renderPlotly({
+    draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort) |>
+      plotly::ggplotly() |>
+      facet_strip_format()
     }
     )
 
+
+
+
+
+
+
     output$fig_heatmap_plot_output <- renderPlot({
-      draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
-    })
+
+      #req(input$"fig_slc-fig_heatmap")
+
+    draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
+
+    #  p <- plotly::ggplotly(ggp) |>
+     #     plotly::layout(
+      #    font = list(family = "Arial"),
+       #   xaxis = list(
+        #    tickfont = list(color = "#939888",
+         #      size = 20)),
+    #      yaxis = list(
+     #       tickfont = list(color = "#939888",
+      #                      size = 20)
+       #   ),
+        #  hovermode = "x") |>
+      #  facet_strip_format()
+
+   })
 
     output$fig_samples_plot_output <- renderPlot({
+
       draw_fig_samples(r, r$fig_ready && r$fig_slc$fig_samples)
+
+   #   p <- plotly::ggplotly(ggp)|>
+   #     plotly::layout(
+  #        font = list(family = "Arial"),
+   #       xaxis = list(
+  #          anchor = "y",
+   #         tickfont = list(color = "#939888",
+    #                        size = 20)),
+     #     yaxis = list(
+      #      tickfont = list(color = "#939888",
+       #                     size = 20)
+        #  ),
+  #        legend = list(
+   #         title = list(
+    #          font = list(size = 20,
+     #                     color = "#5A5A5A")
+      #      ),
+       #     font = list(size = 20,
+        #                color = "#939888")
+  #        )) |>
+   #     facet_strip_format()
     })
 
 
@@ -301,12 +353,19 @@ mod_select_figure_server <- function(id, r) {
           LCicon = unique(LClabel)
         ) |>
         mutate(
-          `Data owner contact` = paste0("anais.lacoursiere@dfo-mpo.gc.ca"),
+          `Data owner contact` = ifelse(
+            is.na(LCicon),
+            paste0("anais.lacoursiere@dfo-mpo.gc.ca"),
+            paste0("kimberly.howland@dfo-mpo.gc.ca")),
           `Indigenous contribution` = ifelse(
             !is.na(LCicon), c('<img src="img/fn_logo.png" height="25"></img>'),
             NA),
           Publication = "DOI:xx.xxxxx",
-          Reference = "Lacoursiere, A. (2019) ....",
+          Reference = case_when(
+            LCicon == "BC" & GOTeDNA_ID == 4 ~ "Sevellec et al (2024)",
+            LCicon == "BC" & GOTeDNA_ID == 2 ~ "Lacoursiere-Roussel et al (2018); Leduc et al (2019)",
+            is.na(LCicon) ~ "Lacoursiere-Roussel et al (2019)"
+            ),
           LCicon = NULL
         ) |>
         dplyr::ungroup() |>
@@ -350,6 +409,24 @@ mod_select_figure_server <- function(id, r) {
 
 }
 
+
+facet_strip_format <- function(gp){
+
+  # n_facets should be the number of facets x2
+  n_facets <- c(1:length(gp[["x"]][["layout"]][["annotations"]]))
+
+  gp[["x"]][["layout"]][["height"]] <- 300 * length(gp[["x"]][["layout"]][["annotations"]])
+
+  for (i in n_facets){
+    gp[["x"]][["layout"]][["annotations"]][[i]][["xanchor"]] <- "left" # increase as needed
+    gp[["x"]][["layout"]][["annotations"]][[i]][["x"]] <- 0
+    gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(size = 25,
+                                                                  color = "#5A5A5A")
+  }
+
+  return(gp)
+}
+
 ui_fig_detect <- function(fig_id, title, caption_file, ns) {
   div(
     id = paste0(ns(fig_id), "_fig_container"),
@@ -370,7 +447,7 @@ ui_fig_detect <- function(fig_id, title, caption_file, ns) {
          bslib::card_image(file = "www/img/fixed-legends/thresh_axis.png",
                      fill = FALSE,
                      width = "80px"),
-      bslib::card_body(plotOutput(paste0(ns(fig_id), "_plot_output"))),
+         bslib::card_body(plotOutput(paste0(ns(fig_id), "_plot_output"))),
       bslib::card_body(
             bslib::card_body(height = "250px"),
             bslib::card_image(file = "www/img/fixed-legends/thresh_legend.png",
@@ -400,12 +477,19 @@ ui_fig_hm <- function(fig_id, title, caption_file, ns) {
         class = "fig_panel",
         bslib::layout_columns(
           bslib::card_body(
-            plotOutput(paste0(ns(fig_id), "_plot_output"), width = "800px"),
-            fillable = TRUE
+            #plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
+            #                     width = "700px",
+            #                     height = "auto"),
+            plotOutput(paste0(ns(fig_id), "_plot_output"),
+                                            width = "700px",
+                                            height = "auto"),
+            fillable = TRUE,
+          #  min_height = "320px" # height of the legend
           ),
-          bslib::card_image(file = "www/img/fixed-legends/hm_legend.png",
+        #  bslib::card_body(
+            bslib::card_image(file = "www/img/fixed-legends/hm_legend.png",
                      fill = FALSE,
-                     width = "200px"),
+                     width = "180px"),
           col_widths = c(9, 3)
         )
       )
@@ -413,7 +497,8 @@ ui_fig_hm <- function(fig_id, title, caption_file, ns) {
   )
 }
 
-ui_figure <- function(fig_id, title, caption_file, ns, legend_file = NULL) {
+
+ui_fig_effort <- function(fig_id, title, caption_file, ns) {
   div(
     id = paste0(ns(fig_id), "_fig_container"),
     class = "fig_container",
@@ -429,16 +514,39 @@ ui_figure <- function(fig_id, title, caption_file, ns, legend_file = NULL) {
       class = "fig_panel_container",
       div(
         class = "fig_panel",
-        plotOutput(paste0(ns(fig_id), "_plot_output"))
+        plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
+                             height = "auto")
       ),
-     # div(
-       # class = "fig_legend",
-      #  add_fixed_legend(legend_file)
-     #)
     )
  )
 }
 
+ui_fig_samples <- function(fig_id, title, caption_file, ns) {
+  div(
+    id = paste0(ns(fig_id), "_fig_container"),
+    class = "fig_container",
+    h4(title),
+    div(
+      class = "fig_caption-container",
+      div(
+        class = "fig_caption",
+        includeHTML(file.path("www", "doc", "caption", caption_file))
+      )
+    ),
+    div(
+      class = "fig_panel_container",
+      div(
+        class = "fig_panel",
+        plotOutput(paste0(ns(fig_id), "_plot_output"),
+                             height = "auto")
+      ),
+      # div(
+      # class = "fig_legend",
+      #  add_fixed_legend(legend_file)
+      #)
+    )
+  )
+}
 
 prepare_data <- function(r) {
   out <- r$cur_data
@@ -475,6 +583,7 @@ prepare_data <- function(r) {
 #      select(GOTeDNA_ID.v)#
 
 #}
+
 
 draw_fig_detect <- function(r, ready, threshold) {
   if (ready) {
@@ -518,10 +627,16 @@ draw_fig_detect <- function(r, ready, threshold) {
 
 draw_fig_effort <- function(r, ready) {
   if (ready) {
+    data_slc <- lapply(r$scaledprobs, function(x)
+      dplyr::filter(x, primer == r$primer) %>%
+        dplyr::group_by(GOTeDNA_ID.v)
+    )
+
     p <- effort_needed_fig(
         r$taxon_lvl_slc,
         ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
-        r$scaledprobs)
+        data_slc
+        )
 
     p
   } else {
@@ -531,6 +646,9 @@ draw_fig_effort <- function(r, ready) {
 
 draw_fig_heatmap <- function(r, ready) {
   if (ready) {
+    data_slc <- lapply(r$scaledprobs, function(x)
+      dplyr::filter(x, primer == r$primer))
+
     p <- hm_fig(
       r$taxon_lvl_slc,
       ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),

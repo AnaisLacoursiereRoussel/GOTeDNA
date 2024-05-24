@@ -69,7 +69,7 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
                         axes = "all",
                        remove_labels = TRUE,
                        strip.position = "right") +
-    #lemon::coord_capped_cart(bottom = 'both') +
+   # lemon::coord_capped_cart(bottom = 'both') +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), limits = c(-.01, 1),
                                 expand = c(0, 0.03)
                                 ) +
@@ -111,16 +111,16 @@ field_sample_fig <- function(data, taxon.select, taxon.name) {
       panel.border = ggplot2::element_blank(),
       # remove strip background
       strip.background = ggplot2::element_blank(),
-      strip.text = ggplot2::element_text(angle = 180,
+      strip.text = ggplot2::element_text(angle = 0,
                                          colour = "#939598"),
       # adjust the margins of plots and remove axis ticks
       plot.margin = ggplot2::margin(0.5, 1, 0.5, 1,
                                     unit = "cm"),
       axis.ticks = ggplot2::element_line(
-        linewidth = 0.1,
+        linewidth = 1,
         colour = "#939598"),
       axis.line = ggplot2::element_line(
-        linewidth = 0.1,
+        linewidth = 1,
         colour = "#939598"),
       # change text family, size, and adjust position of titles
       text = ggplot2::element_text(

@@ -19,15 +19,7 @@ server <- function(input, output, session) {
     lock_view = FALSE
   )
 
-  observeEvent(r$data_filtered, {
-    updateTabsetPanel(
-      session = session,
-      inputId = "tabset_figs",
-      selected = "details"
-    )
-  })
-
-  observeEvent(input$navbar, {
+   observeEvent(input$navbar, {
     if (input$navbar == "partners") {
       browseURL("https://sites.google.com/view/gotedna/partners")
     }

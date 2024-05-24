@@ -17,6 +17,7 @@ Imports:
     dplyr (>= 1.0.0),
     DT,
     fs,
+    ggh4x,
     ggplot2,
     GOTeDNA,
     grid,

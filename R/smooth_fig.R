@@ -51,8 +51,6 @@ smooth_fig <- function(data, taxon.level, taxon.name) {
 
   data.split <- split(data, data$GOTeDNA_ID.v)
 
-  plots <- vector("list")
-
   NEW_data <- lapply(data.split, function(x) {
 
   Dsummary24 <- Dsummary12 <- x

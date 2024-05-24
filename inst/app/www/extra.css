@@ -13,13 +13,13 @@
 
 
 body {
-  font-family: "Lato", sans-serif;
+  font-family: "Arial", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
 p {
-  font-family: "Lato", sans-serif;
+  font-family: "Arial", sans-serif;
   font-weight: 700;
   font-style: normal;
   color: #2241a7;
@@ -31,7 +31,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Arial", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
@@ -587,12 +587,18 @@ h6 {
   width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: end;
+  align-items: center;
 }
 
 .fig_panel {
-  width: 80%;
+  width: 100%;
   padding: 30px;
+  height: auto;
+}
+
+.fig_panel_col {
+  display: flex;
+  flex-direction: column;
 }
 
 .fig_legend {

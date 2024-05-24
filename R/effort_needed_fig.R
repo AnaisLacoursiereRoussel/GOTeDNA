@@ -4,7 +4,7 @@
 #' species detection at different thresholds by using scaled and interpolated
 #' data produced with `[scale_newprob()]`.
 #'
-#' @param scaledprobs_month  (required, data.frame) Normalized detection
+#' @param scaledprobs  (required, data.frame) Normalized detection
 #' probabilities as returned by the element `month` of the list returned by
 #' [scale_newprob()] for one species and one primer.
 #'
@@ -31,28 +31,51 @@ effort_needed_fig <- function(
   data <- scaledprobs$Pscaled_month[
     scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name),
   ]
+  data$month <- factor(data$month,
+                          levels = 1:12,
+                          labels = c("Jan","Feb","Mar","Apr","May",
+                          "Jun","Jul","Aug","Sep","Oct",
+                          "Nov","Dec"))
+
+  #data.split <- split(data, data$GOTeDNA_ID.v)
 
   DF2 <- vector("list")
 
+#DF2 <- lapply(data.split, function(x) {
+
   for (sp in unique(data$species)) {
 
-  DF2[[sp]] <- expand.grid(p = data[data$species == sp,]$fill, n = seq_len(10), P = NA)
+  DF2[[sp]] <- expand.grid(p = data[data$species == sp,]$fill,
+                           `Samples needed` = seq_len(10),
+                           `Detection rate` = NA)
 
   DF2[[sp]] <- DF2[[sp]] |>
     merge(
       data.frame(p = data[data$species == sp,]$fill,
-                 month = data[data$species == sp,]$month,
-                 species = data[data$species == sp,]$species)
+                 Month = data[data$species == sp,]$month,
+                 Species = data[data$species == sp,]$species,
+                 GOTeDNA_ID.v = data[data$species == sp,]$GOTeDNA_ID.v
+                 )
     )
 
   for (i in seq_len(nrow(DF2[[sp]]))) {
-    DF2[[sp]]$P[i] <- 1 - dbinom(0, size = DF2[[sp]]$n[i], prob = DF2[[sp]]$p[i]) # 1 - probability of zero detects
+    DF2[[sp]]$`Detection rate`[i] <- 1 - dbinom(0, size = DF2[[sp]]$`Samples needed`[i], prob = DF2[[sp]]$p[i]) # 1 - probability of zero detects
   }
   }
+    #DF2 |> dplyr::bind_rows()
+#})
 
   DF_tot <- dplyr::bind_rows(DF2)
+  #plots = vector("list")
 
-  ggplot2::ggplot(DF_tot, ggplot2::aes(y = P, x = n, colour = as.factor(month))) +
+ # for (proj in names(DF2)){
+ #   for (sp in unique(DF2$Species)){
+      #DF2[[proj]]$Species)){
+
+  #    plots[[proj]][[sp]] <- with(DF2[[proj]][DF2[[proj]]$Species == sp,],
+
+  ggplot2::ggplot(DF_tot,
+                  ggplot2::aes(y = `Detection rate`, x = `Samples needed`, colour = Month)) +
     ggplot2::geom_point(size = 5, show.legend = FALSE) +
     ggplot2::theme_classic(base_size = 24) +
     ggplot2::expand_limits(x = 0, y = 0) +
@@ -68,9 +91,11 @@ effort_needed_fig <- function(
     ggplot2::scale_colour_viridis_d(
       direction = -1,
       breaks = 1:12,
-      labels = month.abb
+      labels = c("Jan","Feb","Mar","Apr","May",
+                 "Jun","Jul","Aug","Sep","Oct",
+                 "Nov","Dec")
     ) +
-    ggh4x::facet_wrap2(species ~ .,
+    ggh4x::facet_wrap2(Species ~ .,
                        ncol = 1,
                        strip = ggh4x::strip_nested(clip = "off",
                                                    size = "variable")) +
@@ -134,19 +159,15 @@ effort_needed_fig <- function(
                                             margin = ggplot2::margin(b = 0.66, unit = "cm"),
                                             colour = "#5A5A5A",
                                             hjust = 0)
-    #  legend.title.align = 1,
-     # legend.text = ggplot2::element_text(size = 20,
-    #                                      colour = "#939598"),
-     # legend.position = "right",
-      #legend.box.just = "right",
-    #  legend.key.spacing.y = ggplot2::unit(20, "pt"),
-     # legend.spacing.y = ggplot2::unit(20, "pt"),
-      #legend.title = ggplot2::element_text(colour = "#5A5A5A",
-       #                                    margin = ggplot2::margin(b = 20))
 
     ) +
     ggh4x::force_panelsizes(rows = ggplot2::unit(200, "pt"),
                             total_width = ggplot2::unit(620, "pt"))
+    #  )
+  #  }
 
+#}
+
+ # return(plots)
 
 }
