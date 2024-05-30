@@ -189,6 +189,9 @@ scale_newprob <- function(data, newprob) {
     DFyr$fill[DFyr$id == species] <- DF3$fill
   }
 
-  list(Pscaled_month = DFmo, Pscaled_year = DFyr)
+  DFmo$year = NA
+  scaledprobs = dplyr::bind_rows(DFmo, DFyr)
+#  list(Pscaled_month = DFmo, Pscaled_year = DFyr)
+  return(scaledprobs)
 }
 

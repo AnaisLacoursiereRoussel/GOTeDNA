@@ -27,61 +27,58 @@ effort_needed_fig <- function(
     taxon.name,
     scaledprobs) {
 
+  taxon.level <- match.arg(taxon.level)
 
-  data <- scaledprobs$Pscaled_month[
-    scaledprobs$Pscaled_month[[taxon.level]] %in% c(taxon.name),
-  ]
-  data$month <- factor(data$month,
-                          levels = 1:12,
-                          labels = c("Jan","Feb","Mar","Apr","May",
-                          "Jun","Jul","Aug","Sep","Oct",
-                          "Nov","Dec"))
+  scaledprobs %<>%
+    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name,
+                  is.na(year)) %>%
+    dplyr::group_by(GOTeDNA_ID.v)
 
-  #data.split <- split(data, data$GOTeDNA_ID.v)
 
+  scaledprobs$month <- factor(scaledprobs$month,
+                       levels = 1:12,
+                       labels = c("Jan","Feb","Mar","Apr","May",
+                                  "Jun","Jul","Aug","Sep","Oct",
+                                  "Nov","Dec"))
   DF2 <- vector("list")
 
-#DF2 <- lapply(data.split, function(x) {
+  for (sp in unique(scaledprobs$species)) {
 
-  for (sp in unique(data$species)) {
+    DF2[[sp]] <- expand.grid(p = scaledprobs[scaledprobs$species == sp,]$fill,
+                             `Samples needed` = seq_len(10),
+                             `Detection rate` = NA)
 
-  DF2[[sp]] <- expand.grid(p = data[data$species == sp,]$fill,
-                           `Samples needed` = seq_len(10),
-                           `Detection rate` = NA)
+    DF2[[sp]] <- DF2[[sp]] |>
+      merge(
+        data.frame(p = scaledprobs[scaledprobs$species == sp,]$fill,
+                   Month = scaledprobs[scaledprobs$species == sp,]$month,
+                   Species = scaledprobs[scaledprobs$species == sp,]$species,
+                   GOTeDNA_ID.v = scaledprobs[scaledprobs$species == sp,]$GOTeDNA_ID.v
+        )
+      )
 
-  DF2[[sp]] <- DF2[[sp]] |>
-    merge(
-      data.frame(p = data[data$species == sp,]$fill,
-                 Month = data[data$species == sp,]$month,
-                 Species = data[data$species == sp,]$species,
-                 GOTeDNA_ID.v = data[data$species == sp,]$GOTeDNA_ID.v
-                 )
-    )
-
-  for (i in seq_len(nrow(DF2[[sp]]))) {
-    DF2[[sp]]$`Detection rate`[i] <- 1 - dbinom(0, size = DF2[[sp]]$`Samples needed`[i], prob = DF2[[sp]]$p[i]) # 1 - probability of zero detects
+    for (i in seq_len(nrow(DF2[[sp]]))) {
+      DF2[[sp]]$`Detection rate`[i] <- 1 - dbinom(0, size = DF2[[sp]]$`Samples needed`[i], prob = DF2[[sp]]$p[i]) # 1 - probability of zero detects
+    }
   }
-  }
-    #DF2 |> dplyr::bind_rows()
-#})
+  #DF2 |> dplyr::bind_rows()
+  #})
 
   DF_tot <- dplyr::bind_rows(DF2)
-  #plots = vector("list")
-
- # for (proj in names(DF2)){
- #   for (sp in unique(DF2$Species)){
-      #DF2[[proj]]$Species)){
-
-  #    plots[[proj]][[sp]] <- with(DF2[[proj]][DF2[[proj]]$Species == sp,],
 
   ggplot2::ggplot(DF_tot,
-                  ggplot2::aes(y = `Detection rate`, x = `Samples needed`, colour = Month)) +
+                  ggplot2::aes(y = `Detection rate`,
+                               x = `Samples needed`,
+                               colour = Month)) +
     ggplot2::geom_point(size = 5, show.legend = FALSE) +
+    ggplot2::geom_hline(
+      mapping = ggplot2::aes(yintercept = 0),
+      size = 1)+
     ggplot2::theme_classic(base_size = 24) +
     ggplot2::expand_limits(x = 0, y = 0) +
     ggplot2::scale_y_continuous("Detection probability",
-      limits = c(0, 1),
-      expand = c(0, 0.01)
+                                limits = c(0, 1),
+                                expand = c(0, 0)
     ) +
     ggplot2::scale_x_continuous(
       #expand = c(0, 0),
@@ -95,41 +92,21 @@ effort_needed_fig <- function(
                  "Jun","Jul","Aug","Sep","Oct",
                  "Nov","Dec")
     ) +
-    ggh4x::facet_wrap2(Species ~ .,
-                       ncol = 1,
-                       strip = ggh4x::strip_nested(clip = "off",
-                                                   size = "variable")) +
+    ggplot2::facet_wrap(~Species,
+                       ncol = 1) +
     ggplot2::labs(
-     # colour = "Month",
-     # title = species.name,
-     # subtitle = scaledprobs_month$species,
       x = "Number of samples"
     ) +
-   # ggplot2::guides(colour = ggplot2::guide_legend(
-  #    label.position = "left",
-   #   label.hjust = 1
-  #  )) +
     ggplot2::theme(
-      # plotting components
-
-      ## drop minor gridlines
       panel.grid = ggplot2::element_blank(),
-      # change grid lines to gray
-      #  panel.grid.major =  element_line(color = "#d0d0d0"),
-      # fill the plot and panel spaces with grey and remove border
-      #  panel.background = element_blank(),
-      # plot.background = element_blank(),
       panel.border = ggplot2::element_blank(),
       panel.spacing = ggplot2::unit(25, "pt"),
-      # remove strip background
       strip.background = ggplot2::element_blank(),
-      # adjust the margins of plots and remove axis ticks
       plot.margin = ggplot2::margin(0.5, 1, 0.5, 1,
                                     unit = "cm"),
       axis.ticks = ggplot2::element_line(
         linewidth = 0.1,
         colour = "#939598"),
-      # change text family, size, and adjust position of titles
       text = ggplot2::element_text(
         family = "Arial", size = 24),
       axis.text = ggplot2::element_text(
@@ -149,25 +126,13 @@ effort_needed_fig <- function(
       strip.placement = "outside",
       strip.text = ggplot2::element_text(size = 20, colour = "#5A5A5A", hjust = 0,
                                          margin = ggplot2::margin(b = 15, unit = "pt")),
-   #   plot.title = ggplot2::element_text(
-  #      face = "bold",
-  #      size = 30,
-  #      hjust = 0,
-  #      colour = "#5A5A5A"),
       plot.title.position = "plot",
       plot.subtitle = ggplot2::element_text(size = 24,
                                             margin = ggplot2::margin(b = 0.66, unit = "cm"),
                                             colour = "#5A5A5A",
                                             hjust = 0)
 
-    ) +
-    ggh4x::force_panelsizes(rows = ggplot2::unit(200, "pt"),
-                            total_width = ggplot2::unit(620, "pt"))
-    #  )
-  #  }
-
-#}
-
- # return(plots)
+    )
 
 }
+

@@ -28,45 +28,45 @@ hm_fig <- function(
     taxon.name, scaledprobs) {
   taxon.level <- match.arg(taxon.level)
 
-  data <- scaledprobs$Pscaled_year[
-    scaledprobs$Pscaled_year[[taxon.level]] %in% c(taxon.name),
-  ]
+  scaledprobs %<>%
+    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name,
+                  !is.na(year)) %>%
+    dplyr::rename("Month" = "month",
+                  "Detection rate" = "scaleP") %>%
+    dplyr::group_by(GOTeDNA_ID.v)
 
+  scaledprobs$Month <- factor(scaledprobs$Month,
+                       levels = 1:12,
+                       labels = c("Jan","Feb","Mar","Apr","May",
+                                  "Jun","Jul","Aug","Sep","Oct",
+                                  "Nov","Dec"))
   ggplot2::ggplot(
-    data,
-    ggplot2::aes(x = month, y = reorder(year, dplyr::desc(year)))
+    scaledprobs#,
+    # ggplot2::aes(x = month, y = reorder(year, dplyr::desc(year)))
   ) +
-    ggplot2::geom_tile(dplyr::filter(data, scaleP > 0 | is.na(scaleP)),
-                       mapping = ggplot2::aes(x = month,
+    ggplot2::geom_tile(dplyr::filter(scaledprobs, `Detection rate` > 0 | is.na(`Detection rate`)),
+                       mapping = ggplot2::aes(x = Month,
                                               y = reorder(year, dplyr::desc(year)),
-                                              fill = scaleP)) +
-    ggplot2::geom_tile(dplyr::filter(data, scaleP == 0),
-                       mapping = ggplot2::aes(x = month,
-                                              y = reorder(year, dplyr::desc(year))),
-                       fill = "lightgrey")+
-    ggh4x::facet_wrap2(species ~ .,
+                                              fill = `Detection rate`,
+                                              text = paste("Year:", year),
+                                              group = GOTeDNA_ID.v)) +
+    ggplot2::geom_tile(dplyr::filter(scaledprobs, `Detection rate` == 0),
+                       mapping = ggplot2::aes(x = Month,
+                                              y = reorder(year, dplyr::desc(year)),
+                                              group = GOTeDNA_ID.v),
+                       fill = "lightgrey", inherit.aes = FALSE)+
+    ggplot2::facet_wrap(~species,
                        scales = "free",
-                       ncol = 1,
-                       strip = ggh4x::strip_nested(clip = "off",
-                                            size = "variable")) +
+                       ncol = 1) +
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0.00001, 1), na.value = "white",
                                   guide = NULL) +
-    ggplot2::scale_x_continuous(breaks = 1:12,
-                                labels = month.abb,
-                                expand = c(0,0)) +
+    ggplot2::scale_x_discrete(expand = c(0,0)) +
     ggplot2::scale_y_discrete(expand = c(0,0)) +
     ggplot2::labs(
-      fill = NULL, x = NULL, y = NULL#,
-     # title = ifelse(
-      #  taxon.level != "species",
-       # paste0(stringr::str_to_title(taxon.level), ": ", taxon.name),
-        #""
-      #  )
-    ) +
+      fill = NULL, x = NULL, y = NULL) +
     ggplot2::scale_colour_manual(values = "white") +
     ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
-     # plot.margin = ggplot2::unit(c(20, 20, 20, 20), "pt"),
       panel.border = ggplot2::element_rect(fill = NA, colour = "lightgrey"),
       panel.grid = ggplot2::element_blank(),
       panel.spacing = ggplot2::unit(25, "pt"),
@@ -80,12 +80,7 @@ hm_fig <- function(
       strip.text = ggplot2::element_text(size = 20, colour = "#5A5A5A", hjust = 0,
                                          margin = ggplot2::margin(b = 15, unit = "pt")),
       axis.text.x = ggplot2::element_text(
-       # vjust = 1, hjust = 1,
         size = 20, colour = "#939598"),
       axis.text.y = ggplot2::element_text(size = 20, colour = "#939598")
-    ) +
-   ggh4x::force_panelsizes(rows = ggplot2::unit(100, "pt"),
-                           total_width = ggplot2::unit(620, "pt"))
-
-
+    )
 }

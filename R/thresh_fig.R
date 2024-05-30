@@ -28,12 +28,13 @@
 #'   threshold = "90", scaledprobs$Pscaled_month
 #' )
 #' }
-thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
+thresh_fig <- function(
+    taxon.level = c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species"),
+    taxon.name,
+    threshold,
+    scaledprobs) {
 
-  taxon.level <- match.arg(
-    arg = taxon.level,
-    choices = c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")
-  )
+  taxon.level <- match.arg(taxon.level)
 
   thresh_slc <- as.character(seq(50, 95, 5))
   threshold <- match.arg(arg = threshold, choices = thresh_slc)
@@ -45,22 +46,16 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
   thresh.value <- switch(threshold,
                          thresh$values[thresh$labels == threshold]
   )
- # primer.select <- unique(scaledprobs_month$primer)
-#  stopifnot(length(primer.select) == 1)
 
- # if (!primer.select %in% scaledprobs_month$primer) {
-  #  cli::cli_alert_warning("Primer not found in data -- cannot render figure")
-   # return(NULL)
-  #}
-
-  data <- scaledprobs_month |>
-    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), month, primer) |>
+  scaledprobs %<>%
+    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
+    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), month, primer) %>%
     dplyr::summarise(
       nd = sum(detect, na.rm = TRUE),
       n = sum(detect, nondetect, na.rm = TRUE),
       fill = mean(fill, na.rm = TRUE),
       scaleP = mean(scaleP, na.rm = TRUE)
-    ) |>
+    ) %>%
     dplyr::mutate(
       thresh95 = (fill >= 0.94999) * 1,
       thresh90 = (fill >= 0.89999) * 1,
@@ -72,13 +67,12 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       thresh60 = (fill >= 0.59999) * 1,
       thresh55 = (fill >= 0.54999) * 1,
       thresh50 = (fill >= 0.49999) * 1
-    ) |>
-    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name)
+    )
 
   plots = vector("list")
 
-  for (proj in unique(data$GOTeDNA_ID.v)) {
-    plots[[proj]] <- with(data[data$GOTeDNA_ID.v %in% proj, ],
+  for (proj in unique(scaledprobs$GOTeDNA_ID.v)) {
+    plots[[proj]] <- with(scaledprobs[scaledprobs$GOTeDNA_ID.v %in% proj, ],
 
   ggplot2::ggplot() +
     ggplot2::geom_hline(
@@ -92,18 +86,18 @@ thresh_fig <- function(taxon.level, taxon.name, threshold, scaledprobs_month) {
       color = "lightgrey"
     ) +
     ggplot2::geom_col(
-      dplyr::filter(data, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "1"),
+      dplyr::filter(scaledprobs, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "1"),
       mapping = ggplot2::aes(x = month, y = fill), fill = viridis::viridis(1), position = "dodge2",
       width = 0.9, show.legend = FALSE, alpha = .9#, fill = viridis::viridis(1)
     ) +
     ggplot2::geom_col(
-      dplyr::filter(data, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "0"),
+      dplyr::filter(scaledprobs, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "0"),
       mapping = ggplot2::aes(x = month, y = fill), fill = "darkgrey", position = "dodge2",
       width = 0.9, show.legend = FALSE, alpha = .9#, fill = "darkgrey"
     ) +
     # To make the interpolated data stand out
     ggpattern::geom_col_pattern(
-      dplyr::filter(data, GOTeDNA_ID.v %in% proj & is.nan(scaleP)),
+      dplyr::filter(scaledprobs, GOTeDNA_ID.v %in% proj & is.nan(scaleP)),
       mapping = ggplot2::aes(x = month, y = fill),
       position = "dodge2",
       width = 0.9, show.legend = FALSE, fill = NA,

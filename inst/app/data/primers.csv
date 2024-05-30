@@ -1,0 +1,10 @@
+Data,PrimerSet,Locus,OriginalName,Seq,bp,References
+Metabarcoding,Leray_COI,COI,mlCOIintF <br> jgHCO2198,GGWACWGGWTGAACWGTWTAYCCYCC <br> TAIACYTCIGGRTGICCRAARAAYCA,313,"Leray et al. (2013); Geller, Meyer, Parker, & Hawk (2013)"
+Metabarcoding,Folmer_COI,COI,LCO1490 <br> ill_C_R,GGTCAACAAATCATAAAGATATTGG <br> GGIGGRTAIACIGTTCAICC,710,"Folmer, Black, Hoeh, Lutz, & Vrijenhoek (1994); Shokralla et al. (2015)"
+Metabarcoding,Hadziavdic_18S,18S,F-574 <br> R-952,GCGGTAATTCCAGCTCCAA <br> TTGGCAAATGCTTTCGC,378,Hadziavdic et al. (2014)
+Metabarcoding,TAReuk_18S,18S,TAReuk454FWD1 <br> TAReukREV3,CCAGCASCYGCGGTAATTCC <br> ACTTTCGTTCTTGATYRA,,Stoeck et al. (2010)
+Metabarcoding,MiFish_12S,12S,12S_248F_RADS <br> Mifish_UR_Miya,CGTGCCAGCCACCGCGGTT <br> CATAGTGGGGTATCTAATCCCAGTTTG,,Miya et al. (2015); Steeves unpublished
+Metabarcoding,Fish_16S,16S,16S_Fish_F <br> 16S_Fish_R,AGCGYAATCACTTGTCTYTTAA <br> CRBGGTCGCCCCAACCRAA,,McInnes et al. (2017)
+Metabarcoding,Chord_16S,16S,Chord_16S_F_TagA <br> Chord_16 s_R_Short,ATGCGAGAAGACCCTRTGGAGCT <br> CCTNGGTCGCCCCAAC,,Deagle et al. (2009)
+Metabarcoding,MiMam_12S,12S,MiMammal-U_F <br> MiMammal-U_R,GGGTTGGTAAATTTCGTGCCAGC <br> CATAGTGGGGTATCTAATCCCAGTTTG,,Ushio et al. (2017)
+qPCR,,,,,,

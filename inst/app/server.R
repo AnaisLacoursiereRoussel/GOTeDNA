@@ -4,6 +4,7 @@ server <- function(input, output, session) {
     geom = NULL,
     geom_slc = NULL,
     station_slc = NULL,
+    project_slc = NULL,
     taxon_lvl_slc = NULL,
     taxon_id_slc = NULL,
     show_map_info = FALSE,
@@ -13,7 +14,8 @@ server <- function(input, output, session) {
       fig_heatmap = FALSE,
       fig_effort = FALSE,
       fig_samples = FALSE,
-      fig_detect = FALSE
+      fig_detect = FALSE,
+      fig_smooth = FALSE
     ),
     current_fig = "fig1",
     lock_view = FALSE
@@ -37,6 +39,7 @@ server <- function(input, output, session) {
   mod_dialog_map_info_server("show_map_info", r)
   mod_glossary_server("glossary")
 
+  mod_primers_server("primer_seq")
   observeEvent(input$show_source, r$show_source <- TRUE)
 
   observeEvent(input$reset, {
@@ -44,4 +47,6 @@ server <- function(input, output, session) {
   })
 
   mod_select_figure_server("slc_fig", r)
+
 }
+

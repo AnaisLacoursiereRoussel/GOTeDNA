@@ -157,8 +157,10 @@ mod_select_data_ui <- function(id) {
         )
       ),
       div(
+        class = "leaflet_container",
+        style = "display: grid; justify-content: center",
         id = ns("map_container"),
-        mapedit::editModUI(ns("map-select"), height = "75vh")
+        mapedit::editModUI(ns("map-select"), height = "75vh", width = "65vw")
       ),
       div(
         class = "section_footer",
@@ -230,6 +232,11 @@ mod_select_data_server <- function(id, r) {
       r$data_type <- input$data_type
       r$cur_data <- gotedna_data[[input$data_type]]
       r$data_station <- gotedna_station[[input$data_type]]
+      r$GOTeDNA_ID.v <- paste0(r$cur_data$GOTeDNA_ID,
+                             ".",
+                             r$cur_data$GOTeDNA_version)
+
+
       updateSelectInput(session, "slc_phy",
         selected = "All",
         choices = c("All", unique(r$r$cur_data$phylum) |> sort())
@@ -244,6 +251,7 @@ mod_select_data_server <- function(id, r) {
         r$cur_data_sta_slc <- r$cur_data
       }
     )
+
 
 
     ## update Taxon data
@@ -384,6 +392,8 @@ mod_select_data_server <- function(id, r) {
             r$geom_slc <- sf_edits()$all
             r$station_slc <- r$geom$station
 
+            geom_coords <- st_bbox(r$geom_slc)
+
             } else {
             showNotification("No station selected", type = "warning")
           }
@@ -396,6 +406,7 @@ mod_select_data_server <- function(id, r) {
       }
       r$reload_map <- r$reload_map + 1
     })
+
 
     observeEvent(input$show_map_info, r$show_map_info <- TRUE)
 
@@ -424,6 +435,10 @@ mod_select_data_server <- function(id, r) {
 }
 
 
+filter_project <- function(r) {
+  proj <- r$scaledprobs %>% dplyr::mutate(ID = 1:dplyr::n())
+}
+
 # filter via inner join and used to count samples
 filter_station <- function(r) {
   if (length(r$station_slc)) {
@@ -438,7 +453,7 @@ filter_station <- function(r) {
     dplyr::inner_join(
       dff |>
         dplyr::group_by(station, materialSampleID) |>
-        dplyr::summarise(count = dplyr::n(),
+        dplyr::summarise(count = dplyr::n_distinct(materialSampleID),
                          success = sum(detected)),
        # dplyr::group_by(station, primer, species) |>
        # dplyr::summarise(
@@ -472,7 +487,7 @@ update_map <- function(proxy, geom, geom_slc, lock_view = FALSE) {
     addMarkers(
       data = geom,
       clusterOptions = markerClusterOptions(),
-      label = ~ paste(count, "samples"),
+      label = ~ paste(success, "observations"),
       group = "station"
     )
   if (!is.null(geom_slc)) {

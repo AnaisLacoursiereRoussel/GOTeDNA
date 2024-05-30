@@ -41,9 +41,8 @@ ui <- fluidPage(
       div(
         class = "standalone_container",
         div(
-          class = "standalone_60",
-          h1("Primers"),
-          includeHTML(file.path("www", "doc", "primers.html"))
+          class = "standalone_80",
+          mod_primers_ui("primer_seq")
         )
       )
     ),

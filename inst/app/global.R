@@ -6,6 +6,8 @@ library(leaflet)
 library(sf)
 library(shiny)
 library(shinyjs)
+library(bslib)
+library(plotly)
 cli::cli_alert_info("Packages loaded")
 
 list.files("modules", full.names = TRUE) |>
@@ -40,6 +42,7 @@ names(taxonomic_ranks) <- trans_letters(taxonomic_ranks |> unlist())
 ls_threshold <- as.list(seq(50, 95, 5))
 names(ls_threshold) <- paste0(seq(50, 95, 5), "%")
 
+
 # function
 ## filter data based on user choices of taxa
 filter_taxa_data <- function(x, phy, cla, gen, spe) {
@@ -61,16 +64,25 @@ filter_taxa_data <- function(x, phy, cla, gen, spe) {
 basemap <- function() {
   leaflet() |>
     leafem::addMouseCoordinates() |>
-    leaflet::addProviderTiles("Esri.OceanBasemap", group = "OceaBasemap") |>
-    leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
-    leaflet::addLayersControl(
-      baseGroups = c("OpenStreetMap", "Ocean Basemap"),
-      position = "bottomleft"
-    ) |>
+  #  leaflet::addProviderTiles("Esri.OceanBasemap", group = "OceaBasemap") |>
+   # leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
+    leaflet::addProviderTiles("Stadia.StamenTonerLite") |>
+   # leaflet::addProviderTiles("Esri.WorldGrayCanvas") |>
+
+   # leaflet::addLayersControl(
+    #  baseGroups = c("OpenStreetMap", "Ocean Basemap"),
+    #  position = "bottomleft"
+  #  ) |>
     leaflet::addScaleBar(
       position = c("bottomright"),
       options = leaflet::scaleBarOptions(maxWidth = 200)
-    )
+    ) |>
+    leaflet.extras::addDrawToolbar(polylineOptions = FALSE,
+                                   circleOptions = FALSE,
+                                   polygonOptions = TRUE,
+                                   rectangleOptions = TRUE,
+                                   circleMarkerOptions = FALSE,
+                                   markerOptions = FALSE)
 }
 
 
@@ -133,5 +145,17 @@ shinyLink <- function(to, label) {
     label
   )
 }
+
+# Primer information for primer tab
+## import glossary
+primer_seqs <- read.csv("data/primers.csv") %>%
+  dplyr::rename("Primer set" = "PrimerSet",
+                "Type of data" = "Data",
+                "Original primer name" = "OriginalName",
+                "Sequence (5'-3')" = "Seq",
+                "Fragment length (bp)" = "bp")
+
+primer_seqs[["Primer set"]] <- paste0('<p align ="center"><b>', trimws(primer_seqs[["Primer set"]]), "</b></p>")
+#gloss$Definition <- trimws(gloss$Definition)
 
 #coord_tab <- na.omit(data.frame(longitude = NA_real_, latitude = NA_real_))

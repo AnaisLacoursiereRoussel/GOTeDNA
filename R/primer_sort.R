@@ -17,12 +17,13 @@
 #' }
 primer_sort <- function(
     taxon.level = c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species"),
-    scaledprobs_month) {
+    scaledprobs) {
   # However the filtering happens (choosing the taxon level/name, region, and
   # threshold), I'm not sure how to code that. The following code calculates
   # the percent rank of each primer for the taxon level selected, user could
   # then have the option of selecting all primers or a specific primer.
-  out <- scaledprobs_month |>
+  out <- scaledprobs |>
+    dplyr::filter(!is.na(year)) |>
     dplyr::group_by(dplyr::across(dplyr::all_of(taxon.level)), primer) |>
     dplyr::summarise(
       detects = sum(detect, na.rm = TRUE),

@@ -65,11 +65,16 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
 
   thresh.value <- thresh$values[thresh$labels == threshold]
 
-  df <- lapply(scaledprobs, function(x) {
+  sc_split <- list(
+    scaled_month = scaledprobs[is.na(scaledprobs$year),],
+    scaled_year = scaledprobs[!is.na(scaledprobs$year),]
+  )
+
+  df <- lapply(sc_split, function(x) {
     dplyr::filter(x, !!dplyr::ensym(taxon.level) %in% taxon.name)
   })
 
-  df_thresh <- lapply(scaledprobs, function(x) {
+  df_thresh <- lapply(sc_split, function(x) {
     x |> dplyr::filter(
       !!dplyr::ensym(taxon.level) %in% taxon.name,
       fill >= thresh.value
@@ -93,13 +98,13 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
         dplyr::anti_join(x, y)
       ) %>%
         dplyr::group_by(id, consec = cumsum(c(1, diff(month) != 1))) #%>%
-        #dplyr::mutate(
-         # prev_ = dplyr::lag(month), # the previous item
-          #next_ = dplyr::lead(month), # the next item
-          #diff_y1 = dplyr::case_when( # ifelse
-          #  month == next_ | month == prev_ ~ 0,
-          #  TRUE ~ month - prev_
-          #)
+      #dplyr::mutate(
+      # prev_ = dplyr::lag(month), # the previous item
+      #next_ = dplyr::lead(month), # the next item
+      #diff_y1 = dplyr::case_when( # ifelse
+      #  month == next_ | month == prev_ ~ 0,
+      #  TRUE ~ month - prev_
+      #)
       #  )
     },
     df_thresh,
@@ -113,7 +118,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
   #})
 
   #multmonth <- lapply(multmonth, function(x) {
-   # x$diff_y1[is.na(x$diff_y1)] <- 0
+  # x$diff_y1[is.na(x$diff_y1)] <- 0
   #  x
   #})
 
@@ -123,7 +128,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
       dplyr::group_by(id, consec = cumsum(c(1, diff(month) != 1))) %>%
       dplyr::filter(dplyr::n() > 1) %>%
       dplyr::ungroup()
-      #dplyr::filter(diff_y1 == 1, diff_y1 )#length(id) == sum(diff_y1) + 1)
+    #dplyr::filter(diff_y1 == 1, diff_y1 )#length(id) == sum(diff_y1) + 1)
   })
 
   # selects species with consecutive months being December-January >= threshold
@@ -141,7 +146,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
 
   # create df where species have no discernible window (for now, this means more than one non-consecutive period)
   optwin <- lapply(consec.det, function(x) {
-   x %>%
+    x %>%
       dplyr::mutate(window = "inwindow")
   })
 
@@ -209,11 +214,11 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
           period = ifelse(
             len == 1,
             paste(month.abb[month]),
-                  ifelse(
-            !is.na(!month %in% 11),
-            paste0(month.abb[min(month)], "-", month.abb[max(month)]),
-            paste0(month.abb[max(month)], "-", month.abb[max(month[month!=max(month)] )])
-         )))
+            ifelse(
+              !is.na(!month %in% 11),
+              paste0(month.abb[min(month)], "-", month.abb[max(month)]),
+              paste0(month.abb[max(month)], "-", month.abb[max(month[month!=max(month)] )])
+            )))
 
       for (i in names(both_in_out[[var]])) {
         f <- fisher.test(matrix(
@@ -242,7 +247,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
   #fshDF2 <- lapply(fshDF, function(x)
   #  dplyr::bind_rows(x))
 
-  fshDF_year <- dplyr::full_join(fshDF$Pscaled_year, opt_sampling$Pscaled_year, by = "id")
+  fshDF_year <- dplyr::full_join(fshDF$scaled_year, opt_sampling$scaled_year, by = "id")
   fshDF_year[c("GOTeDNA_ID.v", "species", "primer", "year")] <- stringr::str_split_fixed(fshDF_year$id, ";", 4)
   fshDF_year <- dplyr::left_join(fshDF_year, unique(
     data[, c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")]),
@@ -257,7 +262,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
       is.na(`p value`) ~ "No optimal period"
     ))
 
-  fshDF_month <- dplyr::full_join(fshDF$Pscaled_month, opt_sampling$Pscaled_month, by = "id")
+  fshDF_month <- dplyr::full_join(fshDF$scaled_month, opt_sampling$scaled_month, by = "id")
   fshDF_month[c("GOTeDNA_ID.v", "species", "primer")] <- stringr::str_split_fixed(fshDF_month$id, ";", 3)
   fshDF_month <- dplyr::left_join(fshDF_month, unique(
     data[, c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species")]),
@@ -275,12 +280,12 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
         levels = c("Very high", "High", "Medium", "Low", "No optimal period"),
         ordered = TRUE))
 
-    #dplyr::select(-"id", -"mid_month") %>%
-    #dplyr::select(-"odds ratio", -"p value", -"Lower CI", -"Upper CI", -"confidence", dplyr::everything())
+  #dplyr::select(-"id", -"mid_month") %>%
+  #dplyr::select(-"odds ratio", -"p value", -"Lower CI", -"Upper CI", -"confidence", dplyr::everything())
 
   #fshDF_month$confidence <- factor(fshDF_month$confidence,
-    #                               levels = c("Very high", "High", "Medium", "Low", "No optimal period"),
-    #                               ordered = TRUE)
+  #                               levels = c("Very high", "High", "Medium", "Low", "No optimal period"),
+  #                               ordered = TRUE)
 
   list(fshDF_month = fshDF_month, fshDF_year = fshDF_year) %>%
     return()
