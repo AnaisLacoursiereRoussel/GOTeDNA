@@ -41,7 +41,7 @@ mod_select_figure_ui <- function(id) {
             ),
             add_figure_selection(
               ns("fig_effort"),
-              "Sample size to achieve detection",
+              "Guidance on sampling effort",
               "img/thumbnails/tn_effort.svg"
             ),
             add_figure_selection(
@@ -51,7 +51,7 @@ mod_select_figure_ui <- function(id) {
             ),
             add_figure_selection(
               ns("fig_samples"),
-              "Field sample size for datasets",
+              "Data variation",
               "img/thumbnails/tn_samples.svg"
             )
           )
@@ -130,9 +130,9 @@ mod_select_figure_ui <- function(id) {
             div(
               class = "fig_main_container-fig",
               ui_fig_detect("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
-              ui_fig_effort("fig_effort", "Sample size to achieve detection", "sample_size.html", ns),
+              ui_fig_effort("fig_effort", "Guidance on sampling effort", "sample_size.html", ns),
               ui_fig_hm("fig_heatmap", "Species detection heatmap", "heatmap.html", ns),
-              ui_fig_samples("fig_samples", "Field sample size", "field_sample.html", ns)
+              ui_fig_samples("fig_samples", "Data variation", "field_sample.html", ns)
             )
           )
           ),

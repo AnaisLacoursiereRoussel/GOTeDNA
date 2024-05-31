@@ -89,12 +89,6 @@ basemap <- function() {
 get_primer_selection <- function(lvl, data) {
   if (is.null(lvl)) {
     return("Not available")
- # }
- # if (lvl == "kingdom") {
-#    out <- table(data$primer) |>
- #     sort() |>
-#      rev()
- #   names(out)
   } else {
     if (lvl == "species") {
       tx_col <- "species"
@@ -155,7 +149,6 @@ primer_seqs <- read.csv("data/primers.csv") %>%
                 "Sequence (5'-3')" = "Seq",
                 "Fragment length (bp)" = "bp")
 
-primer_seqs[["Primer set"]] <- paste0('<p align ="center"><b>', trimws(primer_seqs[["Primer set"]]), "</b></p>")
-#gloss$Definition <- trimws(gloss$Definition)
+
 
 #coord_tab <- na.omit(data.frame(longitude = NA_real_, latitude = NA_real_))
