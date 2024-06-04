@@ -363,28 +363,21 @@ mod_select_figure_server <- function(id, r) {
         dplyr::ungroup() |>
         dplyr::group_by(
           GOTeDNA_ID,
-          GOTeDNA_version
+          GOTeDNA_version,
+          LClabel
          ) |>
         summarise(
           `Sample #` = dplyr::n_distinct(materialSampleID),
-          `Station #` = length(unique(station)),
-          LCicon = unique(LClabel)
+          `Station #` = dplyr::n_distinct(station)
         ) |>
         mutate(
-          `Data owner contact` = ifelse(
-            is.na(LCicon),
-            paste0("anais.lacoursiere@dfo-mpo.gc.ca"),
-            paste0("kimberly.howland@dfo-mpo.gc.ca")),
+          `Data owner contact` = "anais.lacoursiere@dfo-mpo.gc.ca",
           `Indigenous contribution` = ifelse(
-            !is.na(LCicon), c('<img src="img/fn_logo.png" height="25"></img>'),
+            !is.na(LClabel), c('<img src="img/fn_logo.png" height="25"></img>'),
             NA),
           Publication = "DOI:xx.xxxxx",
-          Reference = case_when(
-            LCicon == "BC" & GOTeDNA_ID == 4 ~ "Sevellec et al (2024)",
-            LCicon == "BC" & GOTeDNA_ID == 2 ~ "Lacoursiere-Roussel et al (2018); Leduc et al (2019)",
-            is.na(LCicon) ~ "Lacoursiere-Roussel et al (2019)"
-            ),
-          LCicon = NULL
+          Reference = "xxxxx",
+          LClabel = NULL
         ) |>
         dplyr::ungroup() |>
         dplyr::relocate(

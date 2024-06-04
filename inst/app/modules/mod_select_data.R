@@ -434,7 +434,7 @@ mod_select_data_server <- function(id, r) {
   })
 }
 
-
+# attempt to create a filtering object
 filter_project <- function(r) {
   proj <- r$scaledprobs %>% dplyr::mutate(ID = 1:dplyr::n())
 }
