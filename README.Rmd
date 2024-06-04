@@ -83,7 +83,11 @@ library("GOTeDNA")
 newprob <- calc_det_prob(data = D_mb_ex)
 scaledprobs <- scale_newprob(D_mb_ex, newprob)
 win <- calc_window(
-  data = D_mb_ex, threshold = "90", species.name = "Acartia longiremis",scaledprobs
+  data = D_mb_ex, 
+  threshold = "75", 
+  taxon.level = "species",
+  taxon.name = "Acartia longiremis", 
+  scaledprobs
 )
 ```
 
@@ -92,51 +96,39 @@ win <- calc_window(
 
 ```{R hm}
 hm_fig(
-   taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
+   taxon.level = "class", 
+   taxon.name = "Copepoda", 
+   scaledprobs)
 ```
 
 ### Effort needed
 
 ```{R effort}
 effort_needed_fig(
-  scaledprobs$Pscaled_month |> dplyr::filter(
-      species %in% "Acartia hudsonica",
-      primer == "COI1"
-  )
+  taxon.level = "genus",
+  taxon.name ="Acartia",
+  scaledprobs
 )
 ```
-ecodistrict.select = "Scotian Shelf",
+
 ### Sampling effort
 
-```{R higher}
-higher_tax_fig(
-  data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"), 
-  higher.taxon.select = "phylum", 
-  taxon.name = "Bryozoa",
-  view.by.level = "genus"
-)
-```
-
-### Sample size 
-
-```{R sample_size}
-sample_size_fig(
-  data = D_mb_ex |> dplyr::filter(scientificName == "Acartia hudsonica"),
-  species.name = "Acartia hudsonica"
+```{R field}
+field_sample_fig(
+  data = D_mb_ex, 
+  taxon.level = "genus", 
+  taxon.name = "Acartia"
 )
 ```
 
 ### Species monthly detection
 
 ```{R smooth}
-D_mb_ex_slc <- D_mb_ex |>
-  dplyr::filter(
-    scientificName == "Acartia longiremis",
-    target_subfragment == "COI1"
-  )
+
 smooth_fig(
-  data = D_mb_ex_slc, 
-  species.name = "Acartia longiremis"
+  data = D_mb_ex, 
+  taxon.level = "species",
+  taxon.name = "Acartia longiremis"
 )
 ```
 
@@ -144,8 +136,11 @@ smooth_fig(
 ### Monthly detection probabilities
 
 ```{R thresh_fig}
-thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
-  threshold = "75", scaledprobs)
+thresh_fig(
+  taxon.level = "species", 
+  taxon.name = "Acartia longiremis", 
+  threshold = "75", 
+  scaledprobs)
 ```
 
 

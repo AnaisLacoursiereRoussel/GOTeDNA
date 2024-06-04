@@ -25,7 +25,6 @@ We recommend to use R and RStudio:
 
 2.  Install R Studio
 
-
 #### Install the package
 
 You first need to have access to the archive `GoteDNA_{version}.tar.gz`.
@@ -41,7 +40,8 @@ You can install the development version of GOTeDNA from
 [GitHub](https://github.com/) with:
 
 ``` r
-install.packages("devtools")
+# install.packages("devtools")
+devtools::install_github("mkmor/GOTeDNA")
 devtools::install_github("mkmor/GOTeDNA", dependencies = TRUE)
 ```
 
@@ -52,14 +52,13 @@ install.packages("devtools")
 devtools::install_local("path/to/the/repo", dependencies = TRUE)
 ```
 
-
 ## Usage
 
 ### R function categories:
 
--   Import data
--   Clean/tidy data
--   Visualization
+- Import data
+- Clean/tidy data
+- Visualization
 
 ``` r
 library("GOTeDNA")
@@ -71,7 +70,11 @@ library("GOTeDNA")
 newprob <- calc_det_prob(data = D_mb_ex)
 scaledprobs <- scale_newprob(D_mb_ex, newprob)
 win <- calc_window(
-  data = D_mb_ex, threshold = "90", species.name = "Acartia longiremis",scaledprobs
+  data = D_mb_ex, 
+  threshold = "75", 
+  taxon.level = "species",
+  taxon.name = "Acartia longiremis", 
+  scaledprobs
 )
 ```
 
@@ -79,7 +82,11 @@ win <- calc_window(
 
 ``` r
 hm_fig(
-   taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
+   taxon.level = "class", 
+   taxon.name = "Copepoda", 
+   scaledprobs)
+#> Warning in ggplot2::geom_tile(dplyr::filter(scaledprobs, `Detection rate` > :
+#> Ignoring unknown aesthetics: text
 ```
 
 <img src="man/figures/README-hm-1.png" width="100%" />
@@ -88,51 +95,104 @@ hm_fig(
 
 ``` r
 effort_needed_fig(
-  scaledprobs$Pscaled_month |> dplyr::filter(
-      species %in% "Acartia hudsonica",
-      primer == "COI1"
-  )
+  taxon.level = "genus",
+  taxon.name ="Acartia",
+  scaledprobs
 )
+#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+#> not found in Windows font database
+
+#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+#> not found in Windows font database
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
 ```
 
 <img src="man/figures/README-effort-1.png" width="100%" />
-ecodistrict.select = “Scotian Shelf”, \### Sampling effort
+
+### Sampling effort
 
 ``` r
-higher_tax_fig(
-  data = D_mb_ex |> dplyr::filter(target_subfragment == "COI1"), 
-  higher.taxon.select = "phylum", 
-  taxon.name = "Bryozoa",
-  view.by.level = "genus"
+field_sample_fig(
+  data = D_mb_ex, 
+  taxon.level = "genus", 
+  taxon.name = "Acartia"
 )
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
+#> Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+#> not found in Windows font database
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
+
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
+
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
+
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
 ```
 
-<img src="man/figures/README-higher-1.png" width="100%" />
-
-### Sample size
-
-``` r
-sample_size_fig(
-  data = D_mb_ex |> dplyr::filter(scientificName == "Acartia hudsonica"),
-  species.name = "Acartia hudsonica"
-)
-```
-
-<img src="man/figures/README-sample_size-1.png" width="100%" />
+<img src="man/figures/README-field-1.png" width="100%" />
 
 ### Species monthly detection
 
 ``` r
-D_mb_ex_slc <- D_mb_ex |>
-  dplyr::filter(
-    scientificName == "Acartia longiremis",
-    target_subfragment == "COI1"
-  )
+
 smooth_fig(
-  data = D_mb_ex_slc, 
-  species.name = "Acartia longiremis"
+  data = D_mb_ex, 
+  taxon.level = "species",
+  taxon.name = "Acartia longiremis"
 )
-#> Warning in RColorBrewer::brewer.pal(length(unique(data$year)), "Dark2"): minimal value for n is 3, returning requested palette with 3 different levels
+#> $`2.3`
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_vline()`).
+#> Warning: Removed 4 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
+
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
+
+#> Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+#> font family not found in Windows font database
 ```
 
 <img src="man/figures/README-smooth-1.png" width="100%" />
@@ -140,8 +200,14 @@ smooth_fig(
 ### Monthly detection probabilities
 
 ``` r
-thresh_fig(taxon.level = "species", taxon.name = "Acartia hudsonica", 
-  threshold = "75", scaledprobs)
+thresh_fig(
+  taxon.level = "species", 
+  taxon.name = "Acartia longiremis", 
+  threshold = "75", 
+  scaledprobs)
+#> $`2.3`
+#> Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+#> family not found in Windows font database
 ```
 
 <img src="man/figures/README-thresh_fig-1.png" width="100%" />
