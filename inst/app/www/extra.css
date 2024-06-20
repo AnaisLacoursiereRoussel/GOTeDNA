@@ -843,7 +843,25 @@ shiny-plot-output {
   z-index: 1001 !important;
 }
 
-
 .definition {
   font-weight: bold;
+}
+
+
+/* indigeneous page */
+.indig_container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+.indig_img {
+  width: 20%;
+}
+
+.indig_txt {
+  width: 80%;
 }
