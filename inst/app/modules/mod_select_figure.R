@@ -177,6 +177,16 @@ mod_select_figure_server <- function(id, r) {
       }
     })
 
+    observeEvent(r$reset,
+      {
+        for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_samples")) {
+          hide_fig(i)
+          r$fig_slc[[i]] <- FALSE
+        }
+      },
+      ignoreInit = TRUE
+    )
+
     hide_fig("fig_detect")
     observeEvent(input$fig_detect, {
       toggle_legends("thresh_legend")
@@ -279,7 +289,7 @@ mod_select_figure_server <- function(id, r) {
       req(input$sel)
       plot_output_list <- lapply(input$sel, function(par) {
         plotname <- paste0("fig_effort_plot_output", par)
-        plotly::plotlyOutput(plotname, height = "500px", inline = TRUE)
+        plotly::plotlyOutput(plotname, inline = TRUE, height = "auto")
       })
 
       do.call(tagList, plot_output_list)
@@ -354,7 +364,7 @@ mod_select_figure_server <- function(id, r) {
           `Data owner contact` = "anais.lacoursiere@dfo-mpo.gc.ca",
           `Indigenous contribution` = ifelse(
             !is.na(LClabel),
-            "<button type='submit' style='border: 0; background: transparent' 
+            "<button type='submit' style='border: 0; background: transparent'
             onclick='fakeClick(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/>
             </button>",
             NA
@@ -669,7 +679,7 @@ ui_fig_effort <- function(fig_id, title, caption_file, ns) {
         # uiOutput("plots")
         plotly::plotlyOutput(
           paste0(ns(fig_id), "_plot_output"),
-          height = "500px"
+          height = "auto"
         )
       ),
     )
@@ -693,7 +703,8 @@ ui_fig_samples <- function(fig_id, title, caption_file, ns) {
       div(
         class = "fig_panel",
         plotly::plotlyOutput(
-          paste0(ns(fig_id), "_plot_output")
+          paste0(ns(fig_id), "_plot_output"),
+          height = "auto"
         )
       ),
     )

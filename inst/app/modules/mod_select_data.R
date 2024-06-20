@@ -284,9 +284,6 @@ mod_select_data_server <- function(id, r) {
           "slc_spe",
           choices = c(
             "All",
-            # r$cur_data_sta_slc[
-            #   r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
-            # ]$species |>
             r$cur_data[
               r$cur_data[[input$taxo_lvl]] == input$taxo_id,
             ]$species |>
@@ -316,9 +313,13 @@ mod_select_data_server <- function(id, r) {
         "taxo_lvl",
         selected = "domain"
       )
-      r$geom_slc <- r$station_slc <- NULL
-      r$geom <- filter_station(r)
-      r$reload_map <- r$reload_map + 1
+      updateSelectizeInput(
+        session,
+        "slc_spe",
+        selected = "All"
+      )
+      r$reset <- r$reset + 1
+      r$data_ready <- NULL
     })
 
 
