@@ -150,7 +150,6 @@ mod_select_figure_ui <- function(id) {
 }
 
 
-
 mod_select_figure_server <- function(id, r) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -264,19 +263,11 @@ mod_select_figure_server <- function(id, r) {
       }
     )
 
-
-    observe({
-      req(input$sel)
-      lapply(input$sel, function(par) {
-
-      })
-    })
-
     output$plots <- renderUI({
       req(input$sel)
       plot_output_list <- lapply(input$sel, function(par) {
         plotname <- paste0("fig_effort_plot_output", par)
-        plotly::plotlyOutput(plotname, height = "250px", inline = TRUE)
+        plotly::plotlyOutput(plotname, height = "500px", inline = TRUE)
       })
 
       do.call(tagList, plot_output_list)
@@ -293,75 +284,42 @@ mod_select_figure_server <- function(id, r) {
 
     output$fig_effort_plot_output <- plotly::renderPlotly({
       ggp <- draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
-
       plotly::ggplotly(ggp) |>
-        facet_strip_format()
+        default_layout()
     })
-
 
     output$fig_heatmap_plot_output <- plotly::renderPlotly({
       ggp <- draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
-      plotly::ggplotly(ggp, tooltip = c("x", "text", "fill")) |>
-        plotly::layout(
-          font = list(family = "Arial"),
-          xaxis = list(
-            tickfont = list(
-              color = "#939888",
-              size = 20
-            )
-          ),
-          yaxis = list(
-            tickfont = list(
-              color = "#939888",
-              size = 20
-            )
-          )
-        )
-      # |>
-      #   facet_strip_format()
+      plotly::ggplotly(
+        ggp,
+        tooltip = c("x", "text", "fill")
+      ) |>
+        default_layout()
     })
 
     output$fig_samples_plot_output <- plotly::renderPlotly({
-      ggp <- draw_fig_samples(r, r$fig_ready && r$fig_slc$fig_samples)
-
-      p <- plotly::ggplotly(ggp) |>
-        plotly::layout(
-          font = list(family = "Arial"),
-          xaxis = list(
-            anchor = "y",
-            zeroline = TRUE,
-            tickfont = list(
-              color = "#939888",
-              size = 20
-            )
-          ),
-          yaxis = list(
-            tickfont = list(
-              color = "#939888",
-              size = 20
-            )
-          ),
-          legend = list(
-            title = list(
-              font = list(
-                size = 20,
-                color = "#5A5A5A"
-              )
-            ),
-            font = list(
-              size = 20,
-              color = "#939888"
-            )
-          )
+      plt_ready <- r$fig_ready && r$fig_slc$fig_samples
+      ggp <- draw_fig_samples(r, plt_ready)
+      if (plt_ready) {
+        # multiply height per years #
+        nys <- r$data_ready$year |>
+          unique() |>
+          length()
+        plt <- plotly::ggplotly(
+          ggp,
+          height = 350 * nys
         ) |>
-        facet_strip_format()
-
-      plotly::subplot(p)
+          default_layout() |>
+          facet_strip_format()
+      } else {
+        plt <- plotly::ggplotly(
+          ggp,
+          height = 400
+        ) |>
+          default_layout()
+      }
+      plt
     })
-
-
-
-
 
     output$data_authorship <- DT::renderDT({
       if (!is.null(r$data_ready)) {
@@ -434,37 +392,168 @@ mod_select_figure_server <- function(id, r) {
 }
 
 
-facet_strip_format <- function(gp) {
-  # n_facets <- seq(length(gp[["x"]][["layout"]][["annotations"]]))
 
-  # gp[["x"]][["layout"]][["height"]] <- 300 * length(gp[["x"]][["layout"]][["annotations"]])
 
-  # gp[["x"]][["layout"]][["yaxis"]][["tickfont"]] <- list(
-  #     size = 20,
-  #     color = "#939888"
-  #   )
-  # for (i in 2:8) {
-  #   gp[["x"]][["layout"]][[paste0("yaxis", i)]][["tickfont"]] <- list(
-  #     size = 20,
-  #     color = "#939888"
-  #   )
-  #   gp[["x"]][["layout"]][[paste0("xaxis", i)]][["tickfont"]] <- list(
-  #     size = 20,
-  #     color = "#939888"
-  #   )
-  # }
+#------- INTERNALS
 
-  # for (i in n_facets) {
-  #   gp[["x"]][["layout"]][["annotations"]][[i]][["xanchor"]] <- "left" # increase as needed
-  #   gp[["x"]][["layout"]][["annotations"]][[i]][["x"]] <- 0
-  #   gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(
-  #     size = 25,
-  #     color = "#5A5A5A"
-  #   )
-  # }
 
-  return(gp)
+
+prepare_data <- function(r) {
+  out <- r$cur_data
+  if (length(r$station_slc)) {
+    out <- out |>
+      dplyr::filter(station %in% r$station_slc)
+  }
+  if (!is.null(r$taxon_lvl_slc)) {
+    if (r$taxon_lvl_slc == "species") {
+      out <- out |>
+        dplyr::filter(species == r$species)
+    } else {
+      if (r$taxon_id_slc != "All") {
+        out <- out[
+          out[[r$taxon_lvl_slc]] == r$taxon_id_slc,
+        ]
+      }
+    }
+  }
+  # do we want to subset?
+  if (r$primer != "not available") {
+    if (r$primer != "All") {
+      out <- out |>
+        dplyr::filter(primer == r$primer)
+    } else {
+      out
+    }
+  }
 }
+
+n_projs <- function(r) {
+  proj_ids <- r$data_ready |>
+    dplyr::summarise(
+      n = sum(detect, nondetect, na.rm = TRUE),
+      .by = GOTeDNA_ID.v
+    ) |>
+    sort(n, decreasing = TRUE) |>
+    select(GOTeDNA_ID.v)
+}
+
+
+
+## FIG HELPERS
+
+plotText <- function(txt, size = 6) {
+  data.frame(x = 0.5, y = 0.5, txt = txt) |>
+    ggplot2::ggplot(ggplot2::aes(x, y, label = txt)) +
+    ggplot2::geom_text(size = size) +
+    ggplot2::theme_void()
+}
+
+plotNotAvailableTaxoLevel <- function() {
+  plotText("Plot not available at the species level.")
+}
+
+plotNotAvailableSpeciesLevel <- function() {
+  plotText("Plot only available at the species level.")
+}
+
+plotNotAvailable <- function() {
+  plotText(stringr::str_wrap("Plot not available. Click 'Compute & visualize'"))
+}
+
+plotNotAvailableForqPCR <- function() {
+  plotText("Plot not available for qPCR data.")
+}
+
+plotNotAvailableYear <- function() {
+  plotText("Plot not available; small sample size.")
+}
+
+
+add_fixed_legend <- function(file) {
+  if (is.null(file)) {
+    tagList()
+  } else {
+    img(
+      # id = "fig_legend_img",
+      src = file.path("img", "fixed-legends", file),
+      alt = "Legend of the figure"
+    )
+  }
+}
+
+
+draw_fig_smooth <- function(r, ready) {
+  if (ready) {
+    p <- try(
+      smooth_fig(
+        r$data_ready,
+        r$taxon_lvl_slc,
+        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
+      )
+    )
+
+    if ("try-error" %in% class(p)) plotNotAvailableYear()
+
+    p[[1]]
+  } else {
+    plotNotAvailable()
+  }
+}
+
+draw_fig_detect <- function(r, ready, threshold) {
+  if (ready) {
+    p <- thresh_fig(
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
+      threshold,
+      r$scaledprobs
+    )
+    p[[1]]
+  } else {
+    plotNotAvailable()
+  }
+}
+
+draw_fig_effort <- function(r, ready) {
+  if (ready) {
+    p <- effort_needed_fig(
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
+      r$scaledprobs
+    )
+
+    p
+  } else {
+    plotNotAvailable()
+  }
+}
+
+draw_fig_heatmap <- function(r, ready) {
+  if (ready) {
+    p <- hm_fig(
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
+      r$scaledprobs
+    )
+    p
+  } else {
+    plotNotAvailable()
+  }
+}
+
+draw_fig_samples <- function(r, ready) {
+  if (ready) {
+    p <- field_sample_fig(
+      r$data_ready,
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
+    )
+    p
+  } else {
+    plotNotAvailable()
+  }
+}
+
 
 
 ui_fig_detect <- function(fig_id, title, caption_file, ns) {
@@ -527,24 +616,23 @@ ui_fig_hm <- function(fig_id, title, caption_file, ns) {
         bslib::layout_columns(
           bslib::card_body(
             plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
-              width = "40vw",
               height = "auto"
             ),
             fillable = TRUE,
           ),
-          #  bslib::card_body(
           bslib::card_image(
             file = "www/img/fixed-legends/hm_legend.png",
-            fill = FALSE,
-            width = "180px"
+            fill = FALSE
           ),
-          col_widths = c(9, 3)
+          col_widths = breakpoints(
+            sm = c(9, 3),
+            md = c(10, 2)
+          )
         )
       )
     )
   )
 }
-
 
 ui_fig_effort <- function(fig_id, title, caption_file, ns) {
   div(
@@ -562,10 +650,10 @@ ui_fig_effort <- function(fig_id, title, caption_file, ns) {
       class = "fig_panel_container",
       div(
         class = "fig_panel",
-
         # uiOutput("plots")
-        plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
-          height = "auto"
+        plotly::plotlyOutput(
+          paste0(ns(fig_id), "_plot_output"),
+          height = "500px"
         )
       ),
     )
@@ -588,166 +676,83 @@ ui_fig_samples <- function(fig_id, title, caption_file, ns) {
       class = "fig_panel_container",
       div(
         class = "fig_panel",
-        plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
-          height = "auto"
+        plotly::plotlyOutput(
+          paste0(ns(fig_id), "_plot_output")
         )
       ),
     )
   )
 }
 
-prepare_data <- function(r) {
-  out <- r$cur_data
-  if (length(r$station_slc)) {
-    out <- out |>
-      dplyr::filter(station %in% r$station_slc)
-  }
-  if (!is.null(r$taxon_lvl_slc)) {
-    if (r$taxon_lvl_slc == "species") {
-      out <- out |>
-        dplyr::filter(species == r$species)
-    } else {
-      if (r$taxon_id_slc != "All") {
-        out <- out[
-          out[[r$taxon_lvl_slc]] == r$taxon_id_slc,
-        ]
-      }
-    }
-  }
-  # do we want to subset?
-  if (r$primer != "not available") {
-    if (r$primer != "All") {
-      out <- out |>
-        dplyr::filter(primer == r$primer)
-    } else {
-      out
-    }
-  }
-}
+## Plotly Helpers
+facet_strip_format <- function(gp) {
+  n_facets <- seq(length(gp[["x"]][["layout"]][["annotations"]]))
 
-n_projs <- function(r) {
-  proj_ids <- r$data_ready |>
-    dplyr::summarise(
-      n = sum(detect, nondetect, na.rm = TRUE),
-      .by = GOTeDNA_ID.v
-    ) |>
-    sort(n, decreasing = TRUE) |>
-    select(GOTeDNA_ID.v)
-}
+  gp[["x"]][["layout"]][["height"]] <- 300 * length(gp[["x"]][["layout"]][["annotations"]])
 
-draw_fig_smooth <- function(r, ready) {
-  if (ready) {
-    p <- try(
-      smooth_fig(
-        r$data_ready,
-        r$taxon_lvl_slc,
-        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
-      )
+  gp[["x"]][["layout"]][["yaxis"]][["tickfont"]] <- list(
+    size = 20,
+    color = "#939888"
+  )
+  for (i in 2:8) {
+    gp[["x"]][["layout"]][[paste0("yaxis", i)]][["tickfont"]] <- list(
+      size = 20,
+      color = "#939888"
     )
-
-    if ("try-error" %in% class(p)) plotNotAvailableYear()
-
-    p[[1]]
-  } else {
-    plotNotAvailable()
-  }
-}
-
-draw_fig_detect <- function(r, ready, threshold) {
-  if (ready) {
-    p <- thresh_fig(
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
-      threshold,
-      r$scaledprobs
-    )
-
-    p[[1]]
-  } else {
-    plotNotAvailable()
-  }
-}
-
-draw_fig_effort <- function(r, ready) {
-  if (ready) {
-    p <- effort_needed_fig(
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
-      r$scaledprobs
-    )
-
-    p
-  } else {
-    plotNotAvailable()
-  }
-}
-
-draw_fig_heatmap <- function(r, ready) {
-  if (ready) {
-    p <- hm_fig(
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
-      r$scaledprobs
-    )
-
-    p
-  } else {
-    plotNotAvailable()
-  }
-}
-
-draw_fig_samples <- function(r, ready) {
-  if (ready) {
-    p <- field_sample_fig(
-      r$data_ready,
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
-    )
-
-    p
-  } else {
-    plotNotAvailable()
-  }
-}
-
-add_fixed_legend <- function(file) {
-  if (is.null(file)) {
-    tagList()
-  } else {
-    img(
-      # id = "fig_legend_img",
-      src = file.path("img", "fixed-legends", file),
-      alt = "Legend of the figure"
+    gp[["x"]][["layout"]][[paste0("xaxis", i)]][["tickfont"]] <- list(
+      size = 20,
+      color = "#939888"
     )
   }
+
+  for (i in n_facets) {
+    gp[["x"]][["layout"]][["annotations"]][[i]][["xanchor"]] <- "left" # increase as needed
+    gp[["x"]][["layout"]][["annotations"]][[i]][["x"]] <- 0
+    gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(
+      size = 25,
+      color = "#5A5A5A"
+    )
+  }
+
+  return(gp)
 }
 
-plotText <- function(txt, size = 20) {
-  data.frame(x = 0.5, y = 0.5, txt = txt) |>
-    ggplot2::ggplot(ggplot2::aes(x, y, label = txt)) +
-    ggplot2::geom_text(size = size) +
-    ggplot2::theme_void()
+default_layout <- function(x) {
+  x |>
+    plotly::layout(
+      font = list(family = "Arial"),
+      xaxis = list(
+        anchor = "y",
+        zeroline = TRUE,
+        tickfont = list(
+          color = "#939888",
+          size = 20
+        )
+      ),
+      yaxis = list(
+        tickfont = list(
+          color = "#939888",
+          size = 20
+        )
+      ),
+      legend = list(
+        title = list(
+          font = list(
+            size = 20,
+            color = "#5A5A5A"
+          )
+        ),
+        font = list(
+          size = 20,
+          color = "#939888"
+        )
+      ),
+      margin = list(pad = 5)
+    )
 }
 
-plotNotAvailableTaxoLevel <- function() {
-  plotText("Plot not available at the species level.")
-}
 
-plotNotAvailableSpeciesLevel <- function() {
-  plotText("Plot only available at the species level.")
-}
-
-plotNotAvailable <- function() {
-  plotText(stringr::str_wrap("Plot not available. Click 'Compute & visualize'"))
-}
-
-plotNotAvailableForqPCR <- function() {
-  plotText("Plot not available for qPCR data.")
-}
-
-plotNotAvailableYear <- function() {
-  plotText("Plot not available; small sample size.")
-}
+## Additional helpers
 
 add_thumbnail_button <- function(id, src, title, alt = "Figure thumbnail") {
   # https://stackoverflow.com/questions/44841346/adding-an-image-to-shiny-action-button
@@ -802,7 +807,6 @@ toggle_fig <- function(fig_id) {
   shinyjs::toggle(paste0(fig_id, "_thumbnail_selected"))
   shinyjs::toggle(paste0(fig_id, "_fig_container"))
 }
-
 
 # toggle_selected <- function(class_id, input_button, fig_id) {
 #   cls_id <- paste0(class_id, "_thumbnail_selected")
