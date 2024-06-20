@@ -2,8 +2,7 @@
 mod_select_figure_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    tags$head(
-     ),
+    tags$head(),
     div(
       id = "figure_selection",
       div(
@@ -71,9 +70,10 @@ mod_select_figure_ui <- function(id) {
     div(
       id = "observation",
       fluidRow(
-          selectInput(inputId = "sel", label = "Select project",
-                      choices = unique(ns("data_slc")), multiple = FALSE)
-        ,
+        selectInput(
+          inputId = "sel", label = "Select project",
+          choices = unique(ns("data_slc")), multiple = FALSE
+        ),
         class = "panels-container",
         column(
           3,
@@ -114,7 +114,7 @@ mod_select_figure_ui <- function(id) {
               ns("export_pdf"),
               "Export to PDF",
               title = "Export figures to PDF",
-             # class = "primary-button"
+              # class = "primary-button"
             )
           )
         ),
@@ -123,10 +123,10 @@ mod_select_figure_ui <- function(id) {
           class = "show-panels",
           div(
             class = "fig_main_container",
-           # div(
-          #    class = "fig_main_container-header",
-           #   h2("Figures")
-          #  ),
+            # div(
+            #    class = "fig_main_container-header",
+            #   h2("Figures")
+            #  ),
             div(
               class = "fig_main_container-fig",
               ui_fig_detect("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
@@ -135,18 +135,18 @@ mod_select_figure_ui <- function(id) {
               ui_fig_samples("fig_samples", "Data variation", "field_sample.html", ns)
             )
           )
-          ),
+        ),
+        div(
+          id = "reference_data_authorship",
           div(
-            id = "reference_data_authorship",
-            div(
-              class = "table_title-container",
-              h2("Reference data authorship")
-            ),
-            DT::DTOutput(ns("data_authorship"))
+            class = "table_title-container",
+            h2("Reference data authorship")
           ),
-        )
+          DT::DTOutput(ns("data_authorship"))
+        ),
       )
     )
+  )
 }
 
 
@@ -255,7 +255,7 @@ mod_select_figure_server <- function(id, r) {
 
               r$GOTeDNA_ID.v <- filter_project(r)
 
-             # projID <- plotly::highlight_key(r$data_ready, ~GOTeDNA_ID.v)
+              # projID <- plotly::highlight_key(r$data_ready, ~GOTeDNA_ID.v)
             } else {
               showNotification("Data selection is empty", type = "warning")
             }
@@ -265,22 +265,21 @@ mod_select_figure_server <- function(id, r) {
     )
 
 
- observe({
+    observe({
       req(input$sel)
       lapply(input$sel, function(par) {
 
       })
     })
 
- output$plots <- renderUI({
-        req(input$sel)
-        plot_output_list <- lapply(input$sel, function(par) {
-          plotname <- paste0("fig_effort_plot_output", par)
-          plotly::plotlyOutput(plotname, height = '250px', inline=TRUE)
-        })
+    output$plots <- renderUI({
+      req(input$sel)
+      plot_output_list <- lapply(input$sel, function(par) {
+        plotname <- paste0("fig_effort_plot_output", par)
+        plotly::plotlyOutput(plotname, height = "250px", inline = TRUE)
+      })
 
-        do.call(tagList, plot_output_list)
-
+      do.call(tagList, plot_output_list)
     })
     # figure must be selected and ready to be drawn
 
@@ -290,63 +289,74 @@ mod_select_figure_server <- function(id, r) {
 
     output$fig_detect_plot_output <- renderPlot({
       draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
-      })
+    })
 
-   output$fig_effort_plot_output <- plotly::renderPlotly({
-        ggp <- draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
+    output$fig_effort_plot_output <- plotly::renderPlotly({
+      ggp <- draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
 
-         plotly::ggplotly(ggp) |>
-           facet_strip_format()
-
-    }
-    )
-
-
-
+      plotly::ggplotly(ggp) |>
+        facet_strip_format()
+    })
 
 
     output$fig_heatmap_plot_output <- plotly::renderPlotly({
       ggp <- draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
       plotly::ggplotly(ggp, tooltip = c("x", "text", "fill")) |>
-          plotly::layout(
+        plotly::layout(
           font = list(family = "Arial"),
           xaxis = list(
-            tickfont = list(color = "#939888",
-               size = 20)),
+            tickfont = list(
+              color = "#939888",
+              size = 20
+            )
+          ),
           yaxis = list(
-            tickfont = list(color = "#939888",
-                            size = 20)
-          )) |>
-        facet_strip_format()
-
-   })
+            tickfont = list(
+              color = "#939888",
+              size = 20
+            )
+          )
+        )
+      # |>
+      #   facet_strip_format()
+    })
 
     output$fig_samples_plot_output <- plotly::renderPlotly({
-      ggp <-  draw_fig_samples(r, r$fig_ready && r$fig_slc$fig_samples)
+      ggp <- draw_fig_samples(r, r$fig_ready && r$fig_slc$fig_samples)
 
-      p <- plotly::ggplotly(ggp)|>
+      p <- plotly::ggplotly(ggp) |>
         plotly::layout(
           font = list(family = "Arial"),
           xaxis = list(
             anchor = "y",
             zeroline = TRUE,
-            tickfont = list(color = "#939888",
-                          size = 20)),
+            tickfont = list(
+              color = "#939888",
+              size = 20
+            )
+          ),
           yaxis = list(
-            tickfont = list(color = "#939888",
-                            size = 20)
+            tickfont = list(
+              color = "#939888",
+              size = 20
+            )
           ),
           legend = list(
             title = list(
-              font = list(size = 20,
-                          color = "#5A5A5A")
+              font = list(
+                size = 20,
+                color = "#5A5A5A"
+              )
             ),
-            font = list(size = 20,
-                        color = "#939888")
-          )) |>
+            font = list(
+              size = 20,
+              color = "#939888"
+            )
+          )
+        ) |>
         facet_strip_format()
 
-        plotly::subplot(p)
+      plotly::subplot(p)
     })
 
 
@@ -365,7 +375,7 @@ mod_select_figure_server <- function(id, r) {
           GOTeDNA_ID,
           GOTeDNA_version,
           LClabel
-         ) |>
+        ) |>
         summarise(
           `Sample #` = dplyr::n_distinct(materialSampleID),
           `Station #` = dplyr::n_distinct(station)
@@ -374,22 +384,27 @@ mod_select_figure_server <- function(id, r) {
           `Data owner contact` = "anais.lacoursiere@dfo-mpo.gc.ca",
           `Indigenous contribution` = ifelse(
             !is.na(LClabel), c('<img src="img/fn_logo.png" height="25"></img>'),
-            NA),
+            NA
+          ),
           Publication = "DOI:xx.xxxxx",
           Reference = "xxxxx",
           LClabel = NULL
         ) |>
         dplyr::ungroup() |>
         dplyr::relocate(
-           GOTeDNA_ID, GOTeDNA_version, Publication,`Data owner contact`,
-           `Sample #`, `Station #`, `Indigenous contribution`, Reference
+          GOTeDNA_ID, GOTeDNA_version, Publication, `Data owner contact`,
+          `Sample #`, `Station #`, `Indigenous contribution`, Reference
         ) |>
-        dplyr::rename("GOTeDNA ID" = "GOTeDNA_ID",
-                      "Version" = "GOTeDNA_version") |>
-        DT::datatable(escape = FALSE, rownames = FALSE,
-                      options = list(
-                        columnDefs = list(list(className = 'dt-center', targets = "_all"))
-                      ))
+        dplyr::rename(
+          "GOTeDNA ID" = "GOTeDNA_ID",
+          "Version" = "GOTeDNA_version"
+        ) |>
+        DT::datatable(
+          escape = FALSE, rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = "dt-center", targets = "_all"))
+          )
+        )
     })
 
     output$export_pdf <- downloadHandler(
@@ -408,66 +423,45 @@ mod_select_figure_server <- function(id, r) {
         # Knit the document, passing in the `params` list, and eval it in a
         # child of the global environment (this isolates the code in the document
         # from the code in this app).
-        rmarkdown::render(tempReport, output_file = file,
-                          params = params,
-                          envir = new.env(parent = globalenv())
+        rmarkdown::render(tempReport,
+          output_file = file,
+          params = params,
+          envir = new.env(parent = globalenv())
         )
       }
     )
   })
-
-
-
 }
 
 
-facet_strip_format <- function(gp){
+facet_strip_format <- function(gp) {
+  # n_facets <- seq(length(gp[["x"]][["layout"]][["annotations"]]))
 
-  n_facets <- c(1:length(gp[["x"]][["layout"]][["annotations"]]))
+  # gp[["x"]][["layout"]][["height"]] <- 300 * length(gp[["x"]][["layout"]][["annotations"]])
 
-  gp[["x"]][["layout"]][["height"]] <- 300 * length(gp[["x"]][["layout"]][["annotations"]])
+  # gp[["x"]][["layout"]][["yaxis"]][["tickfont"]] <- list(
+  #     size = 20,
+  #     color = "#939888"
+  #   )
+  # for (i in 2:8) {
+  #   gp[["x"]][["layout"]][[paste0("yaxis", i)]][["tickfont"]] <- list(
+  #     size = 20,
+  #     color = "#939888"
+  #   )
+  #   gp[["x"]][["layout"]][[paste0("xaxis", i)]][["tickfont"]] <- list(
+  #     size = 20,
+  #     color = "#939888"
+  #   )
+  # }
 
-  gp[["x"]][["layout"]][["yaxis"]][["tickfont"]] <- list(size = 20,
-                                                         color = "#939888")
-  gp[["x"]][["layout"]][["yaxis2"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["yaxis3"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["yaxis4"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["yaxis5"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["yaxis6"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["yaxis7"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["yaxis8"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["xaxis2"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["xaxis3"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["xaxis4"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["xaxis5"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["xaxis6"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["xaxis7"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-  gp[["x"]][["layout"]][["xaxis8"]][["tickfont"]] <- list(size = 20,
-                                                          color = "#939888")
-
-
-
-  for (i in n_facets){
-    gp[["x"]][["layout"]][["annotations"]][[i]][["xanchor"]] <- "left" # increase as needed
-    gp[["x"]][["layout"]][["annotations"]][[i]][["x"]] <- 0
-    gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(size = 25,
-                                                                  color = "#5A5A5A")
-
-
-    }
+  # for (i in n_facets) {
+  #   gp[["x"]][["layout"]][["annotations"]][[i]][["xanchor"]] <- "left" # increase as needed
+  #   gp[["x"]][["layout"]][["annotations"]][[i]][["x"]] <- 0
+  #   gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(
+  #     size = 25,
+  #     color = "#5A5A5A"
+  #   )
+  # }
 
   return(gp)
 }
@@ -483,28 +477,35 @@ ui_fig_detect <- function(fig_id, title, caption_file, ns) {
       div(
         class = "fig_caption",
         includeHTML(file.path("www", "doc", "caption", caption_file))
-        )
-      ),
+      )
+    ),
     div(
       class = "fig_panel_container",
       div(
-       class = "fig_panel",
-       bslib::layout_columns(
-         bslib::card_image(file = "www/img/fixed-legends/thresh_axis.png",
-                     fill = FALSE,
-                     width = "80px"),
-         bslib::card_body(
-           plotOutput(ns("fig_smooth_plot_output")),
-           plotOutput(ns("fig_detect_plot_output"))),
-      bslib::card_body(
+        class = "fig_panel",
+        bslib::layout_columns(
+          bslib::card_image(
+            file = "www/img/fixed-legends/thresh_axis.png",
+            fill = FALSE,
+            width = "80px"
+          ),
+          bslib::card_body(
+            plotOutput(ns("fig_smooth_plot_output")),
+            plotOutput(ns("fig_detect_plot_output"))
+          ),
+          bslib::card_body(
             bslib::card_body(height = "250px"),
-            bslib::card_image(file = "www/img/fixed-legends/thresh_legend.png",
-                     fill = FALSE,
-                     width = "200px")),
-         col_widths = c(2, 6, 4)
+            bslib::card_image(
+              file = "www/img/fixed-legends/thresh_legend.png",
+              fill = FALSE,
+              width = "200px"
+            )
+          ),
+          col_widths = c(2, 6, 4)
+        )
       )
-      )
-  ))
+    )
+  )
 }
 
 ui_fig_hm <- function(fig_id, title, caption_file, ns) {
@@ -517,8 +518,8 @@ ui_fig_hm <- function(fig_id, title, caption_file, ns) {
       div(
         class = "fig_caption",
         includeHTML(file.path("www", "doc", "caption", caption_file))
-        )
-      ),
+      )
+    ),
     div(
       class = "fig_panel_container",
       div(
@@ -526,14 +527,17 @@ ui_fig_hm <- function(fig_id, title, caption_file, ns) {
         bslib::layout_columns(
           bslib::card_body(
             plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
-                                 width = "40vw",
-                                 height = "auto"),
+              width = "40vw",
+              height = "auto"
+            ),
             fillable = TRUE,
           ),
-        #  bslib::card_body(
-            bslib::card_image(file = "www/img/fixed-legends/hm_legend.png",
-                     fill = FALSE,
-                     width = "180px"),
+          #  bslib::card_body(
+          bslib::card_image(
+            file = "www/img/fixed-legends/hm_legend.png",
+            fill = FALSE,
+            width = "180px"
+          ),
           col_widths = c(9, 3)
         )
       )
@@ -559,12 +563,13 @@ ui_fig_effort <- function(fig_id, title, caption_file, ns) {
       div(
         class = "fig_panel",
 
-        #uiOutput("plots")
+        # uiOutput("plots")
         plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
-                             height = "auto")
+          height = "auto"
+        )
       ),
     )
- )
+  )
 }
 
 ui_fig_samples <- function(fig_id, title, caption_file, ns) {
@@ -584,7 +589,8 @@ ui_fig_samples <- function(fig_id, title, caption_file, ns) {
       div(
         class = "fig_panel",
         plotly::plotlyOutput(paste0(ns(fig_id), "_plot_output"),
-                             height = "auto")
+          height = "auto"
+        )
       ),
     )
   )
@@ -609,40 +615,37 @@ prepare_data <- function(r) {
     }
   }
   # do we want to subset?
-   if (r$primer != "not available") {
-     if (r$primer != "All") {
-       out <- out |>
-       dplyr::filter(primer == r$primer)
-     } else {
-       out
-   }
-   }
-
-
-
+  if (r$primer != "not available") {
+    if (r$primer != "All") {
+      out <- out |>
+        dplyr::filter(primer == r$primer)
+    } else {
+      out
+    }
+  }
 }
 
 n_projs <- function(r) {
   proj_ids <- r$data_ready |>
-      dplyr::summarise(n = sum(detect, nondetect, na.rm = TRUE),
-                         .by = GOTeDNA_ID.v
-        ) |>
-      sort(n, decreasing = TRUE) |>
-      select(GOTeDNA_ID.v)
+    dplyr::summarise(
+      n = sum(detect, nondetect, na.rm = TRUE),
+      .by = GOTeDNA_ID.v
+    ) |>
+    sort(n, decreasing = TRUE) |>
+    select(GOTeDNA_ID.v)
 }
 
 draw_fig_smooth <- function(r, ready) {
   if (ready) {
-
     p <- try(
-
       smooth_fig(
         r$data_ready,
         r$taxon_lvl_slc,
-        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc))
+        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
       )
+    )
 
-    if("try-error" %in% class(p)) plotNotAvailableYear()
+    if ("try-error" %in% class(p)) plotNotAvailableYear()
 
     p[[1]]
   } else {
@@ -652,26 +655,26 @@ draw_fig_smooth <- function(r, ready) {
 
 draw_fig_detect <- function(r, ready, threshold) {
   if (ready) {
-
     p <- thresh_fig(
       r$taxon_lvl_slc,
       ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
       threshold,
-      r$scaledprobs)
+      r$scaledprobs
+    )
 
     p[[1]]
-    } else {
-      plotNotAvailable()
+  } else {
+    plotNotAvailable()
   }
 }
 
 draw_fig_effort <- function(r, ready) {
   if (ready) {
-
     p <- effort_needed_fig(
-        r$taxon_lvl_slc,
-        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
-        r$scaledprobs)
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
+      r$scaledprobs
+    )
 
     p
   } else {
@@ -681,14 +684,13 @@ draw_fig_effort <- function(r, ready) {
 
 draw_fig_heatmap <- function(r, ready) {
   if (ready) {
-
     p <- hm_fig(
       r$taxon_lvl_slc,
       ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
-      r$scaledprobs)
+      r$scaledprobs
+    )
 
     p
-
   } else {
     plotNotAvailable()
   }
@@ -697,13 +699,12 @@ draw_fig_heatmap <- function(r, ready) {
 draw_fig_samples <- function(r, ready) {
   if (ready) {
     p <- field_sample_fig(
-        r$data_ready,
-        r$taxon_lvl_slc,
-        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
-      )
+      r$data_ready,
+      r$taxon_lvl_slc,
+      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
+    )
 
     p
-
   } else {
     plotNotAvailable()
   }
@@ -721,12 +722,11 @@ add_fixed_legend <- function(file) {
   }
 }
 
-plotText <- function(txt, ...) {
-  plot(c(-1, 1), c(-1, 1),
-    ann = FALSE, bty = "n", type = "n", xaxt = "n",
-    yaxt = "n"
-  )
-  text(0, 0, txt, cex = 2, ...)
+plotText <- function(txt, size = 20) {
+  data.frame(x = 0.5, y = 0.5, txt = txt) |>
+    ggplot2::ggplot(ggplot2::aes(x, y, label = txt)) +
+    ggplot2::geom_text(size = size) +
+    ggplot2::theme_void()
 }
 
 plotNotAvailableTaxoLevel <- function() {

@@ -11,7 +11,7 @@ effort_needed_fig(
 )
 }
 \arguments{
-\item{scaledprobs_month}{(required, data.frame) Normalized detection
+\item{scaledprobs}{(required, data.frame) Normalized detection
 probabilities as returned by the element \code{month} of the list returned by
 \code{\link[=scale_newprob]{scale_newprob()}} for one species and one primer.}
 }

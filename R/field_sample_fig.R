@@ -32,7 +32,6 @@ field_sample_fig <- function(
     taxon.level <- match.arg(taxon.level)
   }
 
-
   data %<>%
     dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
     dplyr::group_by(kingdom, phylum, class, order, family, genus, species, year, month) %>%

@@ -2,8 +2,8 @@ Package: GOTeDNA.app
 Type: Shiny App
 Encoding: UTF-8
 Title: GOTeDNA Shiny App
-Date: 2024-05-02
-Version: 0.5.0.9004
+Date: 2024-06-20
+Version: 0.5.0.9005
 Authors@R: c(person("Anaïs", "Lacoursière et al.", email = "Anais.Lacoursiere@dfo-mpo.gc.ca", role = c("aut", "cre")))
 Maintainer: Melissa Morrison <melissa.morrison@dfo-mpo.gc.ca>
 Description: The purpose of this Shiny App is to offer an user interface for the package GOTeDNA.
@@ -28,6 +28,7 @@ Imports:
     mapedit (>= 0.6.0),
     magrittr,
     patchwork (>=1.2),
+    plotly (>= 4.10.4),
     shiny
 Remotes:
     mkmor/GOTeDNA

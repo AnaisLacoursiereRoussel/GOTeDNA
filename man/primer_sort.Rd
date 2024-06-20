@@ -7,7 +7,7 @@
 primer_sort(
   taxon.level = c("domain", "kingdom", "phylum", "class", "order", "family", "genus",
     "species"),
-  scaledprobs_month
+  scaledprobs
 )
 }
 \arguments{

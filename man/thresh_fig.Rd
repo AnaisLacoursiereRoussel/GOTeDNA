@@ -5,7 +5,13 @@
 \title{Display monthly detection probabilities for selected taxon, and
 detection probability threshold}
 \usage{
-thresh_fig(taxon.level, taxon.name, threshold, scaledprobs_month)
+thresh_fig(
+  taxon.level = c("domain", "kingdom", "phylum", "class", "order", "family", "genus",
+    "species"),
+  taxon.name,
+  threshold,
+  scaledprobs
+)
 }
 \arguments{
 \item{taxon.level}{(required, data.frame): Select taxonomic level to view.
