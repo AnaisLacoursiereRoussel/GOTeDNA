@@ -96,13 +96,16 @@ mod_select_data_ui <- function(id) {
               ),
               column(
                 3,
-                selectInput(ns("primer"),
+                # https://stackoverflow.com/questions/50218614/shiny-selectinput-to-select-all-from-dropdown
+                htmltools::tagQuery(shinyWidgets::pickerInput(ns("primer"),
                   div(
                     "Primer set",
                     icon("info-circle", class = "definition", onclick = "fakeClick('primer-info')"),
                   ),
-                  choices = "All"
-                )
+                  choices = "All",
+                  options = list(`actions-box` = TRUE),
+                  multiple = TRUE
+                ))$find(".btn")$removeAttrs("data-toggle")$addAttrs(`data-bs-toggle` = "dropdown")$allTags()
               )
             )
           )
@@ -232,12 +235,6 @@ mod_select_data_server <- function(id, r) {
         ".",
         r$cur_data$GOTeDNA_version
       )
-
-
-      updateSelectInput(session, "slc_phy",
-        selected = "All",
-        choices = c("All", unique(r$r$cur_data$phylum) |> sort())
-      )
     })
 
     observe(
@@ -249,8 +246,6 @@ mod_select_data_server <- function(id, r) {
       }
     )
 
-
-
     ## update Taxon data
     observe({
       updateSelectInput(
@@ -259,7 +254,6 @@ mod_select_data_server <- function(id, r) {
         choices = c(
           "All",
           r$cur_data[[input$taxo_lvl]] |>
-            # r$cur_data_sta_slc[[input$taxo_lvl]] |>
             unique() |>
             sort()
         ),
@@ -314,27 +308,17 @@ mod_select_data_server <- function(id, r) {
 
 
     observe({
-      if (input$data_type == "qPCR") {
-        updateSelectInput(
-          session,
-          "primer",
-          choices = get_primer_selection(
-            r$taxon_lvl_slc, filter_taxon(
-              r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
-            )
-          )
+      primer_choices <- get_primer_selection(
+        r$taxon_lvl_slc, filter_taxon(
+          r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
         )
-      } else {
-        updateSelectInput(
-          session,
-          "primer",
-          choices = get_primer_selection(
-            r$taxon_lvl_slc, filter_taxon(
-              r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
-            )
-          )
-        )
-      }
+      )
+      shinyWidgets::updatePickerInput(
+        session,
+        "primer",
+        choices = primer_choices,
+        selected = primer_choices
+      )
     })
 
     observe(r$primer <- input$primer)
@@ -447,7 +431,8 @@ filter_station <- function(r) {
   dff <- filter_taxon(
     r$cur_data, r$taxon_lvl_slc, r$taxon_id_slc, r$species,
     r$primer
-  )
+  ) |>
+    dplyr::filter(primer %in% r$primer)
   sta |>
     dplyr::inner_join(
       dff |>

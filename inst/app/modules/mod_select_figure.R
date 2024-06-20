@@ -225,8 +225,8 @@ mod_select_figure_server <- function(id, r) {
         } else {
           if (r$species == "All" && r$taxon_id_slc == "All") {
             showNotification(
-              "The current selection is too broad, restrict your selection to one
-            specific taxonomic level or to one species.",
+              "The current selection is too broad, restrict your selection to
+              one specific taxonomic level or to one species.",
               type = "warning",
               duration = 10
             )
@@ -443,14 +443,11 @@ prepare_data <- function(r) {
     }
   }
   # do we want to subset?
-  if (r$primer != "not available") {
-    if (r$primer != "All") {
-      out <- out |>
-        dplyr::filter(primer == r$primer)
-    } else {
-      out
-    }
-  }
+  print(r$primer)
+  print(unique(out$primer))
+
+  out |>
+    dplyr::filter(primer %in% r$primer)
 }
 
 n_projs <- function(r) {
