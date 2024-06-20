@@ -2,9 +2,6 @@
 mod_select_data_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    tags$head(
-      tags$script(type = "text/javascript", src = "shinyLink.js")
-    ),
     div(
       id = "data_request",
       div(
@@ -102,14 +99,7 @@ mod_select_data_ui <- function(id) {
                 selectInput(ns("primer"),
                   div(
                     "Primer set",
-                    shinyLink(
-                      to = "primer-info",
-                      label = img(
-                        src = "img/info_icon.png",
-                        title = "Details",
-                        style = "width: 20px"
-                      )
-                    )
+                    icon("info-circle", class = "definition", onclick = "fakeClick('primer-info')"),
                   ),
                   choices = "All"
                 )

@@ -132,14 +132,6 @@ get_taxon_level <- function(phy, cla, gen, spe) {
   }
 }
 
-shinyLink <- function(to, label) {
-  tags$a(
-    class = "shiny__link",
-    href = to,
-    label
-  )
-}
-
 # Primer information for primer tab
 ## import glossary
 primer_seqs <- read.csv("data/primers.csv") %>%
