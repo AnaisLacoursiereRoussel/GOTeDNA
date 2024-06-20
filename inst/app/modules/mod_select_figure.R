@@ -21,12 +21,17 @@ mod_select_figure_ui <- function(id) {
       div(
         id = ns("figure_selection_main"),
         div(
-          class = "d-flex justify-content-center",
+          class = "d-flex justify-content-center buttons-container",
           id = "select_all_figures",
           actionButton(
             ns("select_all"),
             "Select all figures",
             title = "Select all figures"
+          ),
+          actionButton(
+            ns("deselect_all"),
+            "Deselect all figures",
+            title = "Deselect all figures"
           )
         ),
         div(
@@ -162,6 +167,13 @@ mod_select_figure_server <- function(id, r) {
       for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_samples")) {
         show_fig(i)
         r$fig_slc[[i]] <- TRUE
+      }
+    })
+
+    observeEvent(input$deselect_all, {
+      for (i in c("fig_detect", "fig_effort", "fig_heatmap", "fig_samples")) {
+        hide_fig(i)
+        r$fig_slc[[i]] <- FALSE
       }
     })
 
