@@ -847,6 +847,10 @@ shiny-plot-output {
   font-weight: bold;
 }
 
+.definition:hover{
+  cursor: pointer;
+}
+
 
 /* indigeneous page */
 .indig_container {

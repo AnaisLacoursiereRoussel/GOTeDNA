@@ -342,7 +342,9 @@ mod_select_figure_server <- function(id, r) {
           `Data owner contact` = "anais.lacoursiere@dfo-mpo.gc.ca",
           `Indigenous contribution` = ifelse(
             !is.na(LClabel),
-            "<button type='submit' style='border: 0; background: transparent'onclick='fakeClick(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/></button>",
+            "<button type='submit' style='border: 0; background: transparent' 
+            onclick='fakeClick(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/>
+            </button>",
             NA
           ),
           # "/>"#c('<img src="img/fn_logo.png" height="25" >'),
