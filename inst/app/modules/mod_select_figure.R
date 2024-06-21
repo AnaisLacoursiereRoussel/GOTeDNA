@@ -75,10 +75,6 @@ mod_select_figure_ui <- function(id) {
     div(
       id = "observation",
       fluidRow(
-        selectInput(
-          inputId = "sel", label = "Select project",
-          choices = unique(ns("data_slc")), multiple = FALSE
-        ),
         class = "panels-container",
         column(
           3,
@@ -89,12 +85,11 @@ mod_select_figure_ui <- function(id) {
           ),
           div(
             id = "fig_left_panel",
-            selectInput(ns("threshold"), "Threshold", choices = ls_threshold, selected = 75),
-            actionButton(
-              ns("re_calc_window"),
-              label = "Update computation",
-              title = "Compute optimal detection window with updated values",
-              class = "primary-button"
+            selectInput(
+              ns("threshold"),
+              "Threshold",
+              choices = ls_threshold,
+              selected = 75
             ),
             div(
               id = "fig_sampling_info",
@@ -214,7 +209,7 @@ mod_select_figure_server <- function(id, r) {
 
     observeEvent(
       ignoreInit = TRUE,
-      list(input$re_calc_window, input$calc_window),
+      list(input$calc_window, input$threshold),
       {
         #
         if (r$species == "All" && r$data_type == "qPCR") {
@@ -272,11 +267,14 @@ mod_select_figure_server <- function(id, r) {
                 output$conf <- renderUI(paste(win$fshDF_month$confidence[1])) # , collapse = ", "))
                 output$var_year <- renderUI("Medium")
               }
+
               r$fig_ready <- TRUE
 
-              r$GOTeDNA_ID.v <- filter_project(r)
-
-              # projID <- plotly::highlight_key(r$data_ready, ~GOTeDNA_ID.v)
+              # create project vector
+              v_proj <- r$scaledprobs$GOTeDNA_ID.v |> unique()
+              l_proj <- seq(v_proj) |> as.list()
+              names(l_proj) <- paste0("Project ID", v_proj)
+              updateSelectInput(session, "proj_id", choices = l_proj)
             } else {
               showNotification("Data selection is empty", type = "warning")
             }
@@ -297,11 +295,15 @@ mod_select_figure_server <- function(id, r) {
     # figure must be selected and ready to be drawn
 
     output$fig_smooth_plot_output <- renderPlot({
-      draw_fig_smooth(r, r$fig_ready && r$fig_slc$fig_detect)
+      draw_fig_smooth(r, r$fig_ready && r$fig_slc$fig_detect,
+        id = input$proj_id |> as.numeric()
+      )
     })
 
     output$fig_detect_plot_output <- renderPlot({
-      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
+      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold,
+        id = input$proj_id |> as.numeric()
+      )
     })
 
     output$fig_effort_plot_output <- plotly::renderPlotly({
@@ -442,10 +444,7 @@ prepare_data <- function(r) {
       }
     }
   }
-  # do we want to subset?
-  print(r$primer)
-  print(unique(out$primer))
-
+  # primer-based subset
   out |>
     dplyr::filter(primer %in% r$primer)
 }
@@ -497,7 +496,6 @@ add_fixed_legend <- function(file) {
     tagList()
   } else {
     img(
-      # id = "fig_legend_img",
       src = file.path("img", "fixed-legends", file),
       alt = "Legend of the figure"
     )
@@ -505,7 +503,7 @@ add_fixed_legend <- function(file) {
 }
 
 
-draw_fig_smooth <- function(r, ready) {
+draw_fig_smooth <- function(r, ready, id) {
   if (ready) {
     p <- try(
       smooth_fig(
@@ -514,16 +512,13 @@ draw_fig_smooth <- function(r, ready) {
         ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
       )
     )
-
-    if ("try-error" %in% class(p)) plotNotAvailableYear()
-
-    p[[1]]
+    if (inherits(p, "try-error")) plotNotAvailableYear()
   } else {
     plotNotAvailable()
   }
 }
 
-draw_fig_detect <- function(r, ready, threshold) {
+draw_fig_detect <- function(r, ready, threshold, id) {
   if (ready) {
     p <- thresh_fig(
       r$taxon_lvl_slc,
@@ -531,7 +526,7 @@ draw_fig_detect <- function(r, ready, threshold) {
       threshold,
       r$scaledprobs
     )
-    p[[1]]
+    p[[id]]
   } else {
     plotNotAvailable()
   }
@@ -603,7 +598,8 @@ ui_fig_detect <- function(fig_id, title, caption_file, ns) {
           ),
           bslib::card_body(
             plotOutput(ns("fig_smooth_plot_output")),
-            plotOutput(ns("fig_detect_plot_output"))
+            plotOutput(ns("fig_detect_plot_output")),
+            selectInput(ns("proj_id"), "Project", choices = "not available")
           ),
           bslib::card_body(
             bslib::card_body(height = "250px"),
