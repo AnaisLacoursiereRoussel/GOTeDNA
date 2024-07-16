@@ -2,9 +2,6 @@
 mod_select_data_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    tags$head(
-      tags$script(type = "text/javascript", src = "shinyLink.js")
-      ),
     div(
       id = "data_request",
       div(
@@ -86,28 +83,29 @@ mod_select_data_ui <- function(id) {
               ),
               column(
                 3, selectInput(ns("taxo_id"),
-                               "Taxa",
-                               choices = "All")),
-              column(
-                3,
-                selectizeInput(ns("slc_spe"),
-                               "Species",
-                               choices = "All")
+                  "Taxa",
+                  choices = "All"
+                )
               ),
               column(
                 3,
-                selectInput(ns("primer"),
-                            div("Primer set",
-                                shinyLink(to = "primer-info",
-                                          label = img(
-                                            src = "img/info_icon.png",
-                                            title = "Details",
-                                            style = "width: 20px"))
-
-                                 )
-                                ,
-                            choices = "All")
-
+                selectizeInput(ns("slc_spe"),
+                  "Species",
+                  choices = "All"
+                )
+              ),
+              column(
+                3,
+                # https://stackoverflow.com/questions/50218614/shiny-selectinput-to-select-all-from-dropdown
+                htmltools::tagQuery(shinyWidgets::pickerInput(ns("primer"),
+                  div(
+                    "Primer set",
+                    icon("info-circle", class = "definition", onclick = "fakeClick('primer-info')"),
+                  ),
+                  choices = "All",
+                  options = list(`actions-box` = TRUE),
+                  multiple = TRUE
+                ))$find(".btn")$removeAttrs("data-toggle")$addAttrs(`data-bs-toggle` = "dropdown")$allTags()
               )
             )
           )
@@ -232,14 +230,10 @@ mod_select_data_server <- function(id, r) {
       r$data_type <- input$data_type
       r$cur_data <- gotedna_data[[input$data_type]]
       r$data_station <- gotedna_station[[input$data_type]]
-      r$GOTeDNA_ID.v <- paste0(r$cur_data$GOTeDNA_ID,
-                             ".",
-                             r$cur_data$GOTeDNA_version)
-
-
-      updateSelectInput(session, "slc_phy",
-        selected = "All",
-        choices = c("All", unique(r$r$cur_data$phylum) |> sort())
+      r$GOTeDNA_ID.v <- paste0(
+        r$cur_data$GOTeDNA_ID,
+        ".",
+        r$cur_data$GOTeDNA_version
       )
     })
 
@@ -252,8 +246,6 @@ mod_select_data_server <- function(id, r) {
       }
     )
 
-
-
     ## update Taxon data
     observe({
       updateSelectInput(
@@ -262,7 +254,6 @@ mod_select_data_server <- function(id, r) {
         choices = c(
           "All",
           r$cur_data[[input$taxo_lvl]] |>
-            # r$cur_data_sta_slc[[input$taxo_lvl]] |>
             unique() |>
             sort()
         ),
@@ -277,9 +268,6 @@ mod_select_data_server <- function(id, r) {
           "slc_spe",
           choices = c(
             "All",
-            # r$cur_data_sta_slc[
-            #   r$cur_data_sta_slc[[input$taxo_lvl]] == input$taxo_id,
-            # ]$species |>
             r$cur_data[
               r$cur_data[[input$taxo_lvl]] == input$taxo_id,
             ]$species |>
@@ -309,39 +297,33 @@ mod_select_data_server <- function(id, r) {
         "taxo_lvl",
         selected = "domain"
       )
-      r$geom_slc <- r$station_slc <- NULL
-      r$geom <- filter_station(r)
-      r$reload_map <- r$reload_map + 1
+      updateSelectizeInput(
+        session,
+        "slc_spe",
+        selected = "All"
+      )
+      r$reset <- r$reset + 1
+      r$data_ready <- NULL
     })
 
 
     observe({
-      if (input$data_type == "qPCR") {
-        updateSelectInput(
-          session,
-          "primer",
-          choices = get_primer_selection(
-            r$taxon_lvl_slc, filter_taxon(
-              r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
-            )
-          )
+      primer_choices <- get_primer_selection(
+        r$taxon_lvl_slc, filter_taxon(
+          r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
         )
-      } else {
-        updateSelectInput(
-          session,
-          "primer",
-          choices = get_primer_selection(
-            r$taxon_lvl_slc, filter_taxon(
-              r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
-            )
-          )
-        )
-      }
+      )
+      shinyWidgets::updatePickerInput(
+        session,
+        "primer",
+        choices = primer_choices,
+        selected = primer_choices
+      )
     })
 
     observe(r$primer <- input$primer)
 
-   # sample number
+    # sample number
     output$n_smpl_map <- renderUI({
       tagList(
         div(
@@ -393,8 +375,7 @@ mod_select_data_server <- function(id, r) {
             r$station_slc <- r$geom$station
 
             geom_coords <- st_bbox(r$geom_slc)
-
-            } else {
+          } else {
             showNotification("No station selected", type = "warning")
           }
         } else {
@@ -434,10 +415,6 @@ mod_select_data_server <- function(id, r) {
   })
 }
 
-# attempt to create a filtering object
-filter_project <- function(r) {
-  proj <- r$scaledprobs %>% dplyr::mutate(ID = 1:dplyr::n())
-}
 
 # filter via inner join and used to count samples
 filter_station <- function(r) {
@@ -447,18 +424,23 @@ filter_station <- function(r) {
   } else {
     sta <- r$data_station
   }
-  dff <- filter_taxon(r$cur_data, r$taxon_lvl_slc, r$taxon_id_slc, r$species,
-                      r$primer)
+  dff <- filter_taxon(
+    r$cur_data, r$taxon_lvl_slc, r$taxon_id_slc, r$species,
+    r$primer
+  ) |>
+    dplyr::filter(primer %in% r$primer)
   sta |>
     dplyr::inner_join(
       dff |>
         dplyr::group_by(station, materialSampleID) |>
-        dplyr::summarise(count = dplyr::n_distinct(materialSampleID),
-                         success = sum(detected)),
-       # dplyr::group_by(station, primer, species) |>
-       # dplyr::summarise(
-       #   success = sum(detected),
-       #   count = dplyr::n_distinct(materialSampleID)),
+        dplyr::summarise(
+          count = dplyr::n_distinct(materialSampleID),
+          success = sum(detected)
+        ),
+      # dplyr::group_by(station, primer, species) |>
+      # dplyr::summarise(
+      #   success = sum(detected),
+      #   count = dplyr::n_distinct(materialSampleID)),
       join_by(station)
     )
 }
@@ -469,7 +451,7 @@ filter_taxon <- function(data, taxon_lvl, taxon_id, species, primer) {
   if (!is.null(taxon_lvl)) {
     if (taxon_lvl == "species") {
       out <- out |>
-        dplyr::filter(species == {{species}}, primer == primer )
+        dplyr::filter(species == {{ species }}, primer == primer)
     } else {
       if (taxon_id != "All") {
         out <- out |>

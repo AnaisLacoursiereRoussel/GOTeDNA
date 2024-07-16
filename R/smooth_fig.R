@@ -70,9 +70,9 @@ smooth_fig <- function(
   list(NEW2) |> dplyr::bind_rows()
   })
 
-  plots = vector("list")
+  plots <- list()
 
-  for (proj in names(data.split)){
+  for (proj in names(data.split)) {
     plots[[proj]] <- with(data.split[[proj]],
                           ggplot2::ggplot() +
                             ggplot2::geom_hline(ggplot2::aes(yintercept = y), data.frame(y = c(0:4) / 4), color = "lightgrey") +

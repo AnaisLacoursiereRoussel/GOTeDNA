@@ -4,17 +4,21 @@
 \alias{field_sample_fig}
 \title{Display actual sampling effort of taxa within specified taxonomic group.}
 \usage{
-field_sample_fig(data, taxon.select, taxon.name)
+field_sample_fig(
+  data,
+  taxon.level = c("kingdom", "phylum", "class", "order", "family", "genus", "species"),
+  taxon.name
+)
 }
 \arguments{
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}}
 
-\item{taxon.select}{(required, character): Taxonomic level of interest
+\item{taxon.level}{(required, character): Taxonomic level of interest
 Choices = one of \verb{c("domain", "kingdom", "phylum", "class", "order", "family",}
 \verb{"genus", "species")}.}
 
 \item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.select}. E.g., if \code{taxon.select = "class"}
+provided in \code{taxon.level}. E.g., if \code{taxon.level = "class"}
 enter class name, etc..}
 }
 \description{
@@ -25,7 +29,7 @@ for all species of a specified taxonomic group per year.
 \dontrun{
 field_sample_fig(
   data = gotedna_data$metabarcoding,
-  taxon.select = "phylum",
+  taxon.level = "phylum",
   taxon.name = "Bryozoa"
 )
 }

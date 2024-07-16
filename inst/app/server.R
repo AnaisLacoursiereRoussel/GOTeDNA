@@ -18,7 +18,8 @@ server <- function(input, output, session) {
       fig_smooth = FALSE
     ),
     current_fig = "fig1",
-    lock_view = FALSE
+    lock_view = FALSE,
+    reset = 0
   )
 
    observeEvent(input$navbar, {

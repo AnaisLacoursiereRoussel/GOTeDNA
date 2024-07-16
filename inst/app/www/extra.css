@@ -552,7 +552,7 @@ h6 {
   padding: 80px;
   border-radius: 17px;
   width: 100%;
-  min-height: 5vh;
+  min-height: 40vh;
 }
 
 .fig_main_container-header {
@@ -797,11 +797,19 @@ table.dataTable.display>tbody>tr>td {
   margin-right: 1rem;
 }
 
+/* https://github.com/rstudio/shiny/issues/2988 */
+#shiny-notification-panel {
+  top: 0;
+  bottom: unset;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 450px;
+}
+
 .shiny-notification {
-  position: fixed;
-  top: calc(1%);
-  left: calc(25%);
-  width: 50%;
   font-weight: bold;
   text-align: center;
 }
@@ -843,7 +851,29 @@ shiny-plot-output {
   z-index: 1001 !important;
 }
 
-
 .definition {
   font-weight: bold;
+}
+
+.definition:hover {
+  cursor: pointer;
+}
+
+
+/* indigeneous page */
+.indig_container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+
+.indig_img {
+  width: 20%;
+}
+
+.indig_txt {
+  width: 80%;
 }
