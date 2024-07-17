@@ -49,7 +49,7 @@ thresh_fig <- function(
 
   scaledprobs %<>%
     dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
-    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), month, primer) %>%
+    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), month) %>%
     dplyr::summarise(
       nd = sum(detect, na.rm = TRUE),
       n = sum(detect, nondetect, na.rm = TRUE),

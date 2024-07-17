@@ -91,6 +91,9 @@ mod_select_figure_ui <- function(id) {
               choices = ls_threshold,
               selected = 75
             ),
+            selectInput(ns("proj_id"),
+                        "GOTeDNA Project",
+                        choices = "not available"),
             div(
               id = "fig_sampling_info",
               h4("Guidance"),
@@ -273,7 +276,7 @@ mod_select_figure_server <- function(id, r) {
               # create project vector
               v_proj <- r$scaledprobs$GOTeDNA_ID.v |> unique()
               l_proj <- seq(v_proj) |> as.list()
-              names(l_proj) <- paste0("Project ID", v_proj)
+              names(l_proj) <- paste0("GOTeDNA ID ", v_proj)
               updateSelectInput(session, "proj_id", choices = l_proj)
             } else {
               showNotification("Data selection is empty", type = "warning")
@@ -307,18 +310,39 @@ mod_select_figure_server <- function(id, r) {
     })
 
     output$fig_effort_plot_output <- plotly::renderPlotly({
-      ggp <- draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
-      plotly::ggplotly(ggp) |>
-        default_layout()
+      plt_ready <- r$fig_ready && r$fig_slc$fig_effort
+      ggp <- draw_fig_effort(r, plt_ready)
+      if (plt_ready) {
+        # multiply height by number of species
+        nys <- r$data_ready$species |>
+          unique() |>
+          length()
+        plt <- plotly::ggplotly(
+          ggp,
+          height = 300 * nys
+          ) |>
+          default_layout() |>
+          facet_strip_format()
+      }
+
     })
 
     output$fig_heatmap_plot_output <- plotly::renderPlotly({
-      ggp <- draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
-      plotly::ggplotly(
+      plt_ready <- r$fig_ready && r$fig_slc$fig_heatmap
+      ggp <- draw_fig_heatmap(r, plt_ready)
+      if (plt_ready) {
+        # multiply height by number of species
+        nys <- r$data_ready$species |>
+          unique() |>
+          length()
+        plt <- plotly::ggplotly(
         ggp,
+        height = 200 * nys,
         tooltip = c("x", "text", "fill")
       ) |>
-        default_layout()
+        default_layout() |>
+          facet_strip_format()
+      }
     })
 
     output$fig_samples_plot_output <- plotly::renderPlotly({
@@ -331,16 +355,10 @@ mod_select_figure_server <- function(id, r) {
           length()
         plt <- plotly::ggplotly(
           ggp,
-          height = 350 * nys
+          height = 300 * nys
         ) |>
           default_layout() |>
           facet_strip_format()
-      } else {
-        plt <- plotly::ggplotly(
-          ggp,
-          height = 400
-        ) |>
-          default_layout()
       }
       plt
     })
@@ -512,7 +530,8 @@ draw_fig_smooth <- function(r, ready, id) {
         ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
       )
     )
-    if (inherits(p, "try-error")) plotNotAvailableYear()
+ #   if (inherits(p, "try-error")) plotNotAvailableYear()  << not sure what this is, but the figure wasn't showing up
+    p[[id]]
   } else {
     plotNotAvailable()
   }
@@ -599,7 +618,7 @@ ui_fig_detect <- function(fig_id, title, caption_file, ns) {
           bslib::card_body(
             plotOutput(ns("fig_smooth_plot_output")),
             plotOutput(ns("fig_detect_plot_output")),
-            selectInput(ns("proj_id"), "Project", choices = "not available")
+          #  selectInput(ns("proj_id"), "Project", choices = "not available")
           ),
           bslib::card_body(
             bslib::card_body(height = "250px"),
