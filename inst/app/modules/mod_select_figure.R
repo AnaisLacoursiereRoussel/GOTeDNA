@@ -274,9 +274,9 @@ mod_select_figure_server <- function(id, r) {
               r$fig_ready <- TRUE
 
               # create project vector
-              v_proj <- r$scaledprobs$GOTeDNA_ID.v |> unique()
+              v_proj <- r$scaledprobs$GOTeDNA_ID |> unique()
               l_proj <- seq(v_proj) |> as.list()
-              names(l_proj) <- paste0("GOTeDNA ID ", v_proj)
+              names(l_proj) <- paste0("GOTeDNA ID: ", v_proj)
               updateSelectInput(session, "proj_id", choices = l_proj)
             } else {
               showNotification("Data selection is empty", type = "warning")
@@ -374,14 +374,16 @@ mod_select_figure_server <- function(id, r) {
         dplyr::group_by(
           GOTeDNA_ID,
           GOTeDNA_version,
-          LClabel
+          LClabel,
+          bibliographicCitation
         ) |>
         summarise(
           `Sample #` = dplyr::n_distinct(materialSampleID),
-          `Station #` = dplyr::n_distinct(station)
+          `Station #` = dplyr::n_distinct(station),
+          Contact = unique(ownerContact)
         ) |>
+        dplyr::ungroup() |>
         mutate(
-          `Data owner contact` = "anais.lacoursiere@dfo-mpo.gc.ca",
           `Indigenous contribution` = ifelse(
             !is.na(LClabel),
             "<button type='submit' style='border: 0; background: transparent'
@@ -389,20 +391,19 @@ mod_select_figure_server <- function(id, r) {
             </button>",
             NA
           ),
-          # "/>"#c('<img src="img/fn_logo.png" height="25" >'),
-          Publication = "DOI:xx.xxxxx",
-          Reference = "xxxxx",
+
           LClabel = NULL
-        ) |>
-        dplyr::ungroup() |>
-        dplyr::relocate(
-          GOTeDNA_ID, GOTeDNA_version, Publication, `Data owner contact`,
-          `Sample #`, `Station #`, `Indigenous contribution`, Reference
         ) |>
         dplyr::rename(
           "GOTeDNA ID" = "GOTeDNA_ID",
-          "Version" = "GOTeDNA_version"
+          "Subproject" = "GOTeDNA_version",
+          "Publication" = "bibliographicCitation"
         ) |>
+        dplyr::relocate(
+          `GOTeDNA ID`, Subproject, #Contact,
+          `Sample #`, `Station #`, `Indigenous contribution`, Publication
+        ) |>
+
         DT::datatable(
           escape = FALSE, rownames = FALSE,
           options = list(
@@ -471,10 +472,10 @@ n_projs <- function(r) {
   proj_ids <- r$data_ready |>
     dplyr::summarise(
       n = sum(detect, nondetect, na.rm = TRUE),
-      .by = GOTeDNA_ID.v
+      .by = GOTeDNA_ID
     ) |>
     sort(n, decreasing = TRUE) |>
-    select(GOTeDNA_ID.v)
+    select(GOTeDNA_ID)
 }
 
 

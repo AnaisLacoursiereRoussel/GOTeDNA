@@ -70,7 +70,7 @@ scale_newprob <- function(data, newprob) {
     dplyr::tibble()
   row.names(DFmo) <- NULL
 
-  DFmo[c("GOTeDNA_ID.v", "species", "primer")] <- stringr::str_split_fixed(DFmo$id, ";", 3)
+  DFmo[c("GOTeDNA_ID", "species", "primer")] <- stringr::str_split_fixed(DFmo$id, ";", 3)
 
   DFmo <- DFmo |>
     dplyr::left_join(
@@ -141,7 +141,7 @@ scale_newprob <- function(data, newprob) {
     dplyr::tibble()
   row.names(DFyr) <- NULL
 
-  DFyr[c("GOTeDNA_ID.v", "species", "primer", "year")] <- stringr::str_split_fixed(DFyr$id, ";", 4)
+  DFyr[c("GOTeDNA_ID", "species", "primer", "year")] <- stringr::str_split_fixed(DFyr$id, ";", 4)
 
   DFyr <- DFyr |>
     dplyr::left_join(

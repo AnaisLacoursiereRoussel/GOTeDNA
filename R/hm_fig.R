@@ -33,7 +33,7 @@ hm_fig <- function(
                   !is.na(year)) %>%
     dplyr::rename("Month" = "month",
                   "Detection rate" = "scaleP") %>%
-    dplyr::group_by(GOTeDNA_ID.v)
+    dplyr::group_by(GOTeDNA_ID)
 
   scaledprobs$Month <- factor(scaledprobs$Month,
                        levels = 1:12,
@@ -49,11 +49,11 @@ hm_fig <- function(
                                               y = reorder(year, dplyr::desc(year)),
                                               fill = `Detection rate`,
                                               text = paste("Year:", year),
-                                              group = GOTeDNA_ID.v)) +
+                                              group = GOTeDNA_ID)) +
     ggplot2::geom_tile(dplyr::filter(scaledprobs, `Detection rate` == 0),
                        mapping = ggplot2::aes(x = Month,
                                               y = reorder(year, dplyr::desc(year)),
-                                              group = GOTeDNA_ID.v),
+                                              group = GOTeDNA_ID),
                        fill = "lightgrey", inherit.aes = FALSE)+
     ggplot2::facet_wrap(~species,
                        scales = "free",

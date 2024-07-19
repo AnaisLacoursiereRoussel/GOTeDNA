@@ -49,7 +49,7 @@ thresh_fig <- function(
 
   scaledprobs %<>%
     dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
-    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), month) %>%
+    dplyr::group_by(GOTeDNA_ID, !!dplyr::ensym(taxon.level), month) %>%
     dplyr::summarise(
       nd = sum(detect, na.rm = TRUE),
       n = sum(detect, nondetect, na.rm = TRUE),
@@ -71,8 +71,8 @@ thresh_fig <- function(
 
   plots = vector("list")
 
-  for (proj in unique(scaledprobs$GOTeDNA_ID.v)) {
-    plots[[proj]] <- with(scaledprobs[scaledprobs$GOTeDNA_ID.v %in% proj, ],
+  for (proj in unique(scaledprobs$GOTeDNA_ID)) {
+    plots[[proj]] <- with(scaledprobs[scaledprobs$GOTeDNA_ID %in% proj, ],
 
   ggplot2::ggplot() +
     ggplot2::geom_hline(
@@ -86,18 +86,18 @@ thresh_fig <- function(
       color = "lightgrey"
     ) +
     ggplot2::geom_col(
-      dplyr::filter(scaledprobs, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "1"),
+      dplyr::filter(scaledprobs, GOTeDNA_ID %in% proj & !!dplyr::ensym(thresh.value) %in% "1"),
       mapping = ggplot2::aes(x = month, y = fill), fill = viridis::viridis(1), position = "dodge2",
       width = 0.9, show.legend = FALSE, alpha = .9#, fill = viridis::viridis(1)
     ) +
     ggplot2::geom_col(
-      dplyr::filter(scaledprobs, GOTeDNA_ID.v %in% proj & !!dplyr::ensym(thresh.value) %in% "0"),
+      dplyr::filter(scaledprobs, GOTeDNA_ID %in% proj & !!dplyr::ensym(thresh.value) %in% "0"),
       mapping = ggplot2::aes(x = month, y = fill), fill = "darkgrey", position = "dodge2",
       width = 0.9, show.legend = FALSE, alpha = .9#, fill = "darkgrey"
     ) +
     # To make the interpolated data stand out
     ggpattern::geom_col_pattern(
-      dplyr::filter(scaledprobs, GOTeDNA_ID.v %in% proj & is.nan(scaleP)),
+      dplyr::filter(scaledprobs, GOTeDNA_ID %in% proj & is.nan(scaleP)),
       mapping = ggplot2::aes(x = month, y = fill),
       position = "dodge2",
       width = 0.9, show.legend = FALSE, fill = NA,

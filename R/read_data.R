@@ -13,29 +13,35 @@
 #' @param path.folder (optional, character)
 #' Default: `path.folder = NULL`. Default will use the current working directory.
 #'
-#' @return A tibble with 21 columns:
+#' @return A tibble with 26 columns:
 #' * `GOTeDNA_ID`
 #' * `GOTeDNA_version`
-#' * `eventID`: added internally to keep track of files origins,
-#' * `scientificName`: added internally to keep track of files origins,
-#' * `target_gene`
-#' * `target_subfragment`
+#' * `materialSampleID`
+#' * `eventID`
+#' * `primer`
+#' * `species`
+#' * `domain`
 #' * `kingdom`
 #' * `phylum`
 #' * `class`
 #' * `order`
 #' * `family`
 #' * `genus`
+#' * `concentration`: provided when choose.method = "qPCR"
+#' * `pcr_primer_lod` : provided when choose.method = "qPCR"
+#' * `organismQuantity`: provided when choose.method = "metabarcoding"
 #' * `date`
 #' * `ecodistrict`
+#' * `LClabel` : Local Contexts label to denote First Nations data sovereignty
 #' * `decimalLatitude`
 #' * `decimalLongitude`
 #' * `station`
 #' * `year`
 #' * `month`
-#' * `organismQuantity`: provided when choose.method = "metabarcoding",
-#' * `concentration`: provided when choose.method = "qPCR",
 #' * `detected`
+#' * `msct` :logical, where minimum sequence copy threshold = 10
+#' * `ownerContact` : email of data owner/steward
+#' * `bibliographicCitation` : DOI reference, if applicable
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname read_data
@@ -116,14 +122,15 @@ read_data <- function(
         pattern = "(-?[:digit:])"
       )
 
-    samples[[j]]$LClabel <- metadata[[j]]$LClabel[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$GOTeDNA_version <- metadata[[j]]$GOTeDNA_version[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLatitude <- metadata[[j]]$decimalLatitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLongitude <- metadata[[j]]$decimalLongitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$station <- metadata[[j]]$samplingStation[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$year <- lubridate::year(samples[[j]]$date)
     samples[[j]]$month <- lubridate::month(samples[[j]]$date)
-  }
+    samples[[j]]$LClabel <- metadata[[j]]$LClabel[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
+    samples[[j]]$ownerContact <- metadata[[j]]$ownerContact[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
+    samples[[j]]$bibliographicCitation <- metadata[[j]]$bibliographicCitation[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]}
 
   samples <- lapply(samples, function(x) {
     if (choose.method == "qPCR") {
@@ -165,7 +172,7 @@ read_data <- function(
       "GOTeDNA_ID", "GOTeDNA_version", "materialSampleID","eventID", "primer",
       "scientificName", "domain","kingdom", "phylum", "class", "order",
       "family", "genus", "date", "ecodistrict", "LClabel", "decimalLatitude", "decimalLongitude",
-      "station", "year", "month", "organismQuantity", "concentration", "pcr_primer_lod", "detected"
+      "station", "year", "month", "organismQuantity", "concentration", "pcr_primer_lod", "detected", "ownerContact", "bibliographicCitation"
     )]
   })) |>
     dplyr::rename("species" = "scientificName")

@@ -27,8 +27,8 @@ smooth_fig <- function(
 
   data %<>%
     dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
-    dplyr::mutate(GOTeDNA_ID.v = paste0(GOTeDNA_ID, ".", GOTeDNA_version)) %>%
-    dplyr::group_by(GOTeDNA_ID.v, !!dplyr::ensym(taxon.level), year, month) %>%
+    #dplyr::mutate(GOTeDNA_ID = paste0(GOTeDNA_ID, ".", GOTeDNA_version)) %>%
+    dplyr::group_by(GOTeDNA_ID, !!dplyr::ensym(taxon.level), year, month) %>%
     dplyr::summarise(n = dplyr::n(),
                      nd = sum(detected))
 
@@ -38,7 +38,7 @@ smooth_fig <- function(
   data$month <- as.numeric(data$month)
 
   data %<>%
-    dplyr::group_by(GOTeDNA_ID.v, year) %>%
+    dplyr::group_by(GOTeDNA_ID, year) %>%
     tidyr::drop_na(prob) %>%
     dplyr::mutate(scaleP = scale_prop(prob)) %>%
     dplyr::mutate(scaleP = dplyr::case_when(
@@ -46,7 +46,7 @@ smooth_fig <- function(
       scaleP != "NaN" ~ scaleP
     ))
 
-  data.split <- split(data, data$GOTeDNA_ID.v)
+  data.split <- split(data, data$GOTeDNA_ID)
 
   NEW_data <- lapply(data.split, function(x) {
 

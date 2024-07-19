@@ -32,7 +32,7 @@ effort_needed_fig <- function(
   scaledprobs %<>%
     dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name,
                   is.na(year)) %>%
-    dplyr::group_by(GOTeDNA_ID.v)
+    dplyr::group_by(GOTeDNA_ID)
 
 
   scaledprobs$month <- factor(scaledprobs$month,
@@ -53,7 +53,7 @@ effort_needed_fig <- function(
         data.frame(p = scaledprobs[scaledprobs$species == sp,]$fill,
                    Month = scaledprobs[scaledprobs$species == sp,]$month,
                    Species = scaledprobs[scaledprobs$species == sp,]$species,
-                   GOTeDNA_ID.v = scaledprobs[scaledprobs$species == sp,]$GOTeDNA_ID.v
+                   GOTeDNA_ID = scaledprobs[scaledprobs$species == sp,]$GOTeDNA_ID
         )
       )
 
