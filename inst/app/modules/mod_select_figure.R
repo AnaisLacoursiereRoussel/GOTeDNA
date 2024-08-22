@@ -370,7 +370,7 @@ mod_select_figure_server <- function(id, r) {
         nys <- r$data_ready$year |>
           unique() |>
           length()
-        plt <- plotly::ggplotly(
+        plotly::ggplotly(
           ggp,
           height = 320 * nys
         ) |>
@@ -417,7 +417,7 @@ mod_select_figure_server <- function(id, r) {
           `Indigenous contribution` = ifelse(
             !is.na(LClabel),
             "<button type='submit' style='border: 0; background: transparent'
-            onclick='fakeClick(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/>
+            onclick='Click(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/>
             </button>",
             NA
           ),
