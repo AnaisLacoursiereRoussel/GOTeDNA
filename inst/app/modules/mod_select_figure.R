@@ -248,11 +248,14 @@ mod_select_figure_server <- function(id, r) {
               newprob <- calc_det_prob(r$data_ready)
               r$scaledprobs <- scale_newprob(r$data_ready, newprob)
               cli::cli_alert_info("Computing optimal detection window")
+
               win <- calc_window(
                 data = r$data_ready,
                 threshold = input$threshold,
-                taxon.level = "species",
-                taxon.name = unique(r$data_ready$species),
+                taxon.level = r$taxon_lvl_slc,
+                taxon.name = ifelse(r$taxon_lvl_slc == "species",
+                                     r$species,
+                                     r$taxon_id_slc),
                 scaledprobs = r$scaledprobs
               )
 
@@ -265,9 +268,9 @@ mod_select_figure_server <- function(id, r) {
                 output$var_year <- renderUI("NA")
               } else {
                 output$opt_sampl <- renderUI(
-                  paste(win$fshDF_month$period[1])
+                  paste(win$period)
                 ) # , collapse = ", "))
-                output$conf <- renderUI(paste(win$fshDF_month$confidence[1])) # , collapse = ", "))
+                output$conf <- renderUI(paste(win$confidence)) # , collapse = ", "))
                 output$var_year <- renderUI("Medium")
               }
 
@@ -319,13 +322,27 @@ mod_select_figure_server <- function(id, r) {
           length()
         plt <- plotly::ggplotly(
           ggp,
-          height = 300 * nys
+          height = 320 * nys
           ) |>
           default_layout() |>
-          facet_strip_format()
+          facet_strip_format()|>
+          layout(xaxis = list(title = list(text = "Number of samples",
+                                           font = list(
+                                             size = 30,
+                                             color = "#5A5A5A"
+                                           ),
+                                           x=0)),
+                 yaxis = list(title = list(text = "Detection probability",
+                                           font = list(
+                                             size = 30,
+                                             color = "#5A5A5A"
+                                           ),
+                                           y=0)))
       }
 
     })
+
+
 
     output$fig_heatmap_plot_output <- plotly::renderPlotly({
       plt_ready <- r$fig_ready && r$fig_slc$fig_heatmap
@@ -337,7 +354,7 @@ mod_select_figure_server <- function(id, r) {
           length()
         plt <- plotly::ggplotly(
         ggp,
-        height = 200 * nys,
+        height = 275 * nys,
         tooltip = c("x", "text", "fill")
       ) |>
         default_layout() |>
@@ -355,12 +372,25 @@ mod_select_figure_server <- function(id, r) {
           length()
         plt <- plotly::ggplotly(
           ggp,
-          height = 300 * nys
+          height = 320 * nys
         ) |>
           default_layout() |>
-          facet_strip_format()
+          facet_strip_format() |>
+          layout(xaxis = list(title = list(text = "Month",
+                                           font = list(
+                                             size = 30,
+                                             color = "#5A5A5A"
+                                           ),
+                                           x = 0)),
+                 yaxis = list(title = list(text = "Detection rate",
+                                           font = list(
+                                             size = 30,
+                                             color = "#5A5A5A"
+                                           ),
+                                           y = 0))) #change the style but
+        #better than it was!!!!!!
       }
-      plt
+
     })
 
     output$data_authorship <- DT::renderDT({
@@ -726,33 +756,127 @@ ui_fig_samples <- function(fig_id, title, caption_file, ns) {
 
 ## Plotly Helpers
 facet_strip_format <- function(gp) {
-  n_facets <- seq(length(gp[["x"]][["layout"]][["annotations"]]))
 
-  gp[["x"]][["layout"]][["height"]] <- 300 * length(gp[["x"]][["layout"]][["annotations"]])
+  # get info about facets
+  facets <- seq(length(
+    stringr::str_which(
+      names(gp$x$layout),
+      "yaxis"
+      )
+    )
+    )
 
-  gp[["x"]][["layout"]][["yaxis"]][["tickfont"]] <- list(
-    size = 20,
-    color = "#939888"
-  )
-  for (i in 2:8) {
-    gp[["x"]][["layout"]][[paste0("yaxis", i)]][["tickfont"]] <- list(
+  print(facets)
+  n_facets <- length(facets)
+
+  # split x ranges from 0 to 1 into
+  # intervals corresponding to number of facets
+  # xHi = highest x for shape
+  xHi <- seq(0, 1, len = n_facets+1)
+  xHi <- xHi[2:length(xHi)]
+
+  # specify an offset from highest to lowest x for shapes
+  xOs <- 0.15
+
+  # annotation manipulations, identified by label name
+  # structure: p$x$layout$annotations[[2]]
+  ann <- gp$x$layout$annotations
+    j <- 1
+
+
+        # but each annotation between high and low x,
+      # a set adjustment to left
+    for (i in seq_along(ann)) {
+      if (n_facets >= 2){
+        gp$x$layout$annotations[[i]]$y <- ((((xHi[j]-xOs)+xHi[j])/2)+0.11)
+        gp$x$layout$annotations[[i]]$x <- 0
+        gp$x$layout$annotations[[i]]$xanchor <- 'left'
+        gp$x$layout$annotations[[i]]$yanchor <- 'top'
+
+        j<-j+1
+      } else {
+        gp$x$layout$annotations[[i]]$x <- 0
+        gp$x$layout$annotations[[i]]$xanchor <- 'left'
+        }
+}
+
+
+
+  # Shape manipulations
+  # structure: p$x$layout$shapes[[2]]$
+  shp <- gp$x$layout$shapes
+  j <- 1
+  for (i in seq_along(shp)){
+    if (shp[[i]]$fillcolor=="transparent" & (!is.na(shp[[i]]$fillcolor)) & n_facets >= 2){
+      gp$x$layout$shapes[[i]]$y1 <- xHi[j]
+      gp$x$layout$shapes[[i]]$y0 <- (xHi[j] - xOs)
+      j<-j+1
+    }
+  }
+
+  # x-axis line manipulations, identified by xaxis[i]
+  # structure: p$x$layout$xaxis[i]
+    #gp[["x"]][["layout"]][["height"]] <- 300 * n_facets
+  xax <- facets[facets != 1]
+  j <- 1
+
+  for (i in xax){
+    gp$x$layout[[paste0("xaxis", i)]] <- list(
+      showline = TRUE,
+      linecolor = "rgba(147,149,152,1)",
+      ticks = "outside",
+      anchor = paste0("y",i),
+      textangle = 0,
+      tickfont = list(
+        size = 20,
+        color = "#939888"
+      ),
+      range = gp$x$layout$xaxis$range,
+      ticktext = gp$x$layout$xaxis$ticktext,
+      tickvals = gp$x$layout$xaxis$tickvals)
+
+    gp$x$layout[[paste0("yaxis", i)]]$tickfont <- list(
       size = 20,
       color = "#939888"
     )
-    gp[["x"]][["layout"]][[paste0("xaxis", i)]][["tickfont"]] <- list(
-      size = 20,
-      color = "#939888"
-    )
+    j<-j+1
   }
 
-  for (i in n_facets) {
-    gp[["x"]][["layout"]][["annotations"]][[i]][["xanchor"]] <- "left" # increase as needed
-    gp[["x"]][["layout"]][["annotations"]][[i]][["x"]] <- 0
-    gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(
-      size = 25,
-      color = "#5A5A5A"
-    )
+    # domain manipulations
+  # set high and low x for each facet domain
+  #  lot <- names(gp$x$layout)
+  lot <- names(gp$x$layout)
+  j <- 1
+  for (i in seq_along(lot)){
+    if (!is.na(pmatch('yaxis', lot[i])) & n_facets >= 2){
+      #print(p[['x']][['layout']][[lot[i]]][['domain']][2])
+      gp[['x']][['layout']][[lot[i]]][['domain']][2] <- xHi[j]
+      gp[['x']][['layout']][[lot[i]]][['domain']][1] <- xHi[j] - xOs
+      j<-j+1
+    }
   }
+
+ # gp$x$layout$yaxis$domain[2] <- xHi[j]
+  # gp$x$layout$yaxis$domain[1] <- xHi[j] - xOs
+
+
+  # j<-j+1
+
+#   gp$x$layout[[paste0("yaxis",i)]]$domain[2] <- xHi[j]
+ #  gp$x$layout[[paste0("yaxis",i)]]$domain[1] <- xHi[j] - xOs
+
+
+
+
+ # }
+
+#  for (i in n_facets) {
+
+ #   gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(
+  #    size = 25,
+   #   color = "#5A5A5A"
+  #  )
+  #}
 
   return(gp)
 }

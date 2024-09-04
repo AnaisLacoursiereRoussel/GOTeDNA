@@ -33,7 +33,8 @@ hm_fig <- function(
                   !is.na(year)) %>%
     dplyr::rename("Month" = "month",
                   "Detection rate" = "scaleP") %>%
-    dplyr::group_by(GOTeDNA_ID)
+    dplyr::group_by(GOTeDNA_ID) %>%
+    dplyr::mutate(species = reorder(species, dplyr::desc(species)))
 
   scaledprobs$Month <- factor(scaledprobs$Month,
                        levels = 1:12,
@@ -56,7 +57,7 @@ hm_fig <- function(
                                               group = GOTeDNA_ID),
                        fill = "lightgrey", inherit.aes = FALSE)+
     ggplot2::facet_wrap(~species,
-                       scales = "free",
+                       #scales = "free",
                        ncol = 1) +
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0.00001, 1), na.value = "white",
                                   guide = NULL) +
@@ -69,16 +70,17 @@ hm_fig <- function(
     ggplot2::theme(
       panel.border = ggplot2::element_rect(fill = NA, colour = "lightgrey"),
       panel.grid = ggplot2::element_blank(),
-      panel.spacing = ggplot2::unit(25, "pt"),
+      panel.spacing = ggplot2::unit(20, "pt"),
       plot.title = ggplot2::element_text(face = "bold",
                                          size = 30,
                                          hjust = 0,
                                          colour = "#5A5A5A",
-                                         margin = ggplot2::margin(b = 20, unit = "pt")),
+                                         margin = ggplot2::margin(b = 20,
+                                                                  unit = "pt")),
       strip.placement = "outside",
       strip.background = ggplot2::element_blank(),
-      strip.text = ggplot2::element_text(size = 20, colour = "#5A5A5A", hjust = 0,
-                                         margin = ggplot2::margin(b = 15, unit = "pt")),
+      strip.text = ggplot2::element_text(size = 20,
+                                         colour = "#5A5A5A"),
       axis.text.x = ggplot2::element_text(
         size = 20, colour = "#939598"),
       axis.text.y = ggplot2::element_text(size = 20, colour = "#939598")

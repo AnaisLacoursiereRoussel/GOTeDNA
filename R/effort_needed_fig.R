@@ -45,7 +45,7 @@ effort_needed_fig <- function(
   for (sp in unique(scaledprobs$species)) {
 
     DF2[[sp]] <- expand.grid(p = scaledprobs[scaledprobs$species == sp,]$fill,
-                             `Samples needed` = seq_len(10),
+                             `Samples needed` = seq_len(25),
                              `Detection rate` = NA)
 
     DF2[[sp]] <- DF2[[sp]] |>
@@ -64,26 +64,27 @@ effort_needed_fig <- function(
   #DF2 |> dplyr::bind_rows()
   #})
 
-  DF_tot <- dplyr::bind_rows(DF2)
+  DF_tot <- dplyr::bind_rows(DF2) |>
+    dplyr::mutate(Species = reorder(Species, dplyr::desc(Species)))
 
   ggplot2::ggplot(DF_tot,
                   ggplot2::aes(y = `Detection rate`,
                                x = `Samples needed`,
                                colour = Month)) +
-    ggplot2::geom_point(size = 5, show.legend = FALSE) +
-    ggplot2::geom_hline(
-      mapping = ggplot2::aes(yintercept = 0),
-      size = 1)+
+    ggplot2::geom_point(size = 3, show.legend = FALSE) +
+   # ggplot2::geom_hline(
+    #  mapping = ggplot2::aes(yintercept = 0),
+   #   size = 1)+
     ggplot2::theme_classic(base_size = 24) +
     ggplot2::expand_limits(x = 0, y = 0) +
-    ggplot2::scale_y_continuous("Detection probability",
+    ggplot2::scale_y_continuous(
                                 limits = c(0, 1),
                                 expand = c(0, 0)
     ) +
     ggplot2::scale_x_continuous(
-      #expand = c(0, 0),
-      limits = c(1, 10),
-      breaks = 1:10
+      expand = c(0, 0),
+      limits = c(1, 25),
+      breaks = seq(5,25,5)
     ) +
     ggplot2::scale_colour_viridis_d(
       direction = -1,
@@ -93,17 +94,15 @@ effort_needed_fig <- function(
                  "Nov","Dec")
     ) +
     ggplot2::facet_wrap(~Species,
-                       ncol = 1) +
+                       ncol = 1, scales = "free") +
     ggplot2::labs(
-      x = "Number of samples"
+      x = NULL, y = NULL
     ) +
     ggplot2::theme(
       panel.grid = ggplot2::element_blank(),
       panel.border = ggplot2::element_blank(),
-      panel.spacing = ggplot2::unit(25, "pt"),
+      panel.spacing = ggplot2::unit(20, "pt"),
       strip.background = ggplot2::element_blank(),
-      plot.margin = ggplot2::margin(0.5, 1, 0.5, 1,
-                                    unit = "cm"),
       axis.ticks = ggplot2::element_line(
         linewidth = 0.1,
         colour = "#939598"),
@@ -114,23 +113,23 @@ effort_needed_fig <- function(
       axis.title = ggplot2::element_text(colour = "#5A5A5A",
                                          size = 24),
       axis.title.x = ggplot2::element_text(
-        margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
+    #    margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
         hjust = 0),
       axis.title.y = ggplot2::element_text(
-        margin = ggplot2::margin(r = 0.66,
-                                 unit = "cm"),
+     #   margin = ggplot2::margin(r = 0.66,
+      #                           unit = "cm"),
         hjust = 0),
       axis.line = ggplot2::element_line(
         linewidth = 0.1,
         colour = "#939598"),
       strip.placement = "outside",
-      strip.text = ggplot2::element_text(size = 20, colour = "#5A5A5A", hjust = 0,
-                                         margin = ggplot2::margin(b = 15, unit = "pt")),
-      plot.title.position = "plot",
-      plot.subtitle = ggplot2::element_text(size = 24,
-                                            margin = ggplot2::margin(b = 0.66, unit = "cm"),
-                                            colour = "#5A5A5A",
-                                            hjust = 0)
+      #strip.text = ggplot2::element_text(size = 20, colour = "#5A5A5A", hjust = 0,
+                                  #       margin = ggplot2::margin(b = 15, unit = "pt")),
+    #  plot.title.position = "plot",
+    #  plot.subtitle = ggplot2::element_text(size = 24,
+                                          #  margin = ggplot2::margin(b = 0.66, unit = "cm"),
+                                     #       colour = "#5A5A5A",
+                                     #       hjust = 0)
 
     )
 
