@@ -66,11 +66,11 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
   thresh.value <- thresh$values[thresh$labels == threshold]
 
   df <- scaledprobs %>%
-    dplyr::filter(as.name(taxon.level) %in% taxon.name,
+    dplyr::filter({{ taxon.level }} %in% taxon.name,
                   is.na(year)) %>%
 
     dplyr::group_by(GOTeDNA_ID,
-                    as.name(taxon.level),
+                    {{ taxon.level }},
                     month) %>%
     dplyr::summarise(
       nd = sum(detect, na.rm = TRUE),
@@ -97,7 +97,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
   # selects several months >= threshold
   multmonth <- dplyr::anti_join(df_thresh, onemonth) %>%
     dplyr::group_by(
-      GOTeDNA_ID, as.name(taxon.level),
+      GOTeDNA_ID, {{ taxon.level }},
       consec = cumsum(c(1, diff(month) != 1)))
 
   # selects species with consecutive months >= threshold
@@ -162,7 +162,7 @@ calc_window <- function(data, threshold, taxon.level, taxon.name, scaledprobs) {
       # gives the period and length of optimal detection window
 
       opt_sampling[[id]] <- opt_sampling[[id]] %>%
-        dplyr::group_by(as.name(taxon.level)) %>%
+        dplyr::group_by({{ taxon.level }}) %>%
         dplyr::summarise(
           len = length(month),
           thresh = unique(threshold),
