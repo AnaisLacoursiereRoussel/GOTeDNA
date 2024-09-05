@@ -263,7 +263,7 @@ mod_select_figure_server <- function(id, r) {
 
               if (is.null(win)) {
                 # showNotification("No optimal detection window", type = "warning")
-                output$opt_sampl <- renderUI("NA")
+                output$opt_sampl <- renderUI("No optimal window")
                 output$conf <- renderUI("NA")
                 output$var_year <- renderUI("NA")
               } else {
