@@ -13,30 +13,36 @@ read_data(choose.method = c("qPCR", "metabarcoding"), path.folder = NULL)
 Default: \code{path.folder = NULL}. Default will use the current working directory.}
 }
 \value{
-A tibble with 21 columns:
+A tibble with 26 columns:
 \itemize{
 \item \code{GOTeDNA_ID}
 \item \code{GOTeDNA_version}
-\item \code{eventID}: added internally to keep track of files origins,
-\item \code{scientificName}: added internally to keep track of files origins,
-\item \code{target_gene}
-\item \code{target_subfragment}
+\item \code{materialSampleID}
+\item \code{eventID}
+\item \code{primer}
+\item \code{species}
+\item \code{domain}
 \item \code{kingdom}
 \item \code{phylum}
 \item \code{class}
 \item \code{order}
 \item \code{family}
 \item \code{genus}
+\item \code{concentration}: provided when choose.method = "qPCR"
+\item \code{pcr_primer_lod} : provided when choose.method = "qPCR"
+\item \code{organismQuantity}: provided when choose.method = "metabarcoding"
 \item \code{date}
 \item \code{ecodistrict}
+\item \code{LClabel} : Local Contexts label to denote First Nations data sovereignty
 \item \code{decimalLatitude}
 \item \code{decimalLongitude}
 \item \code{station}
 \item \code{year}
 \item \code{month}
-\item \code{organismQuantity}: provided when choose.method = "metabarcoding",
-\item \code{concentration}: provided when choose.method = "qPCR",
 \item \code{detected}
+\item \code{msct} :logical, where minimum sequence copy threshold = 10
+\item \code{ownerContact} : email of data owner/steward
+\item \code{bibliographicCitation} : DOI reference, if applicable
 }
 }
 \description{

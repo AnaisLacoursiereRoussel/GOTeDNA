@@ -5,21 +5,9 @@ ui <- fluidPage(
     tags$link(rel = "stylesheet", type = "text/css", href = "extra.css"),
     tags$link(rel = "stylesheet", type = "text/css", href = "fonts.css"),
     tags$style(type = "text/css", "body {padding-top: 100px;}"),
-    tags$script(type = "text/javascript", src = "scrollPage.js"),
-    tags$button(id = "scroll-top", "^ Top",
-                onclick = "topFunction()"),
-    # https://stackoverflow.com/questions/36412407/shiny-add-link-to-another-tabpanel-in-another-tabpanel
-    tags$script(HTML('
-        var fakeClick = function(tabName) {
-          var dropdownList = document.getElementsByTagName("a");
-          for (var i = 0; i < dropdownList.length; i++) {
-            var link = dropdownList[i];
-            if(link.getAttribute("data-value") == tabName) {
-              link.click();
-            };
-          }
-        };
-      '))
+    tags$script(type = "text/javascript", src = "js/scrollPage.js"),
+    tags$script(type = "text/javascript", src = "js/fakeClick.js"),
+    tags$button(id = "scroll-top", "^ Top", onclick = "topFunction()")
   ),
   navbarPage(id = "navbar",
              position = "fixed-top",
@@ -33,7 +21,8 @@ ui <- fluidPage(
       "Home",
      # value = "home",
       mod_select_data_ui("slc_data"),
-      mod_select_figure_ui("slc_fig")
+      mod_select_figure_ui("slc_fig"),
+      tags$script(type = "text/javascript", src = "js/definitionEvents.js")
     ),
     tabPanel(
       "Interpretation Guide",
