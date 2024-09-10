@@ -308,7 +308,7 @@ mod_select_data_server <- function(id, r) {
 
 
     observe({
-      primer_choices <- get_primer_selection(
+      r$primer_choices_all <- get_primer_selection(
         r$taxon_lvl_slc, filter_taxon(
           r$cur_data_sta_slc, r$taxon_lvl_slc, r$taxon_id_slc, r$species
         )
@@ -316,8 +316,8 @@ mod_select_data_server <- function(id, r) {
       shinyWidgets::updatePickerInput(
         session,
         "primer",
-        choices = primer_choices,
-        selected = primer_choices
+        choices = r$primer_choices_all,
+        selected = r$primer_choices_all
       )
     })
 
@@ -375,6 +375,11 @@ mod_select_data_server <- function(id, r) {
             r$station_slc <- r$geom$station
 
             geom_coords <- st_bbox(r$geom_slc)
+            shinyWidgets::updatePickerInput(
+              session,
+              "primer",
+              selected = r$primer_choices_all
+            )
           } else {
             showNotification("No station selected", type = "warning")
           }
