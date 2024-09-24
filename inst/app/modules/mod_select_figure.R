@@ -92,8 +92,9 @@ mod_select_figure_ui <- function(id) {
               selected = 75
             ),
             selectInput(ns("proj_id"),
-                        "GOTeDNA Project",
-                        choices = "not available"),
+              "GOTeDNA Project",
+              choices = "not available"
+            ),
             div(
               id = "fig_sampling_info",
               h4("Guidance"),
@@ -126,10 +127,6 @@ mod_select_figure_ui <- function(id) {
           class = "show-panels",
           div(
             class = "fig_main_container",
-            # div(
-            #    class = "fig_main_container-header",
-            #   h2("Figures")
-            #  ),
             div(
               class = "fig_main_container-fig",
               ui_fig_detect("fig_detect", "Monthly eDNA detection probability", "detection.html", ns),
@@ -210,6 +207,7 @@ mod_select_figure_server <- function(id, r) {
       r$fig_slc$fig_samples <- !r$fig_slc$fig_samples
     })
 
+    # CALC WINDOW
     observeEvent(
       ignoreInit = TRUE,
       list(input$calc_window, input$threshold),
@@ -254,8 +252,9 @@ mod_select_figure_server <- function(id, r) {
                 threshold = input$threshold,
                 taxon.level = r$taxon_lvl_slc,
                 taxon.name = ifelse(r$taxon_lvl_slc == "species",
-                                     r$species,
-                                     r$taxon_id_slc),
+                  r$species,
+                  r$taxon_id_slc
+                ),
                 scaledprobs = r$scaledprobs
               )
 
@@ -269,18 +268,21 @@ mod_select_figure_server <- function(id, r) {
               } else {
                 output$opt_sampl <- renderUI(
                   paste(win$period)
-                ) # , collapse = ", "))
-                output$conf <- renderUI(paste(win$confidence)) # , collapse = ", "))
+                )
+                output$conf <- renderUI(paste(win$confidence))
                 output$var_year <- renderUI("Medium")
               }
 
               r$fig_ready <- TRUE
 
+              # ca a l'air good a recheck demainNB from KC: if r$scaledprobs includes the same projects as
+              # the input project, the following lines should be removed!
               # create project vector
               v_proj <- r$scaledprobs$GOTeDNA_ID |> unique()
-              l_proj <- seq(v_proj) |> as.list()
-              names(l_proj) <- paste0("GOTeDNA ID: ", v_proj)
-              updateSelectInput(session, "proj_id", choices = l_proj)
+              #  r$scaledprobs$GOTeDNA_ID
+              # l_proj <- seq_along(v_proj) |> as.list()
+              # names(l_proj) <- paste0("GOTeDNA ID: ", v_proj)
+              # updateSelectInput(session, "proj_id", choices = l_proj)
             } else {
               showNotification("Data selection is empty", type = "warning")
             }
@@ -289,33 +291,71 @@ mod_select_figure_server <- function(id, r) {
       }
     )
 
-    output$plots <- renderUI({
-      req(input$sel)
-      plot_output_list <- lapply(input$sel, function(par) {
-        plotname <- paste0("fig_effort_plot_output", par)
-        plotly::plotlyOutput(plotname, inline = TRUE, height = "auto")
-      })
-
-      do.call(tagList, plot_output_list)
+    # UPDATE DATA
+    observe({
+      out <- r$cur_data_sta_slc
+      if (!is.null(r$taxon_lvl_slc)) {
+        if (r$taxon_lvl_slc == "species") {
+          out <- out |>
+            dplyr::filter(species == r$species)
+        } else {
+          if (r$taxon_id_slc != "All") {
+            out <- out[
+              out[[r$taxon_lvl_slc]] == r$taxon_id_slc,
+            ]
+          }
+        }
+      }
+      # primer-based subset
+      r$data_active <- out |>
+        dplyr::filter(primer %in% r$primer)
+      # prevent computation when new data are selected
+      r$fig_ready <- FALSE
     })
-    # figure must be selected and ready to be drawn
 
+    observe({
+      if (nrow(r$data_active)) {
+        v_proj <- r$data_active$GOTeDNA_ID |> table()
+        l_proj <- names(v_proj) |> as.list()
+        names(l_proj) <- paste0(
+          "GOTeDNA ID: ",
+          v_proj |> names(),
+          " (", v_proj, " samples)"
+        )
+        updateSelectInput(
+          session,
+          "proj_id",
+          choices = l_proj[v_proj |>
+            order() |>
+            rev()]
+        )
+      }
+    })
+
+
+
+    # FIGURES
+    ## DETECTION part 1
     output$fig_smooth_plot_output <- renderPlot({
-      draw_fig_smooth(r, r$fig_ready && r$fig_slc$fig_detect,
-        id = input$proj_id |> as.numeric()
-      )
+      if (req(r$fig_ready, cancelOutput = TRUE)) {
+        draw_fig_smooth(isolate(r), r$fig_ready && r$fig_slc$fig_detect,
+          id = input$proj_id # using proj_id as string
+        )
+      }
     })
-
+    ## DETECTION part 2
     output$fig_detect_plot_output <- renderPlot({
-      draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold,
-        id = input$proj_id |> as.numeric()
-      )
+      if (req(r$fig_ready, cancelOutput = TRUE)) {
+        draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold,
+          id = input$proj_id # using proj_id as string
+        )
+      }
     })
 
+    ## EFFORT
     output$fig_effort_plot_output <- plotly::renderPlotly({
-      plt_ready <- r$fig_ready && r$fig_slc$fig_effort
-      ggp <- draw_fig_effort(r, plt_ready)
-      if (plt_ready) {
+      if (req(r$fig_ready, cancelOutput = TRUE)) {
+          ggp <- draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort)
         # multiply height by number of species
         nys <- r$data_ready$species |>
           unique() |>
@@ -323,45 +363,49 @@ mod_select_figure_server <- function(id, r) {
         plt <- plotly::ggplotly(
           ggp,
           height = 320 * nys
-          ) |>
+        ) |>
           default_layout() |>
-          facet_strip_format()|>
-          layout(xaxis = list(title = list(text = "Number of samples",
-                                           font = list(
-                                             size = 30,
-                                             color = "#5A5A5A"
-                                           ),
-                                           x=0)),
-                 yaxis = list(title = list(text = "Detection probability",
-                                           font = list(
-                                             size = 30,
-                                             color = "#5A5A5A"
-                                           ),
-                                           y=0)))
+          facet_strip_format() |>
+          layout(
+            xaxis = list(title = list(
+              text = "Number of samples",
+              font = list(
+                size = 30,
+                color = "#5A5A5A"
+              ),
+              x = 0
+            )),
+            yaxis = list(title = list(
+              text = "Detection probability",
+              font = list(
+                size = 30,
+                color = "#5A5A5A"
+              ),
+              y = 0
+            ))
+          )
       }
-
     })
 
-
-
+    ## HEATMAP
     output$fig_heatmap_plot_output <- plotly::renderPlotly({
-      plt_ready <- r$fig_ready && r$fig_slc$fig_heatmap
-      ggp <- draw_fig_heatmap(r, plt_ready)
-      if (plt_ready) {
+      if (req(r$fig_ready, cancelOutput = TRUE)) {
+        ggp <- draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
         # multiply height by number of species
         nys <- r$data_ready$species |>
           unique() |>
           length()
         plt <- plotly::ggplotly(
-        ggp,
-        height = 275 * nys,
-        tooltip = c("x", "text", "fill")
-      ) |>
-        default_layout() |>
+          ggp,
+          height = 275 * nys,
+          tooltip = c("x", "text", "fill")
+        ) |>
+          default_layout() |>
           facet_strip_format()
       }
     })
 
+    ## DATA VARIATION
     output$fig_samples_plot_output <- plotly::renderPlotly({
       plt_ready <- r$fig_ready && r$fig_slc$fig_samples
       ggp <- draw_fig_samples(r, plt_ready)
@@ -376,30 +420,33 @@ mod_select_figure_server <- function(id, r) {
         ) |>
           default_layout() |>
           facet_strip_format() |>
-          layout(xaxis = list(title = list(text = "Month",
-                                           font = list(
-                                             size = 30,
-                                             color = "#5A5A5A"
-                                           ),
-                                           x = 0)),
-                 yaxis = list(title = list(text = "Detection rate",
-                                           font = list(
-                                             size = 30,
-                                             color = "#5A5A5A"
-                                           ),
-                                           y = 0))) #change the style but
-        #better than it was!!!!!!
+          layout(
+            xaxis = list(title = list(
+              text = "Month",
+              font = list(
+                size = 30,
+                color = "#5A5A5A"
+              ),
+              x = 0
+            )),
+            yaxis = list(title = list(
+              text = "Detection rate",
+              font = list(
+                size = 30,
+                color = "#5A5A5A"
+              ),
+              y = 0
+            ))
+          ) # change the style but
+        # better than it was!!!!!!
       }
-
     })
 
+
+
+    # DATA AUTHORSHIP TABLE
     output$data_authorship <- DT::renderDT({
-      if (!is.null(r$data_ready)) {
-        tmp <- r$data_ready
-      } else {
-        tmp <- r$cur_data_sta_slc
-      }
-      tmp |>
+      r$data_active |>
         dplyr::ungroup() |>
         dplyr::group_by(
           GOTeDNA_ID,
@@ -421,7 +468,6 @@ mod_select_figure_server <- function(id, r) {
             </button>",
             NA
           ),
-
           LClabel = NULL
         ) |>
         dplyr::rename(
@@ -430,10 +476,9 @@ mod_select_figure_server <- function(id, r) {
           "Publication" = "bibliographicCitation"
         ) |>
         dplyr::relocate(
-          `GOTeDNA ID`, Subproject, #Contact,
+          `GOTeDNA ID`, Subproject, # Contact,
           `Sample #`, `Station #`, `Indigenous contribution`, Publication
         ) |>
-
         DT::datatable(
           escape = FALSE, rownames = FALSE,
           options = list(
@@ -472,8 +517,6 @@ mod_select_figure_server <- function(id, r) {
 
 
 #------- INTERNALS
-
-
 
 prepare_data <- function(r) {
   out <- r$cur_data
@@ -539,6 +582,12 @@ plotNotAvailableYear <- function() {
   plotText("Plot not available; small sample size.")
 }
 
+plotNotAvailableError <- function() {
+  plotText(stringr::str_wrap(
+    "An error occured while rendering the plot (sample size may be too small).",
+    width = 60
+  ))
+}
 
 add_fixed_legend <- function(file) {
   if (is.null(file)) {
@@ -552,36 +601,44 @@ add_fixed_legend <- function(file) {
 }
 
 
+## Detection part 1
 draw_fig_smooth <- function(r, ready, id) {
   if (ready) {
-    p <- try(
+    plt <- try(
       smooth_fig(
         r$data_ready,
         r$taxon_lvl_slc,
         ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
       )
     )
- #   if (inherits(p, "try-error")) plotNotAvailableYear()  << not sure what this is, but the figure wasn't showing up
-    p[[id]]
+    if (inherits(plt, "try-error")) {
+      plotNotAvailableError()
+      # there are lots of erros due to predLoess, this is better than a misleading
+      # message on the plot
+    } else {
+      plt[[id]]
+    }
   } else {
     plotNotAvailable()
   }
 }
 
+## Detection part 2
 draw_fig_detect <- function(r, ready, threshold, id) {
   if (ready) {
-    p <- thresh_fig(
+    plt <- thresh_fig(
       r$taxon_lvl_slc,
       ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
       threshold,
       r$scaledprobs
     )
-    p[[id]]
+    plt[[id]]
   } else {
     plotNotAvailable()
   }
 }
 
+## Sampling effort
 draw_fig_effort <- function(r, ready) {
   if (ready) {
     p <- effort_needed_fig(
@@ -589,13 +646,13 @@ draw_fig_effort <- function(r, ready) {
       ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
       r$scaledprobs
     )
-
     p
   } else {
     plotNotAvailable()
   }
 }
 
+## Heatmap
 draw_fig_heatmap <- function(r, ready) {
   if (ready) {
     p <- hm_fig(
@@ -609,6 +666,7 @@ draw_fig_heatmap <- function(r, ready) {
   }
 }
 
+## Data variation
 draw_fig_samples <- function(r, ready) {
   if (ready) {
     p <- field_sample_fig(
@@ -649,7 +707,6 @@ ui_fig_detect <- function(fig_id, title, caption_file, ns) {
           bslib::card_body(
             plotOutput(ns("fig_smooth_plot_output")),
             plotOutput(ns("fig_detect_plot_output")),
-          #  selectInput(ns("proj_id"), "Project", choices = "not available")
           ),
           bslib::card_body(
             bslib::card_body(height = "250px"),
@@ -719,7 +776,6 @@ ui_fig_effort <- function(fig_id, title, caption_file, ns) {
       class = "fig_panel_container",
       div(
         class = "fig_panel",
-        # uiOutput("plots")
         plotly::plotlyOutput(
           paste0(ns(fig_id), "_plot_output"),
           height = "auto"
@@ -754,17 +810,17 @@ ui_fig_samples <- function(fig_id, title, caption_file, ns) {
   )
 }
 
+
+
 ## Plotly Helpers
 facet_strip_format <- function(gp) {
-
   # get info about facets
   facets <- seq(length(
     stringr::str_which(
       names(gp$x$layout),
       "yaxis"
-      )
     )
-    )
+  ))
 
   print(facets)
   n_facets <- length(facets)
@@ -772,7 +828,7 @@ facet_strip_format <- function(gp) {
   # split x ranges from 0 to 1 into
   # intervals corresponding to number of facets
   # xHi = highest x for shape
-  xHi <- seq(0, 1, len = n_facets+1)
+  xHi <- seq(0, 1, len = n_facets + 1)
   xHi <- xHi[2:length(xHi)]
 
   # specify an offset from highest to lowest x for shapes
@@ -781,24 +837,24 @@ facet_strip_format <- function(gp) {
   # annotation manipulations, identified by label name
   # structure: p$x$layout$annotations[[2]]
   ann <- gp$x$layout$annotations
-    j <- 1
+  j <- 1
 
 
-        # but each annotation between high and low x,
-      # a set adjustment to left
-    for (i in seq_along(ann)) {
-      if (n_facets >= 2){
-        gp$x$layout$annotations[[i]]$y <- ((((xHi[j]-xOs)+xHi[j])/2)+0.11)
-        gp$x$layout$annotations[[i]]$x <- 0
-        gp$x$layout$annotations[[i]]$xanchor <- 'left'
-        gp$x$layout$annotations[[i]]$yanchor <- 'top'
+  # but each annotation between high and low x,
+  # a set adjustment to left
+  for (i in seq_along(ann)) {
+    if (n_facets >= 2) {
+      gp$x$layout$annotations[[i]]$y <- ((((xHi[j] - xOs) + xHi[j]) / 2) + 0.11)
+      gp$x$layout$annotations[[i]]$x <- 0
+      gp$x$layout$annotations[[i]]$xanchor <- "left"
+      gp$x$layout$annotations[[i]]$yanchor <- "top"
 
-        j<-j+1
-      } else {
-        gp$x$layout$annotations[[i]]$x <- 0
-        gp$x$layout$annotations[[i]]$xanchor <- 'left'
-        }
-}
+      j <- j + 1
+    } else {
+      gp$x$layout$annotations[[i]]$x <- 0
+      gp$x$layout$annotations[[i]]$xanchor <- "left"
+    }
+  }
 
 
 
@@ -806,26 +862,26 @@ facet_strip_format <- function(gp) {
   # structure: p$x$layout$shapes[[2]]$
   shp <- gp$x$layout$shapes
   j <- 1
-  for (i in seq_along(shp)){
-    if (shp[[i]]$fillcolor=="transparent" & (!is.na(shp[[i]]$fillcolor)) & n_facets >= 2){
+  for (i in seq_along(shp)) {
+    if (shp[[i]]$fillcolor == "transparent" & (!is.na(shp[[i]]$fillcolor)) & n_facets >= 2) {
       gp$x$layout$shapes[[i]]$y1 <- xHi[j]
       gp$x$layout$shapes[[i]]$y0 <- (xHi[j] - xOs)
-      j<-j+1
+      j <- j + 1
     }
   }
 
   # x-axis line manipulations, identified by xaxis[i]
   # structure: p$x$layout$xaxis[i]
-    #gp[["x"]][["layout"]][["height"]] <- 300 * n_facets
+  # gp[["x"]][["layout"]][["height"]] <- 300 * n_facets
   xax <- facets[facets != 1]
   j <- 1
 
-  for (i in xax){
+  for (i in xax) {
     gp$x$layout[[paste0("xaxis", i)]] <- list(
       showline = TRUE,
       linecolor = "rgba(147,149,152,1)",
       ticks = "outside",
-      anchor = paste0("y",i),
+      anchor = paste0("y", i),
       textangle = 0,
       tickfont = list(
         size = 20,
@@ -833,50 +889,42 @@ facet_strip_format <- function(gp) {
       ),
       range = gp$x$layout$xaxis$range,
       ticktext = gp$x$layout$xaxis$ticktext,
-      tickvals = gp$x$layout$xaxis$tickvals)
+      tickvals = gp$x$layout$xaxis$tickvals
+    )
 
     gp$x$layout[[paste0("yaxis", i)]]$tickfont <- list(
       size = 20,
       color = "#939888"
     )
-    j<-j+1
+    j <- j + 1
   }
 
-    # domain manipulations
+  # domain manipulations
   # set high and low x for each facet domain
   #  lot <- names(gp$x$layout)
   lot <- names(gp$x$layout)
   j <- 1
-  for (i in seq_along(lot)){
-    if (!is.na(pmatch('yaxis', lot[i])) & n_facets >= 2){
-      #print(p[['x']][['layout']][[lot[i]]][['domain']][2])
-      gp[['x']][['layout']][[lot[i]]][['domain']][2] <- xHi[j]
-      gp[['x']][['layout']][[lot[i]]][['domain']][1] <- xHi[j] - xOs
-      j<-j+1
+  for (i in seq_along(lot)) {
+    if (!is.na(pmatch("yaxis", lot[i])) & n_facets >= 2) {
+      # print(p[['x']][['layout']][[lot[i]]][['domain']][2])
+      gp[["x"]][["layout"]][[lot[i]]][["domain"]][2] <- xHi[j]
+      gp[["x"]][["layout"]][[lot[i]]][["domain"]][1] <- xHi[j] - xOs
+      j <- j + 1
     }
   }
 
- # gp$x$layout$yaxis$domain[2] <- xHi[j]
+  # gp$x$layout$yaxis$domain[2] <- xHi[j]
   # gp$x$layout$yaxis$domain[1] <- xHi[j] - xOs
-
-
   # j<-j+1
-
-#   gp$x$layout[[paste0("yaxis",i)]]$domain[2] <- xHi[j]
- #  gp$x$layout[[paste0("yaxis",i)]]$domain[1] <- xHi[j] - xOs
-
-
-
-
- # }
-
-#  for (i in n_facets) {
-
- #   gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(
+  #   gp$x$layout[[paste0("yaxis",i)]]$domain[2] <- xHi[j]
+  #  gp$x$layout[[paste0("yaxis",i)]]$domain[1] <- xHi[j] - xOs
+  # }
+  #  for (i in n_facets) {
+  #   gp[["x"]][["layout"]][["annotations"]][[i]][["font"]] <- list(
   #    size = 25,
-   #   color = "#5A5A5A"
+  #   color = "#5A5A5A"
   #  )
-  #}
+  # }
 
   return(gp)
 }
@@ -971,12 +1019,3 @@ toggle_fig <- function(fig_id) {
   shinyjs::toggle(paste0(fig_id, "_thumbnail_selected"))
   shinyjs::toggle(paste0(fig_id, "_fig_container"))
 }
-
-# toggle_selected <- function(class_id, input_button, fig_id) {
-#   cls_id <- paste0(class_id, "_thumbnail_selected")
-#   shinyjs::hide(cls_id)
-#   observeEvent(input_button, {
-#     shinyjs::toggle(cls_id)
-#     r$fig_slc[[fig_id]] <- !r$fig_slc[[fig_id]]
-#   })
-# }

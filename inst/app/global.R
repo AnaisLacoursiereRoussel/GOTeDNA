@@ -44,22 +44,6 @@ names(ls_threshold) <- paste0(seq(50, 95, 5), "%")
 
 
 # function
-## filter data based on user choices of taxa
-filter_taxa_data <- function(x, phy, cla, gen, spe) {
-  if (phy != "All") {
-    x <- x |> dplyr::filter(phylum == phy)
-    if (cla != "All") {
-      x <- x |> dplyr::filter(class == cla)
-      if (gen != "All") {
-        x <- x |> dplyr::filter(genus == gen)
-        if (spe != "All") {
-          x <- x |> dplyr::filter(species == spe)
-        }
-      }
-    }
-  }
-  x
-}
 
 basemap <- function() {
   leaflet() |>
@@ -120,17 +104,6 @@ get_primer_selection <- function(lvl, data) {
   }
 }
 
-get_taxon_level <- function(phy, cla, gen, spe) {
-  if (spe != "All") {
-    out <- 4
-  } else if (gen != "All") {
-    out <- 3
-  } else if (cla != "All") {
-    out <- 2
-  } else {
-    out <- 1
-  }
-}
 
 # Primer information for primer tab
 ## import glossary
