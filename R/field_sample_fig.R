@@ -4,37 +4,21 @@
 #' for all species of a specified taxonomic group per year.
 #'
 #' @param data (required, data.frame): Data.frame read in with [read_data()]
-#' @param taxon.level (required, character): Taxonomic level of interest
-#' Choices = one of `c("domain", "kingdom", "phylum", "class", "order", "family",`
-#' `"genus", "species")`.
-#' @param taxon.name (required, character): Select taxon name that matches the level
-#' provided in `taxon.level`. E.g., if `taxon.level = "class"`
-#' enter class name, etc..
-#'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
 #' @rdname field_sample_fig
 #' @export
 #' @examples
 #' \dontrun{
 #' field_sample_fig(
-#'   data = gotedna_data$metabarcoding,
-#'   taxon.level = "phylum",
-#'   taxon.name = "Bryozoa"
+#'   data = gotedna_data$metabarcoding
 #' )
 #' }
 field_sample_fig <- function(
-    data,
-    taxon.level = c("kingdom", "phylum", "class", "order", "family", "genus", "species"),
-    taxon.name) {
-
-
-  if (!is.null(taxon.level)) {
-    taxon.level <- match.arg(taxon.level)
-  }
+    data
+    ) {
 
   data %<>%
-    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
-    dplyr::group_by(kingdom, phylum, class, order, family, genus, species, year, month) %>%
+    dplyr::group_by(species, year, month) %>%
     dplyr::summarise(
       n = dplyr::n(),
       nd = sum(detected, na.rm = TRUE),
@@ -46,11 +30,6 @@ field_sample_fig <- function(
                   "Sample size" = "n",
                   "Year" = "year")
 
- # data$Month <- factor(data$Month,
-#                       levels = 1:12,
- #                      labels = c("Jan","Feb","Mar","Apr","May",
-  #                                "Jun","Jul","Aug","Sep","Oct",
-   #                               "Nov","Dec"))
 
   data$Year <- reorder(as.numeric(data$Year),
                        dplyr::desc(as.numeric(data$Year)))
@@ -67,13 +46,9 @@ field_sample_fig <- function(
                          na.rm = TRUE, width = 0.5, height = 0.01
     ) +
     ggplot2::scale_colour_manual(values = palette("Alphabet"))+
-    #  ggh4x::facet_grid2(year ~ .,
-    #   strip = ggh4x::strip_nested(bleed = TRUE)
-    # ) +
     ggplot2::facet_wrap(~Year,
                        ncol = 1,
                        scales = "free") +
-    # lemon::coord_capped_cart(bottom = 'both') +
     ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
                                 limits = c(-.01, 1),
                                 expand = c(0, 0)
@@ -100,14 +75,11 @@ field_sample_fig <- function(
     ) +
     ggplot2::theme(
       panel.grid = ggplot2::element_blank(),
-     # panel.grid.minor.x =  ggplot2::element_line(color = "#d0d0d0"),
       panel.spacing = ggplot2::unit(30, "pt"),
       panel.border = ggplot2::element_blank(),
       strip.background = ggplot2::element_blank(),
       strip.text = ggplot2::element_text(angle = 0,
                                          colour = "#939598"),
-     # plot.margin = ggplot2::margin(0.5, 1, 0.5, 1,
-      #                              unit = "cm"),
       axis.ticks = ggplot2::element_line(
         linewidth = 1,
         colour = "#939598"),

@@ -16,44 +16,35 @@
 #' newprob <- calc_det_prob(gotedna_data$metabarcoding)
 #' scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 #' effort_needed_fig(
-#'   scaledprobs$Pscaled_month |> dplyr::filter(
-#'       species %in% "Acartia hudsonica",
-#'       primer == "COI1"
+#'   scaledprobs
 #'   )
 #' )
 #' }
 effort_needed_fig <- function(
-    taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
-    taxon.name,
     scaledprobs) {
 
-  taxon.level <- match.arg(taxon.level)
-
-  scaledprobs %<>%
-    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name,
-                  is.na(year)) %>%
-    dplyr::group_by(GOTeDNA_ID)
+  df <- scaledprobs %>%
+    dplyr::filter(is.na(year))
 
 
-  scaledprobs$month <- factor(scaledprobs$month,
+  df$month <- factor(df$month,
                        levels = 1:12,
                        labels = c("Jan","Feb","Mar","Apr","May",
                                   "Jun","Jul","Aug","Sep","Oct",
                                   "Nov","Dec"))
   DF2 <- vector("list")
 
-  for (sp in unique(scaledprobs$species)) {
+  for (sp in unique(df$species)) {
 
-    DF2[[sp]] <- expand.grid(p = scaledprobs[scaledprobs$species == sp,]$fill,
+    DF2[[sp]] <- expand.grid(p = df[df$species == sp,]$fill,
                              `Samples needed` = seq_len(25),
                              `Detection rate` = NA)
 
     DF2[[sp]] <- DF2[[sp]] |>
       merge(
-        data.frame(p = scaledprobs[scaledprobs$species == sp,]$fill,
-                   Month = scaledprobs[scaledprobs$species == sp,]$month,
-                   Species = scaledprobs[scaledprobs$species == sp,]$species,
-                   GOTeDNA_ID = scaledprobs[scaledprobs$species == sp,]$GOTeDNA_ID
+        data.frame(p = df[df$species == sp,]$fill,
+                   Month = df[df$species == sp,]$month,
+                   Species = df[df$species == sp,]$species
         )
       )
 
@@ -61,8 +52,6 @@ effort_needed_fig <- function(
       DF2[[sp]]$`Detection rate`[i] <- 1 - dbinom(0, size = DF2[[sp]]$`Samples needed`[i], prob = DF2[[sp]]$p[i]) # 1 - probability of zero detects
     }
   }
-  #DF2 |> dplyr::bind_rows()
-  #})
 
   DF_tot <- dplyr::bind_rows(DF2) |>
     dplyr::mutate(Species = reorder(Species, dplyr::desc(Species)))
@@ -72,9 +61,6 @@ effort_needed_fig <- function(
                                x = `Samples needed`,
                                colour = Month)) +
     ggplot2::geom_point(size = 3, show.legend = FALSE) +
-   # ggplot2::geom_hline(
-    #  mapping = ggplot2::aes(yintercept = 0),
-   #   size = 1)+
     ggplot2::theme_classic(base_size = 24) +
     ggplot2::expand_limits(x = 0, y = 0) +
     ggplot2::scale_y_continuous(
@@ -113,23 +99,13 @@ effort_needed_fig <- function(
       axis.title = ggplot2::element_text(colour = "#5A5A5A",
                                          size = 24),
       axis.title.x = ggplot2::element_text(
-    #    margin = ggplot2::margin(0.5, 0, 0, 0, unit = "cm"),
         hjust = 0),
       axis.title.y = ggplot2::element_text(
-     #   margin = ggplot2::margin(r = 0.66,
-      #                           unit = "cm"),
         hjust = 0),
       axis.line = ggplot2::element_line(
         linewidth = 0.1,
         colour = "#939598"),
-      strip.placement = "outside",
-      #strip.text = ggplot2::element_text(size = 20, colour = "#5A5A5A", hjust = 0,
-                                  #       margin = ggplot2::margin(b = 15, unit = "pt")),
-    #  plot.title.position = "plot",
-    #  plot.subtitle = ggplot2::element_text(size = 24,
-                                          #  margin = ggplot2::margin(b = 0.66, unit = "cm"),
-                                     #       colour = "#5A5A5A",
-                                     #       hjust = 0)
+      strip.placement = "outside"
 
     )
 

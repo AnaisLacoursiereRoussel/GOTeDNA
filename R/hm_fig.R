@@ -7,10 +7,6 @@
 #' NOTE: interpolated `(i.e., missing)` data are not used in this
 #' representation.
 #'
-#' @param taxon.level (required, character): Select taxonomic level to view.
-#' @param taxon.name (required, character): Select taxon name that matches the
-#' level provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter
-#' genus name, etc.
 #' @param scaledprobs (required, data.frame) Normalized detection
 #' probabilities as returned by [scale_newprob()].
 #'
@@ -21,44 +17,33 @@
 #' \dontrun{
 #' newprob <- calc_det_prob(D_mb)
 #' scaledprobs <- scale_newprob(D_mb, newprob)
-#' hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
+#' hm_fig(scaledprobs)
 #' }
 hm_fig <- function(
-    taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
-    taxon.name, scaledprobs) {
-  taxon.level <- match.arg(taxon.level)
+    scaledprobs) {
 
-  scaledprobs %<>%
-    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name,
-                  !is.na(year)) %>%
-    dplyr::rename("Month" = "month",
-                  "Detection rate" = "scaleP") %>%
-    dplyr::group_by(GOTeDNA_ID) %>%
+  df <- scaledprobs %>%
+    dplyr::filter(!is.na(year)) %>%
+    dplyr::rename("Detection rate" = "scaleP") %>%
     dplyr::mutate(species = reorder(species, dplyr::desc(species)))
 
-  scaledprobs$Month <- factor(scaledprobs$Month,
+  df$Month <- factor(df$month,
                        levels = 1:12,
                        labels = c("Jan","Feb","Mar","Apr","May",
                                   "Jun","Jul","Aug","Sep","Oct",
                                   "Nov","Dec"))
   ggplot2::ggplot(
-    scaledprobs#,
-    # ggplot2::aes(x = month, y = reorder(year, dplyr::desc(year)))
   ) +
-    ggplot2::geom_tile(dplyr::filter(scaledprobs, `Detection rate` > 0 | is.na(`Detection rate`)),
+    ggplot2::geom_tile(dplyr::filter(df, `Detection rate` > 0 | is.na(`Detection rate`)),
                        mapping = ggplot2::aes(x = Month,
                                               y = reorder(year, dplyr::desc(year)),
-                                              fill = `Detection rate`,
-                                              text = paste("Year:", year),
-                                              group = GOTeDNA_ID)) +
-    ggplot2::geom_tile(dplyr::filter(scaledprobs, `Detection rate` == 0),
+                                              fill = `Detection rate`)) +
+    ggplot2::geom_tile(dplyr::filter(df, `Detection rate` == 0),
                        mapping = ggplot2::aes(x = Month,
-                                              y = reorder(year, dplyr::desc(year)),
-                                              group = GOTeDNA_ID),
+                                              y = reorder(year, dplyr::desc(year))),
                        fill = "lightgrey", inherit.aes = FALSE)+
     ggplot2::facet_wrap(~species,
-                       #scales = "free",
-                       ncol = 1) +
+                        ncol = 1) +
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0.00001, 1), na.value = "white",
                                   guide = NULL) +
     ggplot2::scale_x_discrete(expand = c(0,0)) +

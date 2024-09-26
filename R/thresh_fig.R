@@ -5,10 +5,6 @@
 #' probabilities over a specified threshold displayed in purple and under the
 #' threshold in grey.
 #'
-#' @param taxon.level (required, data.frame): Select taxonomic level to view.
-#' Choices = one of `c("phylum", "class", "order", "family", "genus", "species")`
-#' @param taxon.name (required, character): Select taxon name that matches the level
-#' provided in `taxon.level`. E.g., if `taxon.level = "genus"` enter genus name, etc.
 #' @param threshold (required, character): Detection probability threshold for
 #' which data are to be displayed to visualize potential optimal detection windows.
 #' Choices = one of `"50","55","60","65","70","75","80","85","90","95")`
@@ -24,17 +20,12 @@
 #' newprob <- calc_det_prob(gotedna_data$metabarcoding)
 #' scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 #' thresh_fig(
-#'   taxon.level = "species", taxon.name = "Acartia hudsonica",
-#'   threshold = "90", scaledprobs$Pscaled_month
+#'   threshold = "90", scaledprobs
 #' )
 #' }
 thresh_fig <- function(
-    taxon.level = c("domain", "kingdom", "phylum", "class", "order", "family", "genus", "species"),
-    taxon.name,
     threshold,
     scaledprobs) {
-
-  taxon.level <- match.arg(taxon.level)
 
   thresh_slc <- as.character(seq(50, 95, 5))
   threshold <- match.arg(arg = threshold, choices = thresh_slc)
@@ -47,9 +38,9 @@ thresh_fig <- function(
                          thresh$values[thresh$labels == threshold]
   )
 
-  scaledprobs %<>%
-    dplyr::filter(!!dplyr::ensym(taxon.level) %in% taxon.name) %>%
-    dplyr::group_by(GOTeDNA_ID, !!dplyr::ensym(taxon.level), month) %>%
+  df <- scaledprobs %>%
+    dplyr::filter(is.na(year)) %>%
+    dplyr::group_by(month) %>%
     dplyr::summarise(
       nd = sum(detect, na.rm = TRUE),
       n = sum(detect, nondetect, na.rm = TRUE),
@@ -69,12 +60,7 @@ thresh_fig <- function(
       thresh50 = (fill >= 0.49999) * 1
     )
 
-  plots = vector("list")
-
-  for (proj in unique(scaledprobs$GOTeDNA_ID)) {
-    plots[[proj]] <- with(scaledprobs[scaledprobs$GOTeDNA_ID %in% proj, ],
-
-  ggplot2::ggplot() +
+  ggplot2::ggplot(df) +
     ggplot2::geom_hline(
       mapping = ggplot2::aes(yintercept = y),
       data.frame(y = c(0:4) / 4),
@@ -86,18 +72,18 @@ thresh_fig <- function(
       color = "lightgrey"
     ) +
     ggplot2::geom_col(
-      dplyr::filter(scaledprobs, GOTeDNA_ID %in% proj & !!dplyr::ensym(thresh.value) %in% "1"),
+      dplyr::filter(df, !!dplyr::ensym(thresh.value) %in% "1"),
       mapping = ggplot2::aes(x = month, y = fill), fill = viridis::viridis(1), position = "dodge2",
-      width = 0.9, show.legend = FALSE, alpha = .9#, fill = viridis::viridis(1)
+      width = 0.9, show.legend = FALSE, alpha = .9
     ) +
     ggplot2::geom_col(
-      dplyr::filter(scaledprobs, GOTeDNA_ID %in% proj & !!dplyr::ensym(thresh.value) %in% "0"),
+      dplyr::filter(df, !!dplyr::ensym(thresh.value) %in% "0"),
       mapping = ggplot2::aes(x = month, y = fill), fill = "darkgrey", position = "dodge2",
-      width = 0.9, show.legend = FALSE, alpha = .9#, fill = "darkgrey"
+      width = 0.9, show.legend = FALSE, alpha = .9
     ) +
     # To make the interpolated data stand out
     ggpattern::geom_col_pattern(
-      dplyr::filter(scaledprobs, GOTeDNA_ID %in% proj & is.nan(scaleP)),
+      dplyr::filter(df, is.nan(scaleP)),
       mapping = ggplot2::aes(x = month, y = fill),
       position = "dodge2",
       width = 0.9, show.legend = FALSE, fill = NA,
@@ -114,12 +100,5 @@ thresh_fig <- function(
     ) +
     ggplot2::theme_minimal() +
     theme_circle
-    )
-  #  ggplot2::theme(
-     # panel.grid = ggplot2::element_blank(),
-    #  axis.title.y = ggplot2::element_text(hjust = 1, vjust = 2),
-     # plot.background = ggplot2::element_rect(fill = "white", colour = NA)
-   # )
-  }
-  return(plots)
+
 }

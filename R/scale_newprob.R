@@ -79,6 +79,8 @@ scale_newprob <- function(data, newprob) {
       multiple = "first"
     )
   # Interpolate missing months
+  DFmo$det_int <- NA
+  DFmo$nd_int <- NA
   DFmo$fill <- NA # add column
 
   for (species in unique(DFmo$id)) {
@@ -93,10 +95,12 @@ scale_newprob <- function(data, newprob) {
       cbind(DF1, data.frame(G = 4))
     )
 
+    DF2$det_int <- DF2$detect
+    DF2$nd_int <- DF2$nondetect
     DF2$fill <- DF2$scaleP
 
     # which months are NA and define groups with sequential NAs
-    month_na_id <- which(is.na(DF2$scaleP))
+    month_na_id <- which(is.na(DF2$detect))
     nagroups <- cumsum(c(1, abs(month_na_id[-length(month_na_id)] - month_na_id[-1]) > 1))
 
     # identify which NA groups are in G = 2 or 3 (ignore 1 and 2)
@@ -109,11 +113,24 @@ scale_newprob <- function(data, newprob) {
 
     # loop over final NA groups and fill in using average
     for (i in unique(nagroupsf)) {
-      DF2$fill[month_na_id[which(nagroups == i)]] <- (DF2$scaleP[min(month_na_id[which(nagroups == i)]) - 1] + DF2$scaleP[max(month_na_id[which(nagroups == i)]) + 1]) / 2
+      DF2$det_int[month_na_id[which(nagroups == i)]] <- (DF2$detect[min(
+        month_na_id[which(nagroups == i)]) - 1] + DF2$detect[max(
+          month_na_id[which(nagroups == i)]) + 1])/2
+
+      DF2$nd_int[month_na_id[which(nagroups == i)]] <- (DF2$nondetect[min(
+        month_na_id[which(nagroups == i)]) - 1] + DF2$nondetect[max(
+          month_na_id[which(nagroups == i)]) + 1])/2
+
+      DF2$fill[month_na_id[which(nagroups == i)]] <- (DF2$scaleP[min(
+        month_na_id[which(nagroups == i)]) - 1] + DF2$scaleP[max(
+          month_na_id[which(nagroups == i)]) + 1])/2
     }
     # then put values from DF3 back into DF$sp.pr. This assumes that the months are all in the correct order (jan to dec) in DF3 and test_interp
     # DF3 is final DF with fills
     DF3 <- DF2[DF2$G == 2, ]
+
+    DFmo$det_int[DFmo$id == species] <- DF3$det_int
+    DFmo$nd_int[DFmo$id == species] <- DF3$nd_int
     DFmo$fill[DFmo$id == species] <- DF3$fill
   }
 

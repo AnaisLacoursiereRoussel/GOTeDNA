@@ -93,7 +93,8 @@ mod_select_figure_ui <- function(id) {
             ),
             selectInput(ns("proj_id"),
               "GOTeDNA Project",
-              choices = "not available"
+              choices = "not available",
+              selected = NULL
             ),
             div(
               id = "fig_sampling_info",
@@ -210,7 +211,7 @@ mod_select_figure_server <- function(id, r) {
     # CALC WINDOW
     observeEvent(
       ignoreInit = TRUE,
-      list(input$calc_window, input$threshold),
+      list(input$calc_window, input$threshold, input$proj_id),
       {
         #
         if (r$species == "All" && r$data_type == "qPCR") {
@@ -243,34 +244,30 @@ mod_select_figure_server <- function(id, r) {
                 duration = NULL,
                 id = "notif_calc_win"
               )
-              newprob <- calc_det_prob(r$data_ready)
-              r$scaledprobs <- scale_newprob(r$data_ready, newprob)
+              newprob <- calc_det_prob(r$data_ready |>
+                                         filter(GOTeDNA_ID == input$proj_id))
+              r$scaledprobs <- scale_newprob(r$data_ready |>
+                                               filter(GOTeDNA_ID == input$proj_id), newprob)
               cli::cli_alert_info("Computing optimal detection window")
 
               win <- calc_window(
-                data = r$data_ready,
                 threshold = input$threshold,
-                taxon.level = r$taxon_lvl_slc,
-                taxon.name = ifelse(r$taxon_lvl_slc == "species",
-                  r$species,
-                  r$taxon_id_slc
-                ),
                 scaledprobs = r$scaledprobs
               )
 
               removeNotification(id = "notif_calc_win")
 
               if (is.null(win)) {
-                # showNotification("No optimal detection window", type = "warning")
-                output$opt_sampl <- renderUI("No optimal window")
+               #  showNotification("No optimal detection window", type = "warning")
+                output$opt_sampl <- renderUI("No single detection window")
                 output$conf <- renderUI("NA")
                 output$var_year <- renderUI("NA")
               } else {
                 output$opt_sampl <- renderUI(
-                  paste(win$period)
+                  paste(win$opt_sampling$period)
                 )
-                output$conf <- renderUI(paste(win$confidence))
-                output$var_year <- renderUI("Medium")
+                output$conf <- renderUI(paste(win$fshTest$confidence))
+                output$var_year <- renderUI("NA")
               }
 
               r$fig_ready <- TRUE
@@ -298,14 +295,17 @@ mod_select_figure_server <- function(id, r) {
         if (r$taxon_lvl_slc == "species") {
           out <- out |>
             dplyr::filter(species == r$species)
+
         } else {
           if (r$taxon_id_slc != "All") {
             out <- out[
               out[[r$taxon_lvl_slc]] == r$taxon_id_slc,
             ]
-          }
+
+         }
         }
       }
+
       # primer-based subset
       r$data_active <- out |>
         dplyr::filter(primer %in% r$primer)
@@ -346,8 +346,7 @@ mod_select_figure_server <- function(id, r) {
     ## DETECTION part 2
     output$fig_detect_plot_output <- renderPlot({
       if (req(r$fig_ready, cancelOutput = TRUE)) {
-        draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold,
-          id = input$proj_id # using proj_id as string
+        draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold
         )
       }
     })
@@ -390,7 +389,8 @@ mod_select_figure_server <- function(id, r) {
     ## HEATMAP
     output$fig_heatmap_plot_output <- plotly::renderPlotly({
       if (req(r$fig_ready, cancelOutput = TRUE)) {
-        ggp <- draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap)
+        plt_ready <- r$fig_ready && r$fig_slc$fig_heatmap
+        ggp <- draw_fig_heatmap(r, plt_ready)
         # multiply height by number of species
         nys <- r$data_ready$species |>
           unique() |>
@@ -398,7 +398,7 @@ mod_select_figure_server <- function(id, r) {
         plt <- plotly::ggplotly(
           ggp,
           height = 275 * nys,
-          tooltip = c("x", "text", "fill")
+          tooltip = c("x", "fill")
         ) |>
           default_layout() |>
           facet_strip_format()
@@ -408,7 +408,7 @@ mod_select_figure_server <- function(id, r) {
     ## DATA VARIATION
     output$fig_samples_plot_output <- plotly::renderPlotly({
       plt_ready <- r$fig_ready && r$fig_slc$fig_samples
-      ggp <- draw_fig_samples(r, plt_ready)
+      ggp <- draw_fig_samples(r, plt_ready, id = input$proj_id)
       if (plt_ready) {
         # multiply height per years #
         nys <- r$data_ready$year |>
@@ -606,9 +606,8 @@ draw_fig_smooth <- function(r, ready, id) {
   if (ready) {
     plt <- try(
       smooth_fig(
-        r$data_ready,
-        r$taxon_lvl_slc,
-        ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
+        r$data_ready |>
+          filter(GOTeDNA_ID == id)
       )
     )
     if (inherits(plt, "try-error")) {
@@ -616,7 +615,7 @@ draw_fig_smooth <- function(r, ready, id) {
       # there are lots of erros due to predLoess, this is better than a misleading
       # message on the plot
     } else {
-      plt[[id]]
+      plt#[[1]]
     }
   } else {
     plotNotAvailable()
@@ -624,55 +623,50 @@ draw_fig_smooth <- function(r, ready, id) {
 }
 
 ## Detection part 2
-draw_fig_detect <- function(r, ready, threshold, id) {
+draw_fig_detect <- function(r, ready, threshold){
   if (ready) {
     plt <- thresh_fig(
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
       threshold,
       r$scaledprobs
     )
-    plt[[id]]
+    plt
   } else {
     plotNotAvailable()
   }
 }
 
 ## Sampling effort
-draw_fig_effort <- function(r, ready) {
+draw_fig_effort <- function(r, ready){
   if (ready) {
     p <- effort_needed_fig(
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
       r$scaledprobs
     )
     p
+
   } else {
     plotNotAvailable()
   }
 }
 
 ## Heatmap
-draw_fig_heatmap <- function(r, ready) {
+draw_fig_heatmap <- function(r, ready){
   if (ready) {
     p <- hm_fig(
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc),
       r$scaledprobs
     )
     p
+
   } else {
     plotNotAvailable()
   }
 }
 
 ## Data variation
-draw_fig_samples <- function(r, ready) {
+draw_fig_samples <- function(r, ready, id) {
   if (ready) {
     p <- field_sample_fig(
-      r$data_ready,
-      r$taxon_lvl_slc,
-      ifelse(r$taxon_lvl_slc == "species", r$species, r$taxon_id_slc)
+      r$data_ready |>
+        filter(GOTeDNA_ID == id)
     )
     p
   } else {
@@ -822,7 +816,7 @@ facet_strip_format <- function(gp) {
     )
   ))
 
-  print(facets)
+  #print(facets)
   n_facets <- length(facets)
 
   # split x ranges from 0 to 1 into
