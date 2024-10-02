@@ -31,8 +31,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' jaccard.test(data = D_mb, threshold = "75",
-#'  taxon.name = "Acartia longiremis", scaledprobs)
+#' jaccard.test(scaledprobs, threshold = "75")
 #' }
 jaccard_test <- function(scaledprobs, threshold) {
 
@@ -43,84 +42,97 @@ jaccard_test <- function(scaledprobs, threshold) {
 
   thresh.value <- thresh$values[thresh$labels == threshold]
 
-  df = vector("list")
-  n_year = vector("list")
-
   data <- scaledprobs %>%
-    dplyr::filter(!is.na(year))
+    dplyr::filter(!is.na(year)) %>%
+    dplyr::group_by(year, month) %>%
+    dplyr::summarise(
+      detect = sum(detect, na.rm = TRUE),
+      n = sum(detect, nondetect, na.rm = TRUE),
+      fill = mean(fill, na.rm = TRUE)
+    )
 
-  for (i in unique(data$species)) {
-    df[[i]] <- data[data$species %in% i,] %>%
-      mutate(fill_bin = case_when(
-        fill < thresh.value ~ NA,
-        fill >= thresh.value ~ 1
+  df <- data %>%
+      dplyr::mutate(
+        fill_bin = case_when(
+          fill < thresh.value ~ NA,
+          fill >= thresh.value ~ 1
       )) %>%
       tidyr::pivot_wider(id_cols = year,
                          names_from = month,
                          values_from = fill_bin) %>%
-
-      remove_rownames %>% column_to_rownames(var="year") %>%
+    tibble::remove_rownames() %>%
+    tibble::column_to_rownames(var="year") %>%
       as.matrix()
 
-    n_year[[i]] = data[data$species %in% i,] %>%
-      group_by(id) %>%
-      dplyr::summarise(n = sum(detect+nondetect, na.rm=TRUE))
+    n_year = data %>%
+      dplyr::group_by(year) %>%
+      dplyr::summarise(n = sum(n, na.rm=TRUE))
+
+
+ # df = df[purrr::map(df, nrow) > 1]
+
+  n_mths <- df %>%
+      as.data.frame() %>%
+  #    mutate(year = rownames(.)) %>%
+      mutate(
+        n_mths = select(., 1:12) %>%
+               rowSums(na.rm = TRUE)) %>%
+      select(#year,
+             n_mths)
+
+  if (nrow(df) > 1) {
+
+  compare = t(combn(nrow(df), 2, FUN=function(x) df[x[1],] == df[x[2],]))
+
+  } else {
+    compare = NA
   }
 
-  df = df[purrr::map(df, nrow) > 1]
+  if (all(is.na(compare)) == FALSE ){
 
-  n_mths <- lapply(df, function(x) {
-    x %>%
-      as.data.frame() %>%
-      mutate(year = rownames(.)) %>%
-      rowwise() %>%
-      mutate(
-        n_mths = sum(c_across(1:12), na.rm = TRUE)) %>%
-      select(year, n_mths)
-  })
-
-  compare = lapply(df, function(y) {
-    t(combn(nrow(y), 2, FUN=function(x) y[x[1],] == y[x[2],]))
-  })
-
-  n_union = vector("list")
-  jacc_lst = vector("list")
-
-  for (i in names(df)) {
-    n_union[[i]] = data.frame(
-      n_union = combn(nrow(n_mths[[i]]), 2, FUN=function(x)
-        max(sum(df[[i]][x[1],], na.rm = TRUE),
-            sum(df[[i]][x[2],], na.rm = TRUE))),
-      n_wt = combn(nrow(n_year[[i]]), 2, FUN=function(x)
-        sum(n_year[[i]][x[1],"n"], n_year[[i]][x[2],"n"]))
+  n_union = data.frame(
+      n_union = combn(nrow(n_mths), 2, FUN=function(x)
+        max(sum(df[x[1],], na.rm = TRUE),
+            sum(df[x[2],], na.rm = TRUE))),
+      n_wt = combn(nrow(n_year), 2, FUN=function(x)
+        sum(n_year[x[1],"n"], n_year[x[2],"n"]))
     )
 
-    rownames(compare[[i]]) = combn(nrow(df[[i]]), 2, FUN=function(x) paste0("year",x[1],"_year",x[2]))
+    rownames(compare) = combn(nrow(df), 2, FUN=function(x) paste0("year",x[1],"_year",x[2]))
 
-    jacc_lst[[i]] <- compare[[i]] %>%
+    jacc_df <- compare %>%
       as.data.frame() %>%
       mutate(group = rownames(.)) %>%
       rowwise() %>%
       mutate(
-        n_int = sum(c_across(V1:V12), na.rm = TRUE)) %>%
+        n_int = #select(., V1:V12) %>%
+          rowSums(pick(V1:V12), na.rm = TRUE)) %>%
       select(group, n_int) %>%
-      cbind(n_union[[i]]) %>%
+      cbind(n_union) %>%
       mutate(
         J_index = n_int/n_union,
         J_wt = J_index*n_wt
       )
 
+  jacc_wt_mean <- jacc_df %>%
+    dplyr::summarise(
+      wt_mean = sum(J_wt)/sum(n_wt) *100
+    ) %>%
+    dplyr::mutate(
+      wt_text = dplyr::case_when(
+        wt_mean %in% 0:9.99 ~ "Very low",
+        wt_mean %in% 10:29.99 ~ "Low",
+        wt_mean %in% 30:69.99 ~ "Medium",
+        wt_mean %in% 70:89.99 ~ "High",
+        wt_mean %in% 90:100 ~ "Very high"
+      )
+    )
+
+  return(jacc_wt_mean$wt_text)
+  } else {
+    return(paste("Multi-year data not available"))
   }
 
-  jacc_wt_mean <- jacc_lst %>%
-    bind_rows(.id = "species") %>%
-    dplyr::summarise(
-      wt_mean = sum(J_wt)/sum(n_wt),
-      .by = "species"
-    ) %>%
-    left_join(scaledprobs[c("species", "primer", "kingdom","phylum","class","order","family","genus","GOTeDNA_ID.v")], by = "species",
-              multiple = "first")
-
-  return(jacc_wt_mean)
 
 }
+
