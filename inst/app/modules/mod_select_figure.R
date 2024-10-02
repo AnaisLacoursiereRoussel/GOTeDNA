@@ -91,9 +91,10 @@ mod_select_figure_ui <- function(id) {
               choices = ls_threshold,
               selected = 75
             ),
-            selectInput(ns("proj_id"),
+            selectInput(
+              ns("proj_id"),
               "GOTeDNA Project",
-              choices = "not available",
+              choices = "Not available",
               selected = NULL
             ),
             div(
@@ -111,7 +112,7 @@ mod_select_figure_ui <- function(id) {
               ),
               div(
                 class = "sampling_info-item",
-                h6("Consistency: "),
+                h6("Consistency among years: "),
                 uiOutput(ns("var_year"), class = "fig_text_output"),
               )
             ),
@@ -214,29 +215,33 @@ mod_select_figure_server <- function(id, r) {
       list(input$calc_window, input$threshold, input$proj_id),
       {
         #
-        if (r$species == "All" && r$data_type == "qPCR") {
-          showNotification(
-            "For qPCR data, one species should be selected.",
-            type = "warning"
-          )
-        } else {
-          if (r$species == "All" && r$taxon_id_slc == "All") {
-            showNotification(
-              "The current selection is too broad, restrict your selection to
-              one specific taxonomic level or to one species.",
-              type = "warning",
-              duration = 10
-            )
-          } else {
-            r$data_ready <- prepare_data(r)
+      #  if (r$species == "All" && r$data_type == "qPCR") {
+       #   showNotification(
+        #    "For qPCR data, one species should be selected.",
+         #   type = "warning"
+         # )
+       # } #else { # analysis should still be done even if broad selection
+          #if (r$species == "All" && r$taxon_id_slc == "All") {
+          #  showNotification(
+           #   "The current selection is broad and will take longer to process. Please
+           #   select specific taxonomic level or species for increased speed.",
+              #"The current selection is too broad, restrict your selection to
+              #one specific taxonomic level or to one species.",
+           #   type = "warning",
+           #   duration = 10
+           # )
+        #  } else {
+            r$data_ready <- prepare_data(r) %>%
+              filter(GOTeDNA_ID == input$proj_id)
+
             if (nrow(r$data_ready)) {
               showNotification(
                 paste0(
-                  "Computing time window with threshold set to ",
+                  "Computing detection window with threshold set to ",
                   input$threshold, "%",
                   ifelse(
                     nrow(r$data_ready) > 1e4,
-                    paste0(" (", nrow(r$data_ready), " Observations, this make takes some time)"),
+                    paste0(" (", nrow(r$data_ready), " observations, this may take some time)"),
                     ""
                   )
                 ),
@@ -244,16 +249,19 @@ mod_select_figure_server <- function(id, r) {
                 duration = NULL,
                 id = "notif_calc_win"
               )
-              newprob <- calc_det_prob(r$data_ready |>
-                                         filter(GOTeDNA_ID == input$proj_id))
-              r$scaledprobs <- scale_newprob(r$data_ready |>
-                                               filter(GOTeDNA_ID == input$proj_id), newprob)
+              newprob <- calc_det_prob(r$data_ready)
+              r$scaledprobs <- scale_newprob(r$data_ready, newprob)
+
               cli::cli_alert_info("Computing optimal detection window")
 
               win <- calc_window(
                 threshold = input$threshold,
                 scaledprobs = r$scaledprobs
               )
+
+              j.sim <- jaccard_test(
+                r$scaledprobs,
+                input$threshold)
 
               removeNotification(id = "notif_calc_win")
 
@@ -267,7 +275,9 @@ mod_select_figure_server <- function(id, r) {
                   paste(win$opt_sampling$period)
                 )
                 output$conf <- renderUI(paste(win$fshTest$confidence))
-                output$var_year <- renderUI("NA")
+                output$var_year <- renderUI(
+                    paste(j.sim)
+                  )
               }
 
               r$fig_ready <- TRUE
@@ -283,8 +293,8 @@ mod_select_figure_server <- function(id, r) {
             } else {
               showNotification("Data selection is empty", type = "warning")
             }
-          }
-        }
+         # }
+        #}
       }
     )
 
