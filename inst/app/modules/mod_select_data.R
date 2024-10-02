@@ -9,7 +9,10 @@ mod_select_data_ui <- function(id) {
         div(
           # title and top buttons
           class = "title-container",
-          h1("Data request"),
+          h1("Data request",
+               icon("info-circle", class = "definition",
+                    title = "Processing speed is impacted if data request is broad. Please select specific taxonomic level or species for increased speed."),
+             ),
           div(
             class = "buttons-container",
             actionButton(ns("reset"), "Reset",
@@ -100,7 +103,8 @@ mod_select_data_ui <- function(id) {
                 htmltools::tagQuery(shinyWidgets::pickerInput(ns("primer"),
                   div(
                     "Primer set",
-                    icon("info-circle", class = "definition", onclick = "fakeClick('primer-info')"),
+                    icon("info-circle", class = "definition", onclick = "fakeClick('primer-info')",
+                         title = "Primer details"),
                   ),
                   choices = "All",
                   options = list(`actions-box` = TRUE),
