@@ -102,7 +102,8 @@ calc_window <- function(threshold, scaledprobs) {
   # create df where species have no discernible window (for now, this means more than one non-consecutive period)
   if(!is.null(consec.det)){
   optwin <- consec.det %>%
-    dplyr::mutate(window = "inwindow")
+    dplyr::mutate(window = "inwindow") %>%
+    dplyr::ungroup()
 
   inwindow <- optwin %>%
     dplyr::group_by(
@@ -110,7 +111,8 @@ calc_window <- function(threshold, scaledprobs) {
     dplyr::summarise(
       detect = sum(nd, na.rm = TRUE),
       nondetect = sum(n, na.rm = TRUE)
-    )
+    ) %>%
+    dplyr::ungroup()
 
   # filter out all of the species that have a window from the dataset
   nowin <- dplyr::anti_join(df, optwin, by = "month") %>%
