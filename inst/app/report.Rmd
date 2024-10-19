@@ -1,0 +1,61 @@
+---
+output: pdf_document
+header-includes:
+  \usepackage{svg}
+  \usepackage{fancyhdr}
+  \usepackage{helvet}
+  \fancyhead[L]{\includesvg{www/img/logo_partners/logo_dfo_colour}}
+  \fontfamily{phv}
+classoption: letterpaper
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+# Report for Guidance on Optimal eDNA Timing
+## Date prepared: `r Sys.Date()`
+
+This report has been made using the R Shiny application GOTeDNA.v1:
+
+Lacoursiere-Roussel, A., Morrison, M.K., Grey, E., LeBlanc, F., Gagne, N., Parent, G., Bernier, R., DiBacco, C., Chevrinais, M., Trudel, M., Gomez, C., Jeffery, N., Kinnison, M., Howland, K. (In preparation). GOTeDNA: An R Shiny application for Guidance on Optimal Timing for environmental DNA.
+
+## Disclaimers
+
+This tool intends to infer optimal eDNA detection periods only, not species spatial distribution.
+
+The data presented are observation data only, intended to allow inference of optimal detection periods based on taxa presence/absence, with no intent to provide quantitative population assessments. Finally, data are pooled only when they are obtained via the same protocols, as different field and lab methods may influence the likelihood of organism DNA detection.
+
+Website developers and managers are not responsible for possible errors in the data (e.g., taxonomic misassignment, non-specific amplification, false negative results, etc.). Contact information for data owners and/or publication DOI is provided for any questions pertaining to the data.
+
+GOTeDNA aims to provide guidance on data trends, gaps, and facilitate interpretation to help communication, but we recommend interpreting results with eDNA experts.
+
+All statistical analyses are provided in an R package at […].
+
+This tool and generated results should be cited as the reference publication: Lacoursière-Roussel, A., Morrison, M., […]. (In preparation). GOTeDNA: An R Shiny Application for Guidance on Optimal Timing for eDNA. This paper provides more in depth the analyses, interpretation, and limitations.
+
+Data used should cite Data Owners. References are provided.
+
+\newpage
+\newgeometry{margin=0cm}
+
+```{r, context="render",dpi = 300, out.width="100%"}
+ 
+magick::image_read(path = file.path(tempdir(), "dat_pan.png"))
+
+magick::image_read(path = file.path(tempdir(), "map_sel.png"))
+print("Print geographic bounds")
+```
+\newpage
+
+```{r, context="render",dpi = 300, out.width="100%"}
+magick::image_read(path = file.path(tempdir(), "obs_panels.png"))
+```
+\newpage
+
+```{r, context="render",dpi = 300, out.width="100%"}
+magick::image_read(path = file.path(tempdir(), "dat_auth.png"))
+
+## Indigenous contributions
+```
