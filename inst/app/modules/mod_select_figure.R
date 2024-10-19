@@ -2,7 +2,6 @@
 mod_select_figure_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    tags$head(),
     div(
       id = "figure_selection",
       div(
@@ -80,6 +79,7 @@ mod_select_figure_ui <- function(id) {
           3,
           class = "control-panel",
           div(
+            id = "obs_panel",
             class = "section_header",
             h1("Observation")
           ),
@@ -116,11 +116,11 @@ mod_select_figure_ui <- function(id) {
                 uiOutput(ns("var_year"), class = "fig_text_output"),
               )
             ),
-            actionButton(
+            downloadButton(
               ns("export_pdf"),
               "Export to PDF",
               title = "Export figures to PDF",
-              # class = "primary-button"
+               class = "primary-button"
             )
           )
         ),
@@ -137,17 +137,19 @@ mod_select_figure_ui <- function(id) {
               ui_fig_samples("fig_samples", "Data variation", "field_sample.html", ns)
             )
           )
-        ),
+        )
+        )
+      ),
         div(
           id = "reference_data_authorship",
           div(
             class = "table_title-container",
-            h2("Reference data authorship")
+            h1("Reference data authorship")
           ),
           DT::DTOutput(ns("data_authorship"))
         ),
-      )
-    )
+      #)
+    #)
   )
 }
 
@@ -214,23 +216,8 @@ mod_select_figure_server <- function(id, r) {
       ignoreInit = TRUE,
       list(input$calc_window, input$threshold, input$proj_id),
       {
-        #
-      #  if (r$species == "All" && r$data_type == "qPCR") {
-       #   showNotification(
-        #    "For qPCR data, one species should be selected.",
-         #   type = "warning"
-         # )
-       # } #else { # analysis should still be done even if broad selection
-          #if (r$species == "All" && r$taxon_id_slc == "All") {
-          #  showNotification(
-           #   "The current selection is broad and will take longer to process. Please
-           #   select specific taxonomic level or species for increased speed.",
-              #"The current selection is too broad, restrict your selection to
-              #one specific taxonomic level or to one species.",
-           #   type = "warning",
-           #   duration = 10
-           # )
-        #  } else {
+        req(input$calc_window)
+
             r$data_ready <- prepare_data(r) %>%
               filter(GOTeDNA_ID == input$proj_id)
 
@@ -295,6 +282,31 @@ mod_select_figure_server <- function(id, r) {
             }
          # }
         #}
+
+            shinyscreenshot::screenshot(
+                selector = "#data_request",
+                filename = "dat_pan",
+                download = FALSE, server_dir = tempdir()
+              )
+
+                 shinyscreenshot::screenshot(
+                selector = "#area_selection",
+                filename = "map_sel",
+                download = FALSE, server_dir = tempdir()
+              )
+
+              shinyscreenshot::screenshot(
+                selector = "#observation",
+                filename = "obs_panels",
+                download = FALSE, server_dir = tempdir()
+              )
+
+              shinyscreenshot::screenshot(
+                selector = "#reference_data_authorship",
+                filename = "dat_auth",
+                download = FALSE, server_dir = tempdir()
+              )
+
       }
     )
 
@@ -497,29 +509,51 @@ mod_select_figure_server <- function(id, r) {
         )
     })
 
-    output$export_pdf <- downloadHandler(
-      # For PDF output, change this to "report.pdf"
-      filename = "report.pdf",
+
+  #  observeEvent(input$export_pdf, {
+
+
+   #  shinyscreenshot::screenshot(
+    #    selector = "#data_request",
+     #   filename = "dat_pan",
+    #    download = FALSE, server_dir = "."
+    #  )
+
+    #  print(input$dat_pan)
+
+    #shinyscreenshot::screenshot(
+    #  selector = "#area_selection",
+    #  filename = "map_sel",
+    #  download = FALSE, server_dir = tempdir()
+    #)
+
+    #shinyscreenshot::screenshot(
+     # selector = "#observation",
+      #filename = "obs_panels",
+    #  download = FALSE, server_dir = tempdir()
+  #  )
+
+    #shinyscreenshot::screenshot(
+ #     selector = "#reference_data_authorship",
+ #     filename = "dat_auth",
+ #     download = FALSE, server_dir = tempdir()
+ #   )
+  #  })
+
+    output$export_pdf <- downloadHandler(# For PDF output, change this to "report.pdf"
+     filename = function() {
+        paste0("GOTeDNA_report_",Sys.Date(),".pdf")
+        },
+      contentType = "application/pdf",
       content = function(file) {
-        # Copy the report file to a temporary directory before processing it, in
-        # case we don't have write permissions to the current working dir (which
-        # can happen when deployed).
+
         tempReport <- file.path(tempdir(), "report.Rmd")
-        file.copy("report.Rmd", tempReport, overwrite = TRUE)
 
-        # Set up parameters to pass to Rmd document
-        params <- list(figs = input$fig_main_container)
-
-        # Knit the document, passing in the `params` list, and eval it in a
-        # child of the global environment (this isolates the code in the document
-        # from the code in this app).
-        rmarkdown::render(tempReport,
-          output_file = file,
-          params = params,
-          envir = new.env(parent = globalenv())
+        file.copy("Report.rmd", tempReport, overwrite = TRUE)
+        out <- rmarkdown::render(tempReport)
+        file.rename(out, file)
+        }
         )
-      }
-    )
   })
 }
 
