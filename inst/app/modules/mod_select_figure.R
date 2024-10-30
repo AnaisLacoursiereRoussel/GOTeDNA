@@ -267,37 +267,65 @@ mod_select_figure_server <- function(id, r) {
                   )
               }
 
+
+
               r$fig_ready <- TRUE
 
               # ca a l'air good a recheck demainNB from KC: if r$scaledprobs includes the same projects as
               # the input project, the following lines should be removed!
               # create project vector
               v_proj <- r$scaledprobs$GOTeDNA_ID |> unique()
-              #  r$scaledprobs$GOTeDNA_ID
-              # l_proj <- seq_along(v_proj) |> as.list()
-              # names(l_proj) <- paste0("GOTeDNA ID: ", v_proj)
-              # updateSelectInput(session, "proj_id", choices = l_proj)
+
             } else {
               showNotification("Data selection is empty", type = "warning")
             }
-         # }
-        #}
 
             shinyscreenshot::screenshot(
-                selector = "#data_request",
-                filename = "dat_pan",
+                selector = "#data_request_top_fields",
+                filename = "data_top",
                 download = FALSE, server_dir = tempdir()
               )
 
-                 shinyscreenshot::screenshot(
-                selector = "#area_selection",
-                filename = "map_sel",
+            shinyscreenshot::screenshot(
+              selector = "#data_request_bottom_fields",
+              filename = "data_btm",
+              download = FALSE, server_dir = tempdir()
+            )
+
+            shinyscreenshot::screenshot(
+              id = "proj_id-selectized",
+              filename = "proj_id",
+              download = FALSE, server_dir = tempdir()
+            )
+
+              shinyscreenshot::screenshot(
+                id = "fig_smooth_plot_output",
+                filename = "smooth_fig",
                 download = FALSE, server_dir = tempdir()
               )
 
               shinyscreenshot::screenshot(
-                selector = "#observation",
-                filename = "obs_panels",
+                id = "fig_detect_plot_output",
+                filename = "detect_fig",
+                download = FALSE, server_dir = tempdir()
+              )
+
+              shinyscreenshot::screenshot(
+                id = "fig_effort_plot_output",
+                filename = "effort_fig",
+                download = FALSE, server_dir = tempdir(),
+                timer=3
+              )
+
+              shinyscreenshot::screenshot(
+                id = "fig_heatmap_plot_output",
+                filename = "heatmap_fig",
+                download = FALSE, server_dir = tempdir()
+              )
+
+              shinyscreenshot::screenshot(
+                id = "fig_samples_plot_output",
+                filename = "samples_fig",
                 download = FALSE, server_dir = tempdir()
               )
 
@@ -486,7 +514,7 @@ mod_select_figure_server <- function(id, r) {
           `Indigenous contribution` = ifelse(
             !is.na(LClabel),
             "<button type='submit' style='border: 0; background: transparent'
-            onclick='Click(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/>
+            onclick='fakeClick(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/>
             </button>",
             NA
           ),
@@ -509,48 +537,72 @@ mod_select_figure_server <- function(id, r) {
         )
     })
 
-
-  #  observeEvent(input$export_pdf, {
-
-
-   #  shinyscreenshot::screenshot(
-    #    selector = "#data_request",
-     #   filename = "dat_pan",
-    #    download = FALSE, server_dir = "."
-    #  )
-
-    #  print(input$dat_pan)
-
-    #shinyscreenshot::screenshot(
-    #  selector = "#area_selection",
-    #  filename = "map_sel",
-    #  download = FALSE, server_dir = tempdir()
-    #)
-
-    #shinyscreenshot::screenshot(
-     # selector = "#observation",
-      #filename = "obs_panels",
-    #  download = FALSE, server_dir = tempdir()
-  #  )
-
-    #shinyscreenshot::screenshot(
- #     selector = "#reference_data_authorship",
- #     filename = "dat_auth",
- #     download = FALSE, server_dir = tempdir()
- #   )
-  #  })
-
-    output$export_pdf <- downloadHandler(# For PDF output, change this to "report.pdf"
+    # EXPORT PDF
+    output$export_pdf <- downloadHandler(
      filename = function() {
         paste0("GOTeDNA_report_",Sys.Date(),".pdf")
         },
       contentType = "application/pdf",
       content = function(file) {
 
+        # Data Request
+        # shinyscreenshots
+
+        # Area Selection
+        if (!is.null(r$geom_slc)){
+        geom_coords <- st_bbox(r$geom_slc) %>%
+          as.matrix() %>%
+          t() %>%
+          as.data.frame()
+
+      #  geom_coords <- paste0(
+      #    geom_coords$xmin, ", ", geom_coords$ymin," - ",
+      #    geom_coords$xmax, ", ", geom_coords$ymax
+      #  )
+        } else {
+          geom_coords <- c("Area selection not confirmed")
+        }
+
+        mapDL <- addMarkers(basemap(),
+            data = r$geom,
+            clusterOptions = markerClusterOptions(),
+            label = ~ paste(success, "observations"),
+            group = "station"
+          ) %>%
+          addScaleBar()
+
+        mapview::mapviewOptions(fgb = FALSE)
+
+        mapview::mapshot(
+          mapDL,
+          file = file.path(tempdir(), "mapDL.png")
+        )
+
+        # Observation
+        thresh <- r$threshold
+        #projID <- r$proj_id
+       # sampWin <- output$opt_sampl
+     #   conf <- win$fshTest$confidence
+        cons <- jaccard_test(
+          r$scaledprobs,
+          input$threshold)
+
+
+        # Reference Data Authorship
+        FNdata <- r$data_ready$LClabel
+
         tempReport <- file.path(tempdir(), "report.Rmd")
+        tempDFOlogo <- file.path(tempdir(), "DFOlogo.png")
+        tempGOTlogo <- file.path(tempdir(), "GOTeDNAlogo.png")
 
         file.copy("Report.rmd", tempReport, overwrite = TRUE)
-        out <- rmarkdown::render(tempReport)
+        file.copy("DFOlogo.png", tempDFOlogo, overwrite = TRUE)
+        file.copy("GOTeDNAlogo.png", tempGOTlogo, overwrite = TRUE)
+
+       # params <- list(win, j.sim)
+
+        out <- rmarkdown::render(tempReport)#,
+                                # params = params)
         file.rename(out, file)
         }
         )
@@ -659,7 +711,7 @@ draw_fig_smooth <- function(r, ready, id) {
       # there are lots of erros due to predLoess, this is better than a misleading
       # message on the plot
     } else {
-      plt#[[1]]
+      plt
     }
   } else {
     plotNotAvailable()
