@@ -20,15 +20,20 @@ Imports:
     ggplot2,
     grDevices,
     grid,
+    kableExtra,
     lubridate,
     magick,
     magrittr,
+    orca,
     readxl,
     scales,
     shiny,
+    shinyscreenshot,
     stats,
     tidyr,
-    viridis
+    tinytex,
+    viridis,
+    webshot
 Suggests:
     cli,
     cowplot,
