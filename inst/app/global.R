@@ -49,8 +49,8 @@ basemap <- function() {
   leaflet() |>
     leafem::addMouseCoordinates() |>
   #  leaflet::addProviderTiles("Esri.OceanBasemap", group = "OceaBasemap") |>
-   # leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
-    leaflet::addProviderTiles("Stadia.StamenTonerLite") |>
+    leaflet::addProviderTiles("OpenStreetMap", group = "OpenStreetMap") |>
+  #  leaflet::addProviderTiles("Stadia.StamenTonerLite") |>
    # leaflet::addProviderTiles("Esri.WorldGrayCanvas") |>
 
    # leaflet::addLayersControl(
@@ -115,5 +115,3 @@ primer_seqs <- read.csv("data/primers.csv") %>%
                 "Fragment length (bp)" = "bp")
 
 
-
-#coord_tab <- na.omit(data.frame(longitude = NA_real_, latitude = NA_real_))
