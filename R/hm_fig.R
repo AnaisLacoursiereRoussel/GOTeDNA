@@ -24,14 +24,16 @@ hm_fig <- function(
 
   df <- scaledprobs %>%
     dplyr::filter(!is.na(year)) %>%
+    dplyr::group_by(year, month, species) %>%
+    dplyr::summarise(
+      scaleP = mean(scaleP, na.rm = TRUE)
+    ) %>%
     dplyr::rename("Detection rate" = "scaleP") %>%
     dplyr::mutate(species = reorder(species, dplyr::desc(species)))
 
   df$Month <- factor(df$month,
                        levels = 1:12,
-                       labels = c("Jan","Feb","Mar","Apr","May",
-                                  "Jun","Jul","Aug","Sep","Oct",
-                                  "Nov","Dec"))
+                       labels = month.abb)
   ggplot2::ggplot(
   ) +
     ggplot2::geom_tile(dplyr::filter(df, `Detection rate` > 0 | is.na(`Detection rate`)),
@@ -46,7 +48,7 @@ hm_fig <- function(
                         ncol = 1) +
     ggplot2::scale_fill_viridis_c(direction = -1, limits = c(0.00001, 1), na.value = "white",
                                   guide = NULL) +
-    ggplot2::scale_x_discrete(expand = c(0,0)) +
+    ggplot2::scale_x_discrete(breaks = month.abb, expand = c(0,0)) +
     ggplot2::scale_y_discrete(expand = c(0,0)) +
     ggplot2::labs(
       fill = NULL, x = NULL, y = NULL) +
