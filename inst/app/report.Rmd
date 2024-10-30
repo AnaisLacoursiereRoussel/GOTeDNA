@@ -1,20 +1,33 @@
 ---
-output: pdf_document
+output: 
+  pdf_document:
+    latex_engine: xelatex
 header-includes:
-  \usepackage{svg}
-  \usepackage{fancyhdr}
-  \usepackage{helvet}
-  \fancyhead[L]{\includesvg{www/img/logo_partners/logo_dfo_colour}}
-  \fontfamily{phv}
+  - \usepackage{fontspec}
+  - \setmainfont{Arial}
+  - \usepackage{graphicx}
+  - \usepackage{geometry}
+  - \usepackage{fancyhdr}
+  - \usepackage{lastpage}
+  - \pagestyle{fancy}
+  - \setlength{\headheight}{155pt}
+  - \fancyhf{}
+  - \fancyhead[L]{\includegraphics[width=6.5cm]{DFOlogo.png}\hskip3mm\\\fontsize{25}{25}\selectfont \textsc{}}
+  - \fancyhead[C]{\hskip50mm\includegraphics[width=5cm]{GOTeDNAlogo.png}\\\fontsize{10}{10}\selectfont \textsc{}}
+  - \fancyhead[R]{\thepage\ of \pageref{LastPage}\\\fontsize{30}{30}\selectfont \textsc{}}
+  - \fancyheadoffset{1cm}
 classoption: letterpaper
+documentclass: article
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
+\newgeometry{top=4cm}
 
 # Report for Guidance on Optimal eDNA Timing
+
 ## Date prepared: `r Sys.Date()`
 
 This report has been made using the R Shiny application GOTeDNA.v1:
@@ -23,7 +36,7 @@ Lacoursiere-Roussel, A., Morrison, M.K., Grey, E., LeBlanc, F., Gagne, N., Paren
 
 ## Disclaimers
 
-This tool intends to infer optimal eDNA detection periods only, not species spatial distribution.
+This tool intends to infer optimal environmental DNA detection periods only, not species spatial distribution.
 
 The data presented are observation data only, intended to allow inference of optimal detection periods based on taxa presence/absence, with no intent to provide quantitative population assessments. Finally, data are pooled only when they are obtained via the same protocols, as different field and lab methods may influence the likelihood of organism DNA detection.
 
@@ -38,24 +51,84 @@ This tool and generated results should be cited as the reference publication: La
 Data used should cite Data Owners. References are provided.
 
 \newpage
-\newgeometry{margin=0cm}
 
+## Data Request
 ```{r, context="render",dpi = 300, out.width="100%"}
- 
-magick::image_read(path = file.path(tempdir(), "dat_pan.png"))
-
-magick::image_read(path = file.path(tempdir(), "map_sel.png"))
-print("Print geographic bounds")
+magick::image_read(path = file.path(tempdir(), "data_top.png"))
+magick::image_read(path = file.path(tempdir(), "data_btm.png"))
 ```
+
+## Area Selection
+
+### Geographic bounds (Decimal degrees):
+`r if (!is.null(r$geom_slc)){paste0(geom_coords$ymin, ", ", geom_coords$xmin,"<p>",geom_coords$ymax,", ", geom_coords$xmax)} else {"Area selection not confirmed"}`
+
+
+```{r, dpi=300, out.width="80%"}
+magick::image_read(path = file.path(tempdir(), "mapDL.png"))
+```
+
 \newpage
 
-```{r, context="render",dpi = 300, out.width="100%"}
-magick::image_read(path = file.path(tempdir(), "obs_panels.png"))
+```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
+if (r$fig_ready && r$fig_slc$fig_detect) {
+  kableExtra::text_spec("Monthly detection probability", color = "#333333")
+  
+#  draw_fig_smooth(isolate(r), r$fig_ready && r$fig_slc$fig_detect,
+#          id = input$proj_id) 
+#  
+#  draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold) +
+#  ggplot2::theme(
+#    legend.position = "right"
+#  )
+  magick::image_read(path = file.path(tempdir(), "smooth_fig.png"))
+  magick::image_read(path = file.path(tempdir(), "detect_fig.png"))
+}
+
 ```
+
 \newpage
 
-```{r, context="render",dpi = 300, out.width="100%"}
+
+```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
+#
+if (r$fig_ready && r$fig_slc$fig_effort) {
+  kableExtra::text_spec(print('Guidance on sampling effort'), color = '#333333')
+#  draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort) +
+#    ggplot2::theme(
+#      legend.position = "right"
+#  )
+  magick::image_read(path = file.path(tempdir(), "effort_fig.png"))
+} 
+```
+
+\newpage
+```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
+
+if (r$fig_ready && r$fig_slc$fig_heatmap) {
+  kableExtra::text_spec("Species detection heatmap", color = "#333333")
+  magick::image_read(path = file.path(tempdir(), "heatmap_fig.png"))
+}
+
+```
+
+\newpage
+```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
+
+if (r$fig_ready && r$fig_slc$fig_samples) {
+  kableExtra::text_spec("Data variation", color = "#333333")
+  magick::image_read(path = file.path(tempdir(), "samples_fig.png"))
+}
+```
+
+\newpage
+
+```{r, dpi = 300, out.width="100%"}
 magick::image_read(path = file.path(tempdir(), "dat_auth.png"))
-
-## Indigenous contributions
 ```
+
+```{r}
+#FNdata <- FNdata
+``` 
+`r if(any(FNdata %in% NA) == FALSE) {"Indigenous Contributions <p>We acknowledge that this research was conducted on the unceded and unsurrendered traditional territories of the Mi'kmaq, Passamaquoddy, Wabanaki (Bay of Fundy ecodistrict); Mi’kmaq, Wabanaki (Magdalen Shallows, Scotian Shelf); Métis peoples (Churchill Estuary-Hudson Bay); and the Inuit homelands of Inuit Nunangat including: Nunatsiavut (NL-Labrador Shelves), Nunavik (Southern Hudson Strait), and Nunavut (Baffin Bay/Davis Strait, North Baffin Fjords). <p>Arctic data collections were funded by ArcticNet, Polar Knowledge Canada, DFO (Aquatic Invasive Species Monitoring Program, Strategic Program for Ecosystem-Based Research and Advice [SPERA], Ocean Protection Plan [OPP] Coastal Environmental Baseline Program, Arctic Science Funds, GRDI), Nunavut Wildlife Management Board, Nunavik Marine Region Wildlife Board, and World Wildlife Funds to KH and ALR. Field accommodations and/or logistic support during Arctic field campaigns were provided by Churchill Northern Studies Centre, Glencore-Raglan, Baffinland Iron and Vale Mines, NRCan (Polar Continental Shelf program), Nunatsiavut Government, Environment and Climate Change Canada, and Government of Nunavut MV Nuliajuk."} else {""}`
+
