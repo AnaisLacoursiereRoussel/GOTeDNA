@@ -33,7 +33,7 @@ theme_circle <- ggplot2::theme(
   axis.ticks = ggplot2::element_blank(),
   # change text family, size, and adjust position of titles
   text = ggplot2::element_text(
-    family = "Arial", size = 24),
+    family = "sans", size = 24),
   axis.text = ggplot2::element_text(
     colour = "#939598", size = 20),
   axis.text.y = ggplot2::element_blank(),

@@ -93,7 +93,7 @@ effort_needed_fig <- function(
         linewidth = 0.1,
         colour = "#939598"),
       text = ggplot2::element_text(
-        family = "Arial", size = 24),
+        family = "sans", size = 24),
       axis.text = ggplot2::element_text(
         colour = "#939598", size = 20),
       axis.title = ggplot2::element_text(colour = "#5A5A5A",
