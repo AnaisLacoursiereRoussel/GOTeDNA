@@ -2,6 +2,7 @@
 output: 
   pdf_document:
     latex_engine: xelatex
+    extra_dependencies: "subfig"
 header-includes:
   - \usepackage{fontspec}
   - \setmainfont{Arial}
@@ -9,6 +10,8 @@ header-includes:
   - \usepackage{geometry}
   - \usepackage{fancyhdr}
   - \usepackage{lastpage}
+  - \usepackage{multicol}
+  - \usepackage{tabularx, makecell}
   - \pagestyle{fancy}
   - \setlength{\headheight}{155pt}
   - \fancyhf{}
@@ -24,7 +27,7 @@ documentclass: article
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
-\newgeometry{top=4cm}
+\newgeometry{top=4cm, bottom=2cm}
 
 # Report for Guidance on Optimal eDNA Timing
 
@@ -53,82 +56,118 @@ Data used should cite Data Owners. References are provided.
 \newpage
 
 ## Data Request
-```{r, context="render",dpi = 300, out.width="100%"}
+```{r, dpi = 300, out.width="100%"}
 magick::image_read(path = file.path(tempdir(), "data_top.png"))
 magick::image_read(path = file.path(tempdir(), "data_btm.png"))
 ```
 
 ## Area Selection
-
 ### Geographic bounds (Decimal degrees):
 `r if (!is.null(r$geom_slc)){paste0(geom_coords$ymin, ", ", geom_coords$xmin,"<p>",geom_coords$ymax,", ", geom_coords$xmax)} else {"Area selection not confirmed"}`
-
 
 ```{r, dpi=300, out.width="80%"}
 magick::image_read(path = file.path(tempdir(), "mapDL.png"))
 ```
 
-\newpage
+## Observation
+Detection threshold: `r thresh_slc`% <p>
+Project ID: `r projID`
 
-```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
-if (r$fig_ready && r$fig_slc$fig_detect) {
-  kableExtra::text_spec("Monthly detection probability", color = "#333333")
+### Guidance
+\begin{tabularx}{500pt}{l l l}
+   \thead{\textbf{Optimal timing:}} & \thead{\textbf{Confidence:}} & \thead{\textbf{Consistency among years:}} \\
+   `r if(is.null(sampWin)){"No single detection window"} else {sampWin$opt_sampling$period}` & `r if(is.null(sampWin)){"NA"} else {sampWin$fshTest$confidence}` &  `r cons`
+\end{tabularx}
+
+\newpage
+## Monthly detection probability
+
+Normalized monthly detection probability using eDNA for the selected species, geographic region, primer(s), and detection threshold. (A) Each year is denoted separately by colour, and monthly detection probability is smoothed by locally weighted regression (LOESS). (B) Wedges in purple denote species detection probability ≥ selected threshold, grey denotes detection probability < detection threshold. Dashed wedges denote interpolated data. 
+
+```{r, dpi = 300, out.width="50%", fig.ncol=3}
+magick::image_read(path = file.path(tempdir(), "threshAxis.png")) |>
+  magick::image_scale("150")
+
+draw_fig_smooth(isolate(r), r$fig_ready && r$fig_slc$fig_detect, id = input$proj_id)
+
+``` 
+
+```{r, dpi = 300, out.width="52%", fig.ncol=2}
+draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold)
+
+magick::image_read(path = file.path(tempdir(), "threshLegend.png")) |>
+  magick::image_scale("350")
+ 
+``` 
   
-#  draw_fig_smooth(isolate(r), r$fig_ready && r$fig_slc$fig_detect,
-#          id = input$proj_id) 
-#  
-#  draw_fig_detect(r, r$fig_ready && r$fig_slc$fig_detect, input$threshold) +
-#  ggplot2::theme(
-#    legend.position = "right"
-#  )
-  magick::image_read(path = file.path(tempdir(), "smooth_fig.png"))
-  magick::image_read(path = file.path(tempdir(), "detect_fig.png"))
-}
+\newpage
+## Guidance on sampling effort
+
+Predicted sample size to reach targeted probability of detection given the month of sampling.
+
+```{r, dpi = 300, fig.align="center", out.width="100%", fig.width=12, fig.height=12}
+effort_needed_fig(r$scaledprobs) +
+  ggplot2::labs(y = "Detection probability", x = "Number of samples", colour = "Month") +
+  ggplot2::theme(legend.position = "right",
+                 strip.text = element_text(hjust = 0)) +
+  ggplot2::guides(colour = ggplot2::guide_legend(order = 1,
+                                                 label.position = "left",
+                                                 label.hjust = 1)) +
+  ggh4x::force_panelsizes(
+    rows = unit(150, "pt"), 
+    cols = unit(500, "pt"))
+ 
+```
+
+\newpage
+## Species detection heatmap
+
+Heatmap displaying variation of normalized species eDNA detection probability.
+
+```{r, dpi = 300, out.width="90%", fig.ncol=2, fig.width=10, fig.height=8}
+
+draw_fig_heatmap(r, r$fig_ready && r$fig_slc$fig_heatmap) +
+  ggplot2::theme(
+    strip.text = element_text(hjust = 0)) +
+  ggh4x::force_panelsizes(
+    rows = unit(70, "pt"), 
+    cols = unit(500, "pt"))
+
+magick::image_read(path = file.path(tempdir(), "hmLegend.png")) |>
+  magick::image_scale("350")
+
+
+```
+
+\newpage
+## Data variation
+
+Monthly water sampling effort and proportion of samples having positive eDNA detection.
+
+```{r, dpi = 300, fig.align="center", out.width="100%", fig.width=12, fig.height=12}
+#magick::image_read(path = file.path(tempdir(), "samples_fig.png"))
+
+field_sample_fig(
+      r$data_ready |>
+        filter(GOTeDNA_ID == projID)) +
+  ggplot2::labs(y = "Detection probability", colour = "Species", size = "Sample size", x = "Month") +
+  ggplot2::theme(
+    strip.text = element_text(hjust = 0)) +
+  ggh4x::force_panelsizes(
+    rows = unit(100, "pt")
+  )
 
 ```
 
 \newpage
 
-
-```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
-#
-if (r$fig_ready && r$fig_slc$fig_effort) {
-  kableExtra::text_spec(print('Guidance on sampling effort'), color = '#333333')
-#  draw_fig_effort(r, r$fig_ready && r$fig_slc$fig_effort) +
-#    ggplot2::theme(
-#      legend.position = "right"
-#  )
-  magick::image_read(path = file.path(tempdir(), "effort_fig.png"))
-} 
-```
-
-\newpage
-```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
-
-if (r$fig_ready && r$fig_slc$fig_heatmap) {
-  kableExtra::text_spec("Species detection heatmap", color = "#333333")
-  magick::image_read(path = file.path(tempdir(), "heatmap_fig.png"))
-}
-
-```
-
-\newpage
-```{r, dpi = 300, fig.align="center", out.width="70%", results='asis'}
-
-if (r$fig_ready && r$fig_slc$fig_samples) {
-  kableExtra::text_spec("Data variation", color = "#333333")
-  magick::image_read(path = file.path(tempdir(), "samples_fig.png"))
-}
-```
-
-\newpage
 
 ```{r, dpi = 300, out.width="100%"}
 magick::image_read(path = file.path(tempdir(), "dat_auth.png"))
 ```
 
 ```{r}
-#FNdata <- FNdata
+FNdata <- FNdata
 ``` 
 `r if(any(FNdata %in% NA) == FALSE) {"Indigenous Contributions <p>We acknowledge that this research was conducted on the unceded and unsurrendered traditional territories of the Mi'kmaq, Passamaquoddy, Wabanaki (Bay of Fundy ecodistrict); Mi’kmaq, Wabanaki (Magdalen Shallows, Scotian Shelf); Métis peoples (Churchill Estuary-Hudson Bay); and the Inuit homelands of Inuit Nunangat including: Nunatsiavut (NL-Labrador Shelves), Nunavik (Southern Hudson Strait), and Nunavut (Baffin Bay/Davis Strait, North Baffin Fjords). <p>Arctic data collections were funded by ArcticNet, Polar Knowledge Canada, DFO (Aquatic Invasive Species Monitoring Program, Strategic Program for Ecosystem-Based Research and Advice [SPERA], Ocean Protection Plan [OPP] Coastal Environmental Baseline Program, Arctic Science Funds, GRDI), Nunavut Wildlife Management Board, Nunavik Marine Region Wildlife Board, and World Wildlife Funds to KH and ALR. Field accommodations and/or logistic support during Arctic field campaigns were provided by Churchill Northern Studies Centre, Glencore-Raglan, Baffinland Iron and Vale Mines, NRCan (Polar Continental Shelf program), Nunatsiavut Government, Environment and Climate Change Canada, and Government of Nunavut MV Nuliajuk."} else {""}`
 
