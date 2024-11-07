@@ -60,7 +60,7 @@ effort_needed_fig <- function(
                   ggplot2::aes(y = `Detection rate`,
                                x = `Samples needed`,
                                colour = Month)) +
-    ggplot2::geom_point(size = 3, show.legend = FALSE) +
+    ggplot2::geom_point(size = 3, show.legend = TRUE) +
     ggplot2::theme_classic(base_size = 24) +
     ggplot2::expand_limits(x = 0, y = 0) +
     ggplot2::scale_y_continuous(
@@ -73,6 +73,7 @@ effort_needed_fig <- function(
       breaks = seq(5,25,5)
     ) +
     ggplot2::scale_colour_viridis_d(
+      name = "Month",
       direction = -1,
       breaks = 1:12,
       labels = c("Jan","Feb","Mar","Apr","May",

@@ -62,7 +62,7 @@ field_sample_fig <- function(
     ggplot2::guides(size = ggplot2::guide_legend(order = 1,
                                                  label.position = "left",
                                                  label.hjust = 1),
-                    colour = ggplot2::guide_legend(order = 2,
+                    colour = ggplot2::guide_legend(order = 1,
                                                    label.position = "left",
                                                    label.hjust = 1,
                                                    override.aes = list(size = 5)
@@ -87,7 +87,7 @@ field_sample_fig <- function(
         linewidth = 1,
         colour = "#939598"),
       text = ggplot2::element_text(
-        family = "Arial", size = 24),
+        family = "sans", size = 24),
       axis.text = ggplot2::element_text(
         colour = "#939598", size = 20),
       legend.title.align = 1,
