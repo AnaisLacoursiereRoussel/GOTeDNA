@@ -77,7 +77,7 @@ calc_window <- function(threshold, scaledprobs) {
 
 
   # selects species with consecutive months being December-January >= threshold
-  if (length(unique(multmonth$consec)) > 1) {
+  if (length(unique(multmonth$consec)) == 2) {
     if (any(multmonth$month == 12) & any(multmonth$month == 1)) {
       consecmonth <- multmonth[order(multmonth$consec, decreasing = TRUE),]
       # all of the species with consecutive windows AND single month window
@@ -90,6 +90,7 @@ calc_window <- function(threshold, scaledprobs) {
 
   } else {
 
+    if (length(unique(multmonth$consec)) == 1) {
     # selects species with consecutive months >= threshold
     consecmonth1 <- multmonth %>%
       dplyr::group_by(
@@ -97,6 +98,9 @@ calc_window <- function(threshold, scaledprobs) {
       dplyr::ungroup()
 
     consec.det <- consecmonth1
+    } else {
+    consec.det <- NULL
+    }
   }
 
   # create df where species have no discernible window (for now, this means more than one non-consecutive period)
