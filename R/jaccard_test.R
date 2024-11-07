@@ -23,7 +23,7 @@
 #' * `order`
 #' * `family`
 #' * `genus`
-#' * `GOTeDNA_ID.v`
+#' * `GOTeDNA_ID`
 
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}
@@ -120,11 +120,11 @@ jaccard_test <- function(scaledprobs, threshold) {
     ) %>%
     dplyr::mutate(
       wt_text = dplyr::case_when(
-        wt_mean %in% 0:9.99 ~ "Very low",
-        wt_mean %in% 10:29.99 ~ "Low",
-        wt_mean %in% 30:69.99 ~ "Medium",
-        wt_mean %in% 70:89.99 ~ "High",
-        wt_mean %in% 90:100 ~ "Very high"
+        between(wt_mean, 0, 9.99) == TRUE ~ "Very low",
+        between(wt_mean, 10, 29.99) == TRUE ~ "Low",
+        between(wt_mean, 30, 69.99) == TRUE ~ "Medium",
+        between(wt_mean, 70, 89.99) == TRUE ~ "High",
+        between(wt_mean, 90, 100) == TRUE ~ "Very high"
       )
     )
 
