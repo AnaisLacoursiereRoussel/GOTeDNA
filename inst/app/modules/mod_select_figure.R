@@ -241,6 +241,8 @@ mod_select_figure_server <- function(id, r) {
 
               cli::cli_alert_info("Computing optimal detection window")
 
+              thresh_slc <- input$threshold
+
               win <- calc_window(
                 threshold = input$threshold,
                 scaledprobs = r$scaledprobs
@@ -256,7 +258,8 @@ mod_select_figure_server <- function(id, r) {
                #  showNotification("No optimal detection window", type = "warning")
                 output$opt_sampl <- renderUI("No single detection window")
                 output$conf <- renderUI("NA")
-                output$var_year <- renderUI("NA")
+                output$var_year <- renderUI(
+                  paste(j.sim))
               } else {
                 output$opt_sampl <- renderUI(
                   paste(win$opt_sampling$period)
@@ -291,43 +294,6 @@ mod_select_figure_server <- function(id, r) {
               filename = "data_btm",
               download = FALSE, server_dir = tempdir()
             )
-
-            shinyscreenshot::screenshot(
-              id = "proj_id-selectized",
-              filename = "proj_id",
-              download = FALSE, server_dir = tempdir()
-            )
-
-              shinyscreenshot::screenshot(
-                id = "fig_smooth_plot_output",
-                filename = "smooth_fig",
-                download = FALSE, server_dir = tempdir()
-              )
-
-              shinyscreenshot::screenshot(
-                id = "fig_detect_plot_output",
-                filename = "detect_fig",
-                download = FALSE, server_dir = tempdir()
-              )
-
-              shinyscreenshot::screenshot(
-                id = "fig_effort_plot_output",
-                filename = "effort_fig",
-                download = FALSE, server_dir = tempdir(),
-                timer=3
-              )
-
-              shinyscreenshot::screenshot(
-                id = "fig_heatmap_plot_output",
-                filename = "heatmap_fig",
-                download = FALSE, server_dir = tempdir()
-              )
-
-              shinyscreenshot::screenshot(
-                id = "fig_samples_plot_output",
-                filename = "samples_fig",
-                download = FALSE, server_dir = tempdir()
-              )
 
               shinyscreenshot::screenshot(
                 selector = "#reference_data_authorship",
@@ -546,7 +512,9 @@ mod_select_figure_server <- function(id, r) {
       content = function(file) {
 
         # Data Request
-        # shinyscreenshots
+     #   datSrc <- input$datasource
+      #  datTyp <- input$data_type
+       # primers <- r$primer
 
         # Area Selection
         if (!is.null(r$geom_slc)){
@@ -554,11 +522,6 @@ mod_select_figure_server <- function(id, r) {
           as.matrix() %>%
           t() %>%
           as.data.frame()
-
-      #  geom_coords <- paste0(
-      #    geom_coords$xmin, ", ", geom_coords$ymin," - ",
-      #    geom_coords$xmax, ", ", geom_coords$ymax
-      #  )
         } else {
           geom_coords <- c("Area selection not confirmed")
         }
@@ -568,7 +531,7 @@ mod_select_figure_server <- function(id, r) {
             clusterOptions = markerClusterOptions(),
             label = ~ paste(success, "observations"),
             group = "station"
-          ) %>%
+          ) |>
           addScaleBar()
 
         mapview::mapviewOptions(fgb = FALSE)
@@ -579,13 +542,16 @@ mod_select_figure_server <- function(id, r) {
         )
 
         # Observation
-        thresh <- r$threshold
-        #projID <- r$proj_id
-       # sampWin <- output$opt_sampl
-     #   conf <- win$fshTest$confidence
+        thresh_slc <- input$threshold
+        projID <- input$proj_id
+        sampWin <- calc_window(
+          threshold = thresh_slc,
+          scaledprobs = r$scaledprobs
+        )
+
         cons <- jaccard_test(
           r$scaledprobs,
-          input$threshold)
+          thresh_slc)
 
 
         # Reference Data Authorship
@@ -594,10 +560,16 @@ mod_select_figure_server <- function(id, r) {
         tempReport <- file.path(tempdir(), "report.Rmd")
         tempDFOlogo <- file.path(tempdir(), "DFOlogo.png")
         tempGOTlogo <- file.path(tempdir(), "GOTeDNAlogo.png")
+        temphmLeg <- file.path(tempdir(), "hmLegend.png")
+        tempthreshAx <- file.path(tempdir(), "threshAxis.png")
+        tempthreshLeg <- file.path(tempdir(), "threshLegend.png")
 
         file.copy("Report.rmd", tempReport, overwrite = TRUE)
         file.copy("DFOlogo.png", tempDFOlogo, overwrite = TRUE)
         file.copy("GOTeDNAlogo.png", tempGOTlogo, overwrite = TRUE)
+        file.copy("hm_legend.png", temphmLeg, overwrite = TRUE)
+        file.copy("thresh_axis.png", tempthreshAx, overwrite = TRUE)
+        file.copy("thresh_legend.png", tempthreshLeg, overwrite = TRUE)
 
        # params <- list(win, j.sim)
 
