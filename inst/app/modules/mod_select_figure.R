@@ -719,12 +719,18 @@ draw_fig_effort <- function(r, ready){
 ## Heatmap
 draw_fig_heatmap <- function(r, ready){
   if (ready) {
-    p <- hm_fig(
-      r$scaledprobs
-    )
-    p
+    p <- try(hm_fig(
+      r$scaledprobs))
 
-  } else {
+    if (inherits(p, "try-error")) {
+      plotNotAvailableError()
+      # there are lots of erros due xmin not found, this is better than a misleading
+      # message on the plot
+    } else {
+      p
+    }
+
+    } else {
     plotNotAvailable()
   }
 }
