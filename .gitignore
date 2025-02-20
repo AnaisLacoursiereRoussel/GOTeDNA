@@ -1,6 +1,6 @@
-# Project specific files 
+# Project specific files
 *.html
-inst/app/data/raw_xlsx_files
+#inst/app/data/raw_xlsx_files
 tmp/
 TODO.md
 
