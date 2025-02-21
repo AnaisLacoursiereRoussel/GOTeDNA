@@ -22,15 +22,15 @@ server <- function(input, output, session) {
     reset = 0
   )
 
-   observeEvent(input$navbar, {
-    if (input$navbar == "partners") {
-      browseURL("https://sites.google.com/view/gotedna/partners")
-    }
+#   observeEvent(input$navbar, {
+#    if (input$navbar == "partners") {
+#      browseURL("https://sites.google.com/view/gotedna/partners")
+#    }
 
-    if (input$navbar == "team") {
-      browseURL("https://sites.google.com/view/gotedna/the-team")
-    }
-  })
+#    if (input$navbar == "team") {
+#      browseURL("https://sites.google.com/view/gotedna/the-team")
+#    }
+#  })
 
   mod_select_data_server("slc_data", r)
 
