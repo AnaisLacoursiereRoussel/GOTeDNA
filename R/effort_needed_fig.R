@@ -80,8 +80,8 @@ effort_needed_fig <- function(
                  "Jun","Jul","Aug","Sep","Oct",
                  "Nov","Dec")
     ) +
-  #  ggplot2::facet_wrap(~Species,
-  #                     ncol = 1, scales = "free") +
+    ggplot2::facet_wrap(~Species,
+                       ncol = 1, scales = "free") +
     ggplot2::labs(
       x = NULL, y = NULL
     ) +
