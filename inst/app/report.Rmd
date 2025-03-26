@@ -71,7 +71,7 @@ magick::image_read(path = file.path(tempdir(), "mapDL.png"))
 
 ## Observation
 Detection threshold: `r thresh_slc`% <p>
-Project ID: `r projID`
+Protocol ID: `r protID`
 
 ### Guidance
 \begin{tabularx}{500pt}{l l l}
@@ -149,7 +149,7 @@ Monthly water sampling effort and proportion of samples having positive eDNA det
 
 field_sample_fig(
       r$data_ready |>
-        filter(GOTeDNA_ID == projID)) +
+        filter(protocol_ID == protID)) +
   ggplot2::labs(y = "Detection probability", colour = "Species", size = "Sample size", x = "Month") +
   ggplot2::theme(
     strip.text = element_text(hjust = 0)) +

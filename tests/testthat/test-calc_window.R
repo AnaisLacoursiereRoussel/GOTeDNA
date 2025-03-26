@@ -5,7 +5,7 @@ test_that("calc_window() returns optimal detection windows with confidence value
     structure(list(
       length = 2L, threshold = "90",
       period = "Jan-Dec",
-      GOTeDNA_ID = "8",
+      protocol_ID = "8",
       species = "Acartia longiremis",
       primer = "COI1",
       phylum = "Arthropoda",

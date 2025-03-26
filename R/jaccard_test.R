@@ -23,7 +23,7 @@
 #' * `order`
 #' * `family`
 #' * `genus`
-#' * `GOTeDNA_ID`
+#' * `protocol_ID`
 
 #'
 #' @author Anais Lacoursiere-Roussel \email{Anais.Lacoursiere@@dfo-mpo.gc.ca}

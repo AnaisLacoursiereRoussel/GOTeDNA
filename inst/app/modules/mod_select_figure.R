@@ -92,8 +92,8 @@ mod_select_figure_ui <- function(id) {
               selected = 75
             ),
             selectInput(
-              ns("proj_id"),
-              "GOTeDNA Project",
+              ns("prot_id"),
+              "Protocol ID",
               choices = "Not available",
               selected = NULL
             ),
@@ -219,7 +219,7 @@ mod_select_figure_server <- function(id, r) {
         req(input$calc_window)
 
             r$data_ready <- prepare_data(r) %>%
-              filter(GOTeDNA_ID == input$proj_id)
+              filter(protocol_ID == input$proj_id)
 
             if (nrow(r$data_ready)) {
               showNotification(
@@ -274,10 +274,8 @@ mod_select_figure_server <- function(id, r) {
 
               r$fig_ready <- TRUE
 
-              # ca a l'air good a recheck demainNB from KC: if r$scaledprobs includes the same projects as
-              # the input project, the following lines should be removed!
-              # create project vector
-              v_proj <- r$scaledprobs$GOTeDNA_ID |> unique()
+              # create protocol vector
+              v_proj <- r$scaledprobs$protocol_ID |> unique()
 
             } else {
               showNotification("Data selection is empty", type = "warning")
@@ -331,7 +329,7 @@ mod_select_figure_server <- function(id, r) {
 
     observe({
       if (nrow(r$data_active)) {
-        v_proj <- r$data_active$GOTeDNA_ID |> table()
+        v_proj <- r$data_active$protocol_ID |> table()
         l_proj <- names(v_proj) |> as.list()
         names(l_proj) <- paste0(
           "GOTeDNA ID: ",
@@ -465,8 +463,8 @@ mod_select_figure_server <- function(id, r) {
       r$data_active |>
         dplyr::ungroup() |>
         dplyr::group_by(
-          GOTeDNA_ID,
-          GOTeDNA_version,
+          protocol_ID,
+          protocolVersion,
           LClabel,
           bibliographicCitation
         ) |>
@@ -487,12 +485,12 @@ mod_select_figure_server <- function(id, r) {
           LClabel = NULL
         ) |>
         dplyr::rename(
-          "GOTeDNA ID" = "GOTeDNA_ID",
-          "Subproject" = "GOTeDNA_version",
+          "Protocol ID" = "protocol_ID",
+          "Protocol Version" = "protocolVersion",
           "Publication" = "bibliographicCitation"
         ) |>
         dplyr::relocate(
-          `GOTeDNA ID`, Subproject, # Contact,
+          `Protocol ID`, `Protocol Version`, # Contact,
           `Sample #`, `Station #`, `Indigenous contribution`, Publication
         ) |>
         DT::datatable(
@@ -613,10 +611,10 @@ n_projs <- function(r) {
   proj_ids <- r$data_ready |>
     dplyr::summarise(
       n = sum(detect, nondetect, na.rm = TRUE),
-      .by = GOTeDNA_ID
+      .by = protocol_ID
     ) |>
     sort(n, decreasing = TRUE) |>
-    select(GOTeDNA_ID)
+    select(protocol_ID)
 }
 
 
@@ -675,7 +673,7 @@ draw_fig_smooth <- function(r, ready, id) {
     plt <- try(
       smooth_fig(
         r$data_ready |>
-          filter(GOTeDNA_ID == id)
+          filter(protocol_ID == id)
       )
     )
     if (inherits(plt, "try-error")) {
@@ -740,7 +738,7 @@ draw_fig_samples <- function(r, ready, id) {
   if (ready) {
     p <- field_sample_fig(
       r$data_ready |>
-        filter(GOTeDNA_ID == id)
+        filter(protocol_ID == id)
     )
     p
   } else {

@@ -234,8 +234,8 @@ mod_select_data_server <- function(id, r) {
       r$data_type <- input$data_type
       r$cur_data <- gotedna_data[[input$data_type]]
       r$data_station <- gotedna_station[[input$data_type]]
-      r$GOTeDNA_ID <- paste0(
-        r$cur_data$GOTeDNA_ID
+      r$protocol_ID <- paste0(
+        r$cur_data$protocol_ID
       )
     })
 
