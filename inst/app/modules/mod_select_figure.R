@@ -219,7 +219,11 @@ mod_select_figure_server <- function(id, r) {
         req(input$calc_window)
 
             r$data_ready <- prepare_data(r) %>%
+<<<<<<< HEAD
               filter(protocol_ID == input$prot_id)
+=======
+              filter(protocol_ID == input$proj_id)
+>>>>>>> f6edee6651d7d6078f0f1062c9b13fa7a31f275d
 
             if (nrow(r$data_ready)) {
               showNotification(
@@ -275,7 +279,11 @@ mod_select_figure_server <- function(id, r) {
               r$fig_ready <- TRUE
 
               # create protocol vector
+<<<<<<< HEAD
               v_prot <- r$scaledprobs$protocol_ID |> unique()
+=======
+              v_proj <- r$scaledprobs$protocol_ID |> unique()
+>>>>>>> f6edee6651d7d6078f0f1062c9b13fa7a31f275d
 
             } else {
               showNotification("Data selection is empty", type = "warning")
@@ -336,6 +344,7 @@ mod_select_figure_server <- function(id, r) {
           v_prot |> names(),
           " (", v_prot, " samples)"
         )
+
         updateSelectInput(
           session,
           "prot_id",
