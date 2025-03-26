@@ -14,8 +14,8 @@
 #' Default: `path.folder = NULL`. Default will use the current working directory.
 #'
 #' @return A tibble with 26 columns:
-#' * `GOTeDNA_ID`
-#' * `GOTeDNA_version`
+#' * `protocol_ID`
+#' * `protocolVersion`
 #' * `materialSampleID`
 #' * `eventID`
 #' * `primer`
@@ -31,7 +31,7 @@
 #' * `pcr_primer_lod` : provided when choose.method = "qPCR"
 #' * `organismQuantity`: provided when choose.method = "metabarcoding"
 #' * `date`
-#' * `ecodistrict`
+#' * ecodistrict`
 #' * `LClabel` : Local Contexts label to denote First Nations data sovereignty
 #' * `decimalLatitude`
 #' * `decimalLongitude`
@@ -77,7 +77,7 @@ read_data <- function(
 
   names(samples) <- files
   # remove list elements where sample sheet is empty
-  samples <- Filter(function(a) any(!is.na(a[["GOTeDNA_ID"]])), samples)
+  samples <- Filter(function(a) any(!is.na(a[["protocol_ID"]])), samples)
 
   metadata <- lapply(files, readxl::read_excel, sheet = 2)
   names(metadata) <- files
@@ -117,12 +117,12 @@ read_data <- function(
   # match event date to samples
   for (j in seq_len(length(samples))) {
     samples[[j]]$date <- metadata[[j]]$eventDate[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
-    samples[[j]]$ecodistrict <- metadata[[j]]$ecodistrict[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)] %>%
-      stringr::str_remove_all( # clean ecodistrict
-        pattern = "(-?[:digit:])"
-      )
+  #  samples[[j]]$ecodistrict <- metadata[[j]]$ecodistrict[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)] %>%
+   #   stringr::str_remove_all( # clean ecodistrict
+  #      pattern = "(-?[:digit:])"
+  #    )
 
-    samples[[j]]$GOTeDNA_version <- metadata[[j]]$GOTeDNA_version[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
+    samples[[j]]$protocolVersion <- metadata[[j]]$protocolVersion[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLatitude <- metadata[[j]]$decimalLatitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$decimalLongitude <- metadata[[j]]$decimalLongitude[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
     samples[[j]]$station <- metadata[[j]]$samplingStation[match(samples[[j]]$materialSampleID, metadata[[j]]$materialSampleID)]
@@ -142,7 +142,7 @@ read_data <- function(
           decimalLongitude = suppressWarnings(as.numeric(decimalLongitude)),
           concentration = suppressWarnings(as.numeric(concentration)),
           materialSampleID = suppressWarnings(as.character(materialSampleID)),
-          GOTeDNA_version = suppressWarnings(as.numeric(GOTeDNA_version))) %>%
+          protocolVersion = suppressWarnings(as.numeric(protocolVersion))) %>%
         dplyr::mutate(
           detected = dplyr::case_when(
             is.na(concentration) ~ 0,
@@ -161,7 +161,7 @@ read_data <- function(
             decimalLatitude = suppressWarnings(as.numeric(decimalLatitude)),
             decimalLongitude = suppressWarnings(as.numeric(decimalLongitude)),
             materialSampleID = suppressWarnings(as.character(materialSampleID)),
-            GOTeDNA_version = suppressWarnings(as.numeric(GOTeDNA_version)
+            protocolVersion = suppressWarnings(as.numeric(protocolVersion)
         )) %>%
         dplyr::rename("primer" = "target_subfragment")
     }
@@ -169,9 +169,10 @@ read_data <- function(
 
   GOTeDNA_df <- do.call(dplyr::bind_rows, lapply(samples, function(x) {
     x[, names(x) %in% c(
-      "GOTeDNA_ID", "GOTeDNA_version", "materialSampleID","eventID", "primer",
+      "protocol_ID", "protocolVersion", "materialSampleID","eventID", "primer",
       "scientificName", "domain","kingdom", "phylum", "class", "order",
-      "family", "genus", "date", "ecodistrict", "LClabel", "decimalLatitude", "decimalLongitude",
+      "family", "genus", "date", #"ecodistrict",
+      "LClabel", "decimalLatitude", "decimalLongitude",
       "station", "year", "month", "organismQuantity", "concentration", "pcr_primer_lod", "detected", "ownerContact", "bibliographicCitation"
     )]
   })) |>

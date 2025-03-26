@@ -4,7 +4,7 @@ server <- function(input, output, session) {
     geom = NULL,
     geom_slc = NULL,
     station_slc = NULL,
-    project_slc = NULL,
+    protocol_slc = NULL,
     taxon_lvl_slc = NULL,
     taxon_id_slc = NULL,
     show_map_info = FALSE,

@@ -18,7 +18,7 @@
 #' * `detect`: number of detections
 #' * `nondetect`: number of non-detections
 #' * `scaleP`: detection probability scaled to range 0-1
-#' * `GOTeDNA_ID`:
+#' * `protocol_ID`:
 #' * `species`:
 #' * `primer`:
 #' * `year`:
@@ -70,7 +70,7 @@ scale_newprob <- function(data, newprob) {
     dplyr::tibble()
   row.names(DFmo) <- NULL
 
-  DFmo[c("GOTeDNA_ID", "species", "primer")] <- stringr::str_split_fixed(DFmo$id, ";", 3)
+  DFmo[c("protocol_ID", "species", "primer")] <- stringr::str_split_fixed(DFmo$id, ";", 3)
 
   DFmo <- DFmo |>
     dplyr::left_join(
@@ -158,7 +158,7 @@ scale_newprob <- function(data, newprob) {
     dplyr::tibble()
   row.names(DFyr) <- NULL
 
-  DFyr[c("GOTeDNA_ID", "species", "primer", "year")] <- stringr::str_split_fixed(DFyr$id, ";", 4)
+  DFyr[c("protocol_ID", "species", "primer", "year")] <- stringr::str_split_fixed(DFyr$id, ";", 4)
 
   DFyr <- DFyr |>
     dplyr::left_join(

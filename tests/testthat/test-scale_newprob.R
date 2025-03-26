@@ -6,9 +6,9 @@ test_that("monthly probabilities are scaled and missing months are interpolated,
   expect_identical(
     tmp,
     structure(list(
-      id = "8;Prionospio steenstrupi;COI1", 
+      id = "8;Prionospio steenstrupi;COI1",
       month = 1L, detect = 2, nondetect = 13, scaleP = 0.17778,
-      GOTeDNA_ID = "8", species = "Prionospio steenstrupi", primer = "COI1",
+      protocol_ID = "8", species = "Prionospio steenstrupi", primer = "COI1",
       phylum = "Annelida", class = "Polychaeta", order = "Spionida",
       family = "Spionidae", genus = "Prionospio", fill = 0.17778
     ), row.names = c(
@@ -30,7 +30,7 @@ test_that("monthly probabilities are scaled and missing months are interpolated"
       detect = NA_real_,
       nondetect = NA_real_,
       scaleP = NA_real_,
-      GOTeDNA_ID = "8",
+      protocol_ID = "8",
       species = "Prionospio steenstrupi",
       primer = "COI1",
       year = "2021",
@@ -53,7 +53,7 @@ test_that("monthly probabilities are scaled and missing months are interpolated"
       detect = 4,
       nondetect = 25,
       scaleP = 1,
-      GOTeDNA_ID = "8",
+      protocol_ID = "8",
       species = "Prionospio steenstrupi",
       primer = "COI1",
       year = "2021",

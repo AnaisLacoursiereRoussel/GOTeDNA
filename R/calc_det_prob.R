@@ -2,7 +2,7 @@
 #' with read_data()
 #'
 #' @description Function that calculates non-parametric probability of detection
-#' for each species and primer for the selected ecodistrict. Probabilities are
+#' for each species and primer for the selected data. Probabilities are
 #' calculated both (1) monthly, across all years; and (2) monthly with each year
 #' separate. Outputs are used in subsequent functions.
 #'
@@ -15,7 +15,7 @@
 #' * `nd` number of positive detections per month
 #' * `p` calculated monthly detection probability
 #' * `s` standard deviation
-#' * `GOTeDNA_ID`
+#' * `protocol_ID`
 #' * `year`
 #' * `yr.mo` year;month concatenated
 #'
@@ -34,11 +34,11 @@ calc_det_prob <- function(data) {
 
   data %<>%
     dplyr::mutate(.,
-      id = paste0(GOTeDNA_ID, ";", species, ";", primer),
-      id.yr = paste0(GOTeDNA_ID, ";", species, ";", primer, ";", year)
+      id = paste0(protocol_ID, ";", species, ";", primer),
+      id.yr = paste0(protocol_ID, ";", species, ";", primer, ";", year)
     )
   # Create a variable so detection probability is calculated separately for each
-  # GOTeDNA_ID, version, species, and primer
+  # protocol ID, version, species, and primer
 
   # create new list variables to store outputs
   lnd <- length(unique(data$id))
@@ -95,7 +95,7 @@ calc_det_prob <- function(data) {
 
   newP_yr <- lapply(newP_yr, function(x) {
     dplyr::mutate(x,
-      GOTeDNA_ID = stringr::word(x$id.yr, 1, sep = stringr::fixed(";")),
+      protocol_ID = stringr::word(x$id.yr, 1, sep = stringr::fixed(";")),
       year = stringr::word(x$id.yr, -1, sep = stringr::fixed(";")),
       yr.mo = paste0(year, ";", month),
       id.yr = NULL

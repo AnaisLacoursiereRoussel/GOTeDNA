@@ -6,7 +6,7 @@ test_that("calc_det_prob() calculates detection probability", {
     length(newprob$newP_agg),
     with(
       D_mb_ex,
-      paste0(GOTeDNA_ID, ";", scientificName, ";", target_subfragment)
+      paste0(protocol_ID, ";", scientificName, ";", target_subfragment)
     ) |> unique() |> length()
   )
   expect_identical(
@@ -37,7 +37,7 @@ test_that("calc_det_prob() calculates detection probability", {
     length(newprob$newP_yr),
     with(
       D_mb_ex,
-      paste0(GOTeDNA_ID, ";", scientificName, ";", target_gene, ";", year)
+      paste0(protocol_ID, ";", scientificName, ";", target_gene, ";", year)
     ) |> unique() |> length()
   )
   expect_identical(

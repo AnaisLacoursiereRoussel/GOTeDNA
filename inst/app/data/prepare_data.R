@@ -12,12 +12,13 @@ D_mb_msct <- D_mb %>%
 
 D_mb_nodetect <- D_mb_msct %>%
   dplyr::group_by(
-    GOTeDNA_ID, GOTeDNA_version, species, primer, station) %>%
+    protocol_ID, protocolVersion, species, primer, station) %>%
   dplyr::summarise(num_detected = sum(detected)) %>%
   dplyr::filter(num_detected == 0)
 
 D_mb_clean <- dplyr::anti_join(D_mb_msct, D_mb_nodetect,
-                               by = c("GOTeDNA_ID","GOTeDNA_version","species","primer", "station"))
+                               by = c("protocol_ID","protocolVersion","species",
+                                      "primer", "station"))
 
 D_qPCR <- read_data(
   choose.method = "qPCR", path.folder = "inst/app/data/raw_xlsx_files"
