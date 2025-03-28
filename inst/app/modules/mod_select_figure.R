@@ -219,11 +219,7 @@ mod_select_figure_server <- function(id, r) {
         req(input$calc_window)
 
             r$data_ready <- prepare_data(r) %>%
-<<<<<<< HEAD
               filter(protocol_ID == input$prot_id)
-=======
-              filter(protocol_ID == input$proj_id)
->>>>>>> f6edee6651d7d6078f0f1062c9b13fa7a31f275d
 
             if (nrow(r$data_ready)) {
               showNotification(
@@ -279,11 +275,8 @@ mod_select_figure_server <- function(id, r) {
               r$fig_ready <- TRUE
 
               # create protocol vector
-<<<<<<< HEAD
+
               v_prot <- r$scaledprobs$protocol_ID |> unique()
-=======
-              v_proj <- r$scaledprobs$protocol_ID |> unique()
->>>>>>> f6edee6651d7d6078f0f1062c9b13fa7a31f275d
 
             } else {
               showNotification("Data selection is empty", type = "warning")
@@ -484,7 +477,7 @@ mod_select_figure_server <- function(id, r) {
         ) |>
         dplyr::ungroup() |>
         mutate(
-          `Indigenous contribution` = ifelse(
+          `Indigenous Contributions` = ifelse(
             !is.na(LClabel),
             "<button type='submit' style='border: 0; background: transparent'
             onclick='fakeClick(\"fn-conts\")'><img src='img/fn_logo.png' height='25'/>
@@ -500,7 +493,7 @@ mod_select_figure_server <- function(id, r) {
         ) |>
         dplyr::relocate(
           `Protocol ID`, `Protocol Version`, # Contact,
-          `Sample #`, `Station #`, `Indigenous contribution`, Publication
+          `Sample #`, `Station #`, `Indigenous Contributions`, Publication
         ) |>
         DT::datatable(
           escape = FALSE, rownames = FALSE,
