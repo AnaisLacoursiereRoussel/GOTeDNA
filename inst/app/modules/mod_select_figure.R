@@ -333,9 +333,9 @@ mod_select_figure_server <- function(id, r) {
         v_prot <- r$data_active$protocol_ID |> table()
         l_prot <- names(v_prot) |> as.list()
         names(l_prot) <- paste0(
-          "Protocol ID: ",
+          "Protocol ",
           v_prot |> names(),
-          " (", v_prot, " samples)"
+          " (", v_prot, " observations)"
         )
 
         updateSelectInput(
