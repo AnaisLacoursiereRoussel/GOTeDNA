@@ -15,7 +15,7 @@ RUN mkdir /build_zone
 ADD . /build_zone
 WORKDIR /build_zone
 
-RUN Rscript -e 'remotes::install_local(upgrade = "never", depedencies = TRUE)'
+RUN Rscript -e 'remotes::install_local(upgrade = "never", dependencies = TRUE)'
 WORKDIR /usr
 RUN rm -rf /build_zone
 

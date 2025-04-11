@@ -31,3 +31,5 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 docs/
+# pycharm project settings
+.idea
