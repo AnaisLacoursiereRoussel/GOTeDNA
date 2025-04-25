@@ -4,19 +4,10 @@
 \alias{smooth_fig}
 \title{Display species monthly detection probability by primer and region.}
 \usage{
-smooth_fig(
-  data,
-  taxon.level = c("domain", "kingdom", "phylum", "class", "order", "family", "genus",
-    "species"),
-  taxon.name
-)
+smooth_fig(data)
 }
 \arguments{
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}.}
-
-\item{taxon.level}{(required, character): Taxonomic level selection.}
-
-\item{taxon.name}{(required, character): Full binomial species name.}
 }
 \description{
 This function displays the species optimal detection period as
@@ -28,7 +19,7 @@ data <- gotedna_data$metabarcoding |> dplyr::filter(
      species == "Acartia longiremis",
      primer == "COI1"
  )
-smooth_fig(data = data, species.name = "Acartia longiremis")
+smooth_fig(data = data)
 }
 }
 \author{

@@ -19,14 +19,14 @@ containing 5-7 columns:
 \item \code{nd} number of positive detections per month
 \item \code{p} calculated monthly detection probability
 \item \code{s} standard deviation
-\item \code{GOTeDNA_ID}
+\item \code{protocol_ID}
 \item \code{year}
 \item \code{yr.mo} year;month concatenated
 }
 }
 \description{
 Function that calculates non-parametric probability of detection
-for each species and primer for the selected ecodistrict. Probabilities are
+for each species and primer for the selected data. Probabilities are
 calculated both (1) monthly, across all years; and (2) monthly with each year
 separate. Outputs are used in subsequent functions.
 }

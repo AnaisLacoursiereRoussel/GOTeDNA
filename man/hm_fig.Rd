@@ -4,19 +4,9 @@
 \alias{hm_fig}
 \title{Displays heatmap of scaled monthly detection probabilities for taxon}
 \usage{
-hm_fig(
-  taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
-  taxon.name,
-  scaledprobs
-)
+hm_fig(scaledprobs)
 }
 \arguments{
-\item{taxon.level}{(required, character): Select taxonomic level to view.}
-
-\item{taxon.name}{(required, character): Select taxon name that matches the
-level provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter
-genus name, etc.}
-
 \item{scaledprobs}{(required, data.frame) Normalized detection
 probabilities as returned by \code{\link[=scale_newprob]{scale_newprob()}}.}
 }
@@ -32,7 +22,7 @@ representation.
 \dontrun{
 newprob <- calc_det_prob(D_mb)
 scaledprobs <- scale_newprob(D_mb, newprob)
-hm_fig(taxon.level = "class", taxon.name = "Copepoda", scaledprobs)
+hm_fig(scaledprobs)
 }
 }
 \author{

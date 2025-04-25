@@ -4,11 +4,7 @@
 \alias{effort_needed_fig}
 \title{Calculate sampling effort needed to obtain different detection thresholds.}
 \usage{
-effort_needed_fig(
-  taxon.level = c("phylum", "class", "order", "family", "genus", "species"),
-  taxon.name,
-  scaledprobs
-)
+effort_needed_fig(scaledprobs)
 }
 \arguments{
 \item{scaledprobs}{(required, data.frame) Normalized detection
@@ -25,9 +21,7 @@ data produced with \verb{[scale_newprob()]}.
 newprob <- calc_det_prob(gotedna_data$metabarcoding)
 scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 effort_needed_fig(
-  scaledprobs$Pscaled_month |> dplyr::filter(
-      species \%in\% "Acartia hudsonica",
-      primer == "COI1"
+  scaledprobs
   )
 )
 }

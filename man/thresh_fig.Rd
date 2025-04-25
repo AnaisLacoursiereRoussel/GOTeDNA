@@ -5,21 +5,9 @@
 \title{Display monthly detection probabilities for selected taxon, and
 detection probability threshold}
 \usage{
-thresh_fig(
-  taxon.level = c("domain", "kingdom", "phylum", "class", "order", "family", "genus",
-    "species"),
-  taxon.name,
-  threshold,
-  scaledprobs
-)
+thresh_fig(threshold, scaledprobs)
 }
 \arguments{
-\item{taxon.level}{(required, data.frame): Select taxonomic level to view.
-Choices = one of \code{c("phylum", "class", "order", "family", "genus", "species")}}
-
-\item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.level}. E.g., if \code{taxon.level = "genus"} enter genus name, etc.}
-
 \item{threshold}{(required, character): Detection probability threshold for
 which data are to be displayed to visualize potential optimal detection windows.
 Choices = one of \verb{"50","55","60","65","70","75","80","85","90","95")}}
@@ -38,8 +26,7 @@ threshold in grey.
 newprob <- calc_det_prob(gotedna_data$metabarcoding)
 scaledprobs <- scale_newprob(gotedna_data$metabarcoding, newprob)
 thresh_fig(
-  taxon.level = "species", taxon.name = "Acartia hudsonica",
-  threshold = "90", scaledprobs$Pscaled_month
+  threshold = "90", scaledprobs
 )
 }
 }

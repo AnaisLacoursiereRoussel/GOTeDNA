@@ -15,8 +15,8 @@ Default: \code{path.folder = NULL}. Default will use the current working directo
 \value{
 A tibble with 26 columns:
 \itemize{
-\item \code{GOTeDNA_ID}
-\item \code{GOTeDNA_version}
+\item \code{protocol_ID}
+\item \code{protocolVersion}
 \item \code{materialSampleID}
 \item \code{eventID}
 \item \code{primer}
@@ -32,7 +32,7 @@ A tibble with 26 columns:
 \item \code{pcr_primer_lod} : provided when choose.method = "qPCR"
 \item \code{organismQuantity}: provided when choose.method = "metabarcoding"
 \item \code{date}
-\item \code{ecodistrict}
+\item ecodistrict`
 \item \code{LClabel} : Local Contexts label to denote First Nations data sovereignty
 \item \code{decimalLatitude}
 \item \code{decimalLongitude}

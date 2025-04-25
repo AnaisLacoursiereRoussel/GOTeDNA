@@ -4,22 +4,10 @@
 \alias{field_sample_fig}
 \title{Display actual sampling effort of taxa within specified taxonomic group.}
 \usage{
-field_sample_fig(
-  data,
-  taxon.level = c("kingdom", "phylum", "class", "order", "family", "genus", "species"),
-  taxon.name
-)
+field_sample_fig(data)
 }
 \arguments{
 \item{data}{(required, data.frame): Data.frame read in with \code{\link[=read_data]{read_data()}}}
-
-\item{taxon.level}{(required, character): Taxonomic level of interest
-Choices = one of \verb{c("domain", "kingdom", "phylum", "class", "order", "family",}
-\verb{"genus", "species")}.}
-
-\item{taxon.name}{(required, character): Select taxon name that matches the level
-provided in \code{taxon.level}. E.g., if \code{taxon.level = "class"}
-enter class name, etc..}
 }
 \description{
 This function displays the actual number of eDNA samples taken
@@ -28,9 +16,7 @@ for all species of a specified taxonomic group per year.
 \examples{
 \dontrun{
 field_sample_fig(
-  data = gotedna_data$metabarcoding,
-  taxon.level = "phylum",
-  taxon.name = "Bryozoa"
+  data = gotedna_data$metabarcoding
 )
 }
 }

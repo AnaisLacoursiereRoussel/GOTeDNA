@@ -22,7 +22,7 @@ Grouped data.frame with 15 columns:
 \item \code{detect}: number of detections
 \item \code{nondetect}: number of non-detections
 \item \code{scaleP}: detection probability scaled to range 0-1
-\item \code{GOTeDNA_ID}:
+\item \code{protocol_ID}:
 \item \code{species}:
 \item \code{primer}:
 \item \code{year}:

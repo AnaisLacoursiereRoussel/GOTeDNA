@@ -27,7 +27,7 @@ A data.frame with 10 columns:
 \item \code{order}
 \item \code{family}
 \item \code{genus}
-\item \code{GOTeDNA_ID.v}
+\item \code{protocol_ID}
 }
 }
 \description{
@@ -39,8 +39,7 @@ probability within and outside the window.
 }
 \examples{
 \dontrun{
-jaccard.test(data = D_mb, threshold = "75",
- taxon.name = "Acartia longiremis", scaledprobs)
+jaccard.test(scaledprobs, threshold = "75")
 }
 }
 \author{
