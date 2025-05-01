@@ -39,19 +39,22 @@ Lacoursiere-Roussel, A., Morrison, M.K., Grey, E., LeBlanc, F., Gagne, N., Paren
 
 ## Disclaimers
 
-This tool intends to infer optimal environmental DNA detection periods only, not species spatial distribution.
+This tool intends to infer optimal eDNA detection periods only, not species spatial distribution.
 
 The data presented are observation data only, intended to allow inference of optimal detection periods based on taxa presence/absence, with no intent to provide quantitative population assessments. Finally, data are pooled only when they are obtained via the same protocols, as different field and lab methods may influence the likelihood of organism DNA detection.
 
-Website developers and managers are not responsible for possible errors in the data (e.g., taxonomic misassignment, non-specific amplification, false negative results, etc.). Contact information for data owners and/or publication DOI is provided for any questions pertaining to the data.
+Website developers and managers are not responsible for possible errors in the data (e.g., taxonomic misassignment, non-specific amplification, false negative results). Contact information for data owners and/or publication DOI are provided for any questions pertaining to the data.
 
 GOTeDNA aims to provide guidance on data trends, gaps, and facilitate interpretation to help communication, but we recommend interpreting results with eDNA experts.
 
-All statistical analyses are provided in an R package at […].
+All statistical analyses are provided in an R package at github.com/GOTeDNA-OBON.
 
-This tool and generated results should be cited as the reference publication: Lacoursière-Roussel, A., Morrison, M., […]. (In preparation). GOTeDNA: An R Shiny Application for Guidance on Optimal Timing for eDNA. This paper provides more in depth the analyses, interpretation, and limitations.
+This tool and generated results should be cited as the reference publication, which provides more in depth discussion of analyses, interpretation and limitations:
+
+Lacoursière-Roussel, A., Morrison, M. K., Barrett, T. J., Beauchesne, D., Cazelles, K., Chevrinais, M., DiBacco, C.,  Ferchaud, A.-L., Gagné, N.,  Gomez, C., Grey, E. K., Jeffery, N. W., Kinnison, M. T., LeBlanc, F., McBride, M. C., Parent, G., Trudel, M., & Howland, K. (under review). GOTeDNA: a centralized interactive guidance and reporting tool for eDNA. Molecular Ecology Resources.
 
 Data used should cite Data Owners. References are provided.
+
 
 \newpage
 
