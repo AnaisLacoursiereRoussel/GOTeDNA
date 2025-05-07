@@ -1,0 +1,413 @@
+Group,Genus,Species,TaxonName,Total,EG001,EG002,EG003,EG004,EG005,EG006,EG007,EG008,EG009,EG010,EG011,EG012,EG013,EG014,EG015,EG016,EG017,EG018,EG019,EG020,EG021,EG022,EG023,EG024,EG025,EG026,EG027,EG028,EG029,EG030
+annelida,Prionospio,steenstrupi,annelida_Prionospio_steenstrupi,57404,0,0,0,0,0,0,0,0,1662,1188,5,6,5447,2315,0,0,0,1370,60,0,6,4801,498,0,3,0,0,0,0,0
+annelida,Hypereteone,heteropoda,annelida_Hypereteone_heteropoda,39230,126,190,777,273,133,25,60,0,0,0,0,0,0,0,147,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Marenzelleria,viridis,annelida_Marenzelleria_viridis,9601,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Alitta,virens,annelida_Alitta_virens,3337,0,0,0,0,0,0,0,0,0,0,5,10,20,4,0,29,0,0,0,0,0,12,2,0,0,1,9,0,0,0
+annelida,Lepidonotus,squamatus,annelida_Lepidonotus_squamatus,3223,0,0,0,0,0,0,0,0,469,276,0,0,1291,291,0,3,0,265,88,0,0,125,3,0,10,0,0,341,0,15
+annelida,Myxicola,infundibulum,annelida_Myxicola_infundibulum,575,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Polygordius,jouinae,annelida_Polygordius_jouinae,410,0,383,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Phyllodoce,mucosa,annelida_Phyllodoce_mucosa,385,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,0,0,0,0,12,0,0,0,0,0,0,0
+annelida,Chaetogaster,diastrophus,annelida_Chaetogaster_diastrophus,351,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Ophelina,acuminata,annelida_Ophelina_acuminata,273,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Pholoe,baltica,annelida_Pholoe_baltica,235,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Lumbricus,terrestris,annelida_Lumbricus_terrestris,233,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Harmothoe,imbricata,annelida_Harmothoe_imbricata,156,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Polydora,cornuta,annelida_Polydora_cornuta,136,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Aporrectodea,caliginosa,annelida_Aporrectodea_caliginosa,125,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0
+annelida,Dodecaceria,concharum,annelida_Dodecaceria_concharum,81,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Aporrectodea,longa,annelida_Aporrectodea_longa,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Streblospio,benedicti,annelida_Streblospio_benedicti,61,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Pherusa,affinis,annelida_Pherusa_affinis,51,0,0,0,0,0,0,0,5,21,0,0,0,0,12,0,3,0,0,4,0,0,0,3,0,0,0,0,0,0,0
+annelida,Nicolea,zostericola,annelida_Nicolea_zostericola,47,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Chone,mollis,annelida_Chone_mollis,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Lumbricus,rubellus,annelida_Lumbricus_rubellus,36,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Pectinaria,granulata,annelida_Pectinaria_granulata,35,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Tubificoides,benedii,annelida_Tubificoides_benedii,21,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Harmothoe,rarispina,annelida_Harmothoe_rarispina,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Eulalia,viridis,annelida_Eulalia_viridis,17,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Amphitrite,figulus,annelida_Amphitrite_figulus,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,2,0,0,0,0,0,0,0,0,0,0,0
+annelida,Dendrodrilus,rubidus,annelida_Dendrodrilus_rubidus,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Nais,variabilis,annelida_Nais_variabilis,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Eiseniella,tetraedra,annelida_Eiseniella_tetraedra,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Slavina,appendiculata,annelida_Slavina_appendiculata,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Limnodrilus,hoffmeisteri,annelida_Limnodrilus_hoffmeisteri,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Cirratulus,cirratus,annelida_Cirratulus_cirratus,11,0,0,0,0,0,0,0,0,5,5,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Bipalponephtys,neotena,annelida_Bipalponephtys_neotena,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Pholoe,minuta,annelida_Pholoe_minuta,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Lumbricillus,rivalis,annelida_Lumbricillus_rivalis,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Naineris,quadricuspida,annelida_Naineris_quadricuspida,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Aricidea,nolani,annelida_Aricidea_nolani,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Nereis,pelagica,annelida_Nereis_pelagica,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Leitoscoloplos,robustus,annelida_Leitoscoloplos_robustus,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Pristina,aequiseta,annelida_Pristina_aequiseta,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Rhyacodrilus,falciformis,annelida_Rhyacodrilus_falciformis,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Aporrectodea,rosea,annelida_Aporrectodea_rosea,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Fridericia,ratzeli,annelida_Fridericia_ratzeli,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Glycera,dibranchiata,annelida_Glycera_dibranchiata,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Nothria,conchylega,annelida_Nothria_conchylega,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Paranais,litoralis,annelida_Paranais_litoralis,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Pista,maculata,annelida_Pista_maculata,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Aporrectodea,limicola,annelida_Aporrectodea_limicola,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Sternaspis,scutata,annelida_Sternaspis_scutata,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Enipo,torelli,annelida_Enipo_torelli,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Goniada,maculata,annelida_Goniada_maculata,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Nais,communis,annelida_Nais_communis,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Polycirrus,medusa,annelida_Polycirrus_medusa,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Aporrectodea,icterica,annelida_Aporrectodea_icterica,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Aporrectodea,trapezoides,annelida_Aporrectodea_trapezoides,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Lumbricillus,lineatus,annelida_Lumbricillus_lineatus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Lysippe,labiata,annelida_Lysippe_labiata,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Nais,elinguis,annelida_Nais_elinguis,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Oconnorella,cambrensis,annelida_Oconnorella_cambrensis,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+annelida,Phyllodoce,maculata,annelida_Phyllodoce_maculata,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Centropages,hamatus,arthropoda_Centropages_hamatus,358591,1207,92,0,464,1,407,24,0,40,41,0,184,497,747,166,244,0,99,94,21,0,2503,2142,518,184,0,19,79,135,63
+arthropoda,Celithemis,elisa,arthropoda_Celithemis_elisa,329681,0,0,2,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,1,1,0,0
+arthropoda,Oithona,similis,arthropoda_Oithona_similis,160729,174,115,92,532,129,41,212,17,13,5,3,8,8,5,155,0,3,4,8,2,1,8,16,106,19,12,40,1,137,433
+arthropoda,Eurytemora,herdmani,arthropoda_Eurytemora_herdmani,78024,0,36,0,229,0,21,3,0,252,0,0,0,0,0,0,0,0,10,0,23,336,0,0,0,0,0,0,0,0,0
+arthropoda,Balanus,balanus,arthropoda_Balanus_balanus,58511,1,0,0,0,0,0,0,2590,1,3,0,0,1,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Pseudocalanus,acuspes,arthropoda_Pseudocalanus_acuspes,35414,197,9,0,147,0,0,0,0,0,0,0,0,170,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0
+arthropoda,Tortanus,discaudatus,arthropoda_Tortanus_discaudatus,27119,0,0,0,0,0,0,0,0,0,0,0,816,0,0,1,0,0,43,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Acartia,hudsonica,arthropoda_Acartia_hudsonica,23372,10,12,0,97,8,12,5,0,38,0,0,119,55,11,3,0,29,34,0,8,0,1,0,8,1,1,2,0,0,0
+arthropoda,Pseudocalanus,newmani,arthropoda_Pseudocalanus_newmani,19973,0,5,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+arthropoda,Evadne,spinifera,arthropoda_Evadne_spinifera,19418,7,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,83,0,0,0,0,0
+arthropoda,Amphibalanus,improvisus,arthropoda_Amphibalanus_improvisus,9376,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Acartia,longiremis,arthropoda_Acartia_longiremis,2608,0,0,0,0,0,0,0,0,0,14,0,5,0,0,0,0,0,0,0,0,92,0,5,0,0,0,0,0,0,0
+arthropoda,Entomobrya,nivalis,arthropoda_Entomobrya_nivalis,1889,0,0,0,0,0,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Pseudocalanus,moultoni,arthropoda_Pseudocalanus_moultoni,1597,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Temora,longicornis,arthropoda_Temora_longicornis,1221,2,6,0,31,0,4,0,0,6,9,0,10,9,19,0,0,0,24,1,1,25,7,5,2,0,0,0,0,0,0
+arthropoda,Acartia,tonsa,arthropoda_Acartia_tonsa,1096,1,0,0,1,2,0,0,0,0,0,0,4,2,0,1,0,0,0,0,1,0,0,0,0,0,0,0,51,0,0
+arthropoda,Pseudocalanus,mimus,arthropoda_Pseudocalanus_mimus,962,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Pleopis,polyphemoides,arthropoda_Pleopis_polyphemoides,888,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,67,35,0,0,15,0,0
+arthropoda,Podon,intermedius,arthropoda_Podon_intermedius,612,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Carcinus,maenas,arthropoda_Carcinus_maenas,564,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Appasus,major,arthropoda_Appasus_major,562,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Centropages,typicus,arthropoda_Centropages_typicus,508,0,0,0,11,0,0,1,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Semibalanus,balanoides,arthropoda_Semibalanus_balanoides,264,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Ravinia,stimulans,arthropoda_Ravinia_stimulans,220,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Procambarus,acutus,arthropoda_Procambarus_acutus,156,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Ravinia,derelicta,arthropoda_Ravinia_derelicta,137,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Dermatophagoides,farinae,arthropoda_Dermatophagoides_farinae,105,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Clausocalanus,pergens,arthropoda_Clausocalanus_pergens,80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Calanus,finmarchicus,arthropoda_Calanus_finmarchicus,70,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Calocalanus,tenuis,arthropoda_Calocalanus_tenuis,69,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Alpheus,bellulus,arthropoda_Alpheus_bellulus,66,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Microcalanus,pusillus,arthropoda_Microcalanus_pusillus,55,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Baetis,tricaudatus,arthropoda_Baetis_tricaudatus,48,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0
+arthropoda,Strophopteryx,fasciata,arthropoda_Strophopteryx_fasciata,47,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Alaus,melanops,arthropoda_Alaus_melanops,42,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0
+arthropoda,Chironomus,acidophilus,arthropoda_Chironomus_acidophilus,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Rhacognathus,americanus,arthropoda_Rhacognathus_americanus,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Isotomurus,palustris,arthropoda_Isotomurus_palustris,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Monocorophium,insidiosum,arthropoda_Monocorophium_insidiosum,25,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,5,0,0,0,0
+arthropoda,Glossosoma,nigrior,arthropoda_Glossosoma_nigrior,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Chironomus,maturus,arthropoda_Chironomus_maturus,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Jaera,albifrons,arthropoda_Jaera_albifrons,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Prosimulium,mixtum,arthropoda_Prosimulium_mixtum,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Caligo,illioneus,arthropoda_Caligo_illioneus,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Homarus,americanus,arthropoda_Homarus_americanus,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Sympistis,subsimplex,arthropoda_Sympistis_subsimplex,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Cancer,irroratus,arthropoda_Cancer_irroratus,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Cheumatopsyche,harwoodi,arthropoda_Cheumatopsyche_harwoodi,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Leptodiaptomus,minutus,arthropoda_Leptodiaptomus_minutus,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Phyllophaga,anxia,arthropoda_Phyllophaga_anxia,12,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Prosimulium,arvum,arthropoda_Prosimulium_arvum,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Ravinia,errabunda,arthropoda_Ravinia_errabunda,12,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Chydorus,brevilabris,arthropoda_Chydorus_brevilabris,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Limnephilus,moestus,arthropoda_Limnephilus_moestus,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Limnephilus,submonilifer,arthropoda_Limnephilus_submonilifer,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Opsiphanes,boisduvallii,arthropoda_Opsiphanes_boisduvallii,9,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Orthocladius,dorenus,arthropoda_Orthocladius_dorenus,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Tennesseellum,formica,arthropoda_Tennesseellum_formica,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Caprella,mutica,arthropoda_Caprella_mutica,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Cnephia,ornithophilia,arthropoda_Cnephia_ornithophilia,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Oecetis,persimilis,arthropoda_Oecetis_persimilis,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Pycnopsyche,lepida,arthropoda_Pycnopsyche_lepida,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Pyrausta,augustalis,arthropoda_Pyrausta_augustalis,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Isotomurus,unifasciatus,arthropoda_Isotomurus_unifasciatus,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Olophrum,obtectum,arthropoda_Olophrum_obtectum,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Orthocladius,carlatus,arthropoda_Orthocladius_carlatus,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Phlogophora,periculosa,arthropoda_Phlogophora_periculosa,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Zomaria,interruptolineana,arthropoda_Zomaria_interruptolineana,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Apohyale,prevostii,arthropoda_Apohyale_prevostii,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Centropages,chierchiae,arthropoda_Centropages_chierchiae,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Drymus,unus,arthropoda_Drymus_unus,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Ravinia,floridensis,arthropoda_Ravinia_floridensis,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Ravinia,pusiola,arthropoda_Ravinia_pusiola,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Allocapnia,nivicola,arthropoda_Allocapnia_nivicola,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Antocha,saxicola,arthropoda_Antocha_saxicola,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Chimarra,aterrima,arthropoda_Chimarra_aterrima,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Epiphragma,fasciapenne,arthropoda_Epiphragma_fasciapenne,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Erioptera,caliptera,arthropoda_Erioptera_caliptera,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Euxoa,oncocnemoides,arthropoda_Euxoa_oncocnemoides,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Monstrilla,helgolandica,arthropoda_Monstrilla_helgolandica,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Rheocricotopus,robacki,arthropoda_Rheocricotopus_robacki,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Tisbe,furcata,arthropoda_Tisbe_furcata,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Euxoa,fuscigerus,arthropoda_Euxoa_fuscigerus,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Evadne,nordmanni,arthropoda_Evadne_nordmanni,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Leuctra,duplicata,arthropoda_Leuctra_duplicata,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Limnephilus,indivisus,arthropoda_Limnephilus_indivisus,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Paraleptophlebia,adoptiva,arthropoda_Paraleptophlebia_adoptiva,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Periphyllus,testudinaceus,arthropoda_Periphyllus_testudinaceus,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0
+arthropoda,Platycentropus,radiatus,arthropoda_Platycentropus_radiatus,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Pycnopsyche,guttifera,arthropoda_Pycnopsyche_guttifera,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Agabus,thomsoni,arthropoda_Agabus_thomsoni,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Cancer,borealis,arthropoda_Cancer_borealis,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Cheumatopsyche,halima,arthropoda_Cheumatopsyche_halima,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Corticaria,serrata,arthropoda_Corticaria_serrata,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Limnephilus,rhombicus,arthropoda_Limnephilus_rhombicus,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Paracapnia,angulata,arthropoda_Paracapnia_angulata,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Parasyrphus,vockerothi,arthropoda_Parasyrphus_vockerothi,3,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Procambarus,geminus,arthropoda_Procambarus_geminus,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Apamea,vultuosa,arthropoda_Apamea_vultuosa,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Brillia,flavifrons,arthropoda_Brillia_flavifrons,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Celithemis,eponina,arthropoda_Celithemis_eponina,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Chironomus,melanescens,arthropoda_Chironomus_melanescens,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Choreutinula,inermis,arthropoda_Choreutinula_inermis,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0
+arthropoda,Crambus,leachellus,arthropoda_Crambus_leachellus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Cylindroiulus,caeruleocinctus,arthropoda_Cylindroiulus_caeruleocinctus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Cylindroiulus,latestriatus,arthropoda_Cylindroiulus_latestriatus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Enallagma,vesperum,arthropoda_Enallagma_vesperum,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Gammarus,lawrencianus,arthropoda_Gammarus_lawrencianus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Neomysis,americana,arthropoda_Neomysis_americana,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Noctua,pronuba,arthropoda_Noctua_pronuba,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Psychoda,alternata,arthropoda_Psychoda_alternata,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Agriotes,sputator,arthropoda_Agriotes_sputator,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Allacma,fusca,arthropoda_Allacma_fusca,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Anurophorus,laricis,arthropoda_Anurophorus_laricis,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Baetis,flavistriga,arthropoda_Baetis_flavistriga,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+arthropoda,Bibio,xanthopus,arthropoda_Bibio_xanthopus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Bosmina,longirostris,arthropoda_Bosmina_longirostris,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Clausocalanus,lividus,arthropoda_Clausocalanus_lividus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Dolophilodes,distinctus,arthropoda_Dolophilodes_distinctus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Epeorus,vitreus,arthropoda_Epeorus_vitreus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Erythemis,simplicicollis,arthropoda_Erythemis_simplicicollis,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Hydropsyche,sparna,arthropoda_Hydropsyche_sparna,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Jassa,marmorata,arthropoda_Jassa_marmorata,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0
+arthropoda,Julus,scandinavius,arthropoda_Julus_scandinavius,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Leuctra,tenuis,arthropoda_Leuctra_tenuis,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Melitaea,sarvistana,arthropoda_Melitaea_sarvistana,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Neanura,muscorum,arthropoda_Neanura_muscorum,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Phryganea,sayi,arthropoda_Phryganea_sayi,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Ravinia,querula,arthropoda_Ravinia_querula,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Rheotanytarsus,pellucidus,arthropoda_Rheotanytarsus_pellucidus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Taeniopteryx,maura,arthropoda_Taeniopteryx_maura,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+arthropoda,Tvetenia,paucunca,arthropoda_Tvetenia_paucunca,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+bryozoa,Membranipora,membranacea,bryozoa_Membranipora_membranacea,9946,18,7,0,19,0,45,23,0,0,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+bryozoa,Celleporella,hyalina,bryozoa_Celleporella_hyalina,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Bos,taurus,chordata_Bos_taurus,192817,205,94,2631,20,382,339,19,8,20,14,70,16,5,6,75,9,119,0,36,10,43,19,52,39,37,22,7,59,44,2
+chordata,Tautogolabrus,adspersus,chordata_Tautogolabrus_adspersus,2545,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Mobula,rochebrunei,chordata_Mobula_rochebrunei,2005,0,0,0,0,0,0,0,2,1,4,4,0,7,3,0,0,1,4,3,0,0,2,0,0,0,0,1,0,0,0
+chordata,Scomber,scombrus,chordata_Scomber_scombrus,625,0,0,0,7,26,0,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,9,0,0
+chordata,Ciona,intestinalis,chordata_Ciona_intestinalis,385,42,33,0,55,4,4,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,2,10,0,0,0,0,0,0,0
+chordata,Botrylloides,leachi,chordata_Botrylloides_leachi,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Homo,sapiens,chordata_Homo_sapiens,292,0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Castor,canadensis,chordata_Castor_canadensis,124,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Botrylloides,violaceum,chordata_Botrylloides_violaceum,90,4,1,0,6,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Bos,primigenius,chordata_Bos_primigenius,39,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Gallus,gallus,chordata_Gallus_gallus,36,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Melanogrammus,aeglefinus,chordata_Melanogrammus_aeglefinus,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,0,0,0,0,0,0,0,0,0
+chordata,Ovis,aries,chordata_Ovis_aries,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Pollachius,virens,chordata_Pollachius_virens,21,0,0,0,0,0,0,0,0,0,5,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Chrosomus,neogaeus,chordata_Chrosomus_neogaeus,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Clupea,harengus,chordata_Clupea_harengus,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Rattus,norvegicus,chordata_Rattus_norvegicus,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Ammodytes,hexapterus,chordata_Ammodytes_hexapterus,17,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Canis,lupus,chordata_Canis_lupus,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Limanda,ferruginea,chordata_Limanda_ferruginea,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Urophycis,tenuis,chordata_Urophycis_tenuis,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Sus,scrofa,chordata_Sus_scrofa,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Gavia,immer,chordata_Gavia_immer,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Hippoglossus,hippoglossus,chordata_Hippoglossus_hippoglossus,13,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Rana,catesbeiana,chordata_Rana_catesbeiana,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Botryllus,schlosseri,chordata_Botryllus_schlosseri,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Salmo,salar,chordata_Salmo_salar,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Passerella,iliaca,chordata_Passerella_iliaca,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Halocynthia,pyriformis,chordata_Halocynthia_pyriformis,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+chordata,Salvelinus,fontinalis,chordata_Salvelinus_fontinalis,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Merluccius,bilinearis,chordata_Merluccius_bilinearis,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Capra,hircus,chordata_Capra_hircus,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Lumpenus,lampretaeformis,chordata_Lumpenus_lampretaeformis,3,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Mus,musculus,chordata_Mus_musculus,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Ondatra,zibethicus,chordata_Ondatra_zibethicus,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Sturnus,vulgaris,chordata_Sturnus_vulgaris,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Anas,fulvigula,chordata_Anas_fulvigula,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Boltenia,echinata,chordata_Boltenia_echinata,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Cyprinus,carpio,chordata_Cyprinus_carpio,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Larus,smithsonianus,chordata_Larus_smithsonianus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Microtus,pennsylvanicus,chordata_Microtus_pennsylvanicus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Myoxocephalus,aenaeus,chordata_Myoxocephalus_aenaeus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Pseudopleuronectes,americanus,chordata_Pseudopleuronectes_americanus,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Typhlonarke,aysoni,chordata_Typhlonarke_aysoni,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Catostomus,commersonii,chordata_Catostomus_commersonii,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Clupea,bentincki,chordata_Clupea_bentincki,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Columba,livia,chordata_Columba_livia,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Felis,catus,chordata_Felis_catus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Gadus,macrocephalus,chordata_Gadus_macrocephalus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Hemitripterus,americanus,chordata_Hemitripterus_americanus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+chordata,Zoarces,americanus,chordata_Zoarces_americanus,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Tiaropsis,multicirrata,cnidaria_Tiaropsis_multicirrata,12390,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,12363,0,0,0,8,0,1,0,0,0,0,0,0
+cnidaria,Obelia,geniculata,cnidaria_Obelia_geniculata,1650,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Obelia,dichotoma,cnidaria_Obelia_dichotoma,592,4,0,0,0,0,0,0,0,5,0,3,1,1,1,0,2,0,0,5,0,0,2,34,0,0,0,0,0,0,0
+cnidaria,Aurelia,aurita,cnidaria_Aurelia_aurita,338,0,59,0,0,18,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Obelia,longissima,cnidaria_Obelia_longissima,89,1,0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,2,8,0,0,0,0,0,0,0
+cnidaria,Bougainvillia,muscus,cnidaria_Bougainvillia_muscus,42,0,0,5,9,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Sarsia,princeps,cnidaria_Sarsia_princeps,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Aglantha,digitale,cnidaria_Aglantha_digitale,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Cyanea,capillata,cnidaria_Cyanea_capillata,23,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Laodicea,undulata,cnidaria_Laodicea_undulata,22,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Hydra,vulgaris,cnidaria_Hydra_vulgaris,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Craspedacusta,sowerbyi,cnidaria_Craspedacusta_sowerbyi,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Clytia,languida,cnidaria_Clytia_languida,8,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Gonothyraea,loveni,cnidaria_Gonothyraea_loveni,8,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Melicertum,octocostatum,cnidaria_Melicertum_octocostatum,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Bougainvillia,superciliaris,cnidaria_Bougainvillia_superciliaris,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Hydra,oligactis,cnidaria_Hydra_oligactis,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Clytia,hemisphaerica,cnidaria_Clytia_hemisphaerica,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Diadumene,lineata,cnidaria_Diadumene_lineata,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Ectopleura,larynx,cnidaria_Ectopleura_larynx,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Hybocodon,prolifer,cnidaria_Hybocodon_prolifer,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Ectopleura,crocea,cnidaria_Ectopleura_crocea,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+cnidaria,Metridium,senile,cnidaria_Metridium_senile,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+echinodermata,Strongylocentrotus,droebachiensis,echinodermata_Strongylocentrotus_droebachiensis,5587,0,5,1225,0,489,0,0,0,3,0,0,0,0,6,38,0,0,0,0,0,0,0,6,0,0,2,0,0,0,0
+echinodermata,Ophiopholis,aculeata,echinodermata_Ophiopholis_aculeata,1644,0,0,0,0,0,0,29,0,65,19,0,4,11,8,0,4,0,1,21,3,0,8,16,0,0,0,0,0,0,0
+echinodermata,Asterias,forbesi,echinodermata_Asterias_forbesi,653,7,0,0,18,0,8,0,0,3,0,2,5,4,3,2,13,0,0,0,0,0,0,2,0,0,96,8,0,0,0
+echinodermata,Asterias,rubens,echinodermata_Asterias_rubens,414,0,5,0,8,0,0,0,0,0,0,0,103,0,0,7,0,0,0,0,0,165,0,0,0,0,0,0,0,0,0
+echinodermata,Pentamera,calcigera,echinodermata_Pentamera_calcigera,52,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+echinodermata,Leptasterias,littoralis,echinodermata_Leptasterias_littoralis,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+echinodermata,Cucumaria,frondosa,echinodermata_Cucumaria_frondosa,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+echinodermata,Psolus,fabricii,echinodermata_Psolus_fabricii,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Mytilus,trossulus,mollusca_Mytilus_trossulus,18533,111,96,0,37,0,29,18,34,1073,206,90,24,1577,405,7,858,1114,386,1340,8,8,678,583,60,0,502,7,27,0,5
+mollusca,Mytilus,edulis,mollusca_Mytilus_edulis,10009,0,0,0,0,0,0,8,13,2248,4018,25,16,239,110,0,192,216,77,942,8,11,406,624,0,1,7,2,4,6,1
+mollusca,Mya,arenaria,mollusca_Mya_arenaria,1193,0,0,0,0,0,0,0,1,0,8,0,4,15,4,0,269,330,3,28,0,1,8,51,66,3,8,2,6,0,0
+mollusca,Tergipes,tergipes,mollusca_Tergipes_tergipes,643,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Knoutsodonta,jannae,mollusca_Knoutsodonta_jannae,630,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Crepidula,fornicata,mollusca_Crepidula_fornicata,321,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Doto,coronata,mollusca_Doto_coronata,246,0,170,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Placida,dendritica,mollusca_Placida_dendritica,95,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Modiolus,modiolus,mollusca_Modiolus_modiolus,89,0,7,0,40,0,2,0,0,0,0,0,1,0,1,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Bulinus,umbilicatus,mollusca_Bulinus_umbilicatus,66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Ercolania,fuscata,mollusca_Ercolania_fuscata,51,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Physella,ancillaria,mollusca_Physella_ancillaria,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Stagnicola,elodes,mollusca_Stagnicola_elodes,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Eubranchus,rustyus,mollusca_Eubranchus_rustyus,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Littorina,saxatilis,mollusca_Littorina_saxatilis,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Palio,dubia,mollusca_Palio_dubia,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Littorina,littorea,mollusca_Littorina_littorea,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Flabellina,verrucosa,mollusca_Flabellina_verrucosa,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Deroceras,laeve,mollusca_Deroceras_laeve,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Eubranchus,pallidus,mollusca_Eubranchus_pallidus,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Boreochiton,beringensis,mollusca_Boreochiton_beringensis,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Tectura,testudinalis,mollusca_Tectura_testudinalis,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Dendronotus,frondosus,mollusca_Dendronotus_frondosus,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Arctica,islandica,mollusca_Arctica_islandica,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Cuthona,cocoachroma,mollusca_Cuthona_cocoachroma,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Lehmannia,marginata,mollusca_Lehmannia_marginata,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Mytilus,galloprovincialis,mollusca_Mytilus_galloprovincialis,4,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0
+mollusca,Corbicula,fluminea,mollusca_Corbicula_fluminea,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Aeolidia,papillosa,mollusca_Aeolidia_papillosa,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0
+mollusca,Chlamys,islandica,mollusca_Chlamys_islandica,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Geukensia,demissa,mollusca_Geukensia_demissa,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+mollusca,Lacuna,vincta,mollusca_Lacuna_vincta,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+nemertea,Cerebratulus,lacteus,nemertea_Cerebratulus_lacteus,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+nemertea,Cephalothrix,spiralis,nemertea_Cephalothrix_spiralis,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+nemertea,Micrura,varicolor,nemertea_Micrura_varicolor,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+platyhelminthes,Microstomum,compositum,platyhelminthes_Microstomum_compositum,2750,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+platyhelminthes,Cryptocotyle,lingua,platyhelminthes_Cryptocotyle_lingua,53,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,43,0,0,0,0
+platyhelminthes,Neochildia,fusca,platyhelminthes_Neochildia_fusca,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Ephydatia,fluviatilis,porifera_Ephydatia_fluviatilis,11369,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Baikalospongia,dzhegatajensis,porifera_Baikalospongia_dzhegatajensis,817,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+porifera,Halichondria,panicea,porifera_Halichondria_panicea,314,39,5,0,4,0,28,7,0,9,7,5,0,12,13,0,4,11,3,4,0,0,0,2,0,0,0,1,0,0,0
+porifera,Pseudosuberites,nudus,porifera_Pseudosuberites_nudus,92,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0
+porifera,Eunapius,subterraneus,porifera_Eunapius_subterraneus,44,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Ephydatia,muelleri,porifera_Ephydatia_muelleri,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Suberites,domuncula,porifera_Suberites_domuncula,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0
+porifera,Halisarca,dujardini,porifera_Halisarca_dujardini,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Baikalospongia,intermedia,porifera_Baikalospongia_intermedia,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Spongilla,lacustris,porifera_Spongilla_lacustris,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Lubomirskia,abietina,porifera_Lubomirskia_abietina,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+porifera,Swartschewskia,papyracea,porifera_Swartschewskia_papyracea,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+rotifera,Polyarthra,dolichoptera,rotifera_Polyarthra_dolichoptera,189,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+rotifera,Notholca,acuminata,rotifera_Notholca_acuminata,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+rotifera,Keratella,cochlearis,rotifera_Keratella_cochlearis,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+rotifera,Philodina,vorax,rotifera_Philodina_vorax,3,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Acartia_hudsonica : arthropoda_Acartia_tonsa,MultipleHits,77737,63,95,0,100,67,48,15,0,230,0,0,453,178,43,47,0,1,19,0,41,0,0,0,16,9,19,2,7,0,1
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Ephydatia_fluviatilis,MultipleHits,12919,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,cnidaria_Obelia_dichotoma : cnidaria_Obelia_longissima,MultipleHits,653,5,0,0,0,0,0,0,0,3,1,2,4,3,1,0,1,0,1,15,0,0,3,64,0,0,1,1,0,0,1
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Euwallacea_interjectus : arthropoda_Gammarus_crinicaudatus : arthropoda_Lasioderma_serricorne : arthropoda_Macrosteles_patruelis : arthropoda_Pachliopta_aristolochiae : arthropoda_Parapsyche_elsis : arthropoda_Sinoxylon_conigerum : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens,MultipleHits,313,0,0,0,6,0,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_bacillifera : porifera_Baikalospongia_intermedia : porifera_Baikalospongia_recta : porifera_Ephydatia_muelleri : porifera_Lubomirskia_baicalensis : porifera_Swartschewskia_papyracea,MultipleHits,201,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Larus_marinus : chordata_Larus_smithsonianus,MultipleHits,126,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Centropages_chierchiae : arthropoda_Centropages_typicus,MultipleHits,86,0,0,0,1,0,0,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Canis_lupus : chordata_Canis_lycaon,MultipleHits,86,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Ciona_intestinalis : chordata_Ciona_roulei,MultipleHits,83,40,0,0,34,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Bos_primigenius : chordata_Bos_taurus,MultipleHits,70,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Ephydatia_fluviatilis : porifera_Eunapius_subterraneus,MultipleHits,68,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Mus_musculus : chordata_Rousettus_aegyptiacus,MultipleHits,43,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,annelida_Aporrectodea_caliginosa : annelida_Aporrectodea_tuberculata,MultipleHits,41,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_bacillifera : porifera_Ephydatia_muelleri : porifera_Lubomirskia_baicalensis,MultipleHits,35,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Evadne_nordmanni : arthropoda_Evadne_spinifera,MultipleHits,34,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_bacillifera : porifera_Lubomirskia_baicalensis,MultipleHits,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,cnidaria_Laomedea_flexuosa : cnidaria_Obelia_longissima,MultipleHits,27,9,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,cnidaria_Aurelia_aurita : cnidaria_Laomedea_flexuosa : cnidaria_Obelia_longissima,MultipleHits,26,10,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Ephydatia_fluviatilis : porifera_Swartschewskia_papyracea,MultipleHits,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,mollusca_Mytilus_edulis : mollusca_Mytilus_galloprovincialis,MultipleHits,22,0,0,0,0,0,0,0,0,6,1,1,0,8,2,0,0,3,0,0,0,0,0,1,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_bacillifera : porifera_Baikalospongia_intermedia : porifera_Baikalospongia_recta : porifera_Ephydatia_fluviatilis : porifera_Ephydatia_muelleri : porifera_Lubomirskia_baicalensis : porifera_Swartschewskia_papyracea,MultipleHits,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Catostomus_catostomus : chordata_Catostomus_commersonii,MultipleHits,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Cylindroiulus_latestriatus : arthropoda_Cylindroiulus_punctatus,MultipleHits,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Euwallacea_interjectus : arthropoda_Gammarus_crinicaudatus : arthropoda_Lasioderma_serricorne : arthropoda_Macrosteles_patruelis : arthropoda_Pachliopta_aristolochiae : arthropoda_Parapsyche_elsis : arthropoda_Sinoxylon_conigerum : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens : chordata_Lasiurus_intermedius,MultipleHits,16,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Larus_glaucescens : chordata_Larus_smithsonianus,MultipleHits,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Ravinia_derelicta : arthropoda_Ravinia_stimulans,MultipleHits,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Homo_sapiens : chordata_Lasiurus_intermedius,MultipleHits,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Gammarus_crinicaudatus : arthropoda_Pachliopta_aristolochiae : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens,MultipleHits,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Eunapius_subterraneus,MultipleHits,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_intermedia : porifera_Ephydatia_fluviatilis,MultipleHits,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_intermedia : porifera_Ephydatia_muelleri,MultipleHits,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,annelida_Aporrectodea_caliginosa : annelida_Aporrectodea_trapezoides,MultipleHits,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,annelida_Lumbrineris_fragilis : annelida_Scoletoma_fragilis,MultipleHits,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,cnidaria_Aurelia_aurita : cnidaria_Metridium_farcimen : cnidaria_Metridium_senile : cnidaria_Pachycerianthus_borealis : cnidaria_Urticina_crassicornis : cnidaria_Urticina_felina,MultipleHits,8,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,annelida_Aphrodita_longipalpa : annelida_Aphroditella_hastata,MultipleHits,7,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Dinoderus_bifoveolatus : chordata_Homo_sapiens,MultipleHits,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Macrosteles_patruelis : chordata_Homo_sapiens,MultipleHits,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Ephydatia_fluviatilis : porifera_Ephydatia_muelleri,MultipleHits,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Dichotomius_nisus : arthropoda_Euwallacea_interjectus : arthropoda_Gammarus_crinicaudatus : arthropoda_Lasioderma_serricorne : arthropoda_Macrosteles_patruelis : arthropoda_Pachliopta_aristolochiae : arthropoda_Parapsyche_elsis : arthropoda_Sinoxylon_conigerum : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens,MultipleHits,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Oecetis_avara : arthropoda_Oecetis_persimilis,MultipleHits,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_bacillifera : porifera_Baikalospongia_dzhegatajensis : porifera_Lubomirskia_baicalensis,MultipleHits,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Ephydatia_fluviatilis : porifera_Eunapius_subterraneus,MultipleHits,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Balanus_balanus : arthropoda_Corycaeus_anglicus,MultipleHits,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Larus_argentatus : chordata_Larus_glaucoides : chordata_Larus_hyperboreus : chordata_Larus_schistisagus : chordata_Larus_smithsonianus : chordata_Larus_thayeri,MultipleHits,5,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Ovis_aries : chordata_Ovis_musimon,MultipleHits,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,cnidaria_Ectopleura_crocea : cnidaria_Ectopleura_larynx,MultipleHits,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Hymeniacidon_perlevis : porifera_Hymeniacidon_sinapium,MultipleHits,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Aquarius_nyctalis : arthropoda_Aquarius_remigis : arthropoda_Gerris_buenoi,MultipleHits,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Anas_platyrhynchos : chordata_Anas_poecilorhyncha : chordata_Anas_rubripes,MultipleHits,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Parapsyche_elsis : chordata_Homo_sapiens,MultipleHits,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Euwallacea_interjectus : arthropoda_Gammarus_crinicaudatus : arthropoda_Lasioderma_serricorne : arthropoda_Pachliopta_aristolochiae : arthropoda_Parapsyche_elsis : arthropoda_Sinoxylon_conigerum : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Gammarus_crinicaudatus : arthropoda_Pachliopta_aristolochiae : arthropoda_Parapsyche_elsis : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Euwallacea_interjectus : arthropoda_Gammarus_crinicaudatus : arthropoda_Lasioderma_serricorne : arthropoda_Macrosteles_patruelis : arthropoda_Parapsyche_elsis : arthropoda_Sinoxylon_conigerum : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens : chordata_Lasiurus_intermedius,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Euwallacea_interjectus : arthropoda_Gammarus_crinicaudatus : arthropoda_Lasioderma_serricorne : arthropoda_Macrosteles_patruelis : arthropoda_Sinoxylon_conigerum : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Euxoa_oncocnemoides : arthropoda_Psychoda_alternata,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Canis_familiaris : chordata_Canis_lupus : chordata_Canis_lycaon,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Gasterosteus_aculeatus : chordata_Gasterosteus_gymnurus : chordata_Gasterosteus_islandicus,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Larus_argentatus : chordata_Larus_glaucescens : chordata_Larus_glaucoides : chordata_Larus_hyperboreus : chordata_Larus_schistisagus : chordata_Larus_smithsonianus : chordata_Larus_thayeri,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Sus_scrofa : chordata_Thryonomys_swinderianus,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,mollusca_Littorina_compressa : mollusca_Littorina_saxatilis,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Ephydatia_fluviatilis : porifera_Swartschewskia_papyracea,MultipleHits,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Caligo_illioneus : arthropoda_Ravinia_stimulans,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Pachliopta_aristolochiae : arthropoda_Triatoma_dimidiata : chordata_Homo_sapiens,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Corynoptera_trepida : arthropoda_Pachliopta_aristolochiae : chordata_Homo_sapiens,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Culex_bahamensis : arthropoda_Psorophora_longipalpus,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Ischnura_damula : arthropoda_Ischnura_posita : arthropoda_Ischnura_verticalis,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Lasioderma_serricorne : arthropoda_Macrosteles_patruelis : chordata_Homo_sapiens,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,arthropoda_Ravinia_derelicta : chordata_Mobula_rochebrunei,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Chrosomus_eos : chordata_Chrosomus_neogaeus,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Larus_glaucescens : chordata_Larus_marinus : chordata_Larus_smithsonianus,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Larus_marinus : chordata_Larus_smithsonianus : chordata_Larus_thayeri,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,chordata_Myoxocephalus_scorpioides : chordata_Myoxocephalus_scorpius,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_bacillifera : porifera_Baikalospongia_dzhegatajensis : porifera_Baikalospongia_intermedia : porifera_Baikalospongia_recta : porifera_Ephydatia_fluviatilis : porifera_Ephydatia_muelleri : porifera_Lubomirskia_baicalensis : porifera_Swartschewskia_papyracea,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_bacillifera : porifera_Baikalospongia_dzhegatajensis : porifera_Ephydatia_fluviatilis : porifera_Lubomirskia_baicalensis,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Baikalospongia_intermedia : porifera_Ephydatia_fluviatilis,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Ephydatia_fluviatilis : porifera_Lubomirskia_abietina,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Baikalospongia_dzhegatajensis : porifera_Lubomirskia_abietina,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Ephydatia_fluviatilis : porifera_Ephydatia_muelleri,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Ephydatia_fluviatilis : porifera_Lubomirskia_abietina,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+zMultiple,Hits,porifera_Ephydatia_fluviatilis : porifera_Spongilla_lacustris,MultipleHits,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Total,reads,by,sample,1624986,2288,1434,4733,2181,1271,1038,482,2670,6177,5861,220,1814,9576,4022,658,1699,1838,14729,2663,129,711,8596,4143,899,385,732,107,602,323,521
