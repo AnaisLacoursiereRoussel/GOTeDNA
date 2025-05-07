@@ -379,7 +379,7 @@ mod_select_data_server <- function(id, r) {
             r$geom_slc <- sf_edits()$all
             r$station_slc <- r$geom$station
 
-            geom_coords <- st_bbox(r$geom_slc)
+            geom_coords <- sf::st_bbox(r$geom_slc)
           } else {
             showNotification("No station selected", type = "warning")
           }
@@ -474,11 +474,11 @@ filter_taxon <- function(data, taxon_lvl, taxon_id, species, primer) {
 
 update_map <- function(proxy, geom, geom_slc, lock_view = FALSE) {
   proxy |>
-    clearGroup("station") |>
-    clearGroup("select_polygon") |>
-    addMarkers(
+    leaflet::clearGroup("station") |>
+    leaflet::clearGroup("select_polygon") |>
+    leaflet::addMarkers(
       data = geom,
-      clusterOptions = markerClusterOptions(),
+      clusterOptions = leaflet::markerClusterOptions(),
       label = ~ paste(success, "observations"),
       group = "station"
     )
@@ -489,7 +489,7 @@ update_map <- function(proxy, geom, geom_slc, lock_view = FALSE) {
     ind <- geom_type == "POLYGON"
     if (length(ind)) {
       proxy |>
-        addPolygons(
+        leaflet::addPolygons(
           data = geom_slc[ind, ],
           color = "#75f9c6",
           fillOpacity = 0.1,
@@ -507,6 +507,6 @@ update_map <- function(proxy, geom, geom_slc, lock_view = FALSE) {
       sf::st_bbox() |>
       as.vector()
     proxy |>
-      fitBounds(bb[1], bb[2], bb[3], bb[4])
+      leaflet::fitBounds(bb[1], bb[2], bb[3], bb[4])
   }
 }

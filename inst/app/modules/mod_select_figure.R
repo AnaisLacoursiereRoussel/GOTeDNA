@@ -64,7 +64,7 @@ mod_select_figure_ui <- function(id) {
           id = "confirm_figures_selection",
           actionButton(
             ns("calc_window"),
-            label = "Compute & visualize",
+            label = "Compute & Visualize",
             title = "Compute optimal detection window",
             class = "primary-button"
           )
@@ -381,7 +381,7 @@ mod_select_figure_server <- function(id, r) {
         ) |>
           default_layout() |>
           facet_strip_format() |>
-          layout(
+          plotly::layout(
             xaxis = list(title = list(
               text = "Number of samples",
               font = list(
@@ -436,7 +436,7 @@ mod_select_figure_server <- function(id, r) {
         ) |>
           default_layout() |>
           facet_strip_format() |>
-          layout(
+          plotly::layout(
             xaxis = list(title = list(
               text = "Month",
               font = list(
@@ -518,7 +518,7 @@ mod_select_figure_server <- function(id, r) {
 
         # Area Selection
         if (!is.null(r$geom_slc)){
-        geom_coords <- st_bbox(r$geom_slc) %>%
+        geom_coords <- sf::st_bbox(r$geom_slc) %>%
           as.matrix() %>%
           t() %>%
           as.data.frame()
@@ -526,13 +526,14 @@ mod_select_figure_server <- function(id, r) {
           geom_coords <- c("Area selection not confirmed")
         }
 
-        mapDL <- addMarkers(basemap(),
-            data = r$geom,
-            clusterOptions = markerClusterOptions(),
-            label = ~ paste(success, "observations"),
-            group = "station"
+        mapDL <- leaflet::addMarkers(
+          basemap(),
+          data = r$geom,
+          clusterOptions = leaflet::markerClusterOptions(),
+          label = ~ paste(success, "observations"),
+          group = "station"
           ) |>
-          addScaleBar()
+          leaflet::addScaleBar()
 
         mapview::mapviewOptions(fgb = FALSE)
 
@@ -818,7 +819,7 @@ ui_fig_hm <- function(fig_id, title, caption_file, ns) {
             file = "www/img/fixed-legends/hm_legend.png",
             fill = FALSE
           ),
-          col_widths = breakpoints(
+          col_widths = bslib::breakpoints(
             sm = c(9, 3),
             md = c(10, 2)
           )
