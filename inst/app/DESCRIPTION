@@ -26,15 +26,19 @@ Imports:
     knitr,
     leafem,
     leaflet,
+    magick,
     mapedit (>= 0.6.0),
     magrittr,
-    patchwork (>=1.2),
+    patchwork (>= 1.2),
     plotly (>= 4.10.4),
     shiny,
     shinyjs,
-    shinyWidgets
+    shinyWidgets,
+    tinytex,
+    webshot,
+    writexl
 Remotes:
-    mkmor/GOTeDNA
+    AnaisLacoursiereRoussel/GOTeDNA
 RoxygenNote: 7.2.3
 LazyLoad: yes
 VignetteBuilder:
