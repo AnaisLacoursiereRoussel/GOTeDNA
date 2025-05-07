@@ -877,3 +877,21 @@ shiny-plot-output {
 .indig_txt {
   width: 80%;
 }
+
+/* structure page */
+.struc_container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+
+.struc_img {
+  width: 100%;
+}
+
+.struc_txt {
+  width: 100%;
+}
