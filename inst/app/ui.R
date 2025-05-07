@@ -1,6 +1,6 @@
 ui <- fluidPage(
   theme = bslib::bs_theme(version = 5),
-  useShinyjs(),
+  shinyjs::useShinyjs(),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "extra.css"),
     tags$link(rel = "stylesheet", type = "text/css", href = "fonts.css"),
@@ -23,6 +23,17 @@ ui <- fluidPage(
       mod_select_data_ui("slc_data"),
       mod_select_figure_ui("slc_fig"),
       tags$script(type = "text/javascript", src = "js/definitionEvents.js")
+    ),
+    tabPanel(
+      "Data Structure",
+      div(
+        class = "standalone_container",
+        div(
+          class = "standalone_60",
+          h1("Data Structure"),
+          includeHTML(file.path("www","doc","structure.html"))
+    )
+    )
     ),
     tabPanel(
       "Interpretation Guide",
