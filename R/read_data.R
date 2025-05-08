@@ -61,14 +61,14 @@ read_data <- function(
 
   files <- list.files(
     path = path.folder,
-    pattern = "^GOTeDNA-[0-9]{1,2}_data",
+    pattern = "^GOTeDNA",
     full.names = TRUE
   )
 
   choose.method <- match.arg(choose.method)
   slc_sheet  <- switch(choose.method,
-    qPCR = 3,
-    metabarcoding = 4
+    qPCR = "Sample_qPCR data",
+    metabarcoding = "Sample_Metabarcoding data"
   )
 
   samples <- suppressWarnings(
@@ -79,7 +79,7 @@ read_data <- function(
   # remove list elements where sample sheet is empty
   samples <- Filter(function(a) any(!is.na(a[["protocol_ID"]])), samples)
 
-  metadata <- lapply(files, readxl::read_excel, sheet = 2)
+  metadata <- lapply(files, readxl::read_excel, sheet = "Sample_Metadata")
   names(metadata) <- files
   # only read in metadata for which there are sample sheets
   metadata <- metadata[names(metadata) %in% names(samples)]
